@@ -1,0 +1,5 @@
+= Building `sbt` =
+
+Compile the sources in `sbt/` and then package the classes and the scalac-plugin.xml file in `sbt.jar`. 
+
+You can use the bash script `build` in the root directory for this.
