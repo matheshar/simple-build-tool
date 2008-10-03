@@ -1,0 +1,95 @@
+#labels Featured
+= Introduction =
+
+This page describes how to set up your project for use with sbt.
+All paths are relative to your project directory.
+
+The basic steps are:
+ # Setup your source directory
+ # Put libraries in `lib`
+ # Create the project information file `metadata/info`
+ # Create a launcher script
+ # Read RunningSbt for basic usage instructions
+
+= Directory Layout =
+
+Sbt uses the same directory structure as maven for source files by default.
+
+{{{
+  src/
+    main/
+      resources/
+         <files to include in main jar here>
+      scala/
+         <main Scala sources>
+    test/
+      resources
+         <files to include in test jar here>
+      scala/
+         <test Scala sources>
+}}}
+
+Other directories in src/ will be ignored.  Additionally, `.svn` directories will be ignored.
+
+All dependencies (jars) go in the
+{{{
+  lib/
+}}}
+directory or any subdirectory of `lib`.  Again, `.svn` directories will be ignored.  If you want to use [http://code.google.com/p/scalacheck/ ScalaCheck] for testing, it should go in here as well.  You will need a version compiled with Scala 2.7.2.
+
+The project information directory is:
+{{{
+  metadata/
+    info
+    analysis/
+}}}
+
+The `info` file provides basic project information and is described in the next section.
+The `analysis` directory is where sbt will put information extracted from compilation, such as source file dependencies, mapping from source file to generated class files, and list of tests to run.
+
+Generated files (classes, jars, and documentation) will be written to the
+{{{
+  target/
+}}}
+directory.  This directory does not need to be manually created.
+
+
+= Project Information File =
+
+The `metadata/info` file is a text file that consists of two lines.
+ * The first line is your project's name.
+ * The second line is your project's version.
+This information is used the API documentation title and the base name of generated jars.
+
+
+= Launching Sbt =
+
+The easiest way to launch sbt is to create a one-line script.  Download `sbt.jar` if you have not already.  I will refer to the full path to `sbt.jar` as `sbt_home/sbt.jar` in the scripts.
+
+ === Unix ===
+Put the line
+{{{
+scala -cp sbt_home/sbt.jar sbt.Main $*
+}}}
+in a file called `sbt` in your `~/bin` directory and do
+{{{
+$ chmod u+x ~/bin/sbt
+}}}
+This allows you to launch sbt in any directory by typing `sbt` at the command prompt.  See RunningSbt for usage.
+
+ === Windows ===
+Create a batch file `sbt.bat`:
+{{{
+scala -cp sbt_home\sbt.jar sbt.Main %1
+}}}
+I don't run Windows so I don't know if there is a location you can put this batch file so that it is always available at the command prompt.
+See RunningSbt for sbt usage instructions.
+
+
+= Summary =
+
+ # Setup your source directory as indicated above
+ # Put libraries in `lib`
+ # Create the `metadata/info` file with contents described above
+ # Create a launcher script
+ # Read RunningSbt for basic usage instructions
