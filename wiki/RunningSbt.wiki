@@ -1,0 +1,49 @@
+#labels Featured
+= Introduction =
+
+This page describes how to use `sbt` once you have your project set up (see [Setup]).
+
+= Running =
+
+Run sbt in your project directory.  If you have created a script to start sbt, this should be as simple as:
+{{{
+$ sbt
+}}}
+
+This starts sbt in interactive mode.  You are given a very simple prompt at which you type single word actions, tasks, targets, phases, or whatever you'd like to call them.  I'll refer to them as actions.
+
+Alternatively, you can run sbt in batch mode.  You specify a space-separated list of actions as arguments:
+{{{
+$ sbt clean compile
+}}}
+
+= Actions =
+
+ * `exit` or `quit`
+  End the current interactive session.
+ * `actions`
+  List all available actions.
+ * `clean`
+  Deletes all generated files (the `target` directory and the `metadata/analysis` directory).
+ * `compile`
+  Compiles all sources (in both the `src/main/scala` and `src/test/scala` directories).
+ * `test`
+  Runs all tests detected during compilation.  Runs `compile` first.
+ * `doc`
+  Generates API documentation for Scala source files in `src/main/scala` using scaladoc.  Runs `compile` first.
+ * `doc-test`
+  Generates API documentation for Scala source files in `src/test/scala` using scaladoc.  Runs `compile` first.
+ * `doc-all`
+  Generates API documentation for all Scala source files in `src` using scaladoc.  Runs `compile` first.
+ * `console`
+  Starts the Scala interpreter with a classpath including the compiled sources and all jars in the `lib` directory.  To return to sbt, type `:quit`, Ctrl+D (Unix), or Ctrl+Z (Windows).  Runs `compile` first.
+ * `package`
+  Creates a jar file containing classes compiled from `src/main/scala` and the files in `src/main/resources`.  Runs `compile` first.
+ * `package-test`
+  Creates a jar file containing classes compiled from `src/test/scala` and the files in `src/test/resources`.  Runs `compile` first.
+ * `package-src`
+  Creates a jar file containing all Scala source files in `src/`
+ * `package-docs`
+  Creates a jar file containing API documentation generated from Scala source files in `src/main/scala`.  This does not currently run `doc` first.
+ * `package-all`
+  Runs all of the package actions.  Runs `compile` first.
