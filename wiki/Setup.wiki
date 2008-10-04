@@ -5,15 +5,41 @@ This page describes how to set up your project for use with sbt.
 All paths are relative to your project directory.
 
 The basic steps are:
- # Setup your source directory
- # Put libraries in `lib`
- # Create the project information file `metadata/info`
- # Create a launcher script
+ # Create a script to launch sbt
+ # Create your project with sbt
+ # Put libraries in `lib` and sources in `src`
  # Read RunningSbt for basic usage instructions
+
+= Launching Sbt =
+
+The easiest way to launch sbt is to create a one-line script.  Download [http://simple-build-tool.googlecode.com/files/sbt-0.1.1.jar sbt.jar] if you have not already.  I will refer to the full path to `sbt.jar` as `sbt_home/sbt.jar` in the scripts.
+
+=== Unix ===
+Put the line
+{{{
+scala -cp sbt_home/sbt.jar sbt.Main $*
+}}}
+in a file called `sbt` in your `~/bin` directory and do
+{{{
+$ chmod u+x ~/bin/sbt
+}}}
+This allows you to launch sbt in any directory by typing `sbt` at the command prompt.  See RunningSbt for usage.
+
+=== Windows ===
+Create a batch file `sbt.bat`:
+{{{
+scala -cp sbt_home\sbt.jar sbt.Main %*
+}}}
+I don't run Windows so I don't know if there is a location you can put this batch file so that it is always available at the command prompt.
+See RunningSbt for sbt usage instructions.
+
+= Create Project =
+
+When you run sbt and it does not find a project in the current directory, it asks if you want to create a new project.  If you say yes, sbt will prompt for a project name and version and create the projection information file and directory structure.  These are described in the following sections.
 
 = Directory Layout =
 
-Sbt uses the same directory structure as maven for source files by default.
+Sbt uses the same directory structure as maven for source files by default:
 
 {{{
   src/
@@ -45,7 +71,7 @@ The project information directory is:
 }}}
 
 The `info` file provides basic project information and is described in the next section.
-The `analysis` directory is where sbt will put information extracted from compilation, such as source file dependencies, mapping from source file to generated class files, and list of tests to run.
+The `analysis` directory is where sbt will put information extracted from compilation, such as source file dependencies, mapping from source file to generated class files, and list of tests to run.  The `metadata` directory does not need to be manually created.
 
 Generated files (classes, jars, and documentation) will be written to the
 {{{
@@ -59,38 +85,14 @@ directory.  This directory does not need to be manually created.
 The `metadata/info` file is a text file that consists of two lines.
  * The first line is your project's name.
  * The second line is your project's version.
-This information is used the API documentation title and the base name of generated jars.
+This information is used for the API documentation title and the base name of generated jars.
 
 Further configuration will be done by describing a project in Scala.  For an idea of what this might look like, see [http://code.google.com/p/simple-build-tool/source/browse/trunk/sbt/DefaultProject.scala DefaultProject.scala].
-
-= Launching Sbt =
-
-The easiest way to launch sbt is to create a one-line script.  Download [http://simple-build-tool.googlecode.com/files/sbt-0.1.jar sbt.jar] if you have not already.  I will refer to the full path to `sbt.jar` as `sbt_home/sbt.jar` in the scripts.
-
-=== Unix ===
-Put the line
-{{{
-scala -cp sbt_home/sbt.jar sbt.Main $*
-}}}
-in a file called `sbt` in your `~/bin` directory and do
-{{{
-$ chmod u+x ~/bin/sbt
-}}}
-This allows you to launch sbt in any directory by typing `sbt` at the command prompt.  See RunningSbt for usage.
-
-=== Windows ===
-Create a batch file `sbt.bat`:
-{{{
-scala -cp sbt_home\sbt.jar sbt.Main %*
-}}}
-I don't run Windows so I don't know if there is a location you can put this batch file so that it is always available at the command prompt.
-See RunningSbt for sbt usage instructions.
 
 
 = Summary =
 
- # Setup your source directory as indicated above
- # Put libraries in `lib`
- # Create the `metadata/info` file with contents described above
  # Create a launcher script
+ # Setup your directory structure and `metadata/info` by running `sbt` in your project directory.
+ # Put libraries in `lib`
  # Read RunningSbt for basic usage instructions
