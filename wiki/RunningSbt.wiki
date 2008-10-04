@@ -1,4 +1,3 @@
-#labels Featured
 = Introduction =
 
 This page describes how to use `sbt` once you have your project set up (see [Setup]).
@@ -19,10 +18,25 @@ $ sbt clean compile
 
 = Actions =
 
+== Special Actions ==
  * `exit` or `quit`
   End the current interactive session.
  * `actions`
   List all available actions.
+ * `level`
+  Print the current logging level.
+ * `info`
+  Set the logging level to `info`, which is the default logging level.
+ * `debug`
+  Set the logging level to `debug`.  This logging level is more verbose than `info`, but does not typically log stack traces for errors.
+ * `trace`
+  Set the logging level to `trace`.  This logging level logs stack traces for errors in addition to the information logged by the `debug` level.
+ * `warn`
+  Set the logging level to `warn`.  This logging level only logs warnings and errors.
+ * `error`
+  Set the logging level to `error`.  This logging level only logs errors.
+
+== Build Actions ==
  * `clean`
   Deletes all generated files (the `target` directory and the `metadata/analysis` directory).
  * `compile`
