@@ -1,0 +1,75 @@
+= Introduction =
+
+*Warning: This page and the feature it describes are works in progress.*
+
+This page describes advanced project configuration for when the default actions or paths are not sufficient or appropriate for your project.
+
+= Example =
+
+This example will show you how to specify the main class executed by the `run` action.
+
+First, create a new project:
+{{{
+$ sbt
+> No project found. Create new project? (y/N) y
+Project Name: Test Project
+Version: 1.0
+Create new project Test Project 1.0 ? (Y/n) y
+}}}
+
+Make a source file called
+
+{{{
+src/main/scala/Test.scala
+}}}
+
+with the following content:
+
+{{{
+object Test
+{
+  def main(args: Array[String])
+  {
+    println("Hello World!")
+  }
+}
+}}}
+
+
+Customize the build by creating a new file called
+{{{
+metadata/build/src/TestProject.scala
+}}}
+
+with the following content:
+
+{{{
+import sbt._
+
+class TestProject(info: ProjectInfo, analysis: ProjectAnalysis)
+  extends DefaultProject(info, analysis)
+{
+  override def mainClass = Some("Test")
+}
+}}}
+
+Edit `metadata/info` to specify the customized project definition class:
+
+{{{
+Test Project
+1.0
+TestProject
+}}}
+
+Now, try it out:
+{{{
+$sbt
+> run
+...
+Hello World!
+...
+}}}
+
+On startup, `sbt` will compile `TestProject` and instantiate it.  When you execute the `run` action, `sbt` runs `Test` using the scala runner.
+
+Note: `sbt` only recompiles a project definition on startup.  If you are running in interactive mode, changes made to `TestProject` will not take effect until the next time you start sbt.  This is subject to change in future versions of sbt.
