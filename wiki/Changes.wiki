@@ -1,0 +1,10 @@
+=== 0.1.1 to 0.1.2 ===
+
+ * Should compile/build on Java 1.5
+ * Fixed run action implementation to include scala library on classpath
+ * Made project configuration easier (see BuildConfiguration in the Wiki)
+
+=== 0.1 to 0.1.1 ===
+
+ * Fixed handling of source files without a package
+ * Added easy project setup
