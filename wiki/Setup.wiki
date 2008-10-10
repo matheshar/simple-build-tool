@@ -87,8 +87,7 @@ The `metadata/info` file is a text file that consists of two lines.
  * The second line is your project's version.
 This information is used for the API documentation title and the base name of generated jars.
 
-Further configuration will be done by describing a project in Scala.  For an idea of what this might look like, see [http://code.google.com/p/simple-build-tool/source/browse/trunk/sbt/DefaultProject.scala DefaultProject.scala].
-
+Further configuration is done by describing a project in Scala.  This is under development.  See BuildConfiguration.
 
 = Summary =
 
