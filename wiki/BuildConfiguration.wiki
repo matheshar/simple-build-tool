@@ -53,14 +53,6 @@ class TestProject(info: ProjectInfo, analysis: ProjectAnalysis)
 }
 }}}
 
-Edit `metadata/info` to specify the customized project definition class:
-
-{{{
-Test Project
-1.0
-TestProject
-}}}
-
 Now, try it out:
 {{{
 $sbt
