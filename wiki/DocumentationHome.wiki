@@ -1,0 +1,8 @@
+#labels Featured
+To get started with `sbt`, see [Setup] and RunningSbt.
+
+To build `sbt` from source
+ # [http://code.google.com/p/simple-build-tool/source/checkout Checkout] from svn
+ # [Build]
+
+See [Changes] for a list of changes between releases/snapshots.
