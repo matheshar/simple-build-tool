@@ -1,6 +1,8 @@
-=== 0.1.3 to trunk ===
+=== 0.1.3 to 0.1.4 ===
 
  * Autodetection of Project definitions.
+ * Simple tab completion/history in an interactive session with JLine
+ * Added descriptions for most actions
 
 === 0.1.2 to 0.1.3 ===
 
