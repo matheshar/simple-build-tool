@@ -1,6 +1,8 @@
 === 0.1.4 to trunk ===
 
- * Subproject support (change in required project constructor signature)
+ * Generalized interface with plugin (see AnalysisCallback)
+ * Split out task implementations and paths from Project to ScalaProject
+ * Subproject support (changed required project constructor signature)
   * Specify project-level dependencies
   * Execute tasks across multiple projects
   * TODO: Proper inter-project source-level dependency handling
