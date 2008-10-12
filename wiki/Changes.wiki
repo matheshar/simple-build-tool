@@ -1,7 +1,7 @@
 === 0.1.4 to trunk ===
 
- * Generalized interface with plugin (see AnalysisCallback)
- * Split out task implementations and paths from Project to ScalaProject
+ * Generalized interface with plugin (see `AnalysisCallback`)
+ * Split out task implementations and paths from Project to `ScalaProject`
  * Subproject support (changed required project constructor signature)
   * Specify project-level dependencies
   * Execute tasks across multiple projects
