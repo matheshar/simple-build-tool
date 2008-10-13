@@ -1,12 +1,21 @@
 === 0.1.4 to trunk ===
 
  * Generalized interface with plugin (see `AnalysisCallback`)
- * Split out task implementations and paths from Project to `ScalaProject`
- * Subproject support (changed required project constructor signature)
-  * Specify project-level dependencies
+ * Split out task implementations and paths from `Project` to `ScalaProject`
+ * Subproject support (changed required project constructor signature: see `sbt/DefaultProject.scala`)
+  * Can specify dependencies between projects
   * Execute tasks across multiple projects
-  * TODO: Proper inter-project source-level dependency handling
+  * Classpath of all dependencies included when compiling
+  * Proper inter-project source dependency handling
   * TODO: Ability to switch working project (e.g. only compile subproject A and dependencies instead of all subprojects)
+ * External dependency handling
+  * Tracks non-source dependencies (compiled classes and jars)
+  * Requires each class to be provided by exactly one classpath element (This means you cannot have two versions of the same class on the classpath, e.g. from two versions of a library)
+  * Changes in a project propagate the right source recompilations in dependent projects
+  * Consequences:
+   * Recompilation when changing java/scala version
+   * Recompilation when upgrading libraries (again, as indicated in the second point, situations where you have library-1.0.jar and library-2.0.jar on the classpath at the same time are not handled predictably.  Replacing library-1.0.jar with library-2.0.jar should work as expected.)
+   * Changing sbt version will recompile project definitions
 
 === 0.1.3 to 0.1.4 ===
 
