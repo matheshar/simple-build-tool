@@ -7,7 +7,7 @@
   * Execute tasks across multiple projects
   * Classpath of all dependencies included when compiling
   * Proper inter-project source dependency handling
-  * TODO: Ability to switch working project (e.g. only compile subproject A and dependencies instead of all subprojects)
+  * Can change to a project in an interactive session to work only on that project (and its dependencies)
  * External dependency handling
   * Tracks non-source dependencies (compiled classes and jars)
   * Requires each class to be provided by exactly one classpath element (This means you cannot have two versions of the same class on the classpath, e.g. from two versions of a library)
