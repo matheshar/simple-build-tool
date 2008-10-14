@@ -24,8 +24,12 @@ $ sbt clean compile
   End the current interactive session.
  * `actions`
   List all available actions.
- * `level`
-  Print the current logging level.
+ * `projects`
+  List all (sub)projects.
+ * `project <project name>`
+  Change the current project to the project named <project name>
+ * `current`
+  Print the current project and logging level.
  * `info`
   Set the logging level to `info`, which is the default logging level.
  * `debug`
