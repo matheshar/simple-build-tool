@@ -1,6 +1,10 @@
 #labels Featured
 To get started with `sbt`, see [Setup] and RunningSbt.
 
+Documentation on configuration beyond the name and version of the project is at BuildConfiguration.
+
+For information on multiple projects/subprojects, see SubProjects.
+
 To build `sbt` from source
  # [http://code.google.com/p/simple-build-tool/source/checkout Checkout] from svn
  # [Build]
