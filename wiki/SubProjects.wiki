@@ -1,0 +1,77 @@
+= Overview =
+
+This page describes how to manage multiple projects within a project.  The first section details the features of subproject support and the second section describes how to use this support.
+
+= Features =
+
+With subproject support in `sbt`, you can specify project-level dependencies and execute tasks across multiple projects.  For example, assume you have three projects A, B, and C and you specify that C depends on B and B depends on A. When you execute the `compile` action on project C, it will first execute `compile` on A, then B, and finally on C.
+
+Additionally, the classpath of dependencies is available to a project.  So, in the situation above, the classpath of C includes the classpath of A and B.  This includes the compiled classes of A and B and all libraries of A and B in addition to those explicitly specified for C.
+
+Source dependencies are tracked between projects, so that the right sources are recompiled when a dependency is updated.  For example, assume eacb project has two classes.  A has A1 and A2, B has B1 and B2, and C has C1 and C2.  Let C1 depend on B1 and B1 depend on A1.  Now, assume class A1 is modified.  Executing compile on project C will recompile class A1 in project A, then class B1 in project B, and finally, class C1 in project C.  A2 will only be recompiled if it depends on A1. B2 will only be recompiled if it depends on A1 or B1 (or A2 if A2 depends on A1).  C2 will only be recompiled if it depends on A1 or B1 or C1 (or A2 or B2 if they required recompilation).
+
+Finally, when working in an interactive session, you can switch to a specific project to only execute commands on that project and its dependencies.  More details on this are given in the next section.
+
+= Usage =
+
+A well-known, open source Scala-only (no Java) project that uses subprojects is [http://liftweb.net/index.php/Main_Page Lift].  Therefore, it is used as an example of how to set up subprojects.  You do not need to know how to use Lift for this example.  (Note: Lift is used as an example only for the reasons above, not because sbt will be used to build Lift at some point in the future.)
+
+The project definition, which goes in `metadata/build/src` as described in BuildConfiguration, looks like:
+
+{{{
+import sbt._
+
+class LiftProject(info: ProjectInfo, dependencies: Iterable[Project]) extends ParentProject(info, dependencies)
+{
+   lazy val lift = project("lift", "Lift Webkit")
+   lazy val textile = project("lift-textile", "Lift Textile")
+   lazy val facebook = project("lift-facebook", "Lift Facebook", lift)
+   lazy val amqp = project("lift-amqp", "Lift AMQP")
+   lazy val xmpp = project("lift-xmpp", "Lift XMPP")
+   lazy val widgets = project("lift-widgets", "Lift Widgets", lift)
+   lazy val openID = project("lift-openid", "Lift OpenID", lift)
+   lazy val oauth = project("lift-oauth", "Lift OAuth")
+   lazy val testkit = project("lift-testkit", "Lift Testkit", lift)
+   lazy val core = project("lift-core", "Lift Core", lift, textile, facebook, amqp, xmpp, widgets)
+   
+   lazy val sites = project("sites", "Lift Sites", new SitesProject(_))
+   
+   class SitesProject(info: ProjectInfo) extends ParentProject(info, Nil)
+   {
+      lazy val example = project("example", "Lift Example", core)
+      lazy val skittr = project("skittr", "Skittr Example", core)
+      lazy val hellolift = project("hellolift", "HelloLift example application", core)
+      lazy val hellodarwin = project("hellodarwin", "HelloDarwin tutorial application", core)
+   }
+}
+}}}
+
+Let's look at each piece.  The first line imports everything in the `sbt` package.  All `sbt` classes are currently in the `sbt` package.  The second line defines a class that has the required constructor signature (see BuildConfiguration) and is a subclass of `sbt.ParentProject`, which is in turn a subclass of `sbt.Project`.  `ParentProject` is the starting point for a project that defines other projects.  `LiftProject` will be the initial project on `sbt` startup and all actions will be performed on it.
+
+The remaining lines define subprojects of the main project.  The `project` method is defined on `sbt.Project` and has several variants.  The main variant used here has the signature
+
+{{{
+def project(path: Path, name: String, deps: Project*): Project
+}}}
+
+A `Path` is (will be) described in [Path].  It specifies the directory containing the subproject and is relative to the project directory of the enclosing project, which is `LiftProject` in this case.  `name` is the name of the project and is be specified here to avoid the need to create the `metadata/info` file in every subproject.  The version is inherited from the parent project.  The last argument is a list of dependencies of the project.
+
+Implicit in using this method is that the project is of the default project type, `sbt.DefaultProject`.  This is changed by inserting another argument before specifying the dependencies.  This argument is a function with signature:
+
+{{{
+ProjectInfo => Project
+}}}
+
+As is shown for the definition of `sites`, this is usually just the constructor of a `Project` subclass.
+
+The first note about `SitesProject` is that it is embedded in `LiftProject`.  This is useful so that `sbt` only finds one top-level subclass of `Project` and automatically runs it.  (To have multiple top-level `Project` definitions, you would have to explicitly specify the class name of the one that is the entry point on the third line of `metadata/info`)
+
+Next, `SitesProject` subclasses `ParentProject` and so it defines subprojects itself.  These subprojects can depend on projects in the outer class, as is done in `SitesProject`.
+
+Using a `Project` definition other than `sbt.DefaultProject` is also useful for concrete projects (usually subclasses of `ScalaProject`, although this is not shown here.  This way, all project configuration can be done in the parent project if desired.
+
+Alternatively, each subproject can configured individually by specifying `metadata/info` in each project and configuring the build in `metadata/build/src`.  In this case, the form of `project` used would be:
+
+{{{
+def project(path: Path, deps: Project*): Project
+}}}
