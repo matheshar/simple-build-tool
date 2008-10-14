@@ -46,8 +46,8 @@ with the following content:
 {{{
 import sbt._
 
-class TestProject(info: ProjectInfo, analysis: ProjectAnalysis)
-  extends DefaultProject(info, analysis)
+class TestProject(info: ProjectInfo, deps: Iterable[Project])
+  extends DefaultProject(info, deps)
 {
   override def mainClass = Some("Test")
 }
