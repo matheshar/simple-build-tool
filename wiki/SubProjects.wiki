@@ -46,17 +46,25 @@ class LiftProject(info: ProjectInfo, dependencies: Iterable[Project]) extends Pa
 }
 }}}
 
-Let's look at each piece.  The first line imports everything in the `sbt` package.  All `sbt` classes are currently in the `sbt` package.  The second line defines a class that has the required constructor signature (see BuildConfiguration) and is a subclass of `sbt.ParentProject`, which is in turn a subclass of `sbt.Project`.  `ParentProject` is the starting point for a project that defines other projects.  `LiftProject` will be the initial project on `sbt` startup and all actions will be performed on it.
+Let's look at each piece.  The first line
+{{{
+import sbt._
+}}}
+imports everything in the `sbt` package.  All `sbt` classes are currently in the `sbt` package.  The next line
+{{{
+class LiftProject(info: ProjectInfo, dependencies: Iterable[Project]) extends ParentProject(info, dependencies)
+}}}
+defines a class that has the required constructor signature (see BuildConfiguration) and is a subclass of `sbt.ParentProject`, which is in turn a subclass of `sbt.Project`.  `ParentProject` is the starting point for configuring a project that defines other projects.  `LiftProject` will be the initial project on `sbt` startup and all actions will be performed on it.
 
-The remaining lines define subprojects of the main project.  The `project` method is defined on `sbt.Project` and has several variants.  The main variant used here has the signature
+The remaining lines define subprojects of the main project.  The `project` method is defined in `sbt.Project` and has several variants.  The main variant used here has the signature
 
 {{{
 def project(path: Path, name: String, deps: Project*): Project
 }}}
 
-A `Path` is (will be) described in [Path].  It specifies the directory containing the subproject and is relative to the project directory of the enclosing project, which is `LiftProject` in this case.  `name` is the name of the project and is be specified here to avoid the need to create the `metadata/info` file in every subproject.  The version is inherited from the parent project.  The last argument is a list of dependencies of the project.
+A `Path` is (will be) described in [Paths].  The path provided to `project` specifies the directory containing the subproject and is relative to the project directory of the enclosing project (`LiftProject` in this case).  `name` is the name of the project and is specified here to avoid the need to create the `metadata/info` file in every subproject.  The version of the new project is inherited from the enclosing project.  The last argument is a list of dependencies of the project.
 
-Implicit in using this method is that the project is of the default project type, `sbt.DefaultProject`.  This is changed by inserting another argument before specifying the dependencies.  This argument is a function with signature:
+Implicit in using this method is that the project is of the default project type, `sbt.DefaultProject`.  This can be changed by using the variant of `project` with another argument before the dependencies of type:
 
 {{{
 ProjectInfo => Project
