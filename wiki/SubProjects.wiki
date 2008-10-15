@@ -76,9 +76,9 @@ The first note about `SitesProject` is that it is embedded in `LiftProject`.  Th
 
 Next, `SitesProject` subclasses `ParentProject` and so it defines subprojects itself.  These subprojects can depend on projects in the outer class, as is done in `SitesProject`.
 
-Using a `Project` definition other than `sbt.DefaultProject` is also useful for concrete projects (usually subclasses of `ScalaProject`, although this is not shown here.  This way, all project configuration can be done in the parent project if desired.
+Using a `Project` definition other than `sbt.DefaultProject` is also useful for concrete projects (usually subclasses of `ScalaProject`), although this is not shown here.  This way, all project configuration can be done in the parent project if desired.
 
-Alternatively, each subproject can configured individually by specifying `metadata/info` in each project and configuring the build in `metadata/build/src`.  In this case, the form of `project` used would be:
+Alternatively, each subproject can configured by providing `metadata/info` in each project and configuring the build in `metadata/build/src`.  In this case, the form of `project` used would be:
 
 {{{
 def project(path: Path, deps: Project*): Project
