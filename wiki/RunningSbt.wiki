@@ -66,3 +66,5 @@ $ sbt clean compile
   Creates a jar file containing API documentation generated from Scala source files in `src/main/scala`.  This does not currently run `doc` first.
  * `package-all`
   Runs all of the package actions.  Runs `compile` first.
+ * `run`
+  Runs the class specified in the project definition (see BuildConfiguration for specifying the main class) in the same virtual machine as `sbt`.  Please see RunningProjectCode for details on the use of `System.exit` and threads in code run by this action.
