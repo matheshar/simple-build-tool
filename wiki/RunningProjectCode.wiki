@@ -29,10 +29,10 @@ A user-created thread is one that is not in the `system` thread group and is not
 Given the above, when can user code be run with the `run` and `console` actions?
 
 The user code cannot rely on shutdown hooks and at least one of the following situations must apply for user code to run in the same JVM:
-1) User code creates no threads.
-2) User code creates a GUI and no other threads.
-3) The program ends when user-created threads terminate on their own.
-4) `System.exit` is used to end the program and user-created threads terminate when interrupted.
+ # User code creates no threads.
+ # User code creates a GUI and no other threads.
+ # The program ends when user-created threads terminate on their own.
+ # `System.exit` is used to end the program and user-created threads terminate when interrupted.
 
 The requirements on threading and shutdown hooks are required because the JVM does not actually shut down.  So, threads are not terminated unless they stop when interrupted and shutdown hooks are not run.  If these requirements are not met, code must run in a forked JVM.  A `run-forked` action is not currently implemented but is on the enhancement list.  You can write your own in the meantime.
 
