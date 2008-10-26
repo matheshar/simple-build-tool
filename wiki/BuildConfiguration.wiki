@@ -62,6 +62,6 @@ Hello World!
 ...
 }}}
 
-On startup, `sbt` will compile `TestProject` and instantiate it.  When you execute the `run` action, `sbt` runs `Test` using the scala runner.
+On startup, `sbt` will compile `TestProject` and instantiate it.  When you execute the `run` action, `sbt` runs `Test` using the scala runner in the same virtual machine as `sbt`.  See RunningProjectCode for details.
 
 Note: `sbt` only recompiles a project definition on startup.  If you are running in interactive mode, changes made to `TestProject` will not take effect until the next time you start sbt.  This is subject to change in future versions of sbt.
