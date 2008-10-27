@@ -1,0 +1,135 @@
+*This documents paths as they are implemented in trunk (will be 0.1.7).*
+
+= Examples =
+
+The examples are written in the context of a `Project` definition and assume the following directory structure:
+
+{{{
+project/
+    .svn/
+    src/
+        .svn/
+        main/
+            .svn/
+            resources/
+                .svn/
+                LICENSE
+                logo.png
+            scala/
+                .svn/
+                sbt/
+                    .svn/
+                    Project.scala
+                    Analyzer.scala
+    lib/
+        ivy.jar
+    target/
+        sbt.jar
+        classes/
+            sbt/
+                Project.class
+                Analyzer.class
+}}}
+
+=== Simple Paths ===
+
+{{{
+val p = "src" / "main" / "scala" / "sbt" / "Analyzer.scala"
+}}}
+
+Here, "src" is converted to a `Path` relative to the project directory by an implicit conversion defined in `Project`.  Alternatively, the implicit conversion may be called directly:
+
+{{{
+val p = path("src") / "main" / "scala" / "sbt" / "Analyzer.scala"
+}}}
+
+Either back or forward slashes may be used (they are equivalent):
+
+{{{
+val p = "src" \ "main" \ "scala" \ "sbt" \ "Analyzer.scala"
+}}}
+
+Typical usage in `sbt` is to build up paths:
+
+{{{
+    def sourcePath = path(sourceDirectoryName)
+    def mainSourcePath = sourcePath / mainDirectoryName
+    def mainScalaSourcePath = mainSourcePath / scalaDirectoryName
+}}}
+
+=== Path Finders ===
+
+{{{
+val scalaSources: PathFinder = "src" ** "*.scala"
+}}}
+
+This selects all files that end in `.scala` that are in `src` or a descendent directory.  The list of paths is not actually evaluated until `get` is called:
+
+{{{
+val sourceIterable: Iterable[Path] = scalaSources.get
+}}}
+
+If the filesystem changes, a second call to `get` on the same `PathFinder` object will reflect the changes.  That is, the `get` method reevaluates the list of paths each time.
+
+Selecting files that are immediate children of a subdirectory is done with a single `*`:
+
+{{{
+val scalaSources = mainScalaSourcePath / "sbt" * "*.scala"
+}}}
+
+If a selector is used on a path that does not represent a directory, the path list will be empty:
+
+{{{
+val emptyFinder = "lib" / "ivy.jar" * "not_possible"
+}}}
+
+The argument to the child and descendent selectors `*` and `**` is actually a `NameFilter`.  An implicit is used to convert a `String` to a `NameFilter` that interprets `*` to represent zero or more characters of any value.  See the Name Filters section for more information.
+
+Another operation is concatenation of `PathFinder`s:
+
+{{{
+val multiPath = ("src" / "main") +++ "lib" +++ ("target" / "classes")
+}}}
+
+The concatenated finder supports all standard operators.  For example,
+
+{{{
+val jars = ("lib" +++ "target") * "*.jar"
+}}}
+
+selects `ivy.jar` and `sbt.jar`.
+
+=== Base Paths ===
+
+In some situations, it is useful to define the directory a path is relative to.  For example, the `package` action in `sbt` packages compiled classes and all files under `resources`.  The full path name should not be used in the jar, however.  This is where the `##` operator comes in.  The paths for this situation would look like:
+
+{{{
+val allClasses = ("target" / "classes" ##) ** "*.class"
+val allResources = ("src" / "main" / "resources" ##) ** "*"
+val toPackage = allClasses +++ allResources
+}}}
+
+Ignoring the `.svn` directories, the paths in the jar would then look like:
+{{{
+LICENSE
+logo.png
+sbt/
+    Project.class
+    Analyzer.class
+}}}
+
+=== Name Filters ===
+
+There are some useful operations on `NameFilter`s.  A common problem is excluding version control directories.  This can be accomplished as follows:
+
+{{{
+val sources = "src" ** (- ".svn") * "*.scala"
+}}}
+
+This first selects all descendent (or self) paths with name not equal to `.svn`.  Then, all children of those paths with name ending in `.scala` are selected.
+
+The `|` operator declares alternative `NameFilter`s:
+
+{{{
+val sources = "src" ** ("*.scala" | "*.java")
+}}}
