@@ -5,6 +5,12 @@
  * Redesigned `Path` properly.
  * Moved paths out of `ScalaProject` and into `BasicProjectPaths` to keep path definitions separate from task definitions.
  * Added initial support for managing third-party libraries through the `update` task, which must be explicitly called (it is not a dependency of compile or any other task).  This is still quite experimental and its behavior is likely to change! (not to mention that it is undocumented)
+ * Parallel execution implementation at the project level.  Disabled by default until logging situation figured out. To enable, add:
+ {{{
+ override def parallelExecution = true
+ }}}
+ to your project definition.  Nothing special is done to make logging more useful yet.
+ * `run` and `console` are now specified as "interactive" actions, which means they are only executed on the project in which they are defined when called directly, and not on all dependencies.  Their dependencies are still run on dependent projects.
 
 
 === 0.1.5 to 0.1.6 ===
