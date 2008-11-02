@@ -11,6 +11,7 @@
  }}}
  to your project definition.  Nothing special is done to make logging more useful yet.
  * `run` and `console` are now specified as "interactive" actions, which means they are only executed on the project in which they are defined when called directly, and not on all dependencies.  Their dependencies are still run on dependent projects.
+ * Generalized conditional tasks a bit.
 
 
 === 0.1.5 to 0.1.6 ===
