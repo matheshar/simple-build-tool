@@ -1,7 +1,5 @@
 = Introduction =
 
-*Warning: This page and the feature it describes are works in progress.*
-
 This page describes advanced project configuration for when the default actions or paths are not sufficient or appropriate for your project.
 
 = Example =
