@@ -10,7 +10,7 @@ Run sbt in your project directory.  If you have created a script to start sbt, t
 $ sbt
 }}}
 
-This starts sbt in interactive mode.  You are given a very simple prompt at which you type single word actions, tasks, targets, phases, or whatever you'd like to call them.  I'll refer to them as actions.
+This starts sbt in interactive mode.  You are given a very simple prompt at which you type actions (or tasks, targets, phases, or whatever else you'd like to call them).
 
 Alternatively, you can run sbt in batch mode.  You specify a space-separated list of actions as arguments:
 {{{
@@ -25,15 +25,15 @@ $ sbt clean compile
  * `actions`
   List all available actions.
  * `projects`
-  List all (sub)projects.
+  List all available projects.
  * `project <project name>`
-  Change the current project to the project named <project name>
+  Change the current project to the project named <project name>.  Further operations will be done on the given project.
  * `current`
   Print the current project and logging level.
  * `info`
-  Set the logging level to `info`, which is the default logging level.
+  Set the logging level to `info`.  This is the default logging level.
  * `debug`
-  Set the logging level to `debug`.  This logging level is more verbose than `info`, but does not typically log stack traces for errors.
+  Set the logging level to `debug`.  This logging level is more verbose than `info`, but does not log stack traces for errors.
  * `trace`
   Set the logging level to `trace`.  This logging level logs stack traces for errors in addition to the information logged by the `debug` level.
  * `warn`
@@ -43,7 +43,7 @@ $ sbt clean compile
 
 == Build Actions ==
  * `clean`
-  Deletes all generated files (the `target` directory and the `metadata/analysis` directory).
+  Deletes all generated files (the `target` directory).
  * `compile`
   Compiles all sources (in both the `src/main/scala` and `src/test/scala` directories).
  * `test`
@@ -63,8 +63,8 @@ $ sbt clean compile
  * `package-src`
   Creates a jar file containing all Scala source files in `src/`
  * `package-docs`
-  Creates a jar file containing API documentation generated from Scala source files in `src/main/scala`.  This does not currently run `doc` first.
+  Creates a jar file containing API documentation generated from Scala source files in `src/main/scala`.  Runs `doc` first.
  * `package-all`
   Runs all of the package actions.  Runs `compile` first.
  * `run`
-  Runs the class specified in the project definition (see BuildConfiguration for specifying the main class) in the same virtual machine as `sbt`.  Please see RunningProjectCode for details on the use of `System.exit` and threads in code run by this action.
+  Runs the class specified in the project definition (see BuildConfiguration for specifying the main class) in the same virtual machine as `sbt`.  Please see RunningProjectCode for details on the use of `System.exit` and multithreading (including GUIs) in code run by this action.
