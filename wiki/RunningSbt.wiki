@@ -1,4 +1,3 @@
-#labels Featured
 = Introduction =
 
 This page describes how to use `sbt` once you have your project set up (see [Setup]).
