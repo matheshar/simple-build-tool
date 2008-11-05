@@ -1,0 +1,34 @@
+== Introduction ==
+
+This is the roadmap to a first release.  The current work is various improvements to existing features and adding support for other testing frameworks.  The other two major categories of work remaining are documentation and testing.
+
+Comments and suggestions are welcome.
+
+== Improvements ==
+
+This list describes improvements/fixes to existing features.
+
+ * Parallel execution
+  * Make output of `compile`, `doc`, and `test` actions compatible with parallel execution (need to buffer output)
+ * Conditional execution has been generalized and could be applied to documentation generation, test execution, preprocessor, etc...
+ * Library dependency management
+  * Improve/fix handling of Ivy configurations
+ * Either improve `Version` or allow arbitrary version strings
+
+== Features ==
+
+ * Test execution
+  * Support for other testing frameworks (ScalaTest, specs, ...)
+
+== Documentation ==
+
+This list describes the documentation to be done.
+
+ * API Documentation, especially:
+  * Project and subclasses
+  * Path and related classes
+ * Basic Configuration
+  * Changing default paths
+  * Configuring tasks
+ * Library dependency management
+ * Parallel execution
