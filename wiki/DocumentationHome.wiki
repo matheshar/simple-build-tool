@@ -5,6 +5,7 @@
  * Configuration
   * [BuildConfiguration Basic Configuration]
   * SubProjects
+  * [Paths]
  * Project Information
   * [Roadmap]
   * [Changes]
