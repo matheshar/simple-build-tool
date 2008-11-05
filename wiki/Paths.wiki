@@ -66,7 +66,7 @@ val scalaSources: PathFinder = "src" ** "*.scala"
 This selects all files that end in `.scala` that are in `src` or a descendent directory.  The list of paths is not actually evaluated until `get` is called:
 
 {{{
-val sourceIterable: Iterable[Path] = scalaSources.get
+val sourceSet: Set[Path] = scalaSources.get
 }}}
 
 If the filesystem changes, a second call to `get` on the same `PathFinder` object will reflect the changes.  That is, the `get` method reevaluates the list of paths each time.
