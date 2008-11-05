@@ -18,7 +18,7 @@ This list describes improvements/fixes to existing features.
 == Features ==
 
  * Test execution
-  * Support for other testing frameworks (ScalaTest, specs, ...)
+  * Support for other testing frameworks (`ScalaTest`, specs, ...)
 
 == Documentation ==
 
