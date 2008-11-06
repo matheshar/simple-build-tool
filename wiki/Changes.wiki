@@ -17,6 +17,7 @@
  * Dependencies passed to `project` are checked for null (may help with errors related to initialization/circular dependencies)
  * Task dependencies are checked for null
  * Projects in a multi-project configuration are checked to ensure that output paths are different (check can be disabled)
+ * Made `update` task globally synchronized because Ivy is not thread-safe.
 
 === 0.1.5 to 0.1.6 ===
 
