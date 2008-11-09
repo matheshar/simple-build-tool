@@ -1,6 +1,6 @@
 == Introduction ==
 
-This is the roadmap to a first release.  The current work is various improvements to existing features and adding support for other testing frameworks.  The other two major categories of work remaining are documentation and testing.
+This is the roadmap to a first release.  The current work is various improvements to existing features.  The other two major categories of work remaining are documentation and testing.
 
 Comments and suggestions are welcome.
 
