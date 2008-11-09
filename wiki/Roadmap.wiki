@@ -14,11 +14,7 @@ This list describes improvements/fixes to existing features.
  * Library dependency management
   * Improve/fix handling of Ivy configurations
  * Either improve `Version` or allow arbitrary version strings
-
-== Features ==
-
- * Test execution
-  * Support for other testing frameworks (`ScalaTest`, specs, ...)
+ * Improve ScalaTest support.
 
 == Documentation ==
 
