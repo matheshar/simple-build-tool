@@ -63,7 +63,7 @@ imports everything in the `sbt` package.  All `sbt` classes are currently in the
 {{{
 class LiftProject(info: ProjectInfo, dependencies: Iterable[Project]) extends ParentProject(info, dependencies)
 }}}
-defines a class that has the required constructor signature (see BuildConfiguration) and is a subclass of `sbt.ParentProject`, which is in turn a subclass of `sbt.Project`.  `ParentProject` is the starting point for configuring a project that defines other projects.  `LiftProject` will be the initial project on `sbt` startup and all actions will be performed on it.
+defines a class that has a constructor signature with one more argument (`dependencies`) than usual and is a subclass of `sbt.ParentProject`, which is in turn a subclass of `sbt.Project`.  The extra argument contains the dependencies specified when the project is loaded with a call to `project` (see below).  `ParentProject` is the starting point for configuring a project that defines other projects.  `LiftProject` will be the initial project on `sbt` startup and all actions will be performed on it.
 
 The remaining lines define subprojects of the main project.  The `project` method is defined in `sbt.Project` and has several variants.  The main variant used here has the signature
 
