@@ -11,7 +11,7 @@
  }}}
  to your project definition.  In order for logging to make sense, all project logging is buffered until the project is finished executing.  Still to be done is some sort of notification of project execution (which ones are currently executing, how many remain)
  * `run` and `console` are now specified as "interactive" actions, which means they are only executed on the project in which they are defined when called directly, and not on all dependencies.  Their dependencies are still run on dependent projects.
- * Generalized conditional tasks a bit.
+ * Generalized conditional tasks a bit. Of note is that analysis is no longer required to be in metadata/analysis, but is now in target/analysis by default.
  * Message now displayed when project definition is recompiled on startup
  * Project no longer inherits from Logger, but now has a log member.
  * Dependencies passed to `project` are checked for null (may help with errors related to initialization/circular dependencies)
