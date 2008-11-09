@@ -4,8 +4,8 @@
  * Options are now passed to tasks as varargs.
  * Redesigned `Path` properly, including `PathFinder` returning a `Set[Path]` now instead of `Iterable[Path]`.
  * Moved paths out of `ScalaProject` and into `BasicProjectPaths` to keep path definitions separate from task definitions.
- * Added initial support for managing third-party libraries through the `update` task, which must be explicitly called (it is not a dependency of compile or any other task).  This is still quite experimental and its behavior is likely to change! (not to mention that it is undocumented)
- * Parallel execution implementation at the project level, currently disabled by default. To enable, add:
+ * Added initial support for managing third-party libraries through the `update` task, which must be explicitly called (it is not a dependency of compile or any other task).  This is experimental, undocumented, and known to be incomplete.
+ * Parallel execution implementation at the project level, disabled by default. To enable, add:
  {{{
  override def parallelExecution = true
  }}}
@@ -18,6 +18,16 @@
  * Task dependencies are checked for null
  * Projects in a multi-project configuration are checked to ensure that output paths are different (check can be disabled)
  * Made `update` task globally synchronized because Ivy is not thread-safe.
+ * Generalized test framework, directly invoking frameworks now (used reflection before).
+ * Moved license files to licenses/
+ * Added support for `specs` and some support for `ScalaTest` (the test action doesn't fail if `ScalaTest` tests fail).
+ * Added `specs`, `ScalaCheck`, `ScalaTest` jars to lib/
+  * These are now required for compilation, but are optional at runtime.
+  * Added the appropriate licenses and notices.
+ * Options for `update` action are now taken from updateOptions member.
+ * Fixed `SbtManager` inline dependency manager to work properly.
+ * Added case class implementation of `SbtManager` called `SimpleManager`.
+ * Project definitions not specifying dependencies can now use just a single argument constructor.
 
 === 0.1.5 to 0.1.6 ===
 
