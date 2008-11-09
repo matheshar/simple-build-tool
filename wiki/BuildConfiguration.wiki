@@ -1,6 +1,6 @@
 = Introduction =
 
-This page describes advanced project configuration for when the default actions or paths are not sufficient or appropriate for your project.
+This page describes build configuration for when the default actions or paths are not sufficient or appropriate for your project.
 
 = Example =
 
@@ -44,8 +44,7 @@ with the following content:
 {{{
 import sbt._
 
-class TestProject(info: ProjectInfo, deps: Iterable[Project])
-  extends DefaultProject(info, deps)
+class TestProject(info: ProjectInfo) extends DefaultProject(info)
 {
   override def mainClass = Some("Test")
 }
@@ -62,4 +61,4 @@ Hello World!
 
 On startup, `sbt` will compile `TestProject` and instantiate it.  When you execute the `run` action, `sbt` runs `Test` using the scala runner in the same virtual machine as `sbt`.  See RunningProjectCode for details.
 
-Note: `sbt` only recompiles a project definition on startup.  If you are running in interactive mode, changes made to `TestProject` will not take effect until the next time you start sbt.  This is subject to change in future versions of sbt.
+Note: `sbt` only recompiles a project definition on startup.  If you are running in interactive mode, changes made to `TestProject` will not take effect until the next time you start sbt.
