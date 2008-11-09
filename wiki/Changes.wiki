@@ -1,4 +1,4 @@
-=== 0.1.6 to trunk ===
+=== 0.1.6 to 0.1.7 ===
 
  * Added graph action to generate dot files (for graphiz) from dependency information (work in progress).
  * Options are now passed to tasks as varargs.
@@ -26,6 +26,7 @@
   * Added the appropriate licenses and notices.
  * Options for `update` action are now taken from updateOptions member.
  * Fixed `SbtManager` inline dependency manager to work properly.
+ * Improved Ivy configuration handling (not compiled with test dependencies yet though).
  * Added case class implementation of `SbtManager` called `SimpleManager`.
  * Project definitions not specifying dependencies can now use just a single argument constructor.
 
