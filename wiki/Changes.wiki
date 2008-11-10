@@ -1,3 +1,9 @@
+=== 0.1.7 to trunk ===
+
+ * Improved configuring of tests to exclude.
+ * Simplified version handling.
+ * Task `&&` operator properly handles dependencies of tasks it combines.
+
 === 0.1.6 to 0.1.7 ===
 
  * Added graph action to generate dot files (for graphiz) from dependency information (work in progress).
