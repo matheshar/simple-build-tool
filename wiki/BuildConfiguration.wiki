@@ -2,6 +2,8 @@
 
 This page describes build configuration for when the default actions or paths are not sufficient or appropriate for your project.
 
+<wiki:toc max_depth="2" />
+
 = Example =
 
 This example will show you how to specify the main class executed by the `run` action.
@@ -62,3 +64,67 @@ Hello World!
 On startup, `sbt` will compile `TestProject` and instantiate it.  When you execute the `run` action, `sbt` runs `Test` using the scala runner in the same virtual machine as `sbt`.  See RunningProjectCode for details.
 
 Note: `sbt` only recompiles a project definition on startup.  If you are running in interactive mode, changes made to `TestProject` will not take effect until the next time you start sbt.
+
+= Specifying Options =
+
+Setting the main class was one case of specifying options for tasks (in that case, the `run` task).  The general mechanism for specifying options is with an overridable method that defines the list of options for a task.  For example, the default options for the `compile` task are defined as:
+
+{{{
+    def compileOptions: Seq[CompileOption] = Deprecation :: Nil
+}}}
+
+`Deprecation` is a val on `ScalaProject` that is an instance of `CompileOption` representing the command line `scalac` `-deprecation` option.  To additionally specify the `-unchecked` command line option, override `compileOptions` in your project definition (class `TestProject` above):
+
+{{{
+    override def compileOptions = Unchecked :: Deprecation :: Nil
+}}}
+or
+{{{
+    override def compileOptions = Unchecked :: super.compileOptions.toList
+}}}
+
+
+The currently available options are listed below.
+
+== Compile Options ==
+
+Method `compileOptions` specifies the options for task `compile` and is of type `Seq[CompileOption]`.  Provided options are:
+  * `Deprecation`
+  * `Unchecked`
+  * `ExplainTypes`
+  * `Optimize`
+  * `Verbose`
+  * `DisableWarnings`
+  * `target(t: Target.Value)`   (accepts values of the `Target` enumeration: `Java1_5`, `Java1_4`, `Msil`)
+  * `CompileOption(optionString)`   (for arbitrary options)
+
+== Run Options ==
+
+Method `mainClass` (as described above) is of type `Option[String]` and specifies an optional main class to run when the `run` task is invoked.  The default implementation specifies no main class (`None`).
+Method `runOptions` is a list of arguments (`Seq[String]`) to the main class run by the  `run` task.  The default implementation is the empty sequence (`Nil`).
+
+== Document Options ==
+
+Method `documentOptions` specifies the options for the API documentation tasks `doc` and `docTests`.  Provided options are:
+  * `LinkSource`
+  * `NoComment`
+  * `access(access: Access.Value)`
+  * `documentBottom(bottomText: String)`
+  * `documentCharset(charset: String)`
+  * `documentTitle(title: String)`
+  * `documentFooter(footerText: String)`
+  * `documentHeader(headerText: String)`
+  * `stylesheetFile(path: Path)`
+  * `documentTop(topText: String)`
+  * `windowTitle(title: String)`
+
+== Test Options (0.1.8) ==
+
+Method `testOptions` specifies the options for the `test` action.  The only available option is `ExcludeTests(tests: Iterable[String])`, which specifies the class names of tests that should not be run.
+
+== Dependency Management (Update) Options ==
+
+Method `updateOptions` specifies the options for the dependency management task `update`.  Available options are:
+ * `Validate`   Specifying this validates the configuration files (Maven or Ivy)
+ * `Synchronize`   Specifying this removes libraries from the managed library directory that are not currently used.
+ * `QuietUpdate`   Specifying this puts Ivy in quiet mode during execution.
