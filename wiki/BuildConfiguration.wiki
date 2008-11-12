@@ -183,8 +183,8 @@ by specifying the following in your project definition:
 The redefinition of `allSources` is required for the `package-src` action.
 
 The paths directly used by the default actions are listed below.  Other paths are only used to build up these paths.  If redefined, care should be taken to keep these paths distinct.
- * `dependencyPath`- This is the location of jars.
-  * `managedDependencyPath` - This is the location that automatic dependency management puts downloaded artifacts.  It must be an immediate subdirectory of `dependencyPath`, which is enforced by making it final.  You can override its name, which is `managed` by default.  When executed, the `clean-lib` action removes this directory.
+ * `dependencyPath`- This is the location to put jars.
+ * `managedDependencyPath` - This is the location that automatic dependency management puts downloaded artifacts.  When executed, the `clean-lib` action removes this directory.
  * `mainScalaSourcePath` - The path to Scala sources comprising the project.
  * `mainResourcesPath` - The path to resources to include in the project jar.
  * `testScalaSourcePath` - The path to Scala sources defining tests.
