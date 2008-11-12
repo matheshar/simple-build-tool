@@ -6,6 +6,7 @@
   * [BuildConfiguration Basic Configuration]
   * SubProjects
   * [Paths]
+  * LibraryManagement
  * Project Information
   * [Roadmap]
   * [Changes]
