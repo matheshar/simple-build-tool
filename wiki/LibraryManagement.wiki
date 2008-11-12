@@ -6,7 +6,7 @@ There are two ways for you to manage libraries with `sbt`, manually or automatic
 
 = Manual Dependency Management ==
 
-Manually managing dependencies involves copying any jars that you want to use to the `lib` directory.  `sbt` will put these jars on the classpath during compilation, testing, running, and when using the interpreter.  You are responsible for adding, removing, updating, and otherwise managing the jars in this directory.  No modifications to your project definition are required to use this method unless you would like to change the location of the directory you store the jars in (see `BuildConfiguration`).
+Manually managing dependencies involves copying any jars that you want to use to the `lib` directory.  `sbt` will put these jars on the classpath during compilation, testing, running, and when using the interpreter.  You are responsible for adding, removing, updating, and otherwise managing the jars in this directory.  No modifications to your project definition are required to use this method unless you would like to change the location of the directory you store the jars in (see BuildConfiguration).
 
 = Automatic Dependency Management =
 
