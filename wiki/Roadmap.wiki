@@ -8,13 +8,10 @@ Comments and suggestions are welcome.
 
 This list describes improvements/fixes to existing features.
 
- * Parallel execution
-  * Make output of `compile`, `doc`, and `test` actions compatible with parallel execution (need to buffer output)
+ * Parallel execution: make output of `compile`, `doc`, and `test` actions compatible with parallel execution (need to buffer output)
  * Conditional execution has been generalized and could be applied to documentation generation, test execution, preprocessor, etc...
- * Library dependency management
-  * Improve/fix handling of Ivy configurations
- * Either improve `Version` or allow arbitrary version strings
- * Improve ScalaTest support.
+ * Improve/fix handling of Ivy configurations (`test` mainly)
+ * Finish `ScalaTest` support.
 
 == Documentation ==
 
@@ -24,7 +21,5 @@ This list describes the documentation to be done.
   * Project and subclasses
   * Path and related classes
  * Basic Configuration
-  * Changing default paths
-  * Configuring tasks
- * Library dependency management
+  * Defining tasks
  * Parallel execution
