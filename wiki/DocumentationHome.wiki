@@ -11,3 +11,4 @@
   * [Roadmap]
   * [Changes]
   * [Build] from source
+  * [http://simple-build-tool.googlecode.com/svn/branches/0.1.8/api/index.html API Documentation]
