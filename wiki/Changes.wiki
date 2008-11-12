@@ -3,6 +3,8 @@
  * Improved configuring of tests to exclude.
  * Simplified version handling.
  * Task `&&` operator properly handles dependencies of tasks it combines.
+ * Changed method of inline library dependency declarations to be simpler.
+ * Better handling of errors in parallel execution.
 
 === 0.1.6 to 0.1.7 ===
 
