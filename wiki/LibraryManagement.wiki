@@ -1,0 +1,61 @@
+= Introduction =
+
+There are two ways for you to manage libraries with `sbt`, manually or automatically.  These two ways can be mixed, as well.
+
+<wiki:toc max_depth="3" />
+
+= Manual Dependency Management ==
+
+Manually managing dependencies involves copying any jars that you want to use to the `lib` directory.  `sbt` will put these jars on the classpath during compilation, testing, running, and when using the interpreter.  You are responsible for adding, removing, updating, and otherwise managing the jars in this directory.  No modifications to your project definition are required to use this method unless you would like to change the location of the directory you store the jars in (see `BuildConfiguration`).
+
+= Automatic Dependency Management =
+
+This method of dependency management involves specifying the direct dependencies of your project and letting `sbt` handle retrieving and updating your dependencies.  `sbt` performs this dependency handling when the `update` action is executed.  By default, `sbt` does *not* update your dependencies before every compilation, but only does so when you execute `update`.  `sbt` supports three ways of specifying these dependencies:
+ * Declarations in your project definition
+ * Maven POM files
+ * Ivy configuration and settings files
+
+Behind the scenes, `sbt` uses Apache Ivy to implement dependency management in all three cases.  If multiple configurations are present, the follow precedence is used by default:
+ * Maven and Ivy configurations (`pom.xml`, `ivy.xml`, `ivysettings.xml`) are ignored when inline declarations are present.
+ * A Maven configuration `pom.xml` is ignored when an Ivy `ivy.xml` configuration is present.  Note that `ivysettings.xml` can be used with a Maven `pom.xml`.
+The default repositories are the standard Maven2 repository and the Scala Tools Releases (http://scala-tools.org/repo-releases) repository.  There is no support for publishing to a repository yet.
+
+The following sections describe how to use each method of automatic dependency management.
+
+== Inline Declarations ==
+
+Inline declarations are a very basic way of specifying dependencies to be automatically retrieved.  They are intended as a lightweight alternative to a full configuration using Ivy or Maven.  To use inline declarations, follow these steps:
+
+ # Declare each dependency in your project definition as a `val` with the form:
+{{{
+  val dep = groupID % artifactID % revision
+}}}
+ (The actual name for the `val` is currently unimportant.)
+ # Declare additional repositories besides the default Maven2 and Scala Tools Releases repositories that you want to use with the form:
+{{{
+  val rep = name at location
+}}}
+ (The actual name for the `val` is currently unimportant.)
+ # Finally, declare your project's ID by implementing `projectID`:
+{{{
+  val projectID = projectGroupID % projectArtifactID % revision
+}}}
+
+For example:
+{{{
+  val derby = "org.apache.derby" % "derby" % "10.4.1.3"
+  val specs = "org.specs" % "specs" % "1.3.1"
+
+  val scalaToolsSnapshots = "Scala-Tools Maven2 Snapshots Repository" at "http://scala-tools.org/repo-snapshots"
+
+  val projectID = "net.frostbridge" % "frostbridge" % "0.2.2"
+}}}
+
+== Maven/Ivy ==
+
+For this method, create the configuration files as you would for Maven (`pom.xml`) or Ivy (`ivy.xml` and optionally `ivysettings.xml`).  `sbt` will use these configurations to resolve and retrieve dependencies when you execute `update`.  No modifications to your project definition are necessary.
+
+Maven support is dependent on Ivy's support for Maven POMs.
+Known issues with this support:
+ * Specifying `relativePath` in the `parent` section of a POM will produce an error.
+ * Ivy ignores repositories specified in the POM.  A workaround is to specify repositories in an Ivy `ivysettings.xml` file.
