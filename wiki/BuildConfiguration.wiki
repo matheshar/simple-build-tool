@@ -118,7 +118,7 @@ Method `documentOptions` specifies the options for the API documentation tasks `
   * `documentTop(topText: String)`
   * `windowTitle(title: String)`
 
-== Test Options (0.1.8) ==
+== Test Options ==
 
 Method `testOptions` specifies the options for the `test` action.  The only available option is `ExcludeTests(tests: Iterable[String])`, which specifies the class names of tests that should not be run.
 
