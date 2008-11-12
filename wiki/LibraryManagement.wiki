@@ -24,22 +24,18 @@ The following sections describe how to use each method of automatic dependency m
 
 == Inline Declarations ==
 
-Inline declarations are a very basic way of specifying dependencies to be automatically retrieved.  They are intended as a lightweight alternative to a full configuration using Ivy or Maven.  To use inline declarations, follow these steps:
+Inline declarations are a very basic way of specifying dependencies to be automatically retrieved.  They are intended as a lightweight alternative to a full configuration using Ivy or Maven.  To use inline declarations, do the following:
 
- # Declare each dependency in your project definition as a `val` with the form:
-{{{
+ * Declare each dependency in your project definition as a `val` with the form:
+ {{{
   val dep = groupID % artifactID % revision
-}}}
+ }}}
  (The actual name for the `val` is currently unimportant.)
- # Declare additional repositories besides the default Maven2 and Scala Tools Releases repositories that you want to use with the form:
-{{{
+ * Declare additional repositories besides the default Maven2 and Scala Tools Releases repositories that you want to use with the form:
+ {{{
   val rep = name at location
-}}}
+ }}}
  (The actual name for the `val` is currently unimportant.)
- # Finally, declare your project's ID by implementing `projectID`:
-{{{
-  val projectID = projectGroupID % projectArtifactID % revision
-}}}
 
 For example:
 {{{
@@ -47,8 +43,6 @@ For example:
   val specs = "org.specs" % "specs" % "1.3.1"
 
   val scalaToolsSnapshots = "Scala-Tools Maven2 Snapshots Repository" at "http://scala-tools.org/repo-snapshots"
-
-  val projectID = "net.frostbridge" % "frostbridge" % "0.2.2"
 }}}
 
 == Maven/Ivy ==
