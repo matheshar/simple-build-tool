@@ -6,6 +6,7 @@
  * Changed some update options to be final vals instead of objects.
  * Added some more API documentation.
  * Removed release action.
+ * Split compilation into separate main and test compilations.
 
 === 0.1.7 to 0.1.8 ===
 
