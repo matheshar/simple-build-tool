@@ -10,7 +10,6 @@ This list describes improvements/fixes to existing features.
 
  * Parallel execution: make output of `compile`, `doc`, and `test` actions compatible with parallel execution (need to buffer output)
  * Conditional execution has been generalized and could be applied to documentation generation, test execution, preprocessor, etc...
- * Improve/fix handling of Ivy configurations (`test` mainly)
  * Finish `ScalaTest` support.
 
 == Documentation ==
