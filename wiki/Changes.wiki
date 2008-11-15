@@ -1,3 +1,12 @@
+=== 0.1.8 to trunk ===
+
+* Better default implementation of `allSources`.
+* Generate warning if two jars on classpath have the same name.
+* Upgraded to specs 1.4.0, which introduced a compile time dependency on `JUnit` for sbt to use `ConsoleRunner`, so detailed output is currently disabled.
+- Changed some update options to be final vals instead of objects.
+- Added some more API documentation.
+- Removed release action.
+
 === 0.1.7 to 0.1.8 ===
 
  * Improved configuring of tests to exclude.
