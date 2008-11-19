@@ -9,7 +9,7 @@
  * Removed release action.
  * Split compilation into separate main and test compilations.
  * A failure in a `ScalaTest` run now fails the test action.
- * Implemented reporters for compile/scaladoc, `ScalaTest`, and specs that delegate to the appropriate sbt.Logger.
+ * Implemented reporters for `compile/scaladoc`, `ScalaTest`, `ScalaCheck`, and `specs` that delegate to the appropriate `sbt.Logger`.
 
 === 0.1.7 to 0.1.8 ===
 
