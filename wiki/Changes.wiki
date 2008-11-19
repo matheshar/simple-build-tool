@@ -1,4 +1,4 @@
-=== 0.1.8 to trunk ===
+=== 0.1.8 to 0.1.9 ===
 
  * Better default implementation of `allSources`.
  * Generate warning if two jars on classpath have the same name.
