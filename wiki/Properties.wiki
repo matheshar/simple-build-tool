@@ -1,0 +1,98 @@
+* Warning: This page describes the trunk version of sbt. *
+
+= Properties =
+
+== Introduction ==
+
+`sbt` provides a means of working with system properties (`System.getProperty/setProperty`) and persistent user-defined variables.  `sbt` handles serializing and deserializing user-defined properties for you, but system properties are not persisted.  User-defined variables are useful for task options or within custom tasks.
+
+=== User-Defined Property Examples ===
+
+{{{
+  val documentBottomText = property[String]
+  val timestamp = propertyOptional[Long](-1L) // This variant provides a default value.
+
+  // Using a property
+  override def documentOptions = super.documentOptions ++ documentBottomText.getOption.map(documentBottom).toList
+
+  // Custom format for java.net.URL
+  implicit val urlFormat =
+    new Format[URL]
+    {
+      def fromString(s: String) = new URL(s)
+      def toString(u: URL) = u.toExternalForm
+    }
+
+  val location = property[URL]  // urlFormat is implicitly passed to the property method
+}}}
+
+=== System Property Examples ===
+
+{{{
+  val operatingSystem = system[String]("os.name")
+  val userHome = system[File]("user.home")
+  val custom = systemOptional[Int]("custom.property", 0)
+}}}
+
+== Usage Details ==
+
+A property has a value that you can read or write.  Some properties may not require an explicitly defined value and can instead fall back to a default value or, for user-defined properties, a value inherited from a parent project.  Specifically, when reading a property's value, the result is:
+ # The explicitly specified value for the property, if there is one
+ # Otherwise, the default value for the property, if one has been specified
+ # Otherwise, the value inherited from the respective variable in the parent project, if there is one
+ # Otherwise, the property's value is undefined
+
+There are three methods for reading a property's value that differ by how they handle undefined values:
+ * `value` returns the property value if it is defined or throws an exception if the property's value is undefined.
+ * `get` returns the property value wrapped in `Some` if it is defined or `None` if the value is undefined.
+ * `resolve` returns an instance of `sbt.PropertyResolution` that provides full information about the resolution of the value as described above:
+  * If an error occurred while processing, an instance of `sbt.ResolutionException` is returned.
+  * If the property's value is undefined, `sbt.UndefinedValue` is returned.
+  * If the property's value is defined, an instance of `sbt.DefinedValue` is returned.  It provides the resolved value and flags that indicate whether the value was inherited or was the default value.
+
+A property's value may be explicitly set using the `update` method.
+
+Behind the scenes, a property's value is converted to and from a `String` representation as needed according to the `sbt.Format` instance provided when defining the property (described later).  For a system property, every read and write converts to or from the `String` representation for `getProperty/setProperty` in `java.lang.System`.  User-defined properties are read from a standard `java.util.Properties`-formatted file at startup and are synchronized to that properties file after each explicitly invoked action executes.
+
+== User-Defined Property Definition ==
+
+To define a property, use one of the following methods defined by the `sbt.Environment` trait, from which all projects inherit.
+
+{{{
+	def property[T](implicit manifest: Manifest[T], format: Format[T]): Property[T]
+	def propertyLocal[T](implicit manifest: Manifest[T], format: Format[T]): Property[T]
+	def propertyOptional[T](defaultValue: => T)(implicit manifest: Manifest[T], format: Format[T]): Property[T]
+}}}
+
+The first variant creates a user-defined property that tries to inherit its value from a parent project, if there is one, if its value is not explicitly specified.  The second variant creates a user-defined property that 
+
+The implicit parameters do not usually need to be specified explicitly, however you may want to use different formats for the same type (such as a format for positive integers and one for negative integers).  In this case, there are variants of the above with an 'F' appended to the method name and with the `format` parameter in the normal parameter list (so that `manifest` may still be implied).
+
+For example,
+{{{
+  def propertyF[T](format: Format[T])(implicit manifest: Manifest[T]): Property[T]
+}}}
+
+In order for the value of a user-defined property to persist between builds, it must be assigned to a `val` in a `Project` subclass (see the examples).  The name of the val will be used as the property's name after being transformed from camel-case identifier style to period-separated property style (`propertyName` to `property.name`).
+
+== System Property Definition ==
+
+To define a system property, use one of the following methods defined by the `sbt.Environment` trait, which all projects inherit.
+
+{{{
+  def system[T](propName: String)(implicit format: Format[T]): Property[T]
+  def systemOptional[T](propName: String, defaultValue: => T)(implicit format: Format[T]): Property[T]
+}}}
+
+The first variant accepts the name of the system property and a formatter to convert between the `String` representation used by `System.getProperty` and `System.setProperty` and the type defined by the user.  Several formatters are predefined, including `Int`, `String`, `Long`, `Boolean`, `Double`, and `java.io.File`.  The second variant has the additional by-name argument for specifying a default value to return when the property is not defined.
+
+== Default Properties ==
+
+Every project has the following two properties defined.
+
+{{{
+  val projectName = propertyLocalF[String](NonEmptyStringFormat)
+  val projectVersion = property[Version]
+}}}
+
+The definition of `projectName` explictly specifies the format so that a project name cannot be empty.  Additionally, the `Local` in `propertyLocalF` specifies that the value for `propertyName` is not inherited from a parent project if is not explicitly set.  `projectVersion` can be inherited, however.
