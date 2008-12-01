@@ -64,7 +64,7 @@ To define a property, use one of the following methods defined by the `sbt.Envir
 	def propertyOptional[T](defaultValue: => T)(implicit manifest: Manifest[T], format: Format[T]): Property[T]
 }}}
 
-The first variant creates a user-defined property that tries to inherit its value from a parent project, if there is one, if its value is not explicitly specified.  The second variant creates a user-defined property that 
+The first variant creates a user-defined property that tries to inherit its value from a parent project, if there is one, if its value is not explicitly specified.  The second variant creates a user-defined property that does not try to inherit its value from a parent project.  The third variant creates a user-defined property that uses the given default value if it does not have an explicitly specified value.
 
 The implicit parameters do not usually need to be specified explicitly, however you may want to use different formats for the same type (such as a format for positive integers and one for negative integers).  In this case, there are variants of the above with an 'F' appended to the method name and with the `format` parameter in the normal parameter list (so that `manifest` may still be implied).
 
