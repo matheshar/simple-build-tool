@@ -1,4 +1,4 @@
-* Warning: This page describes the trunk version of sbt. *
+* Warning: This page describes version 0.2.0 of sbt. *
 
 = Properties =
 
