@@ -1,3 +1,12 @@
+=== 0.1.9 to 0.2.0 ===
+
+ * Implemented typed properties and access to system properties
+ * Renamed `metadata` directory to `project`
+ * Information previously in `info` file now obtained by properties:
+  * `info.name --> name`
+  * `info.currentVersion --> version`
+ * Concrete `Project` subclasses should have a constructor that accepts a single argument of type `ProjectInfo` (argument `dependencies: Iterable[Project]` has been merged into `ProjectInfo`)
+
 === 0.1.8 to 0.1.9 ===
 
  * Better default implementation of `allSources`.
