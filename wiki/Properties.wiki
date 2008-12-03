@@ -26,6 +26,16 @@
   val location = property[URL]  // urlFormat is implicitly passed to the property method
 }}}
 
+The properties are backed by a standard properties file `project/build.properties` that looks like:
+
+{{{
+#Project properties
+#Tue Dec 02 19:58:06 EST 2008
+location=http\://code.google.com/p/simple-build-tool/
+document.bottom.text=Some Bottom Text
+...
+}}}
+
 === System Property Examples ===
 
 {{{
