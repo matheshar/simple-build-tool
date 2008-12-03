@@ -13,7 +13,7 @@
   val timestamp = propertyOptional[Long](-1L) // This variant provides a default value.
 
   // Using a property
-  override def documentOptions = super.documentOptions ++ documentBottomText.getOption.map(documentBottom).toList
+  override def documentOptions = super.documentOptions ++ documentBottomText.get.map(documentBottom).toList
 
   // Custom format for java.net.URL
   implicit val urlFormat =
