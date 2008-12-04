@@ -9,7 +9,7 @@ Run sbt in your project directory.  If you have created a script to start sbt, t
 $ sbt
 }}}
 
-This starts sbt in interactive mode.  You are given a very simple prompt at which you type actions (or tasks, targets, phases, or whatever else you'd like to call them).
+This starts sbt in interactive mode.  You are given a very simple prompt at which you type actions (or tasks, targets, phases, or whatever you'd like to call them).
 
 Alternatively, you can run sbt in batch mode.  You specify a space-separated list of actions as arguments:
 {{{
@@ -39,6 +39,10 @@ $ sbt clean compile
   Set the logging level to `warn`.  This logging level only logs warnings and errors.
  * `error`
   Set the logging level to `error`.  This logging level only logs errors.
+ * `set property.name property value`
+  If a user property with name `property.name` exists for the current project, that property is set to value `property value` (no quotes are required for values with spaces).  Otherwise, the system property with name `property.name` is set with that value.
+ * `get property.name`
+  Shows the value of the property (user or system) with name `property.name`.
 
 == Build Actions ==
  * `clean`
