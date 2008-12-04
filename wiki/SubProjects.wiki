@@ -25,12 +25,12 @@ Finally, when working in an interactive session, you can switch to a specific pr
 
 A well-known, open source Scala-only (no Java) project that uses subprojects is [http://liftweb.net/index.php/Main_Page Lift].  Therefore, it is used as an example of how to set up subprojects.  You do not need to know how to use Lift for this example.  (Note: Lift is used as an example only for the reasons above, not because sbt will be used to build Lift at some point in the future.)
 
-The project definition, which goes in `metadata/build/src` as described in BuildConfiguration, looks like:
+The project definition, which goes in `project/build/src` as described in BuildConfiguration, looks like:
 
 {{{
 import sbt._
 
-class LiftProject(info: ProjectInfo, dependencies: Iterable[Project]) extends ParentProject(info, dependencies)
+class LiftProject(info: ProjectInfo) extends ParentProject(info)
 {
    lazy val lift = project("lift", "Lift Webkit")
    lazy val textile = project("lift-textile", "Lift Textile")
@@ -45,7 +45,7 @@ class LiftProject(info: ProjectInfo, dependencies: Iterable[Project]) extends Pa
    
    lazy val sites = project("sites", "Lift Sites", new SitesProject(_))
    
-   class SitesProject(info: ProjectInfo) extends ParentProject(info, Nil)
+   class SitesProject(info: ProjectInfo) extends ParentProject(info)
    {
       lazy val example = project("example", "Lift Example", core)
       lazy val skittr = project("skittr", "Skittr Example", core)
@@ -61,9 +61,9 @@ import sbt._
 }}}
 imports everything in the `sbt` package.  All `sbt` classes are currently in the `sbt` package.  The next line
 {{{
-class LiftProject(info: ProjectInfo, dependencies: Iterable[Project]) extends ParentProject(info, dependencies)
+class LiftProject(info: ProjectInfo) extends ParentProject(info)
 }}}
-defines a class that has a constructor signature with one more argument (`dependencies`) than usual and is a subclass of `sbt.ParentProject`, which is in turn a subclass of `sbt.Project`.  The extra argument contains the dependencies specified when the project is loaded with a call to `project` (see below).  `ParentProject` is the starting point for configuring a project that defines other projects.  `LiftProject` will be the initial project on `sbt` startup and all actions will be performed on it.
+defines a class with the usual constructor signature and is a subclass of `sbt.ParentProject`, which is in turn a subclass of `sbt.Project`.  `ParentProject` is the starting point for configuring a project that defines other projects.  `LiftProject` will be the initial project on `sbt` startup and all actions will be performed on it.
 
 The remaining lines define subprojects of the main project.  The `project` method is defined in `sbt.Project` and has several variants.  The main variant used here has the signature
 
@@ -71,7 +71,7 @@ The remaining lines define subprojects of the main project.  The `project` metho
 def project(path: Path, name: String, deps: Project*): Project
 }}}
 
-A `Path` is described in [Paths].  The path provided to `project` specifies the directory containing the subproject and is relative to the project directory of the enclosing project (`LiftProject` in this case).  `name` is the name of the project and is specified here to avoid the need to create the `metadata/info` file in every subproject.  The version of the new project is inherited from the enclosing project.  The last argument is a list of dependencies of the project.
+A `Path` is described in [Paths].  The path provided to `project` specifies the directory containing the subproject and is relative to the project directory of the enclosing project (`LiftProject` in this case).  `name` is the name of the project and is specified here to avoid the need to set the name property the usual way in every subproject.  The version of the new project is inherited from the enclosing project.  The last argument is a list of dependencies of the project.
 
 Implicit in using this method is that the project is of the default project type, `sbt.DefaultProject`.  This can be changed by using the variant of `project` with another argument before the dependencies of type:
 
@@ -81,13 +81,13 @@ ProjectInfo => Project
 
 As is shown for the definition of `sites`, this is usually just the constructor of a `Project` subclass.
 
-The first note about `SitesProject` is that it is embedded in `LiftProject`.  This is useful so that `sbt` only finds one top-level subclass of `Project` and automatically loads it on startup.  (To have multiple top-level `Project` definitions, you would have to explicitly specify the class name of the one that is the entry point on the third line of `metadata/info`)
+The first note about `SitesProject` is that it is embedded in `LiftProject`.  This is important so that `sbt` only finds one top-level subclass of `Project` and automatically loads it on startup.
 
 Next, `SitesProject` subclasses `ParentProject` and so it defines subprojects itself.  These subprojects can depend on projects in the outer class, as is done in `SitesProject`.
 
 Using a `Project` definition other than `sbt.DefaultProject` is also useful for concrete projects (usually subclasses of `ScalaProject`), although this is not shown here.  This way, all project configuration can be done in the parent project if desired.
 
-Alternatively, each subproject can configured by providing `metadata/info` in each project and configuring the build in `metadata/build/src`.  In this case, the form of `project` used would be:
+Alternatively, each subproject can configured with its `project` directory as with a single project.  In this case, the form of `project` used would be:
 
 {{{
 def project(path: Path, deps: Project*): Project
