@@ -11,7 +11,7 @@ The basic steps are:
 
 = Launching Sbt =
 
-The easiest way to launch sbt is to create a one-line script.  Download [http://simple-build-tool.googlecode.com/files/sbt-0.1.9.jar sbt.jar] if you have not already.  I will refer to the full path to `sbt.jar` as `sbt_home/sbt.jar` in the scripts.
+The easiest way to launch sbt is to create a one-line script.  Download [http://simple-build-tool.googlecode.com/files/sbt-0.2.0.jar sbt.jar] if you have not already.  I will refer to the full path to `sbt.jar` as `sbt_home/sbt.jar` in the scripts.
 
 === Unix ===
 Put the line
@@ -37,7 +37,7 @@ See RunningSbt for sbt usage instructions.
 
 = Create Project =
 
-When you run sbt and it does not find a project in the current directory, it asks if you want to create a new project.  If you say yes, sbt will prompt for a project name and version and create the projection information file and directory structure.  These are described in the following sections.
+When you run sbt and it does not find a project in the current directory, it asks if you want to create a new project.  If you say yes, sbt will prompt for a project name and version and create the project properties file and directory structure.  These are described in the following sections.
 
 = Directory Layout =
 
@@ -67,12 +67,12 @@ directory or any subdirectory of `lib`.  Again, `.svn` directories will be ignor
 
 The project information directory is:
 {{{
-  metadata/
-    info
-  build/
+  project/
+    build.properties
+    build/
 }}}
 
-The `info` file provides basic project information and is described in the next section.  The `build` directory is where further configuration is done and is described in BuildConfiguration.
+The `build.properties` file contains the project name and version and any other user-defined properties (see [Properties]).  The `build` directory is where further configuration is done and is described in BuildConfiguration.
 
 Generated files (classes, jars, analysis, and documentation) will be written to the
 {{{
@@ -80,20 +80,10 @@ Generated files (classes, jars, analysis, and documentation) will be written to 
 }}}
 directory.  This directory does not need to be manually created.
 
-
-= Project Information File =
-
-The `metadata/info` file is a text file that consists of two lines.
- * The first line is your project's name.
- * The second line is your project's version.
-This information is used for the API documentation title and the base name of generated jars.
-
-Further configuration is done by describing a project in Scala.  See BuildConfiguration.
-
 = Summary =
 
  # Create a launcher script
- # Setup your directory structure and `metadata/info` by running `sbt` in your project directory.
+ # Setup your project information and directory structure by running `sbt` in your project directory.
  # Put libraries in `lib`
  # Read RunningSbt for basic usage instructions
  # Start with BuildConfiguration for further project configuration.
