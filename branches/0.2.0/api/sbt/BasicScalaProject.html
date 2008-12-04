@@ -1,0 +1,1442 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head><title>class BasicScalaProject in sbt</title>
+        <meta http-equiv="content-type" content="text/html; charset=UTF8"></meta><meta content="scaladoc (version 2.7.2.final)" name="generator"></meta><link href="../style.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../script.js"></script>
+        </head>
+        <body onload="init()">
+        <table summary="" class="navigation">
+        <tr>
+          <td class="navigation-links" valign="top">
+            <!-- <table><tr></tr></table> -->
+          </td>
+          <td align="right" valign="top" style="white-space:nowrap;" rowspan="2">
+            <div class="doctitle-larger">Simple Build Tool 0.2.0</div>
+          </td>
+        </tr>
+        <tr><td></td></tr>
+      </table>
+        
+      <div class="entity">
+        <a href="../sbt$package.html" target="_self">sbt</a>
+        <br></br>
+        <span class="entity">class  BasicScalaProject</span>
+      </div><hr></hr>
+      <div class="source">
+        [source: <a href="" class="sbt/BasicScalaProject"><code>sbt/BasicScalaProject.scala</code></a>]
+      </div><hr></hr>
+      <a name="BasicScalaProject"></a><dl>
+      <dt>
+        
+        <code>abstract</code>
+        <code>class</code>
+        <em>BasicScalaProject</em>
+      </dt>
+      <dd><code> extends </code><a href="../sbt/ManagedScalaProject.html" target="_self">ManagedScalaProject</a><code> with </code><a href="../sbt/BasicProjectPaths.html" target="_self">BasicProjectPaths</a><code> with </code><a href="../sbt/ReflectiveManagedProject.html" target="_self">ReflectiveManagedProject</a></dd>
+    </dl><dl>
+      <dt style="margin:10px 0 0 20px;"><b>Direct Known Subclasses:</b></dt>
+      <dd><a href="../sbt/DefaultProject.html" target="_self">DefaultProject</a></dd>
+      </dl><hr></hr>
+      
+
+<table summary="" cellpadding="3" class="member">
+      <tr><td class="title" colspan="2">Value Summary</td></tr>
+      <tr>
+      <td class="modifiers" valign="top"> 
+        <code> lazy val</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/BasicScalaProject.html#clean" target="_self">clean</a></em>
+         : <a href="../sbt/TaskManager.Task.html" target="_self">Task</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> lazy val</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/BasicScalaProject.html#cleanLib" target="_self">cleanLib</a></em>
+         : <a href="../sbt/TaskManager.Task.html" target="_self">Task</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> lazy val</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/BasicScalaProject.html#compile" target="_self">compile</a></em>
+         : <a href="../sbt/TaskManager.Task.html" target="_self">Task</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> lazy val</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/BasicScalaProject.html#console" target="_self">console</a></em>
+         : <a href="../sbt/TaskManager.Task.html" target="_self">Task</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> lazy val</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/BasicScalaProject.html#doc" target="_self">doc</a></em>
+         : <a href="../sbt/TaskManager.Task.html" target="_self">Task</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> lazy val</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/BasicScalaProject.html#docAll" target="_self">docAll</a></em>
+         : <a href="../sbt/TaskManager.Task.html" target="_self">Task</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> lazy val</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/BasicScalaProject.html#docTest" target="_self">docTest</a></em>
+         : <a href="../sbt/TaskManager.Task.html" target="_self">Task</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> lazy val</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/BasicScalaProject.html#graph" target="_self">graph</a></em>
+         : <a href="../sbt/TaskManager.Task.html" target="_self">Task</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> val</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/BasicScalaProject.html#mainCompileConditional" target="_self">mainCompileConditional</a></em>
+         : <a href="../sbt/CompileConditional.html" target="_self">CompileConditional</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> lazy val</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/BasicScalaProject.html#package" target="_self">package</a></em>
+         : <a href="../sbt/TaskManager.Task.html" target="_self">Task</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> lazy val</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/BasicScalaProject.html#packageAll" target="_self">packageAll</a></em>
+         : <a href="../sbt/TaskManager.Task.html" target="_self">Task</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> lazy val</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/BasicScalaProject.html#packageDocs" target="_self">packageDocs</a></em>
+         : <a href="../sbt/TaskManager.Task.html" target="_self">Task</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> lazy val</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/BasicScalaProject.html#packageSrc" target="_self">packageSrc</a></em>
+         : <a href="../sbt/TaskManager.Task.html" target="_self">Task</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> lazy val</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/BasicScalaProject.html#packageTest" target="_self">packageTest</a></em>
+         : <a href="../sbt/TaskManager.Task.html" target="_self">Task</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> lazy val</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/BasicScalaProject.html#run" target="_self">run</a></em>
+         : <a href="../sbt/TaskManager.Task.html" target="_self">Task</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> lazy val</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/BasicScalaProject.html#test" target="_self">test</a></em>
+         : <a href="../sbt/TaskManager.Task.html" target="_self">Task</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> lazy val</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/BasicScalaProject.html#testCompile" target="_self">testCompile</a></em>
+         : <a href="../sbt/TaskManager.Task.html" target="_self">Task</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> val</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/BasicScalaProject.html#testCompileConditional" target="_self">testCompileConditional</a></em>
+         : <a href="../sbt/CompileConditional.html" target="_self">CompileConditional</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> lazy val</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/BasicScalaProject.html#update" target="_self">update</a></em>
+         : <a href="../sbt/TaskManager.Task.html" target="_self">Task</a>
+        
+        
+      </td>
+    </tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Values and Variables inherited from <a href="../sbt/ManagedScalaProject.html" target="_self">ManagedScalaProject</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="../sbt/ManagedScalaProject.html#Synchronize" target="_self">Synchronize</a>, <a href="../sbt/ManagedScalaProject.html#Validate" target="_self">Validate</a>, <a href="../sbt/ManagedScalaProject.html#QuietUpdate" target="_self">QuietUpdate</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Values and Variables inherited from <a href="../sbt/ScalaProject.html" target="_self">ScalaProject</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="../sbt/ScalaProject.html#Deprecation" target="_self">Deprecation</a>, <a href="../sbt/ScalaProject.html#ExplainTypes" target="_self">ExplainTypes</a>, <a href="../sbt/ScalaProject.html#Optimize" target="_self">Optimize</a>, <a href="../sbt/ScalaProject.html#Verbose" target="_self">Verbose</a>, <a href="../sbt/ScalaProject.html#Unchecked" target="_self">Unchecked</a>, <a href="../sbt/ScalaProject.html#DisableWarnings" target="_self">DisableWarnings</a>, <a href="../sbt/ScalaProject.html#LinkSource" target="_self">LinkSource</a>, <a href="../sbt/ScalaProject.html#NoComment" target="_self">NoComment</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Values and Variables inherited from <a href="../sbt/Project.html" target="_self">Project</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="../sbt/Project.html#log" target="_self">log</a>, <a href="../sbt/Project.html#projectVersion" target="_self">projectVersion</a>, <a href="../sbt/Project.html#projectName" target="_self">projectName</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Values and Variables inherited from <a href="../sbt/BasicEnvironment.html" target="_self">BasicEnvironment</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="../sbt/BasicEnvironment.html#IntFormat" target="_self">IntFormat</a>, <a href="../sbt/BasicEnvironment.html#LongFormat" target="_self">LongFormat</a>, <a href="../sbt/BasicEnvironment.html#DoubleFormat" target="_self">DoubleFormat</a>, <a href="../sbt/BasicEnvironment.html#BooleanFormat" target="_self">BooleanFormat</a>, <a href="../sbt/BasicEnvironment.html#StringFormat" target="_self">StringFormat</a>, <a href="../sbt/BasicEnvironment.html#NonEmptyStringFormat" target="_self">NonEmptyStringFormat</a>, <a href="../sbt/BasicEnvironment.html#VersionFormat" target="_self">VersionFormat</a>, <a href="../sbt/BasicEnvironment.html#FileFormat" target="_self">FileFormat</a>
+        </td></tr>
+      </table>
+<table summary="" cellpadding="3" class="member">
+      <tr><td class="title" colspan="2">Method Summary</td></tr>
+      <tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/BasicScalaProject.html#allSources" target="_self">allSources</a></em>
+         : <a href="../sbt/PathFinder.html" target="_self">PathFinder</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/BasicScalaProject.html#cleanOptions" target="_self">cleanOptions</a></em>
+         : <a href="" target="contentFrame" class="scala/Seq">scala.Seq</a>[<a href="../sbt/ScalaProject.CleanOption.html" target="_self">CleanOption</a>]
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/BasicScalaProject.html#compileClasspath" target="_self">compileClasspath</a></em>
+         : <a href="../sbt/PathFinder.html" target="_self">PathFinder</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/BasicScalaProject.html#compileOptions" target="_self">compileOptions</a></em>
+         : <a href="" target="contentFrame" class="scala/Seq">scala.Seq</a>[<a href="../sbt/ScalaProject.CompileOption.html" target="_self">CompileOption</a>]
+        
+        <div>The options provided to the 'compile' action.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/BasicScalaProject.html#consoleClasspath" target="_self">consoleClasspath</a></em>
+         : <a href="../sbt/PathFinder.html" target="_self">PathFinder</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/BasicScalaProject.html#consoleConfiguration" target="_self">consoleConfiguration</a></em>
+         : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/BasicScalaProject.html#defaultExcludes" target="_self">defaultExcludes</a></em>
+         : <a href="../sbt/NameFilter.html" target="_self">NameFilter</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/BasicScalaProject.html#defaultIncludeAll" target="_self">defaultIncludeAll</a></em>
+         : <a href="../sbt/NameFilter.html" target="_self">NameFilter</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/BasicScalaProject.html#dependencies" target="_self">dependencies</a></em>
+         : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="../sbt/Project.html" target="_self">Project</a>]
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/BasicScalaProject.html#docClasspath" target="_self">docClasspath</a></em>
+         : <a href="../sbt/PathFinder.html" target="_self">PathFinder</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/BasicScalaProject.html#documentOptions" target="_self">documentOptions</a></em>
+         : <a href="" target="contentFrame" class="scala/Seq">scala.Seq</a>[<a href="../sbt/ScalaProject.ScaladocOption.html" target="_self">ScaladocOption</a>]
+        
+        <div>The options provided to the 'doc' and 'docTest' actions.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/BasicScalaProject.html#excludeIDs" target="_self">excludeIDs</a></em>
+         : <a href="" target="contentFrame" class="scala/List">scala.List</a>[<a href="../sbt/ModuleID.html" target="_self">ModuleID</a>]
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/BasicScalaProject.html#fullClasspath%28String%29" target="_self">fullClasspath</a></em>
+        (<em>config</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>) : <a href="../sbt/PathFinder.html" target="_self">PathFinder</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/BasicScalaProject.html#fullClasspath%28String%2CBoolean%29" target="_self">fullClasspath</a></em>
+        (<em>config</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <em>includeTestCompilePath</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/Boolean.html" target="_self">Boolean</a>) : <a href="../sbt/PathFinder.html" target="_self">PathFinder</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>override final def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/BasicScalaProject.html#initializeDirectories%28%29" target="_self">initializeDirectories</a></em>
+         : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+        
+        <div>Initializes the project directories when a user has requested that sbt create a new project.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/BasicScalaProject.html#mainClass" target="_self">mainClass</a></em>
+         : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+        
+        <div>The class to be run by the 'run' action.
+ See http://code.google.com/p/simple-build-tool/wiki/RunningProjectCode for details.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/BasicScalaProject.html#mainClasses" target="_self">mainClasses</a></em>
+         : <a href="../sbt/PathFinder.html" target="_self">PathFinder</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/BasicScalaProject.html#mainCompileConfiguration" target="_self">mainCompileConfiguration</a></em>
+         : <a href="../sbt/BasicScalaProject.MainCompileConfig.html" target="_self">MainCompileConfig</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/BasicScalaProject.html#mainLabel" target="_self">mainLabel</a></em>
+         : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/BasicScalaProject.html#mainResources" target="_self">mainResources</a></em>
+         : <a href="../sbt/PathFinder.html" target="_self">PathFinder</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/BasicScalaProject.html#mainSources" target="_self">mainSources</a></em>
+         : <a href="../sbt/PathFinder.html" target="_self">PathFinder</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/BasicScalaProject.html#managedClasspath%28String%29" target="_self">managedClasspath</a></em>
+        (<em>config</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>) : <a href="../sbt/PathFinder.html" target="_self">PathFinder</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/BasicScalaProject.html#manager" target="_self">manager</a></em>
+         : <a href="../sbt/SimpleManager.html" target="_self">SimpleManager</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/BasicScalaProject.html#projectClasspath%28String%2CBoolean%29" target="_self">projectClasspath</a></em>
+        (<em>config</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <em>includeTestCompilePath</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/Boolean.html" target="_self">Boolean</a>) : <a href="../sbt/PathFinder.html" target="_self">PathFinder</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/BasicScalaProject.html#projectID" target="_self">projectID</a></em>
+         : <a href="../sbt/ModuleID.html" target="_self">ModuleID</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/BasicScalaProject.html#runClasspath" target="_self">runClasspath</a></em>
+         : <a href="../sbt/PathFinder.html" target="_self">PathFinder</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/BasicScalaProject.html#runOptions" target="_self">runOptions</a></em>
+         : <a href="" target="contentFrame" class="scala/Seq">scala.Seq</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+        
+        <div>The options provided to the 'run' action.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/BasicScalaProject.html#testClasses" target="_self">testClasses</a></em>
+         : <a href="../sbt/PathFinder.html" target="_self">PathFinder</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/BasicScalaProject.html#testClasspath" target="_self">testClasspath</a></em>
+         : <a href="../sbt/PathFinder.html" target="_self">PathFinder</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/BasicScalaProject.html#testCompileConfiguration" target="_self">testCompileConfiguration</a></em>
+         : <a href="../sbt/BasicScalaProject.TestCompileConfig.html" target="_self">TestCompileConfig</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/BasicScalaProject.html#testCompileOptions" target="_self">testCompileOptions</a></em>
+         : <a href="" target="contentFrame" class="scala/Seq">scala.Seq</a>[<a href="../sbt/ScalaProject.CompileOption.html" target="_self">CompileOption</a>]
+        
+        <div>The options provided to the 'test-compile' action, defaulting to those for the 'compile' action.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/BasicScalaProject.html#testFrameworks" target="_self">testFrameworks</a></em>
+         : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="../sbt/TestFramework.html" target="_self">TestFramework</a>]
+        
+        <div>The list of test frameworks to use for testing.  Note that adding frameworks to this list
+ for an active project currently requires an explicit 'clean'.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/BasicScalaProject.html#testLabel" target="_self">testLabel</a></em>
+         : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/BasicScalaProject.html#testOptions" target="_self">testOptions</a></em>
+         : <a href="" target="contentFrame" class="scala/Seq">scala.Seq</a>[<a href="../sbt/ScalaProject.TestOption.html" target="_self">TestOption</a>]
+        
+        <div>The options provided to the 'test' action.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/BasicScalaProject.html#testResources" target="_self">testResources</a></em>
+         : <a href="../sbt/PathFinder.html" target="_self">PathFinder</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/BasicScalaProject.html#testSources" target="_self">testSources</a></em>
+         : <a href="../sbt/PathFinder.html" target="_self">PathFinder</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>implicit def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/BasicScalaProject.html#toGroupID%28String%29" target="_self">toGroupID</a></em>
+        (<em>groupID</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>) : <a href="../sbt/GroupID.html" target="_self">GroupID</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>implicit def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/BasicScalaProject.html#toRepositoryName%28String%29" target="_self">toRepositoryName</a></em>
+        (<em>name</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>) : <a href="../sbt/RepositoryName.html" target="_self">RepositoryName</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/BasicScalaProject.html#unmanagedClasspath" target="_self">unmanagedClasspath</a></em>
+         : <a href="../sbt/PathFinder.html" target="_self">PathFinder</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/BasicScalaProject.html#updateOptions" target="_self">updateOptions</a></em>
+         : <a href="" target="contentFrame" class="scala/Seq">scala.Seq</a>[<a href="../sbt/ManagedScalaProject.ManagedOption.html" target="_self">ManagedOption</a>]
+        
+        <div>The options provided to the 'update' action.</div>
+      </td>
+    </tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="../sbt/ReflectiveLibraryDependencies.html" target="_self">ReflectiveLibraryDependencies</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="../sbt/ReflectiveLibraryDependencies.html#libraryDependencies" target="_self">libraryDependencies</a>, <a href="../sbt/ReflectiveLibraryDependencies.html#reflectiveLibraryDependencies" target="_self">reflectiveLibraryDependencies</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="../sbt/ReflectiveRepositories.html" target="_self">ReflectiveRepositories</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="../sbt/ReflectiveRepositories.html#repositories" target="_self">repositories</a>, <a href="../sbt/ReflectiveRepositories.html#reflectiveRepositories" target="_self">reflectiveRepositories</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="../sbt/ReflectiveTasks.html" target="_self">ReflectiveTasks</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="../sbt/ReflectiveTasks.html#tasks" target="_self">tasks</a>, <a href="../sbt/ReflectiveTasks.html#reflectiveTaskMappings" target="_self">reflectiveTaskMappings</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="../sbt/ReflectiveModules.html" target="_self">ReflectiveModules</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="../sbt/ReflectiveModules.html#subProjects" target="_self">subProjects</a>, <a href="../sbt/ReflectiveModules.html#reflectiveModuleMappings" target="_self">reflectiveModuleMappings</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="../sbt/BasicProjectPaths.html" target="_self">BasicProjectPaths</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="../sbt/BasicProjectPaths.html#defaultJarBaseName" target="_self">defaultJarBaseName</a>, <a href="../sbt/BasicProjectPaths.html#defaultJarName" target="_self">defaultJarName</a>, <a href="../sbt/BasicProjectPaths.html#outputDirectoryName" target="_self">outputDirectoryName</a>, <a href="../sbt/BasicProjectPaths.html#sourceDirectoryName" target="_self">sourceDirectoryName</a>, <a href="../sbt/BasicProjectPaths.html#mainDirectoryName" target="_self">mainDirectoryName</a>, <a href="../sbt/BasicProjectPaths.html#scalaDirectoryName" target="_self">scalaDirectoryName</a>, <a href="../sbt/BasicProjectPaths.html#resourcesDirectoryName" target="_self">resourcesDirectoryName</a>, <a href="../sbt/BasicProjectPaths.html#testDirectoryName" target="_self">testDirectoryName</a>, <a href="../sbt/BasicProjectPaths.html#mainCompileDirectoryName" target="_self">mainCompileDirectoryName</a>, <a href="../sbt/BasicProjectPaths.html#testCompileDirectoryName" target="_self">testCompileDirectoryName</a>, <a href="../sbt/BasicProjectPaths.html#dependencyDirectoryName" target="_self">dependencyDirectoryName</a>, <a href="../sbt/BasicProjectPaths.html#docDirectoryName" target="_self">docDirectoryName</a>, <a href="../sbt/BasicProjectPaths.html#apiDirectoryName" target="_self">apiDirectoryName</a>, <a href="../sbt/BasicProjectPaths.html#graphDirectoryName" target="_self">graphDirectoryName</a>, <a href="../sbt/BasicProjectPaths.html#managedDirectoryName" target="_self">managedDirectoryName</a>, <a href="../sbt/BasicProjectPaths.html#mainAnalysisDirectoryName" target="_self">mainAnalysisDirectoryName</a>, <a href="../sbt/BasicProjectPaths.html#testAnalysisDirectoryName" target="_self">testAnalysisDirectoryName</a>, <a href="../sbt/BasicProjectPaths.html#dependencyPath" target="_self">dependencyPath</a>, <a href="../sbt/BasicProjectPaths.html#managedDependencyPath" target="_self">managedDependencyPath</a>, <a href="../sbt/BasicProjectPaths.html#outputPath" target="_self">outputPath</a>, <a href="../sbt/BasicProjectPaths.html#sourcePath" target="_self">sourcePath</a>, <a href="../sbt/BasicProjectPaths.html#mainSourcePath" target="_self">mainSourcePath</a>, <a href="../sbt/BasicProjectPaths.html#mainScalaSourcePath" target="_self">mainScalaSourcePath</a>, <a href="../sbt/BasicProjectPaths.html#mainResourcesPath" target="_self">mainResourcesPath</a>, <a href="../sbt/BasicProjectPaths.html#mainDocPath" target="_self">mainDocPath</a>, <a href="../sbt/BasicProjectPaths.html#mainCompilePath" target="_self">mainCompilePath</a>, <a href="../sbt/BasicProjectPaths.html#mainAnalysisPath" target="_self">mainAnalysisPath</a>, <a href="../sbt/BasicProjectPaths.html#testSourcePath" target="_self">testSourcePath</a>, <a href="../sbt/BasicProjectPaths.html#testScalaSourcePath" target="_self">testScalaSourcePath</a>, <a href="../sbt/BasicProjectPaths.html#testResourcesPath" target="_self">testResourcesPath</a>, <a href="../sbt/BasicProjectPaths.html#testDocPath" target="_self">testDocPath</a>, <a href="../sbt/BasicProjectPaths.html#testCompilePath" target="_self">testCompilePath</a>, <a href="../sbt/BasicProjectPaths.html#testAnalysisPath" target="_self">testAnalysisPath</a>, <a href="../sbt/BasicProjectPaths.html#docPath" target="_self">docPath</a>, <a href="../sbt/BasicProjectPaths.html#graphPath" target="_self">graphPath</a>, <a href="../sbt/BasicProjectPaths.html#outputDirectories" target="_self">outputDirectories</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="../sbt/ManagedScalaProject.html" target="_self">ManagedScalaProject</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="../sbt/ManagedScalaProject.html#updateTask%28String%2Csbt.Path%2CManagedScalaProject.this.ManagedOption*%29" target="_self">updateTask</a>, <a href="../sbt/ManagedScalaProject.html#cleanLibTask%28sbt.Path%29" target="_self">cleanLibTask</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="../sbt/ScalaProject.html" target="_self">ScalaProject</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="../sbt/ScalaProject.html#errorTask%28String%29" target="_self">errorTask</a>, <a href="../sbt/ScalaProject.html#target%28ScalaProject.this.Target.Value%29" target="_self">target</a>, <a href="../sbt/ScalaProject.html#access%28ScalaProject.this.Access.Value%29" target="_self">access</a>, <a href="../sbt/ScalaProject.html#documentBottom%28String%29" target="_self">documentBottom</a>, <a href="../sbt/ScalaProject.html#documentCharset%28String%29" target="_self">documentCharset</a>, <a href="../sbt/ScalaProject.html#documentTitle%28String%29" target="_self">documentTitle</a>, <a href="../sbt/ScalaProject.html#documentFooter%28String%29" target="_self">documentFooter</a>, <a href="../sbt/ScalaProject.html#documentHeader%28String%29" target="_self">documentHeader</a>, <a href="../sbt/ScalaProject.html#stylesheetFile%28sbt.Path%29" target="_self">stylesheetFile</a>, <a href="../sbt/ScalaProject.html#documentTop%28String%29" target="_self">documentTop</a>, <a href="../sbt/ScalaProject.html#windowTitle%28String%29" target="_self">windowTitle</a>, <a href="../sbt/ScalaProject.html#consoleTask%28sbt.PathFinder%29" target="_self">consoleTask</a>, <a href="../sbt/ScalaProject.html#runTask%28Option%5BString%5D%2Csbt.PathFinder%2CString*%29" target="_self">runTask</a>, <a href="../sbt/ScalaProject.html#cleanTask%28sbt.PathFinder%2CScalaProject.this.CleanOption*%29" target="_self">cleanTask</a>, <a href="../sbt/ScalaProject.html#testTask%28Iterable%5Bsbt.TestFramework%5D%2Csbt.PathFinder%2Csbt.CompileAnalysis%2CScalaProject.this.TestOption*%29" target="_self">testTask</a>, <a href="../sbt/ScalaProject.html#graphTask%28sbt.Path%2Csbt.CompileAnalysis%29" target="_self">graphTask</a>, <a href="../sbt/ScalaProject.html#scaladocTask%28String%2Csbt.PathFinder%2Csbt.Path%2Csbt.PathFinder%2CScalaProject.this.ScaladocOption*%29" target="_self">scaladocTask</a>, <a href="../sbt/ScalaProject.html#packageTask%28sbt.PathFinder%2Csbt.Path%2CString%2CScalaProject.this.PackageOption*%29" target="_self">packageTask</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="../sbt/Project.html" target="_self">Project</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="../sbt/Project.html#info" target="_self">info</a> (abstract), <a href="../sbt/Project.html#logImpl" target="_self">logImpl</a>, <a href="../sbt/Project.html#name" target="_self">name</a>, <a href="../sbt/Project.html#version" target="_self">version</a>, <a href="../sbt/Project.html#taskNames" target="_self">taskNames</a>, <a href="../sbt/Project.html#taskList" target="_self">taskList</a>, <a href="../sbt/Project.html#projectNames" target="_self">projectNames</a>, <a href="../sbt/Project.html#act%28String%29" target="_self">act</a>, <a href="../sbt/Project.html#path%28String%29" target="_self">path</a>, <a href="../sbt/Project.html#filter%28String%29" target="_self">filter</a>, <a href="../sbt/Project.html#project%28sbt.Path%2Csbt.Project*%29" target="_self">project</a>, <a href="../sbt/Project.html#project%28sbt.Path%2CString%2Csbt.Project*%29" target="_self">project</a>, <a href="../sbt/Project.html#project%28sbt.Path%2CString%2CClass%5BP%5D%2Csbt.Project*%29" target="_self">project</a>, <a href="../sbt/Project.html#project%28sbt.Path%2CString%2C%28sbt.ProjectInfo%29%3D%3EP%2Csbt.Project*%29" target="_self">project</a>, <a href="../sbt/Project.html#parallelExecution" target="_self">parallelExecution</a>, <a href="../sbt/Project.html#shouldCheckOutputDirectories" target="_self">shouldCheckOutputDirectories</a>, <a href="../sbt/Project.html#envBackingPath" target="_self">envBackingPath</a>, <a href="../sbt/Project.html#parentEnvironment" target="_self">parentEnvironment</a>, <a href="../sbt/Project.html#runAndSaveEnvironment%28%3D%3EOption%5BString%5D%29" target="_self">runAndSaveEnvironment</a>, <a href="../sbt/Project.html#toString%28%29" target="_self">toString</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="../sbt/BasicEnvironment.html" target="_self">BasicEnvironment</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="../sbt/BasicEnvironment.html#environmentLabel" target="_self">environmentLabel</a>, <a href="../sbt/BasicEnvironment.html#system%28String%29" target="_self">system</a>, <a href="../sbt/BasicEnvironment.html#systemOptional%28String%2C%3D%3ET%29" target="_self">systemOptional</a>, <a href="../sbt/BasicEnvironment.html#property%28scala.reflect.Manifest%5BT%5D%2Csbt.Format%5BT%5D%29" target="_self">property</a>, <a href="../sbt/BasicEnvironment.html#propertyLocal%28scala.reflect.Manifest%5BT%5D%2Csbt.Format%5BT%5D%29" target="_self">propertyLocal</a>, <a href="../sbt/BasicEnvironment.html#propertyOptional%28%3D%3ET%29" target="_self">propertyOptional</a>, <a href="../sbt/BasicEnvironment.html#propertyNames" target="_self">propertyNames</a>, <a href="../sbt/BasicEnvironment.html#getPropertyNamed%28String%29" target="_self">getPropertyNamed</a>, <a href="../sbt/BasicEnvironment.html#propertyNamed%28String%29" target="_self">propertyNamed</a>, <a href="../sbt/BasicEnvironment.html#saveEnvironment%28%29" target="_self">saveEnvironment</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="../sbt/Environment.html" target="_self">Environment</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="../sbt/Environment.html#propertyF%28sbt.Format%5BT%5D%29" target="_self">propertyF</a>, <a href="../sbt/Environment.html#propertyLocalF%28sbt.Format%5BT%5D%29" target="_self">propertyLocalF</a>, <a href="../sbt/Environment.html#propertyOptionalF%28%3D%3ET%2Csbt.Format%5BT%5D%29" target="_self">propertyOptionalF</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="../sbt/Dag.html" target="_self">Dag</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="../sbt/Dag.html#topologicalSort" target="_self">topologicalSort</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="../sbt/TaskManager.html" target="_self">TaskManager</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="../sbt/TaskManager.html#task%28%3D%3EOption%5BString%5D%29" target="_self">task</a>, <a href="../sbt/TaskManager.html#interactiveTask%28%3D%3EOption%5BString%5D%29" target="_self">interactiveTask</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#getClass%28%29" target="_self">getClass</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#hashCode%28%29" target="_self">hashCode</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#equals%28Any%29" target="_self">equals</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#clone%28%29" target="_self">clone</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#notify%28%29" target="_self">notify</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#notifyAll%28%29" target="_self">notifyAll</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#wait%28Long%29" target="_self">wait</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#wait%28Long%2CInt%29" target="_self">wait</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#wait%28%29" target="_self">wait</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#finalize%28%29" target="_self">finalize</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#%3D%3D%28AnyRef%29" target="_self">==</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#%21%3D%28AnyRef%29" target="_self">!=</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#eq%28AnyRef%29" target="_self">eq</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#ne%28AnyRef%29" target="_self">ne</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#synchronized%28T0%29" target="_self">synchronized</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html" target="_self">Any</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html#%3D%3D%28Any%29" target="_self">==</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html#%21%3D%28Any%29" target="_self">!=</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html#isInstanceOf" target="_self">isInstanceOf</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html#asInstanceOf" target="_self">asInstanceOf</a>
+        </td></tr>
+      </table>
+<table summary="" cellpadding="3" class="member">
+      <tr><td class="title" colspan="2">Class Summary</td></tr>
+      <tr>
+      <td class="modifiers" valign="top"> 
+        <code>abstract class</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/BasicScalaProject.BaseCompileConfig.html" target="_self">BaseCompileConfig</a></em>
+        <code> extends </code><a href="../sbt/CompileConfiguration.html" target="_self">CompileConfiguration</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> class</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/BasicScalaProject.MainCompileConfig.html" target="_self">MainCompileConfig</a></em>
+        <code> extends </code><a href="../sbt/BasicScalaProject.BaseCompileConfig.html" target="_self">BaseCompileConfig</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> class</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/BasicScalaProject.TestCompileConfig.html" target="_self">TestCompileConfig</a></em>
+        <code> extends </code><a href="../sbt/BasicScalaProject.BaseCompileConfig.html" target="_self">BaseCompileConfig</a>
+        
+        
+      </td>
+    </tr>
+      </table>
+
+      
+
+<table summary="" cellpadding="3" class="member-detail">
+          <tr><td class="title">Value Details</td></tr>
+        </table><div><a name="mainCompileConditional"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>val</code>
+        <em>mainCompileConditional</em> : <a href="../sbt/CompileConditional.html" target="_self">CompileConditional</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="testCompileConditional"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>val</code>
+        <em>testCompileConditional</em> : <a href="../sbt/CompileConditional.html" target="_self">CompileConditional</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="compile"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>lazy val</code>
+        <em>compile</em> : <a href="../sbt/TaskManager.Task.html" target="_self">Task</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="testCompile"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>lazy val</code>
+        <em>testCompile</em> : <a href="../sbt/TaskManager.Task.html" target="_self">Task</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="clean"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>lazy val</code>
+        <em>clean</em> : <a href="../sbt/TaskManager.Task.html" target="_self">Task</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="run"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>lazy val</code>
+        <em>run</em> : <a href="../sbt/TaskManager.Task.html" target="_self">Task</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="console"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>lazy val</code>
+        <em>console</em> : <a href="../sbt/TaskManager.Task.html" target="_self">Task</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="doc"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>lazy val</code>
+        <em>doc</em> : <a href="../sbt/TaskManager.Task.html" target="_self">Task</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="docTest"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>lazy val</code>
+        <em>docTest</em> : <a href="../sbt/TaskManager.Task.html" target="_self">Task</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="test"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>lazy val</code>
+        <em>test</em> : <a href="../sbt/TaskManager.Task.html" target="_self">Task</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="package"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>lazy val</code>
+        <em>package</em> : <a href="../sbt/TaskManager.Task.html" target="_self">Task</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="packageTest"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>lazy val</code>
+        <em>packageTest</em> : <a href="../sbt/TaskManager.Task.html" target="_self">Task</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="packageDocs"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>lazy val</code>
+        <em>packageDocs</em> : <a href="../sbt/TaskManager.Task.html" target="_self">Task</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="packageSrc"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>lazy val</code>
+        <em>packageSrc</em> : <a href="../sbt/TaskManager.Task.html" target="_self">Task</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="docAll"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>lazy val</code>
+        <em>docAll</em> : <a href="../sbt/TaskManager.Task.html" target="_self">Task</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="packageAll"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>lazy val</code>
+        <em>packageAll</em> : <a href="../sbt/TaskManager.Task.html" target="_self">Task</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="graph"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>lazy val</code>
+        <em>graph</em> : <a href="../sbt/TaskManager.Task.html" target="_self">Task</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="update"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>lazy val</code>
+        <em>update</em> : <a href="../sbt/TaskManager.Task.html" target="_self">Task</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="cleanLib"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>lazy val</code>
+        <em>cleanLib</em> : <a href="../sbt/TaskManager.Task.html" target="_self">Task</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr></div>
+<table summary="" cellpadding="3" class="member-detail">
+          <tr><td class="title">Method Details</td></tr>
+        </table><div><a name="mainClass"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>mainClass</em> : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>The class to be run by the 'run' action.
+ See http://code.google.com/p/simple-build-tool/wiki/RunningProjectCode for details.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="dependencies"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>dependencies</em> : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="../sbt/Project.html" target="_self">Project</a>]
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="allSources"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>allSources</em> : <a href="../sbt/PathFinder.html" target="_self">PathFinder</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="mainSources"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>mainSources</em> : <a href="../sbt/PathFinder.html" target="_self">PathFinder</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="testSources"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>testSources</em> : <a href="../sbt/PathFinder.html" target="_self">PathFinder</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="mainResources"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>mainResources</em> : <a href="../sbt/PathFinder.html" target="_self">PathFinder</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="testResources"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>testResources</em> : <a href="../sbt/PathFinder.html" target="_self">PathFinder</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="mainClasses"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>mainClasses</em> : <a href="../sbt/PathFinder.html" target="_self">PathFinder</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="testClasses"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>testClasses</em> : <a href="../sbt/PathFinder.html" target="_self">PathFinder</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="defaultExcludes"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>defaultExcludes</em> : <a href="../sbt/NameFilter.html" target="_self">NameFilter</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="defaultIncludeAll"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>defaultIncludeAll</em> : <a href="../sbt/NameFilter.html" target="_self">NameFilter</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="projectID"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>projectID</em> : <a href="../sbt/ModuleID.html" target="_self">ModuleID</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="excludeIDs"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>excludeIDs</em> : <a href="" target="contentFrame" class="scala/List">scala.List</a>[<a href="../sbt/ModuleID.html" target="_self">ModuleID</a>]
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="manager"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>manager</em> : <a href="../sbt/SimpleManager.html" target="_self">SimpleManager</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="updateOptions"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>updateOptions</em> : <a href="" target="contentFrame" class="scala/Seq">scala.Seq</a>[<a href="../sbt/ManagedScalaProject.ManagedOption.html" target="_self">ManagedOption</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>The options provided to the 'update' action.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="compileOptions"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>compileOptions</em> : <a href="" target="contentFrame" class="scala/Seq">scala.Seq</a>[<a href="../sbt/ScalaProject.CompileOption.html" target="_self">CompileOption</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>The options provided to the 'compile' action.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="testCompileOptions"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>testCompileOptions</em> : <a href="" target="contentFrame" class="scala/Seq">scala.Seq</a>[<a href="../sbt/ScalaProject.CompileOption.html" target="_self">CompileOption</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>The options provided to the 'test-compile' action, defaulting to those for the 'compile' action.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="runOptions"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>runOptions</em> : <a href="" target="contentFrame" class="scala/Seq">scala.Seq</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>The options provided to the 'run' action.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="documentOptions"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>documentOptions</em> : <a href="" target="contentFrame" class="scala/Seq">scala.Seq</a>[<a href="../sbt/ScalaProject.ScaladocOption.html" target="_self">ScaladocOption</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>The options provided to the 'doc' and 'docTest' actions.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="testOptions"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>testOptions</em> : <a href="" target="contentFrame" class="scala/Seq">scala.Seq</a>[<a href="../sbt/ScalaProject.TestOption.html" target="_self">TestOption</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>The options provided to the 'test' action.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="cleanOptions"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>cleanOptions</em> : <a href="" target="contentFrame" class="scala/Seq">scala.Seq</a>[<a href="../sbt/ScalaProject.CleanOption.html" target="_self">CleanOption</a>]
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="initializeDirectories%28%29"></a><dl>
+      <dt>
+        
+        <code>override final</code>
+        <code>def</code>
+        <em>initializeDirectories</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Initializes the project directories when a user has requested that sbt create a new project.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="consoleConfiguration"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>consoleConfiguration</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="docClasspath"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>docClasspath</em> : <a href="../sbt/PathFinder.html" target="_self">PathFinder</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="compileClasspath"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>compileClasspath</em> : <a href="../sbt/PathFinder.html" target="_self">PathFinder</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="testClasspath"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>testClasspath</em> : <a href="../sbt/PathFinder.html" target="_self">PathFinder</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="runClasspath"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>runClasspath</em> : <a href="../sbt/PathFinder.html" target="_self">PathFinder</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="consoleClasspath"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>consoleClasspath</em> : <a href="../sbt/PathFinder.html" target="_self">PathFinder</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="managedClasspath%28String%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>managedClasspath</em>(<em>config</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>) : <a href="../sbt/PathFinder.html" target="_self">PathFinder</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="unmanagedClasspath"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>unmanagedClasspath</em> : <a href="../sbt/PathFinder.html" target="_self">PathFinder</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="projectClasspath%28String%2CBoolean%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>projectClasspath</em>(<em>config</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <em>includeTestCompilePath</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/Boolean.html" target="_self">Boolean</a>) : <a href="../sbt/PathFinder.html" target="_self">PathFinder</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="fullClasspath%28String%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>fullClasspath</em>(<em>config</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>) : <a href="../sbt/PathFinder.html" target="_self">PathFinder</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="fullClasspath%28String%2CBoolean%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>fullClasspath</em>(<em>config</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <em>includeTestCompilePath</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/Boolean.html" target="_self">Boolean</a>) : <a href="../sbt/PathFinder.html" target="_self">PathFinder</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="testFrameworks"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>testFrameworks</em> : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="../sbt/TestFramework.html" target="_self">TestFramework</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>The list of test frameworks to use for testing.  Note that adding frameworks to this list
+ for an active project currently requires an explicit 'clean'.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="mainLabel"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>mainLabel</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="testLabel"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>testLabel</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="mainCompileConfiguration"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>mainCompileConfiguration</em> : <a href="../sbt/BasicScalaProject.MainCompileConfig.html" target="_self">MainCompileConfig</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="testCompileConfiguration"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>testCompileConfiguration</em> : <a href="../sbt/BasicScalaProject.TestCompileConfig.html" target="_self">TestCompileConfig</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="toGroupID%28String%29"></a><dl>
+      <dt>
+        
+        <code>implicit</code>
+        <code>def</code>
+        <em>toGroupID</em>(<em>groupID</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>) : <a href="../sbt/GroupID.html" target="_self">GroupID</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="toRepositoryName%28String%29"></a><dl>
+      <dt>
+        
+        <code>implicit</code>
+        <code>def</code>
+        <em>toRepositoryName</em>(<em>name</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>) : <a href="../sbt/RepositoryName.html" target="_self">RepositoryName</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr></div>
+
+
+    <hr></hr>
+        <table summary="" class="navigation">
+        <tr>
+          <td class="navigation-links" valign="top">
+            <!-- <table><tr></tr></table> -->
+          </td>
+          <td align="right" valign="top" style="white-space:nowrap;" rowspan="2">
+            <div class="doctitle-larger">Simple Build Tool 0.2.0</div>
+          </td>
+        </tr>
+        <tr><td></td></tr>
+      </table>
+      </body>
+      </html>
