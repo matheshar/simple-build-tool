@@ -38,7 +38,7 @@ object Test
 
 Customize the build by creating a new file called
 {{{
-metadata/build/src/TestProject.scala
+project/build/src/TestProject.scala
 }}}
 
 with the following content:
