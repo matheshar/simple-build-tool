@@ -4,4 +4,4 @@
 
 Compile the sources in `sbt/` using Scala 2.7.2 and then package the classes and the scalac-plugin.xml file in `sbt.jar`. 
 
-You can use the bash script `build` in the root directory for this.
+You can use the bash script `build` in the root directory for this.  Alternatively, if you already have `sbt` setup, you can use `sbt` to build itself.
