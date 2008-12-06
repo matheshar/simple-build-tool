@@ -13,6 +13,8 @@ project/
                 .svn/
                 LICENSE
                 logo.png
+                left.png
+                right.png
             scala/
                 .svn/
                 sbt/
@@ -67,7 +69,7 @@ This selects all files that end in `.scala` that are in `src` or a descendent di
 val sourceSet: Set[Path] = scalaSources.get
 }}}
 
-If the filesystem changes, a second call to `get` on the same `PathFinder` object will reflect the changes.  That is, the `get` method reevaluates the list of paths each time.
+If the filesystem changes, a second call to `get` on the same `PathFinder` object will reflect the changes.  That is, the `get` method reevaluates the list of paths each time.  `get` only returns `Path`s that existed at the time it was called.
 
 Selecting files that are immediate children of a subdirectory is done with a single `*`:
 
@@ -116,18 +118,31 @@ sbt/
     Analyzer.class
 }}}
 
-=== Name Filters ===
+=== Excluding Paths ===
 
-There are some useful operations on `NameFilter`s.  A common problem is excluding version control directories.  This can be accomplished as follows:
+A common problem is excluding version control directories.  This can be accomplished as follows:
 
 {{{
-val sources = "src" ** (- ".svn") * "*.scala"
+val sources = ("src" ** "*.scala") --- ("src" ** ".svn" ** "*.scala")
 }}}
 
-This first selects all descendent (or self) paths with name not equal to `.svn`.  Then, all children of those paths with name ending in `.scala` are selected.
+The first selector selects all Scala sources and the second removes all sources that are a descendent of a `.svn` directory.  This pattern is common enough that there is a method `descendentsExcept` that does the same thing as the above:
 
-The `|` operator declares alternative `NameFilter`s:
+{{{
+val sources = "src".descendentsExcept("*.scala", ".svn")
+}}}
+
+=== Name Filters ===
+
+There are some useful operations on `NameFilter`s.  The `|` operator declares alternative `NameFilter`s:
 
 {{{
 val sources = "src" ** ("*.scala" | "*.java")
 }}}
+
+The `-` operator excludes a set of names:
+{{{
+val imageResources = "src"/"main"/"resources" * ("*.png" - "logo.png")
+}}}
+
+This will get `right.png` and `left.png`.  `-` is also available as a prefix operator.
