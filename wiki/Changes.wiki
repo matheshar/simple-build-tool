@@ -1,3 +1,16 @@
+=== 0.2.0 to trunk ===
+
+ * Added some action descriptions
+ * jar name now comes from normalized name (lowercased and spaces to dashes)
+ * Some cleanups related to creating filters
+ * Path should only 'get' itself if the underlying file exists to be consistent with other `PathFinders`
+ * Added `---` operator for `PathFinder` that excludes paths from the `PathFinder` argument
+ * Removed `***` operator on `PathFinder`
+ * `**` operator on `PathFinder` matches all descendents or self that match the `NameFilter` argument
+ * The above should fix bug `#6`
+ * Added version increment and release actions.
+ * Can now build sbt with sbt.  Build scripts `build` and `clean` will still exist.
+
 === 0.1.9 to 0.2.0 ===
 
  * Implemented typed properties and access to system properties
