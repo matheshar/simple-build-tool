@@ -1,3 +1,7 @@
+=== 0.2.1 to 0.2.2 ===
+ * Package name is now a call-by-name parameter for the package action
+ * Fixed release action calling compile multiple times
+
 === 0.2.0 to 0.2.1 ===
 
  * Added some action descriptions
