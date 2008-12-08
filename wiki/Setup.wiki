@@ -4,10 +4,11 @@ This page describes how to set up your project for use with sbt.
 All paths are relative to your project directory.
 
 The basic steps are:
- # Create a script to launch sbt
- # Create your project with sbt
- # Put libraries in `lib` and sources in `src`
- # Read RunningSbt for basic usage instructions
+ # Create a script to launch sbt.
+ # Create your project with sbt.
+ # Put libraries in `lib` and sources in `src`.
+ # Read RunningSbt for basic usage instructions.
+ # Read BuildConfiguration for further configuration.
 
 = Launching Sbt =
 
@@ -63,7 +64,7 @@ All dependencies (jars) go in the
 {{{
   lib/
 }}}
-directory or any subdirectory of `lib`.  Again, `.svn` directories will be ignored.  If you want to use [http://code.google.com/p/scalacheck/ ScalaCheck] for testing, it should go in here as well.  You will need a version compiled with Scala 2.7.2.
+directory or any subdirectory of `lib`.  Again, `.svn` directories will be ignored.  If you want to use [http://code.google.com/p/scalacheck/ ScalaCheck], [http://code.google.com/p/specs/ specs], or [http://www.artima.com/scalatest/ ScalaTest] for testing, those should go in here as well.  Alternatively, you can let `sbt` automatically manage your dependencies (see LibraryManagement).
 
 The project information directory is:
 {{{
@@ -78,12 +79,12 @@ Generated files (classes, jars, analysis, and documentation) will be written to 
 {{{
   target/
 }}}
-directory.  This directory does not need to be manually created.
+directory.
 
 = Summary =
 
- # Create a launcher script
+ # Create a launcher script.
  # Setup your project information and directory structure by running `sbt` in your project directory.
- # Put libraries in `lib`
- # Read RunningSbt for basic usage instructions
+ # Put libraries in `lib` or configure automatic dependency management.
+ # Read RunningSbt for basic usage instructions.
  # Start with BuildConfiguration for further project configuration.
