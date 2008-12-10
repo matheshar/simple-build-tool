@@ -1,3 +1,11 @@
+=== 0.2.2 to trunk ===
+
+ * Added tests for `Dag`, `NameFilter`
+ * Fixed handling of trailing `*`s in `GlobFilter` and added some error-checking for control characters, which `Pattern` doesn't seem to like
+ * Fixed `Analysis.allProducts` implementation
+  * It previously returned the sources instead of the generated classes
+  * Will only affect the count of classes (it should be correct now) and the debugging of missed classes (erroneously listed classes as missed)
+
 === 0.2.1 to 0.2.2 ===
  * Package name is now a call-by-name parameter for the package action
  * Fixed release action calling compile multiple times
