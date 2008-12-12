@@ -10,9 +10,7 @@
  * Added `Seq[..Option]` alternative to `...Option*` for tasks
  * Documentation generation fixed to use latest value of version
  * Fixed `BasicVersion.incrementMicro`
-<wiki:comment>
  * Fixed test class loading so that `sbt` can test the version of `sbt` being developed (previously, the classes from the executing version of `sbt` were tested)
-</wiki:comment>
 
 
 === 0.2.1 to 0.2.2 ===
