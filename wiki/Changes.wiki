@@ -1,4 +1,4 @@
-=== 0.2.2 to trunk ===
+=== 0.2.2 to 0.2.3 ===
 
  * Added tests for `Dag`, `NameFilter`, `Version`
  * Fixed handling of trailing `*`s in `GlobFilter` and added some error-checking for control characters, which `Pattern` doesn't seem to like
