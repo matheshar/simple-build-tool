@@ -1,6 +1,6 @@
 = Introduction =
 
-This page describes how to use `sbt` once you have your project set up (see [Setup]).
+This page describes how to use `sbt` once you have set up your project (see [Setup]).
 
 = Running =
 
@@ -9,24 +9,54 @@ Run sbt in your project directory.  If you have created a script to start sbt, t
 $ sbt
 }}}
 
-This starts sbt in interactive mode.  You are given a very simple prompt at which you type actions (or tasks, targets, phases, or whatever you'd like to call them).
+This starts sbt in interactive mode.  You are given a simple prompt at which you type actions (or tasks, targets, phases, or whatever you'd like to call them).
 
-Alternatively, you can run sbt in batch mode.  You specify a space-separated list of actions as arguments:
+Alternatively, you can run sbt in batch mode.  You specify a space-separated list of actions as arguments.  For example,
 {{{
 $ sbt clean compile
 }}}
 
 = Actions =
 
-== Special Actions ==
+== Build Actions ==
+ * `clean`
+  Deletes all generated files (the `target` directory).
+ * `compile`
+  Compiles the main sources (in the `src/main/scala` directory).
+ * `doc`
+  Generates API documentation for Scala source files in `src/main/scala` using scaladoc.  Runs `compile` first.
+ * `doc-test`
+  Generates API documentation for Scala source files in `src/test/scala` using scaladoc.  Runs `test-compile` first.
+ * `doc-all`
+  Runs `doc` and `doc-test`.
+ * `console`
+  Starts the Scala interpreter with a classpath including the compiled sources and all jars in the `lib` directory.  To return to sbt, type `:quit`, Ctrl+D (Unix), or Ctrl+Z (Windows).  Runs `compile-test` first.
+ * `package`
+  Creates a jar file containing classes compiled from `src/main/scala` and the files in `src/main/resources`.  Runs `compile` first.
+ * `package-test`
+  Creates a jar file containing classes compiled from `src/test/scala` and the files in `src/test/resources`.  Runs `test-compile` first.
+ * `package-src`
+  Creates a jar file containing all Scala source files in `src/`
+ * `package-docs`
+  Creates a jar file containing API documentation generated from Scala source files in `src/main/scala`.  Runs `doc` first.
+ * `package-all`
+  Runs all of the package actions.
+ * `release`
+  Compiles, tests, generates documentation, packages, and increments the version.
+ * `run`
+  Runs the class specified in the project definition (see BuildConfiguration for specifying the main class) in the same virtual machine as `sbt`.  Please see RunningProjectCode for details on the use of `System.exit` and multithreading (including GUIs) in code run by this action.  Runs `compile` first.
+ * `test-compile`
+  Compiles the test sources (in the `src/test/scala` directory).  Runs `compile` first.
+ * `test`
+  Runs all tests detected during compilation.  Runs `test-compile` first.
+ * `update`
+  Resolves and retrieves external dependencies as described in LibraryManagement.
+
+== Interactive Actions ==
  * `exit` or `quit`
   End the current interactive session.
  * `actions`
   List all available actions.
- * `projects`
-  List all available projects.
- * `project <project name>`
-  Change the current project to the project named <project name>.  Further operations will be done on the given project.
  * `current`
   Print the current project and logging level.
  * `info`
@@ -40,38 +70,10 @@ $ sbt clean compile
  * `error`
   Set the logging level to `error`.  This logging level only logs errors.
  * `set property.name property value`
-  If a user property with name `property.name` exists for the current project, that property is set to value `property value` (no quotes are required for values with spaces).  Otherwise, the system property with name `property.name` is set with that value.
+  If a user property with name `property.name` exists for the current project, that property is set to value `property value` (no quotes are required for values with spaces).  Otherwise, the system property with name `property.name` is set to value `property value`. (See [Properties] for more on properties)
  * `get property.name`
-  Shows the value of the property (user or system) with name `property.name`.
-
-== Build Actions ==
- * `clean`
-  Deletes all generated files (the `target` directory).
- * `compile`
-  Compiles all sources (in both the `src/main/scala` and `src/test/scala` directories).
- * `test`
-  Runs all tests detected during compilation.  Runs `compile` first.
- * `doc`
-  Generates API documentation for Scala source files in `src/main/scala` using scaladoc.  Runs `compile` first.
- * `doc-test`
-  Generates API documentation for Scala source files in `src/test/scala` using scaladoc.  Runs `compile` first.
- * `doc-all`
-  Generates API documentation for all Scala source files in `src` using scaladoc.  Runs `compile` first.
- * `console`
-  Starts the Scala interpreter with a classpath including the compiled sources and all jars in the `lib` directory.  To return to sbt, type `:quit`, Ctrl+D (Unix), or Ctrl+Z (Windows).  Runs `compile` first.
- * `package`
-  Creates a jar file containing classes compiled from `src/main/scala` and the files in `src/main/resources`.  Runs `compile` first.
- * `package-test`
-  Creates a jar file containing classes compiled from `src/test/scala` and the files in `src/test/resources`.  Runs `compile` first.
- * `package-src`
-  Creates a jar file containing all Scala source files in `src/`
- * `package-docs`
-  Creates a jar file containing API documentation generated from Scala source files in `src/main/scala`.  Runs `doc` first.
- * `package-all`
-  Runs all of the package actions.  Runs `compile` first.
- * `release`
-  Compiles, tests, generates documentation, packages, and increments the version.
- * `run`
-  Runs the class specified in the project definition (see BuildConfiguration for specifying the main class) in the same virtual machine as `sbt`.  Please see RunningProjectCode for details on the use of `System.exit` and multithreading (including GUIs) in code run by this action.
- * `update`
-  Resolves and retrieves external dependencies as described in LibraryManagement.
+  Shows the value of the property (user or system) with name `property.name`. (See [Properties] for more on properties)
+ * `projects`
+  List all available projects (See SubProjects for more on multiple projects).
+ * `project <project name>`
+  Change the current project to the project named <project name>.  Further operations will be done on the given project. (See SubProjects for more on multiple projects)
