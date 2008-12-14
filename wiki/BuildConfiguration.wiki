@@ -126,12 +126,12 @@ Method `testOptions` specifies the options for the `test` action.  The only avai
 
 Method `updateOptions` specifies the options for the dependency management task `update`.  Available options are:
  * `Validate`   Specifying this validates the configuration files (Maven or Ivy)
- * `Synchronize`   Specifying this removes libraries from the managed library directory that are not currently used.
+ * `Synchronize`   Specifying this removes libraries that are not currently used from the managed library directory.
  * `QuietUpdate`   Specifying this puts Ivy in quiet mode during execution.
 
 = Changing Paths =
 
-The only paths in `sbt` that are completely fixed are the locations of the files in the `metadata` directory.  The other paths, such as the path to sources, jars, and outputs, are configurable.  Overriding the default paths is described in this section.  See [Paths] for details on constructing paths.
+The only paths in `sbt` that are completely fixed are the locations of the files in the `project` directory.  The other paths, such as the path to sources, jars, and outputs, are configurable.  Overriding the default paths is described in this section.  See [Paths] for details on constructing paths.
 
 Paths in `sbt` are incrementally built up out of path components so that you can easily rename any directory in the path or modify the path structure.
 
