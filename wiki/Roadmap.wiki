@@ -1,6 +1,6 @@
 == Introduction ==
 
-This is the roadmap to a first release.  The work remaining is mainly documentation and testing.
+This is the roadmap for `sbt`.  The current goals are mainly documentation and testing.
 
 Comments and suggestions are welcome.
 
@@ -18,5 +18,4 @@ This list describes the documentation to be done.
 == Testing ==
 
  * Dependency analysis
- * Test execution
- * Regression testing framework
+ * General framework for running tests on sample projects
