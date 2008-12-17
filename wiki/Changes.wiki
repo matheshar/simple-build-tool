@@ -1,3 +1,6 @@
+=== 0.2.3 to 0.3 ===
+ * Version change only for first release.
+
 === 0.2.2 to 0.2.3 ===
 
  * Added tests for `Dag`, `NameFilter`, `Version`
