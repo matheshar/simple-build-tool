@@ -23,47 +23,35 @@ Finally, when working in an interactive session, you can switch to a specific pr
 
 = Usage =
 
-A well-known, open source Scala-only (no Java) project that uses subprojects is [http://liftweb.net/index.php/Main_Page Lift].  Therefore, it is used as an example of how to set up subprojects.  You do not need to know how to use Lift for this example.  (Note: Lift is used as an example only for the reasons above, not because sbt will be used to build Lift at some point in the future.)
-
-The project definition, which goes in `project/build/src` as described in BuildConfiguration, looks like:
+To demonstrate subprojects, consider a project for a simulator (flight simulator, circuit simulator, ...).  It might have the backend as one project and the user interface as a separate project.  Then, there might be some examples demonstrating using the backend embedded in another application or some examples showing how to use the user interface.  The following project definition (which goes in `project/build/src` as described in BuildConfiguration) would be one way of describing this project:
 
 {{{
 import sbt._
 
-class LiftProject(info: ProjectInfo) extends ParentProject(info)
+class SimulatorProject(info: ProjectInfo) extends ParentProject(info)
 {
-   lazy val lift = project("lift", "Lift Webkit")
-   lazy val textile = project("lift-textile", "Lift Textile")
-   lazy val facebook = project("lift-facebook", "Lift Facebook", lift)
-   lazy val amqp = project("lift-amqp", "Lift AMQP")
-   lazy val xmpp = project("lift-xmpp", "Lift XMPP")
-   lazy val widgets = project("lift-widgets", "Lift Widgets", lift)
-   lazy val openID = project("lift-openid", "Lift OpenID", lift)
-   lazy val oauth = project("lift-oauth", "Lift OAuth")
-   lazy val testkit = project("lift-testkit", "Lift Testkit", lift)
-   lazy val core = project("lift-core", "Lift Core", lift, textile, facebook, amqp, xmpp, widgets)
+   lazy val core = project("core", "Simulator Core")
+   lazy val ui = project("ui", "Simulator User Interface")
    
-   lazy val sites = project("sites", "Lift Sites", new SitesProject(_))
+   lazy val examples = project("examples", "Simulator Examples", new Examples(_))
    
-   class SitesProject(info: ProjectInfo) extends ParentProject(info)
+   class Examples(info: ProjectInfo) extends ParentProject(info)
    {
-      lazy val example = project("example", "Lift Example", core)
-      lazy val skittr = project("skittr", "Skittr Example", core)
-      lazy val hellolift = project("hellolift", "HelloLift example application", core)
-      lazy val hellodarwin = project("hellodarwin", "HelloDarwin tutorial application", core)
+      lazy val embedded = project("embedded", "Embedded Simulator Example", core)
+      lazy val standalone = project("standalone", "Standalone Simulator Example", core)
    }
 }
 }}}
 
-Let's look at each piece.  The first line
+The first line
 {{{
 import sbt._
 }}}
 imports everything in the `sbt` package.  All `sbt` classes are currently in the `sbt` package.  The next line
 {{{
-class LiftProject(info: ProjectInfo) extends ParentProject(info)
+class SimulatorProject(info: ProjectInfo) extends ParentProject(info)
 }}}
-defines a class with the usual constructor signature and is a subclass of `sbt.ParentProject`, which is in turn a subclass of `sbt.Project`.  `ParentProject` is the starting point for configuring a project that defines other projects.  `LiftProject` will be the initial project on `sbt` startup and all actions will be performed on it.
+defines a class with the usual constructor signature and is a subclass of `sbt.ParentProject`, which is in turn a subclass of `sbt.Project`.  `ParentProject` is the starting point for configuring a project that defines other projects.  `SimulatorProject` will be the initial project on `sbt` startup and all actions will be performed on it.
 
 The remaining lines define subprojects of the main project.  The `project` method is defined in `sbt.Project` and has several variants.  The main variant used here has the signature
 
@@ -71,7 +59,7 @@ The remaining lines define subprojects of the main project.  The `project` metho
 def project(path: Path, name: String, deps: Project*): Project
 }}}
 
-A `Path` is described in [Paths].  The path provided to `project` specifies the directory containing the subproject and is relative to the project directory of the enclosing project (`LiftProject` in this case).  `name` is the name of the project and is specified here to avoid the need to set the name property the usual way in every subproject.  The version of the new project is inherited from the enclosing project.  The last argument is a list of dependencies of the project.
+A `Path` is described in [Paths].  The path provided to `project` specifies the directory containing the subproject and is relative to the project directory of the enclosing project (`SimulatorProject` in this case).  `name` is the name of the project and is specified here to avoid the need to set the name property the usual way in every subproject.  The version of the new project is inherited from the enclosing project.  The last argument is a list of dependencies of the project.
 
 Implicit in using this method is that the project is of the default project type, `sbt.DefaultProject`.  This can be changed by using the variant of `project` with another argument before the dependencies of type:
 
@@ -79,11 +67,11 @@ Implicit in using this method is that the project is of the default project type
 ProjectInfo => Project
 }}}
 
-As is shown for the definition of `sites`, this is usually just the constructor of a `Project` subclass.
+As is shown for the definition of `examples`, this is usually just the constructor of a `Project` subclass.
 
-The first note about `SitesProject` is that it is embedded in `LiftProject`.  This is important so that `sbt` only finds one top-level subclass of `Project` and automatically loads it on startup.
+The first note about `Examples` is that it is embedded in `SimulatorProject`.  This is important so that `sbt` only finds one top-level subclass of `Project` and automatically loads it on startup.
 
-Next, `SitesProject` subclasses `ParentProject` and so it defines subprojects itself.  These subprojects can depend on projects in the outer class, as is done in `SitesProject`.
+Next, `Examples` subclasses `ParentProject` and so it defines subprojects itself.  These subprojects can depend on projects in the outer class, as is done in `Examples`.
 
 Using a `Project` definition other than `sbt.DefaultProject` is also useful for concrete projects (usually subclasses of `ScalaProject`), although this is not shown here.  This way, all project configuration can be done in the parent project if desired.
 
