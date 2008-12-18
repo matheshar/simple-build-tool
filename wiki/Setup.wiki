@@ -1,7 +1,6 @@
 = Introduction =
 
 This page describes how to set up your project for use with sbt.
-All paths are relative to your project directory.
 
 The basic steps are:
  # Create a script to launch sbt.
@@ -38,7 +37,7 @@ When you run sbt and it does not find a project in the current directory, it ask
 
 = Directory Layout =
 
-Sbt uses the same directory structure as [http://maven.apache.org/ Maven] for source files by default:
+Sbt uses the same directory structure as [http://maven.apache.org/ Maven] for source files by default (all paths are relative to the project directory):
 
 {{{
   src/
