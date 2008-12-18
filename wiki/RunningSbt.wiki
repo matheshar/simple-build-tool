@@ -9,7 +9,7 @@ Run sbt in your project directory.  If you have created a script to start sbt, t
 $ sbt
 }}}
 
-This starts sbt in interactive mode.  You are given a simple prompt at which you type actions (or tasks, targets, phases, or whatever you'd like to call them).
+This starts sbt in interactive mode.  You are given a simple prompt at which you type actions (or tasks, targets, phases, or whatever you'd like to call them).  There is tab completion and history available at this prompt.
 
 Alternatively, you can run sbt in batch mode.  You specify a space-separated list of actions as arguments.  For example,
 {{{
@@ -30,7 +30,7 @@ $ sbt clean compile
  * `doc-all`
   Runs `doc` and `doc-test`.
  * `console`
-  Starts the Scala interpreter with a classpath including the compiled sources and all jars in the `lib` directory.  To return to sbt, type `:quit`, Ctrl+D (Unix), or Ctrl+Z (Windows).  Runs `compile-test` first.
+  Starts the Scala interpreter with a classpath including the compiled sources and all jars in the `lib` directory.  To return to sbt, type `:quit`, Ctrl+D (Unix), or Ctrl+Z (Windows).  Runs `test-compile` first.
  * `package`
   Creates a jar file containing classes compiled from `src/main/scala` and the files in `src/main/resources`.  Runs `compile` first.
  * `package-test`
