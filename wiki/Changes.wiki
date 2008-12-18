@@ -1,3 +1,6 @@
+=== 0.3 to 0.3.1 ===
+ * Fixed bugs #8, #9, and #10.
+
 === 0.2.3 to 0.3 ===
  * Version change only for first release.
 
