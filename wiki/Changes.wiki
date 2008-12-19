@@ -1,3 +1,9 @@
+=== 0.3.2 to trunk ===
+ * Fixed bug #11.
+
+=== 0.3.1 to 0.3.2 ===
+ * Compiled jar with Java 1.5.
+
 === 0.3 to 0.3.1 ===
  * Fixed bugs #8, #9, and #10.
 
