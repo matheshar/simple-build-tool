@@ -1,5 +1,6 @@
 === 0.3.2 to trunk ===
  * Fixed bug #11.
+ * Fixed scala-tools not being used by default for inline configurations.
 
 === 0.3.1 to 0.3.2 ===
  * Compiled jar with Java 1.5.
