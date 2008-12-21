@@ -1,6 +1,9 @@
 === 0.3.2 to trunk ===
  * Fixed bug #11.
  * Fixed scala-tools not being used by default for inline configurations.
+ * Small dependency management error message correction
+ * Slight refactoring for specifying whether scala-tools releases gets added to configured resolvers
+ * Separated repository/dependency overriding
 
 === 0.3.1 to 0.3.2 ===
  * Compiled jar with Java 1.5.
