@@ -6,6 +6,12 @@
  * Separated repository/dependency overriding so that repositories can be specified inline for use with `ivy.xml` or `pom.xml` files
  * Added ability to specify Ivy XML configuration in Scala.
  * Added `clean-cache` action for deleting Ivy's cache
+ * Some initial work towards accessing a resource directory from tests
+ * Initial tests for `Path`
+ * Some additional `FileUtilities` methods, some `FileUtilities` method adjustments and some initial tests for `FileUtilities`
+ * A basic framework for testing `ReflectUtilities`, not run by default because of run time
+ * Minor cleanup to `Path` and added non-empty check to path components
+ * Catch additional exceptions in `TestFramework`
 
 === 0.3.1 to 0.3.2 ===
  * Compiled jar with Java 1.5.
