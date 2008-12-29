@@ -1,0 +1,67 @@
+*Warning: This is a work in progress and describes the trunk version of sbt.*
+
+= Introduction =
+
+This page describes how to define your own actions and how to modify the builtin actions.
+
+= Creating Actions =
+
+Create a new action by constructing a `Task` instance and assigning it to a `val`.  The name of the `val` is used as the name of the action after transforming camel-case style to be dash separated (for example, `testCompile` becomes `test-compile`).  A `Task` is constructed with the `task` method and represents a unit of work.  You provide the code to execute when the task is invoked as the argument to `task`.  Return `None` if the task executes successfully or return an error message wrapped in `Some` if it does not.  The `log` method (of type `sbt.Logger`) can be used for logging information.
+
+Example:
+{{{
+  lazy val print = task { log.info("This is a test."); None }
+}}}
+
+The `val` is required so that `sbt` can discover the task using reflection and so that the task can used as a dependency of other tasks.  Using `lazy` avoids initialization issues.
+
+You specify the dependencies of a task with the `dependsOn` method.  You provide a description using the `describedAs` method.
+
+Example:
+{{{
+  lazy val jars = task { ... } dependsOn(compile, doc) describedAs("Package classes and API docs.")
+  lazy val compile = ...
+  lazy val doc = ...
+}}}
+
+*Note:* The dependencies that you refer to must be assigned to a `val`.  The following would be incorrect:
+
+{{{
+  //Incorrect example:
+  lazy val jar = task { ... } dependsOn(compile, test)
+  lazy val test = task { ... } dependsOn(compile)
+  def compile = task { ... }
+}}}
+
+In this case, `jar` depends on a different `compile` task than `test` does because the `compile` method returns a different object each time it is called.  So, the `compile` task would run twice when `jar` is executed.
+
+= Modifying Actions =
+
+Most of the default actions (such as `clean`, `test`, `run`, `doc`, and `package`) are defined using the following pattern, shown here for the `run` action:
+
+{{{
+  lazy val run = runAction
+  def runAction = runTask(mainClass, runClasspath, runOptions) dependsOn(compile) describedAs(RunDescription)
+  def runTask(mainClass: Option[String], classpath: PathFinder, options: => Seq[String]): Task = task { ... }
+}}}
+
+This approach is intended to provide flexibility for when you need to change the default behavior.  The first statement binds a new action called `run` to the task returned by `runAction`.  It is not possible to override a `lazy val` (which is required for reasons described in the Creating Actions section above), and so the actual task is created by the overridable second statement `runAction`.
+
+The second statement specifies options to a third method that defines the general behavior of a task.  The second statement also specifies the dependencies for the task. 
+
+This third method is often shared between similar actions.  For example, there is a single `packageTask` method defined in `sbt.ScalaProject` that is used by the `package`, `packageSrc`, packageDocs`, and `packageTest` actions.
+
+There are two main scenarios that require modifying the default actions.  The first is changing the behavior of a default action.  For example, you might want to create a war file instead of a jar file.  The second is changing the dependencies of the default tasks.  For example, you might want to write a task that preprocesses your sources before compilation.  You'd want to make the `compile` task depend on the preprocessor task.  In the first case, you would completely redefine `packageAction` to be:
+
+{{{
+  override def packageAction = task { createWar() } dependsOn(compile) describedAs("Creates a war file.")
+}}}
+
+Again, note that the compile dependency is referenced by the `lazy val` it is assigned to.  That is, do `dependsOn(compile)` and not `dependsOn(compileAction)`.
+
+In the second case, you just want to change the dependencies, so you do something like:
+
+{{{
+  lazy val preprocess = task { ... }
+  override def compileAction = super.compileAction dependsOn(preprocess)
+}}}
