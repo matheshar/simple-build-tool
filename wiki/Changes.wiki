@@ -12,6 +12,12 @@
  * A basic framework for testing `ReflectUtilities`, not run by default because of run time
  * Minor cleanup to `Path` and added non-empty check to path components
  * Catch additional exceptions in `TestFramework`
+ * Added `copyTask` task creation method.
+ * Added `jetty-run` action and added ability to package war files.
+ * Added `jetty-stop` action.
+ * Added `console-quick` action that is the same as `console` but doesn't compile sources first.
+ * Moved some custom `ClassLoader`s to `ClasspathUtilities` and improved a check.
+ * Added ability to specify hooks to call before `sbt` shuts down.
 
 === 0.3.1 to 0.3.2 ===
  * Compiled jar with Java 1.5.
