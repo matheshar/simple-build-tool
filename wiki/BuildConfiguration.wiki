@@ -135,7 +135,7 @@ The only paths in `sbt` that are completely fixed are the locations of the files
 
 Paths in `sbt` are incrementally built up out of path components so that you can easily rename any directory in the path or modify the path structure.
 
-The paths and the names used to construct them are defined in `BasicProjectPaths`, which is mixed in to the default project definition, as members that you can override.  If you only want to rename a directory, override the member that specifies the name.  For example, to rename the output directory from `target` to `build`,
+The paths and the names used to construct them are defined in `BasicProjectPaths`, which is mixed into the default project definition, as members that you can override.  If you only want to rename a directory, override the member that specifies the name.  For example, to rename the output directory from `target` to `build`,
 
 {{{
   override def outputDirectoryName = "build"
@@ -143,6 +143,7 @@ The paths and the names used to construct them are defined in `BasicProjectPaths
 
 The outputs for compilation and API documentation are defined as:
 {{{
+  def outputPath = path(outputDirectoryName)
 
   def compilePath = outputPath / compileDirectoryName
   def docPath = outputPath / docDirectoryName
