@@ -37,7 +37,7 @@ In this case, `jar` depends on a different `compile` task than `test` does becau
 
 = Modifying Actions =
 
-Most of the default actions (such as `clean`, `test`, `run`, `doc`, and `package`) are defined using the following pattern, shown here for the `run` action:
+Most of the builtin actions (such as `clean`, `test`, `run`, `doc`, and `package`) are defined using the following pattern, shown here for the `run` action:
 
 {{{
   lazy val run = runAction
@@ -45,11 +45,7 @@ Most of the default actions (such as `clean`, `test`, `run`, `doc`, and `package
   def runTask(mainClass: Option[String], classpath: PathFinder, options: => Seq[String]): Task = task { ... }
 }}}
 
-This approach is intended to provide flexibility for when you need to change the default behavior.  The first statement binds a new action called `run` to the task returned by `runAction`.  It is not possible to override a `lazy val` (which is required for reasons described in the Creating Actions section above), and so the actual task is created by the overridable second statement `runAction`.
-
-The second statement specifies options to a third method that defines the general behavior of a task.  The second statement also specifies the dependencies for the task. 
-
-This third method is often shared between similar actions.  For example, there is a single `packageTask` method defined in `sbt.ScalaProject` that is used by the `package`, `packageSrc`, packageDocs`, and `packageTest` actions.
+This approach is intended to provide flexibility for when you need to change the default behavior.  The first statement binds a new action called `run` to the task returned by `runAction`.  It is not possible to override a `lazy val` (which is required for reasons described in the Creating Actions section above), so a separate, overridable method is used (in this case, `runAction`).  This second method is the method to override to change an action's behavior.  A third method provides the actual behavior for the task.
 
 There are two main scenarios that require modifying the default actions.  The first is changing the behavior of a default action.  For example, you might want to create a war file instead of a jar file.  The second is changing the dependencies of the default tasks.  For example, you might want to write a task that preprocesses your sources before compilation.  You'd want to make the `compile` task depend on the preprocessor task.  In the first case, you would completely redefine `packageAction` to be:
 
