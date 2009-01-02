@@ -4,7 +4,7 @@ This page provides an example of building a [http://liftweb.net Lift] web applic
 
 == Get sbt ==
 
-Make sure you have the 0.3.3 snapshot posted to the group ([http://simple-build-tool.googlegroups.com/web/sbt-0.3.3.jar?gda=HKSG0T8AAAApxXevJ274S5XvBJoxTJW6im3h_3kR4LlY-85gyioyKEPc9Y3ul624uOJO9901IAGccyFKn-rNKC-d1pM_IdV0&gsc=-uEslxYAAACfzjjW7tWB23vrC85VTgzZS7ibph5ftdNh9K_-frBgDg sbt-0.3.3.jar]) or have compiled the latest version of trunk (see [Build]).
+Make sure you have the 0.3.3 snapshot posted to the group ([http://simple-build-tool.googlegroups.com/web/sbt-0.3.3.jar sbt-0.3.3.jar]) or have compiled the latest version of trunk (see [Build]).
 
 == Get the example ==
 
