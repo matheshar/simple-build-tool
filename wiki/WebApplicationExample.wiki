@@ -1,0 +1,98 @@
+= Hello Lift Example =
+
+This page provides an example of building a [http://liftweb.net Lift] web application using some new features in the trunk version of `sbt`.  It is meant to be a preview of these features and so it is a work in progress.  Feedback is welcome.
+
+== Get sbt ==
+
+Make sure you have the 0.3.3 snapshot posted to the group ([http://simple-build-tool.googlegroups.com/web/sbt-0.3.3.jar?gda=HKSG0T8AAAApxXevJ274S5XvBJoxTJW6im3h_3kR4LlY-85gyioyKEPc9Y3ul624uOJO9901IAGccyFKn-rNKC-d1pM_IdV0&gsc=-uEslxYAAACfzjjW7tWB23vrC85VTgzZS7ibph5ftdNh9K_-frBgDg sbt-0.3.3.jar]) or have compiled the latest version of trunk (see [Build]).
+
+== Get the example ==
+
+Download the [http://liftweb.net/index.php/HowTo_start_a_new_liftwebapp Hello Lift example] using maven and change to the new directory.
+
+{{{
+$ mvn archetype:create -U \
+ -DarchetypeGroupId=net.liftweb \
+ -DarchetypeArtifactId=lift-archetype-basic \
+ -DarchetypeVersion=0.10-SNAPSHOT \
+ -DremoteRepositories=http://scala-tools.org/repo-snapshots \
+ -DgroupId=net.liftweb.hello -DartifactId=hello-lift
+
+$ cd hello-lift
+}}}
+
+== Create the custom project configuration ==
+
+Use the following project definition (put it in project/build/src/HelloLiftProject.scala):
+
+{{{
+import sbt._
+
+class HelloLiftProject(info: ProjectInfo) extends DefaultWebProject(info)
+{
+	val snapshots = "Scala Tools Snapshots" at "http://scala-tools.org/repo-snapshots"
+	override def ivyXML =
+		<configurations>
+			<conf name="compile"/>
+			<conf name="provided"/>
+			<conf name="runtime" extends="compile"/>
+			<conf name="test" extends="runtime" visibility="private"/>
+		</configurations>
+		<dependencies>
+			<dependency org="org.mortbay.jetty" name="jetty" rev="6.1.14" conf="test->default"/>
+			<dependency org="javax.servlet" name="servlet-api" rev="2.5" conf="provided->default"/>
+			<dependency org="org.apache.derby" name="derby" rev="10.4.1.3" conf="runtime->default"/>
+			<dependency org="net.liftweb" name="lift-core" rev="0.10-SNAPSHOT" conf="compile->default">
+				<exclude org="junit"/>
+				<exclude org="org.igniterealtime.smack"/>
+				<exclude org="org.apache.commons"/>
+				<exclude org="org.scala-lang"/>
+			</dependency>
+		</dependencies>
+}
+}}}
+
+The inline Ivy configuration could be replaced with an equivalent pom.xml.
+
+== Specify the name and version ==
+
+Run `sbt` and provide the project name and version:
+
+{{{
+$ sbt
+[info] Recompiling project definition...
+[info]    Source analysis: 1 new/modifed, 0 indirectly invalidated, 0 removed.
+[error] Project in [...]/hello-lift has undefined properties.
+[error]  Property 'project.name'  is not defined.
+  Enter new value for project.name : Hello Lift
+
+[error]  Property 'project.version'  is not defined.
+  Enter new value for project.version : 1.0
+}}}
+
+== Get the dependencies ==
+
+`sbt` does not resolve dependencies unless explicitly requested, so run `update`:
+{{{
+> update
+}}}
+
+== Try it out ==
+
+Now, start the webapp:
+{{{
+> jetty-run
+}}}
+
+and browse to http://localhost:8080.
+
+Stop the webapp when you are done:
+{{{
+> jetty-stop
+}}}
+
+To create a war file, run the `package` action.  `DefaultWebProject` redefines `package` to create a war instead of a jar.
+
+{{{
+> package
+}}}
