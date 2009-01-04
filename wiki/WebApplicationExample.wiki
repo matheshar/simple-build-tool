@@ -23,7 +23,7 @@ $ cd hello-lift
 
 == Create the custom project configuration ==
 
-Use the following project definition (put it in project/build/src/HelloLiftProject.scala):
+Use the following project definition (put it in `project/build/src/HelloLiftProject.scala`):
 
 {{{
 import sbt._
