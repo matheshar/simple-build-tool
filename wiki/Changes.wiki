@@ -1,5 +1,6 @@
 === 0.3.2 to trunk ===
  * Fixed bug #11.
+ * Fixed problem with dependencies where source jars would be used instead of binary jars.
  * Fixed scala-tools not being used by default for inline configurations.
  * Small dependency management error message correction
  * Slight refactoring for specifying whether scala-tools releases gets added to configured resolvers
@@ -18,6 +19,8 @@
  * Added `console-quick` action that is the same as `console` but doesn't compile sources first.
  * Moved some custom `ClassLoader`s to `ClasspathUtilities` and improved a check.
  * Added ability to specify hooks to call before `sbt` shuts down.
+ * Added `zip`, `unzip` methods to `FileUtilities`
+ * Added `append` equivalents to `write*` methods in `FileUtilites`
 
 === 0.3.1 to 0.3.2 ===
  * Compiled jar with Java 1.5.
