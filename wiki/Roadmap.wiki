@@ -15,9 +15,6 @@ This list describes the documentation to be done.
 
  * API Documentation, especially:
   * `Project` and subclasses
-  * `Path` and related classes
-  * `Run`
-  * `FileUtilities`
  * Parallel execution
  * General `FileUtilities` documentation
 
