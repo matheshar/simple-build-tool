@@ -21,6 +21,8 @@
  * Added ability to specify hooks to call before `sbt` shuts down.
  * Added `zip`, `unzip` methods to `FileUtilities`
  * Added `append` equivalents to `write*` methods in `FileUtilites`
+ * Added first draft of integration testing
+ * Added batch command `compile-stats`
 
 === 0.3.1 to 0.3.2 ===
  * Compiled jar with Java 1.5.
