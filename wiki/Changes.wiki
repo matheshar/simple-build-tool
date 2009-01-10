@@ -25,6 +25,9 @@
  * Added batch command `compile-stats`
  * Added methods to create tasks that have basic conditional execution based on declared sources/products of the task
  * Added `newerThan` and `olderThan` methods to `Path`
+ * Added `reload` action to reread the project definition without losing the performance benefits of an already running jvm
+ * Added `help` action to tab completion
+ * Added handling of (effectively empty) scala source files that create no class files: they are always interpreted as modified.
 
 === 0.3.1 to 0.3.2 ===
  * Compiled jar with Java 1.5.
