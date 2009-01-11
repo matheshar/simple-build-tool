@@ -1,5 +1,7 @@
 *Warning: This is a work in progress and describes the trunk version of sbt.*
 
+<wiki:toc max_depth="2" />
+
 = Introduction =
 
 This page describes how to define your own actions and how to modify the builtin actions.
@@ -84,20 +86,7 @@ The next case is a task that takes sources and generates a known group of produc
   fileTask(products from sources) { doWork }
 }}}
 
-where `products` is of type
-
-{{{
-  Path
-or
-  Iterable[Path]
-}}}
-
-`sources` is of type
-
-{{{
-  Iterable[Path]
-or
-  PathFinder
-}}}
-
-and `doWork` is call-by-name with type `Option[String]`.
+where:
+ * `products` is of type `Path` or `Iterable[Path]`
+ * `sources` is of type `Iterable[Path]` or `PathFinder` (note that `Path` is a subtype of `PathFinder`)
+ * `doWork` has type `Option[String]`
