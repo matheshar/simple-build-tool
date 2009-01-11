@@ -61,3 +61,43 @@ In the second case, you just want to change the dependencies, so you do somethin
   lazy val preprocess = task { ... }
   override def compileAction = super.compileAction dependsOn(preprocess)
 }}}
+
+= Conditional Task Execution =
+
+Many tasks generate output files (products) from input files (sources).  This section describes how to specify that a task should only do its work if its products are out of date.
+
+== Products Only ==
+
+The simplest case is a task that generates a group of files and has no inputs.  Declare a task of this kind using the `fileTask` method with the following signature:
+
+{{{
+  def fileTask(products: => Iterable[Path])(action: => Option[String]): Task
+}}}
+
+The first argument is a list of output files and the second argument is the action to perform when the task is invoked if any of the products provided in the first argument do not exist.
+
+== Known Products from Sources ==
+
+The next case is a task that takes sources and generates a known group of products (that is, which files will be produced are known before the task does its work).  The task's work should be done if any of the products do not exist or if any of the products are older than any of the sources.  Create a task of this kind in the following manner:
+
+{{{
+  fileTask(products from sources) { doWork }
+}}}
+
+where `products` is of type
+
+{{{
+  Path
+or
+  Iterable[Path]
+}}}
+
+`sources` is of type
+
+{{{
+  Iterable[Path]
+or
+  PathFinder
+}}}
+
+and `doWork` is call-by-name with type `Option[String]`.
