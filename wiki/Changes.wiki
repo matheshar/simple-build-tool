@@ -28,6 +28,9 @@
  * Added `reload` action to reread the project definition without losing the performance benefits of an already running jvm
  * Added `help` action to tab completion
  * Added handling of (effectively empty) scala source files that create no class files: they are always interpreted as modified.
+ * Added prompt to retry project loading if compilation fails
+ * `package` action now uses `fileTask` so that it only executes if files are out of date
+ * fixed `ScalaTest` framework wrapper so that it fails the `test` action if tests fail
 
 === 0.3.1 to 0.3.2 ===
  * Compiled jar with Java 1.5.
