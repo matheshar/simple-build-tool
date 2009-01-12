@@ -1,0 +1,20 @@
+* Warning: This page is a work in progress and describes the trunk version of sbt *
+
+= Web Applications =
+
+This page describes some features of `sbt` that are useful for developing web applications.
+
+Instead of extending `sbt.DefaultProject` in your project definition, extend `sbt.DefaultWebProject`.  This currently does two things.  First, the `package` action creates a war file instead of a jar file.  Second, if you add [http://jetty.mortbay.com/ Jetty] as a dependency (manually or automatically), you can use `jetty-run` to start your web application from `sbt`.  Use `jetty-stop` to stop it.
+
+`sbt` uses the directory structure of Maven by default, so your web application files should go in `src/main/webapp` by default.  You can override `webappPath` to change this.  If you need to include extra files in your web application, override `extraWebappFiles` with a `PathFinder` that selects the extra files that you want (see [Path] for information on `PathFinder`).
+
+A minimal project definition might be:
+
+{{{
+class WebappBuild(info: ProjectInfo) extends DefaultWebProject(info)
+{
+  val jetty = "org.mortbay.jetty" % "jetty" % "6.1.14"
+}
+}}}
+
+For a runnable example, see the [WebApplicationExample] page, which describes running the Hello Lift example with `sbt`.
