@@ -4,7 +4,7 @@
 
 = Introduction =
 
-This page describes how to define your own actions and how to modify the builtin actions.
+This page describes how to define your own actions and how to modify the builtin actions.  For information on writing the code that implements the action, see [ActionContent].
 
 = Creating Actions =
 
@@ -36,6 +36,8 @@ Example:
 }}}
 
 In this case, `jar` depends on a different `compile` task than `test` does because the `compile` method returns a different object each time it is called.  So, the `compile` task would run twice when `jar` is executed.
+
+For information on writing the code that implements the action, see [ActionContent].
 
 = Modifying Actions =
 
