@@ -1,0 +1,41 @@
+* Warning: This page is a work in progress and describes the current version of trunk. *
+
+<wiki:toc max_depth="2" />
+
+= Introduction =
+
+This page provides assistance writing the code that defines the work of an action.
+
+= Error Handling =
+
+This section describes error handling in `sbt`.  When you create a task, you pass code that returns `None` if the action executes normally or `Some(errorMessage)` if an error occurs.  This is the way `sbt` works with errors internally and how it indicates recoverable errors when you use utility methods.  Note that if you throw an exception in your code, `sbt` will handle it.
+
+There are methods in `sbt.Control` for working with code that can throw exceptions.
+
+= File Utilities =
+
+`sbt` includes several methods for dealing with the filesystem in `sbt.FileUtilities`.  Their capabilities are described below.  The [http://simple-build-tool.googlecode.com/svn/artifacts/0.3.2/api/sbt/FileUtilities$object.html API documentation] describes the details of using the methods.
+
+== Jar/Zip Files ==
+
+`FileUtilities` contains methods to create jar files or zip files and for unzipping files.  You can unzip from a `Path`, `URL`, `File`, or `InputStream` and you can optionally filter the files that are extracted using a `NameFilter`.  You can jar or zip the files selected by a `PathFinder` and optionally descend into directories recursively, which is useful if you just want to specify the directories to zip.  (See [Path] for details on `Path`, `PathFinder` and `NameFilter`).
+
+== Copying ==
+
+There are several methods for copying files and data.  You can transfer data from an `InputStream` to an `OutputStream` and optionally close the `InputStream` on completion.  You can copy a single file or a single directory (recursively).  There are also methods to copy a list of files to a directory, optionally flattening the file hierarchy in the process.
+
+== Creating Directories and Files ==
+
+There are methods to create a directory and all parent directories and to "touch" a file (create it if it doesn't exist or update its last modified time if it does).
+
+== Removing Directories and Files ==
+
+There is a method to recursively delete directories and files.
+
+== Temporary Directories ==
+
+There is a method to create a temporary directory and a method to execute code using a temporary directory that is automatically deleted after the code completes.
+
+== General I/O ==
+
+There are methods to read from, write to, and append to files, streams, and readers/writers and let `FileUtilities` open and close the streams, readers, or writers.  There are convenience methods to read or write text or an array of bytes to or from a `File`.
