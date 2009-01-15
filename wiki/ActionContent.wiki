@@ -22,7 +22,7 @@ There are methods in `sbt.Control` for working with code that can throw exceptio
 
 == Copying ==
 
-There are several methods for copying files and data.  You can transfer data from an `InputStream` to an `OutputStream` and optionally close the `InputStream` on completion.  You can copy a single file or a single directory (recursively).  There are also methods to copy a list of files to a directory, optionally flattening the file hierarchy in the process.
+There are several methods for copying files and data.  You can transfer data from an `InputStream` to an `OutputStream` and optionally close the `InputStream` on completion.  You can copy a single file or a single directory (recursively).  There are also methods to copy a list of files to a directory, optionally flattening the file hierarchy in the process.  Additionally, there is a method to mirror the contents of two directories.
 
 == Creating Directories and Files ==
 
