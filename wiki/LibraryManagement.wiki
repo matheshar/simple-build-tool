@@ -16,9 +16,11 @@ This method of dependency management involves specifying the direct dependencies
  * Ivy configuration and settings files
 
 Behind the scenes, `sbt` uses [http://ant.apache.org/ivy/ Apache Ivy] to implement dependency management in all three cases.  If multiple configurations are present, the follow precedence is used by default:
- * Maven and Ivy configurations (`pom.xml`, `ivy.xml`, `ivysettings.xml`) are ignored when inline declarations are present.
+ * Inline repositories take precedence over configuration done in `ivysettings.xml`.
+ * Maven and Ivy configurations (`pom.xml` and `ivy.xml`) are ignored when inline dependency declarations are present.  Note that `ivysettings.xml` can be used with inline dependencies if no inline repositories are used.
  * A Maven configuration `pom.xml` is ignored when an Ivy `ivy.xml` configuration is present.  Note that `ivysettings.xml` can be used with a Maven `pom.xml`.
-The default repositories are the standard Maven2 repository and the Scala Tools Releases (http://scala-tools.org/repo-releases) repository.  There is no support for publishing to a repository yet.
+
+The default repositories when `ivysettings.xml` is not present are the standard Maven2 repository and the Scala Tools Releases (http://scala-tools.org/repo-releases) repository.  There is no support for publishing to a repository yet.
 
 The following sections describe how to use each method of automatic dependency management.
 
@@ -30,6 +32,11 @@ Inline declarations are a very basic way of specifying the dependencies to be au
  {{{
   val dep = groupID % artifactID % revision
  }}}
+or
+ {{{
+  val dep = groupID % artifactID % revision % configuration
+ }}}
+
  The actual name for the `val` is currently unimportant.
  * Declare additional repositories besides the default Maven2 and Scala Tools Releases repositories that you want to use with the form:
  {{{
@@ -45,6 +52,30 @@ For example:
   val scalaToolsSnapshots = "Scala-Tools Maven2 Snapshots Repository" at "http://scala-tools.org/repo-snapshots"
 }}}
 
+`sbt` additionally support directly specifying the configurations or dependencies sections of an Ivy configuration file inline.  You can mix this with inline Scala dependency and repository declarations.
+
+For example:
+{{{
+  val jetty = "org.mortbay.jetty" % "jetty" % "6.1.14" % "test->default"
+  val servlet = "javax.servlet" % "servlet-api" % "2.5" % "provided->default"
+  val derby = "org.apache.derby" % "derby" % "10.2.2.0" % "runtime->default"
+  override def ivyXML =
+    <configurations>
+      <conf name="compile"/>
+      <conf name="provided"/>
+      <conf name="runtime" extends="compile"/>
+      <conf name="test" extends="runtime" visibility="private"/>
+    </configurations>
+    <dependencies>
+      <dependency org="net.liftweb" name="lift-core" rev="0.10" conf="compile->default">
+        <exclude org="junit"/>
+        <exclude org="org.igniterealtime.smack"/>
+        <exclude org="org.apache.commons"/>
+        <exclude org="org.scala-lang"/>
+      </dependency>
+    </dependencies>
+}}}
+
 == Maven/Ivy ==
 
 For this method, create the configuration files as you would for Maven (`pom.xml`) or Ivy (`ivy.xml` and optionally `ivysettings.xml`).  `sbt` will use these configurations to resolve and retrieve dependencies when you execute `update`.  No modifications to your project definition are necessary.
@@ -52,4 +83,4 @@ For this method, create the configuration files as you would for Maven (`pom.xml
 Maven support is dependent on Ivy's support for Maven POMs.
 Known issues with this support:
  * Specifying `relativePath` in the `parent` section of a POM will produce an error.
- * Ivy ignores repositories specified in the POM.  A workaround is to specify repositories in an Ivy `ivysettings.xml` file.
+ * Ivy ignores repositories specified in the POM.  A workaround is to specify repositories inline or in an Ivy `ivysettings.xml` file.
