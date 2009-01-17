@@ -63,7 +63,7 @@ Hello World!
 
 On startup, `sbt` will compile `TestProject` and instantiate it.  When you execute the `run` action, `sbt` runs `Test` using the scala runner in the same virtual machine as `sbt`.  See RunningProjectCode for details.
 
-Note: `sbt` only recompiles a project definition on startup.  If you are running in interactive mode, changes made to `TestProject` will not take effect until the next time you start sbt.
+Note: `sbt` only recompiles a project definition on startup or when invoking the interactive command `reload`.  Therefore, if you are running in interactive mode, invoke `reload` after making changes to your project definition for the changes to take effect.
 
 = Specifying Options =
 
@@ -125,9 +125,12 @@ Method `testOptions` specifies the options for the `test` action.  The only avai
 == Dependency Management (Update) Options ==
 
 Method `updateOptions` specifies the options for the dependency management task `update`.  Available options are:
- * `Validate`   Specifying this validates the configuration files (Maven or Ivy)
- * `Synchronize`   Specifying this removes libraries that are not currently used from the managed library directory.
- * `QuietUpdate`   Specifying this puts Ivy in quiet mode during execution.
+ * `Validate`   Specifying this validates the configuration files (Maven or Ivy).  This is used by default.
+ * `Synchronize`   Specifying this removes libraries that are not currently used from the managed library directory.  This is used by default.
+ * `QuietUpdate`   Specifying this puts Ivy in quiet mode during execution.  This is used by default.
+ * `ErrorIfNoConfiguration`  Specifying this causes the `update` task to fail if no configuration is provided inline or as a file.  Otherwise, it performs no action.  This is not used by default.
+* `AddScalaToolsReleases`  Specifying this adds the `http://scala-tools.org/repo-releases` repository to the configured repositories if `ivysettings.xml` is not present.  This is used by default.
+* `LibraryManager`  Explicitly specifies the method to use for handling dependencies.
 
 = Changing Paths =
 
@@ -180,7 +183,7 @@ by specifying the following in your project definition:
 }}}
 
 The paths directly used by the default actions are listed below.  Other paths are only used to build up these paths.  If redefined, care should be taken to keep these paths distinct.
- * `dependencyPath`- This is the location to put jars.
+ * `dependencyPath`- This is the location of manually managed jars.
  * `managedDependencyPath` - This is the location that automatic dependency management puts downloaded artifacts.  When executed, the `clean-lib` action removes this directory.
  * `mainScalaSourcePath` - The path to Scala sources comprising the project.
  * `mainResourcesPath` - The path to resources to include in the project jar.
@@ -193,3 +196,7 @@ The paths directly used by the default actions are listed below.  Other paths ar
   * `testCompilePath` - The path where compiled test classes go.
   * `mainAnalysisPath` - The path where the analysis done at compile time goes.  This includes files that record dependencies from the Scala sources.
   * `testAnalysisPath` - The path where the analysis done at test compile time goes.  This includes files that record dependencies from the Scala sources and the class names of tests.
+
+Additionally, web applications use these paths defined in `sbt.WebProjectPaths`:
+ * `webappPath` - The location of web application resources.
+ * `temporaryWarPath` - The intermediate location used to create a war file or to run Jetty.  It should be a subpath of `outputPath`.
