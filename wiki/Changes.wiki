@@ -1,4 +1,4 @@
-=== 0.3.2 to 0.3.4 ===
+=== 0.3.2 to 0.3.5 ===
  * Fixed bug #11.
  * Fixed problem with dependencies where source jars would be used instead of binary jars.
  * Fixed scala-tools not being used by default for inline configurations.
