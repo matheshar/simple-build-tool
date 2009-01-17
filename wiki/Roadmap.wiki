@@ -4,11 +4,6 @@ This is the roadmap for `sbt`.  The current goals are mainly usability, document
 
 Comments and suggestions are welcome.
 
-== Features ==
- * Ivy Configurations
-  * Provide syntax for specifying configurations for inline dependencies
-  * Provide syntax for declaring configurations inline
-
 == Documentation ==
 
 This list describes the documentation to be done.
@@ -16,9 +11,8 @@ This list describes the documentation to be done.
  * API Documentation, especially:
   * `Project` and subclasses
  * Parallel execution
- * General `FileUtilities` documentation
 
 == Testing ==
 
  * Dependency analysis
- * More testing on `FileUtilities` so that it can be documented and considered generally usable for users.
+ * More testing on `FileUtilities`.
