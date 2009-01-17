@@ -1,15 +1,21 @@
 #labels Featured
  * Getting Started
   * [Setup] - Getting `sbt` running on your machine.
-  * RunningSbt - Basic usage
+  * [RunningSbt Basic Usage]
  * Configuration
   * [BuildConfiguration Basic Configuration]
   * [Properties]
-  * SubProjects
+  * [SubProjects Sub Projects]
   * [Paths]
-  * LibraryManagement
+  * [LibraryManagement Library Management]
+ * Writing Actions
+  * [CustomActions Creating/Modifying Actions]
+  * [ActionContent Implementing Actions]
+ * Web Applications
+  * [WebApplications Web Applications]
+  * [WebApplicationExample Hello Lift Example]
  * Project Information
   * [Roadmap]
   * [Changes]
   * [Build] from source
-  * [http://simple-build-tool.googlecode.com/svn/artifacts/0.3.2/api/index.html API Documentation]
+  * [http://simple-build-tool.googlecode.com/svn/artifacts/0.3.4/api/index.html API Documentation]
