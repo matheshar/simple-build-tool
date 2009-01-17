@@ -1,10 +1,6 @@
 = Hello Lift Example =
 
-This page provides an example of building a [http://liftweb.net Lift] web application using some new features in the trunk version of `sbt`.  It is meant to be a preview of these features and so it is a work in progress.  Feedback is welcome.
-
-== Get sbt ==
-
-Make sure you have the 0.3.3 snapshot posted to the group ([http://simple-build-tool.googlegroups.com/web/sbt-0.3.3.jar sbt-0.3.3.jar]) or have compiled the latest version of trunk (see [Build]).
+This page provides an example of building a [http://liftweb.net Lift] web application using the new web application features in `sbt` 0.3.4.
 
 == Get the example ==
 
@@ -14,23 +10,41 @@ Download the [http://liftweb.net/index.php/HowTo_start_a_new_liftwebapp Hello Li
 $ mvn archetype:create -U \
  -DarchetypeGroupId=net.liftweb \
  -DarchetypeArtifactId=lift-archetype-basic \
- -DarchetypeVersion=0.10-SNAPSHOT \
- -DremoteRepositories=http://scala-tools.org/repo-snapshots \
+ -DarchetypeVersion=0.10 \
+ -DremoteRepositories=http://scala-tools.org/repo-releases \
  -DgroupId=net.liftweb.hello -DartifactId=hello-lift
 
 $ cd hello-lift
 }}}
 
+== Setup the `sbt` project ==
+
+Run `sbt` and provide the project name and version:
+
+{{{
+$ sbt
+No project found. Create new project? (y/N) y
+Project Name: Hello Lift
+Version: 1.0
+Create new project Hello Lift 1.0 ? (Y/n)
+[success] Successfully initialized directory structure.
+[info] Building project Hello Lift 1.0 using sbt.DefaultProject
+[info] No actions specified, interactive session started. Execute 'help' for more information.
+>
+}}}
+
 == Create the custom project configuration ==
 
-Use the following project definition (put it in `project/build/src/HelloLiftProject.scala`):
+Use the following project definition (put it in `project/build/src/HelloLiftProject.scala`) to enable the web application features and declare dependencies.  Afterwards, run `reload` so that `sbt` reloads the project definition.
 
 {{{
 import sbt._
 
 class HelloLiftProject(info: ProjectInfo) extends DefaultWebProject(info)
 {
-	val snapshots = "Scala Tools Snapshots" at "http://scala-tools.org/repo-snapshots"
+	val jetty = "org.mortbay.jetty" % "jetty" % "6.1.14" % "test->default"
+	val servlet = "javax.servlet" % "servlet-api" % "2.5" % "provided->default"
+	val derby = "org.apache.derby" % "derby" % "10.2.2.0" % "runtime->default"
 	override def ivyXML =
 		<configurations>
 			<conf name="compile"/>
@@ -39,10 +53,7 @@ class HelloLiftProject(info: ProjectInfo) extends DefaultWebProject(info)
 			<conf name="test" extends="runtime" visibility="private"/>
 		</configurations>
 		<dependencies>
-			<dependency org="org.mortbay.jetty" name="jetty" rev="6.1.14" conf="test->default"/>
-			<dependency org="javax.servlet" name="servlet-api" rev="2.5" conf="provided->default"/>
-			<dependency org="org.apache.derby" name="derby" rev="10.4.1.3" conf="runtime->default"/>
-			<dependency org="net.liftweb" name="lift-core" rev="0.10-SNAPSHOT" conf="compile->default">
+			<dependency org="net.liftweb" name="lift-core" rev="0.10" conf="compile->default">
 				<exclude org="junit"/>
 				<exclude org="org.igniterealtime.smack"/>
 				<exclude org="org.apache.commons"/>
@@ -52,22 +63,9 @@ class HelloLiftProject(info: ProjectInfo) extends DefaultWebProject(info)
 }
 }}}
 
-The inline Ivy configuration could be replaced with an equivalent pom.xml.
-
-== Specify the name and version ==
-
-Run `sbt` and provide the project name and version:
-
+Run `reload`:
 {{{
-$ sbt
-[info] Recompiling project definition...
-[info]    Source analysis: 1 new/modifed, 0 indirectly invalidated, 0 removed.
-[error] Project in [...]/hello-lift has undefined properties.
-[error]  Property 'project.name'  is not defined.
-  Enter new value for project.name : Hello Lift
-
-[error]  Property 'project.version'  is not defined.
-  Enter new value for project.version : 1.0
+> reload
 }}}
 
 == Get the dependencies ==
