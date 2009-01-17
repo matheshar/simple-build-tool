@@ -21,6 +21,10 @@ $ sbt clean compile
 == Build Actions ==
  * `clean`
   Deletes all generated files (the `target` directory).
+ * `clean-cache`
+  Deletes the cache of downloaded artifacts and metadata for automatically managed dependencies for this user.
+ * `clean-lib`
+  Deletes the managed library directory for this project.
  * `compile`
   Compiles the main sources (in the `src/main/scala` directory).
  * `doc`
@@ -31,8 +35,11 @@ $ sbt clean compile
   Runs `doc` and `doc-test`.
  * `console`
   Starts the Scala interpreter with a classpath including the compiled sources and all jars in the `lib` directory.  To return to sbt, type `:quit`, Ctrl+D (Unix), or Ctrl+Z (Windows).  Runs `test-compile` first.
+ * console-quick
+  Starts the Scala interpreter with the project classes on the classpath without running any other action first.
  * `package`
-  Creates a jar file containing classes compiled from `src/main/scala` and the files in `src/main/resources`.  Runs `compile` first.
+  For a normal project, creates a jar file containing classes compiled from `src/main/scala` and the files in `src/main/resources` after running `compile` first.
+  For a web application project, creates a war file after running `compile` and `prepareWebapp` first.
  * `package-test`
   Creates a jar file containing classes compiled from `src/test/scala` and the files in `src/test/resources`.  Runs `test-compile` first.
  * `package-src`
@@ -51,10 +58,18 @@ $ sbt clean compile
   Runs all tests detected during compilation.  Runs `test-compile` first.
  * `update`
   Resolves and retrieves external dependencies as described in LibraryManagement.
+ * `jetty-run` (Web Projects only)
+  Starts the Jetty server and serves this project as a web application on `http://localhost:8080`.
+ * `jetty-stop` (Web Projects only)
+  Stops the Jetty server that was started with the `jetty-run` action.
 
 == Interactive Actions ==
  * `exit` or `quit`
   End the current interactive session.
+ * `reload`
+  Reloads the current interactive session.  The project definition is recompiled and reloaded.
+ * `help`
+  Displays a help message and lists these interactive actions and their descriptions.
  * `actions`
   List all available actions.
  * `current`
