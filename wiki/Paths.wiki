@@ -118,6 +118,8 @@ sbt/
     Analyzer.class
 }}}
 
+Note that the `##` operator is also defined for `PathFinder`s.
+
 === Excluding Paths ===
 
 A common problem is excluding version control directories.  This can be accomplished as follows:
