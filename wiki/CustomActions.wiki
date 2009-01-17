@@ -1,5 +1,3 @@
-*Warning: This is a work in progress and describes the trunk version of sbt.*
-
 <wiki:toc max_depth="2" />
 
 = Introduction =
