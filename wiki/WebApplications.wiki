@@ -1,5 +1,3 @@
-* Warning: This page is a work in progress and describes the trunk version of sbt *
-
 = Web Applications =
 
 This page describes some features of `sbt` that are useful for developing web applications.
