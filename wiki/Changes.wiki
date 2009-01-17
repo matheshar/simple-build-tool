@@ -31,6 +31,7 @@
  * Added prompt to retry project loading if compilation fails
  * `package` action now uses `fileTask` so that it only executes if files are out of date
  * fixed `ScalaTest` framework wrapper so that it fails the `test` action if tests fail
+ * Inline dependencies can now specify configurations
 
 === 0.3.1 to 0.3.2 ===
  * Compiled jar with Java 1.5.
