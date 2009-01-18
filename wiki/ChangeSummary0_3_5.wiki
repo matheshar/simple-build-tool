@@ -7,6 +7,11 @@
  * Added `console-quick` action for when you want fast access to the Scala interpreter but don't need your project compiled.
  * Added `clean-cache` action to delete Ivy's artifact and metadata cache.
 
+=== Integration Testing ===
+ * Added integration test support with `integration-test` action.
+ * Behaves like `test` but takes its test sources from `src/it` (by default).
+ * Use it by mixing in `BasicScalaIntegrationTesting` to your project definition.
+
 === Dependency Management ===
  * Added ability to specify inline Ivy XML configuration in project definition (see towards the bottom of the [LibraryManagement Library Management] page).
  * Can specify Ivy configurations as fourth piece of inline dependencies `(... % "runtime->compile")`.
