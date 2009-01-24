@@ -18,4 +18,4 @@
   * [Roadmap]
   * [Changes]
   * [Build] from source
-  * [http://simple-build-tool.googlecode.com/svn/artifacts/0.3.5/api/index.html API Documentation]
+  * [http://simple-build-tool.googlecode.com/svn/artifacts/0.3.6/api/index.html API Documentation]
