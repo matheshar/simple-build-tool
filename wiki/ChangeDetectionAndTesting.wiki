@@ -4,7 +4,7 @@ A general guideline for a build tool is that you should be able to trust its out
 
 One simple way `sbt` does this is to run the compiler in the same virtual machine each time.  (Note that this is not quite the same as `fsc`, which reuses the same compiler instance.)  This approach results in a consistent speedup by a factor of 2 after the first compile.
 
-A second way to speed up compilation times is to only recompile sources that are out of date.  This approach requires some work to do properly.  A sign of failure to it properly is users running `clean` as part of their normal development cycle.  So, the motivation behind `sbt`'s scripted test framework is to try to find bugs in `sbt`'s change detection so that compilation works as expected.
+A second way to speed up compilation times is to only recompile sources that are out of date.  This approach requires some work to do properly.  A sign of failure to do it properly is users running `clean` as part of their normal development cycle.  So, the motivation behind `sbt`'s scripted test framework is to try to find bugs in `sbt`'s change detection so that compilation works as expected.
 
 The general idea is to create a test project, a set of changes to make to that project, and a script that consists of statements that apply those changes and invoke actions on the project, declaring whether the actions should succeed or fail.  Before describing this in further detail, I'll discuss change detection in `sbt`.
 
@@ -30,15 +30,15 @@ Once a source is detected as out of date, there are three recompilation strategi
 
 Finally, when a source is out of date (directly or indirectly), its classes should be deleted.
 
-Through version 0.3.6, `sbt` has used 1, 3, and 5 combined to detect changes and recompilation strategy 2.  The trunk version substitutes change detection approach 4 (comparing hashes) for approach 3 (comparing last modified times) because of the following problems with approach 3:
+Through version 0.3.6, `sbt` has used methods 1, 3, and 5 combined to detect changes and recompilation strategy 2.  The trunk version of `sbt` substitutes change detection method 4 (comparing hashes) for method 3 (comparing last modified times) because of the following problems with method 3:
 
- # Changes to a source that produces no classes are not detected (requires 2 or 4)
- # Changes to a source between starting a compilation and finishing it are not detected (requires 2 or 4)
- # The resolution of last modified time can be as coarse as 1 second for many filesystems. (requires 4)
+ # Changes to a source that produces no classes are not detected (requires change detection method 2 or 4 to work properly).
+ # Changes to a source between starting a compilation and finishing it are not detected (requires 2 or 4 to work properly).
+ # The resolution of the last modified time of a file can be as coarse as 1 second for many filesystems (requires 4 to fix).
 
 The last issue was especially a problem when implementing the scripted tests.  An automated test script could compile, update, and compile again within a second.  The second compile wouldn't detect any changes because the last modified times were the same.
 
-One problem with hashing is that it reads in every source file to calculate its hash.  As a rough idea, this might take about 1 second per 10 MB of sources on a local filesystem.  This mainly affects how long it takes to run compile on a project without any changes, since a project with 10 MB of Scala sources probably takes several minutes to compile.  Of course, the change detection to use is configurable, so you can use the last modified method if the problems listed above are acceptable.
+One problem with hashing is that it reads in every source file to calculate its hash.  As a rough idea, this might take about 1 second per 10 MB of sources on a local filesystem.  This mainly affects how long it takes to run `compile` on a project without any changes.  Of course, change detection is configurable, so you can use the last modified method if desired.
 
 === Example ===
 
