@@ -9,7 +9,8 @@ This page describes how to manage multiple projects within a project.  The first
     * Execute tasks across multiple projects
     * Classpath of all dependencies included when compiling a project
     * Proper inter-project source dependency handling
-    * Can change to a project in an interactive session to work only on that project (and its dependencies) 
+    * Can change to a project in an interactive session to work only on that project (and its dependencies)
+    * Can build projects in parallel
 
 === Details ===
 
@@ -78,3 +79,13 @@ Alternatively, each subproject can configured with its `project` directory as is
 {{{
 def project(path: Path, deps: Project*): Project
 }}}
+
+=== Parallel Builds ===
+
+`sbt` can build projects in parallel.  Add
+
+{{{
+  override def parallelExecution = true
+}}}
+
+to your root project definition.
