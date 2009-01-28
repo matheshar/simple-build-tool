@@ -4,6 +4,11 @@ This is the roadmap for `sbt`.  The current goals are mainly usability, document
 
 Comments and suggestions are welcome.
 
+== Features ==
+ * Test reporting improvements
+ * Parallel test running
+ * Ability to declare expected Scala, Java version
+
 == Documentation ==
 
 This list describes the documentation to be done.
