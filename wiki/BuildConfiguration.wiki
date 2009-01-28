@@ -129,8 +129,8 @@ Method `updateOptions` specifies the options for the dependency management task 
  * `Synchronize`   Specifying this removes libraries that are not currently used from the managed library directory.  This is used by default.
  * `QuietUpdate`   Specifying this puts Ivy in quiet mode during execution.  This is used by default.
  * `ErrorIfNoConfiguration`  Specifying this causes the `update` task to fail if no configuration is provided inline or as a file.  Otherwise, it performs no action.  This is not used by default.
-* `AddScalaToolsReleases`  Specifying this adds the `http://scala-tools.org/repo-releases` repository to the configured repositories if `ivysettings.xml` is not present.  This is used by default.
-* `LibraryManager`  Explicitly specifies the method to use for handling dependencies.
+ * `AddScalaToolsReleases`  Specifying this adds the `http://scala-tools.org/repo-releases` repository to the configured repositories if `ivysettings.xml` is not present.  This is used by default.
+ * `LibraryManager`  Explicitly specifies the method to use for handling dependencies.
 
 = Changing Paths =
 
