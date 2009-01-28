@@ -1,3 +1,14 @@
+=== 0.3.6 to 0.3.7 ===
+ * Improved classpath methods
+ * Refactored various features into separate project traits
+ * `ParentProject` can now specify dependencies
+ * Support for `optional` scope
+ * More API documentation
+ * Test resource paths provided on classpath for testing
+ * Added some missing read methods in `FileUtilities`
+ * Added scripted test framework
+ * Change detection using hashes of files
+
 === 0.3.5 to 0.3.6 ===
  * Fixed bug #12.
  * Compiled with 2.7.2.
