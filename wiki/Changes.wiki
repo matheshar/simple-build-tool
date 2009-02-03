@@ -1,4 +1,4 @@
-=== 0.3.6 to 0.3.7 ===
+=== 0.3.6 to 0.3.7 (trunk) ===
  * Improved classpath methods
  * Refactored various features into separate project traits
  * `ParentProject` can now specify dependencies
@@ -8,6 +8,8 @@
  * Added some missing read methods in `FileUtilities`
  * Added scripted test framework
  * Change detection using hashes of files
+ * Fixed problem with manifests not being generated
+ * Fixed issue with scala-tools repository not being included by default (again)
 
 === 0.3.5 to 0.3.6 ===
  * Fixed bug #12.
