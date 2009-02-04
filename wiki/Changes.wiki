@@ -8,8 +8,9 @@
  * Added some missing read methods in `FileUtilities`
  * Added scripted test framework
  * Change detection using hashes of files
- * Fixed problem with manifests not being generated
+ * Fixed problem with manifests not being generated (bug #14)
  * Fixed issue with scala-tools repository not being included by default (again)
+ * Added option to set ivy cache location (mainly for testing)
 
 === 0.3.5 to 0.3.6 ===
  * Fixed bug #12.
