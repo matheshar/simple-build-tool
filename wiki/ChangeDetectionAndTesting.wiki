@@ -4,7 +4,7 @@
 
 A general guideline for a build tool is that you should be able to trust its outputs.  This is especially relevant to compiling Scala sources because the Scala compiler is slow and there is a sizable amount of code in `sbt` to speed up compilation times.
 
-One simple way `sbt` does this is to run the compiler in the same virtual machine each time.  (Note that this is not quite the same as `fsc`, which reuses the same compiler instance.)  This approach results in a consistent speedup by a factor of 2 after the first compile.
+One simple way `sbt` speeds up compilation is to run the compiler in the same virtual machine each time.  (Note that this is not quite the same as `fsc`, which reuses the same compiler instance.)  This approach results in a consistent speedup by a factor of 2 after the first compile.
 
 A second way to speed up compilation times is to only recompile sources that are out of date.  This approach requires some work to do properly.  A sign of failing to do it properly is users running `clean` as part of their normal development cycle.  The motivation behind `sbt`'s scripted test framework is to try to find bugs in `sbt`'s change detection so that compilation works as expected and `clean` is something you don't need to do to get correct outputs.
 
