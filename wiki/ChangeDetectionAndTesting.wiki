@@ -1,3 +1,5 @@
+* Warning: This page describes the trunk version of sbt *
+
 <wiki:toc max_depth="3" />
 
 = Introduction =
@@ -8,7 +10,13 @@ One simple way `sbt` speeds up compilation is to run the compiler in the same vi
 
 A second way to speed up compilation times is to only recompile sources that are out of date.  This approach requires some work to do properly.  A sign of failing to do it properly is users running `clean` as part of their normal development cycle.  The motivation behind `sbt`'s scripted test framework is to try to find bugs in `sbt`'s change detection so that compilation works as expected and `clean` is something you don't need to do to get correct outputs.
 
-The general idea behind these tests is to create a test project, a set of changes to make to that project, and a script that consists of statements that apply those changes and invoke actions on the project, declaring whether the actions should succeed or fail.  Before describing this in further detail, I'll discuss change detection in `sbt`.
+The basic steps to create a scripted test are:
+ # Create a project that will form the base
+ # Determine the changes to make to that project and any actions to invoke on the project
+ # Create the files comprising the changes
+ # Create a script that consists of statements that apply the changes and invoke actions on the project, declaring whether the actions should succeed or fail.
+
+The first part discusses change detection in `sbt` and the second part describes scripted tests.
 
 = Change Detection =
 
@@ -97,7 +105,8 @@ The next section describes scripts and provides an example of the `test` script.
 == Syntax ==
 
 {{{
-script ::= statement+
+script ::= (comment | statement)+
+comment ::= '#' comment-text EOL
 statement ::= action | command
 
 action ::= '>' name expected-result
@@ -105,6 +114,7 @@ command ::= '$' name argument* expected-result
 
 expected-result ::= '[success]' | '[failure]'
 }}}
+
 
 == Example ==
 
@@ -137,6 +147,10 @@ All paths are relative to the project directory.
     Succeeds if the given `path`s exist, fails otherwise.
 `absent path+`
     Succeeds if the given `path`s do not exist, fails otherwise.
+`exec command args*'
+    Executes the given command in a separate process.
+`pause`
+    Pauses until enter is pressed.  It is useful for inspecting the current test state.
 
 = Running Tests =
 
