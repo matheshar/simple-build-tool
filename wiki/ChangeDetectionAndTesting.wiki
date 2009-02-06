@@ -147,7 +147,7 @@ All paths are relative to the project directory.
     Succeeds if the given `path`s exist, fails otherwise.
 `absent path+`
     Succeeds if the given `path`s do not exist, fails otherwise.
-`exec command args*'
+`exec command args*`
     Executes the given command in a separate process.
 `pause`
     Pauses until enter is pressed.  It is useful for inspecting the current test state.
