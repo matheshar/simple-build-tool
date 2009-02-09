@@ -11,6 +11,8 @@
  * Fixed problem with manifests not being generated (bug #14)
  * Fixed issue with scala-tools repository not being included by default (again)
  * Added option to set ivy cache location (mainly for testing)
+ * trace is no longer a logging level but a flag enabling/disabling stack traces
+ * Project.loadProject and related methods now accept a Logger to use
 
 === 0.3.5 to 0.3.6 ===
  * Fixed bug #12.
