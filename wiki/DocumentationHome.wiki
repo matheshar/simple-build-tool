@@ -15,6 +15,7 @@
   * [WebApplications Web Applications]
   * [WebApplicationExample Hello Lift Example]
  * Project Information
+  * [Credits]
   * [Roadmap]
   * [Changes]
   * [Build] from source
