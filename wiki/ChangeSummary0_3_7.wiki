@@ -1,0 +1,15 @@
+= Improvements/Features =
+=== Change Detection ===
+ * The previous method for detecting changes to sources was to compare last modified times.  This method is still available, but is no longer the default.  Now, SHA hashes of the sources are compared.  This addresses several issues but could be slower for large projects.  Please provide feedback if you notice that running `compile` with no modified sources is slower.   See [ChangeDetectionAndTesting Change Detection and Testing] for details.
+
+=== General ===
+ * `sbt` now exits with a nonzero exit code if an action fails in batch mode.
+ * `trace` is no longer a logging level but is instead a flag to determine whether stack traces are printed.
+ * Hidden files and files that start with '.' are excluded by default (previously, `.svn` and `.cvs` directories were excluded by default).  '.*' is necessary in addition to the hidden file requirement because subversion does not mark `.svn` directories hidden on Windows.
+ 
+=== Testing sbt ===
+ * There is now a scripted test framework for functional testing of `sbt`.  Writing tests for `sbt` is as straightforward as creating a project, determining changes to make to the project (e.g. add/remove/modify a file), and a simple script to run the project and make the changes.  Please see [ChangeDetectionAndTesting Change Detection and Testing] for details.
+
+= Fixes =
+ * Fixed bug #12 (manifests for jars not generated).
+ * Fixed scala-tools releases not being used by default.

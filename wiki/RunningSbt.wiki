@@ -63,7 +63,7 @@ $ sbt clean compile
  * `jetty-stop` (Web Projects only)
   Stops the Jetty server that was started with the `jetty-run` action.
 
-== Interactive Actions ==
+== Interactive Commands ==
  * `exit` or `quit`
   End the current interactive session.
  * `reload`
@@ -79,7 +79,7 @@ $ sbt clean compile
  * `debug`
   Set the logging level to `debug`.  This logging level is more verbose than `info`, but does not log stack traces for errors.
  * `trace`
-  Set the logging level to `trace`.  This logging level logs stack traces for errors in addition to the information logged by the `debug` level.
+  Toggles whether stack traces for errors are displayed.  They are disabled by default.
  * `warn`
   Set the logging level to `warn`.  This logging level only logs warnings and errors.
  * `error`

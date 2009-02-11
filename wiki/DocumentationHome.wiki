@@ -1,7 +1,7 @@
 #labels Featured
  * Getting Started
   * [Setup] - Getting `sbt` running on your machine.
-  * [RunningSbt Basic Usage]
+  * [RunningSbt Basic Usage] - Actions and Commands
  * Configuration
   * [BuildConfiguration Basic Configuration]
   * [Properties]
@@ -19,4 +19,5 @@
   * [Roadmap]
   * [Changes]
   * [Build] from source
-  * [http://simple-build-tool.googlecode.com/svn/artifacts/0.3.6/api/index.html API Documentation]
+  * [http://simple-build-tool.googlecode.com/svn/artifacts/0.3.7/api/index.html API Documentation]
+  * [ChangeDetectionAndTesting Change Detection and Testing]

@@ -1,4 +1,4 @@
-=== 0.3.6 to 0.3.7 (trunk) ===
+=== 0.3.6 to 0.3.7 ===
  * Improved classpath methods
  * Refactored various features into separate project traits
  * `ParentProject` can now specify dependencies
@@ -15,6 +15,7 @@
  * Project.loadProject and related methods now accept a Logger to use
  * Made hidden files and files that start with `'.'` excluded by default (`'.*'` is required because subversion seems to not mark `.svn` directories hidden on Windows)
  * Implemented exit codes
+ * Added continuous compilation command `cc`
 
 === 0.3.5 to 0.3.6 ===
  * Fixed bug #12.
