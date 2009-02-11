@@ -13,7 +13,7 @@
  * Added option to set ivy cache location (mainly for testing)
  * trace is no longer a logging level but a flag enabling/disabling stack traces
  * Project.loadProject and related methods now accept a Logger to use
- * Made `".*"` the default exclude filter
+ * Made hidden files and files that start with '.' excluded by default ('.*' is required because subversion seems to not mark .svn directories hidden on Windows)
  * Implemented exit codes
 
 === 0.3.5 to 0.3.6 ===
