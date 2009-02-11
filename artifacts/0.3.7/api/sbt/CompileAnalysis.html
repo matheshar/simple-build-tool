@@ -1,0 +1,373 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head><title>class CompileAnalysis in sbt</title>
+        <meta http-equiv="content-type" content="text/html; charset=UTF8"></meta><meta content="scaladoc (version 2.7.2.final)" name="generator"></meta><link href="../style.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../script.js"></script>
+        </head>
+        <body onload="init()">
+        <table summary="" class="navigation">
+        <tr>
+          <td class="navigation-links" valign="top">
+            <!-- <table><tr></tr></table> -->
+          </td>
+          <td align="right" valign="top" style="white-space:nowrap;" rowspan="2">
+            <div class="doctitle-larger">Simple Build Tool 0.3.7 API</div>
+          </td>
+        </tr>
+        <tr><td></td></tr>
+      </table>
+        
+      <div class="entity">
+        <a href="../sbt$package.html" target="_self">sbt</a>
+        <br></br>
+        <span class="entity">class  CompileAnalysis</span>
+      </div><hr></hr>
+      <div class="source">
+        [source: <a href="" class="sbt/CompileAnalysis"><code>sbt/CompileAnalysis.scala</code></a>]
+      </div><hr></hr>
+      <a name="CompileAnalysis"></a><dl>
+      <dt>
+        
+        <code>final</code>
+        <code>class</code>
+        <em>CompileAnalysis</em>(<em>analysisPath</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>projectPath</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>)
+      </dt>
+      <dd><code> extends </code><a href="../sbt/BasicAnalysis.html" target="_self">BasicAnalysis</a></dd>
+    </dl>
+      
+
+
+<table summary="" cellpadding="3" class="member">
+      <tr><td class="title" colspan="2">Method Summary</td></tr>
+      <tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/CompileAnalysis.html#addProjectDefinition%28sbt.Path%2CString%29" target="_self">addProjectDefinition</a></em>
+        (<em>source</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>className</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>) : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/CompileAnalysis.html#addTest%28sbt.Path%2Csbt.TestDefinition%29" target="_self">addTest</a></em>
+        (<em>source</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>test</em> : <a href="../sbt/TestDefinition.html" target="_self">TestDefinition</a>) : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/CompileAnalysis.html#allProjects" target="_self">allProjects</a></em>
+         : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/CompileAnalysis.html#allTests" target="_self">allTests</a></em>
+         : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="../sbt/TestDefinition.html" target="_self">TestDefinition</a>]
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/CompileAnalysis.html#clearHash%28sbt.Path%29" target="_self">clearHash</a></em>
+        (<em>source</em> : <a href="../sbt/Path.html" target="_self">Path</a>) : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/CompileAnalysis.html#clearHashes%28%29" target="_self">clearHashes</a></em>
+         : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/CompileAnalysis.html#getClasses%28sbt.PathFinder%2Csbt.Path%29" target="_self">getClasses</a></em>
+        (<em>sources</em> : <a href="../sbt/PathFinder.html" target="_self">PathFinder</a>, <em>outputDirectory</em> : <a href="../sbt/Path.html" target="_self">Path</a>) : <a href="../sbt/PathFinder.html" target="_self">PathFinder</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/CompileAnalysis.html#hash%28sbt.Path%29" target="_self">hash</a></em>
+        (<em>source</em> : <a href="../sbt/Path.html" target="_self">Path</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="scala/Array">scala.Array</a>[<a href="http://www.scala-lang.org/docu/files/api/scala/Byte.html" target="_self">Byte</a>]]
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>protected override def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/CompileAnalysis.html#loadExtra%28%29" target="_self">loadExtra</a></em>
+         : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>protected override def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/CompileAnalysis.html#mapsToClear" target="_self">mapsToClear</a></em>
+         : <a href="" target="contentFrame" class="scala/List">scala.List</a>[<a href="" target="contentFrame" class="scala/collection/mutable/Map">scala.collection.mutable.Map</a>]
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>protected override def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/CompileAnalysis.html#mapsToRemoveSource" target="_self">mapsToRemoveSource</a></em>
+         : <a href="" target="contentFrame" class="scala/List">scala.List</a>[<a href="" target="contentFrame" class="scala/collection/mutable/Map">scala.collection.mutable.Map</a>]
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>protected override def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/CompileAnalysis.html#saveExtra%28%29" target="_self">saveExtra</a></em>
+         : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/CompileAnalysis.html#setHash%28sbt.Path%2CArray%5BByte%5D%29" target="_self">setHash</a></em>
+        (<em>source</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>hash</em> : <a href="" target="contentFrame" class="scala/Array">scala.Array</a>[<a href="http://www.scala-lang.org/docu/files/api/scala/Byte.html" target="_self">Byte</a>]) : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+        
+        
+      </td>
+    </tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="../sbt/BasicAnalysis.html" target="_self">BasicAnalysis</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="../sbt/BasicAnalysis.html#mapsToRemoveDependent" target="_self">mapsToRemoveDependent</a>, <a href="../sbt/BasicAnalysis.html#mapsToMark" target="_self">mapsToMark</a>, <a href="../sbt/BasicAnalysis.html#clear%28%29" target="_self">clear</a>, <a href="../sbt/BasicAnalysis.html#removeSource%28sbt.Path%29" target="_self">removeSource</a>, <a href="../sbt/BasicAnalysis.html#removeSelfDependency%28sbt.Path%29" target="_self">removeSelfDependency</a>, <a href="../sbt/BasicAnalysis.html#removeDependent%28sbt.Path%29" target="_self">removeDependent</a>, <a href="../sbt/BasicAnalysis.html#removeDependencies%28sbt.Path%29" target="_self">removeDependencies</a>, <a href="../sbt/BasicAnalysis.html#removeExternalDependency%28java.io.File%29" target="_self">removeExternalDependency</a>, <a href="../sbt/BasicAnalysis.html#externalDependencies%28java.io.File%29" target="_self">externalDependencies</a>, <a href="../sbt/BasicAnalysis.html#sourceDependencies%28sbt.Path%29" target="_self">sourceDependencies</a>, <a href="../sbt/BasicAnalysis.html#products%28Iterable%5Bsbt.Path%5D%29" target="_self">products</a>, <a href="../sbt/BasicAnalysis.html#products%28sbt.Path%29" target="_self">products</a>, <a href="../sbt/BasicAnalysis.html#allSources" target="_self">allSources</a>, <a href="../sbt/BasicAnalysis.html#allProducts" target="_self">allProducts</a>, <a href="../sbt/BasicAnalysis.html#allExternals" target="_self">allExternals</a>, <a href="../sbt/BasicAnalysis.html#allExternalDependencies" target="_self">allExternalDependencies</a>, <a href="../sbt/BasicAnalysis.html#allDependencies" target="_self">allDependencies</a>, <a href="../sbt/BasicAnalysis.html#addSourceDependency%28sbt.Path%2Csbt.Path%29" target="_self">addSourceDependency</a>, <a href="../sbt/BasicAnalysis.html#addExternalDependency%28java.io.File%2Csbt.Path%29" target="_self">addExternalDependency</a>, <a href="../sbt/BasicAnalysis.html#addProduct%28sbt.Path%2Csbt.Path%29" target="_self">addProduct</a>, <a href="../sbt/BasicAnalysis.html#addSource%28sbt.Path%29" target="_self">addSource</a>, <a href="../sbt/BasicAnalysis.html#revert%28%29" target="_self">revert</a>, <a href="../sbt/BasicAnalysis.html#load%28%29" target="_self">load</a>, <a href="../sbt/BasicAnalysis.html#save%28%29" target="_self">save</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#getClass%28%29" target="_self">getClass</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#hashCode%28%29" target="_self">hashCode</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#equals%28Any%29" target="_self">equals</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#clone%28%29" target="_self">clone</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#toString%28%29" target="_self">toString</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#notify%28%29" target="_self">notify</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#notifyAll%28%29" target="_self">notifyAll</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#wait%28Long%29" target="_self">wait</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#wait%28Long%2CInt%29" target="_self">wait</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#wait%28%29" target="_self">wait</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#finalize%28%29" target="_self">finalize</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#%3D%3D%28AnyRef%29" target="_self">==</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#%21%3D%28AnyRef%29" target="_self">!=</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#eq%28AnyRef%29" target="_self">eq</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#ne%28AnyRef%29" target="_self">ne</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#synchronized%28T0%29" target="_self">synchronized</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html" target="_self">Any</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html#%3D%3D%28Any%29" target="_self">==</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html#%21%3D%28Any%29" target="_self">!=</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html#isInstanceOf" target="_self">isInstanceOf</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html#asInstanceOf" target="_self">asInstanceOf</a>
+        </td></tr>
+      </table>
+
+
+      
+
+
+<table summary="" cellpadding="3" class="member-detail">
+          <tr><td class="title">Method Details</td></tr>
+        </table><div><a name="mapsToClear"></a><dl>
+      <dt>
+        
+        <code>protected override</code>
+        <code>def</code>
+        <em>mapsToClear</em> : <a href="" target="contentFrame" class="scala/List">scala.List</a>[<a href="" target="contentFrame" class="scala/collection/mutable/Map">scala.collection.mutable.Map</a>]
+      </dt>
+      <dd></dd>
+    </dl><dl>
+        <dt style="margin:10px 0 0 20px;">
+          <b>Overrides</b>
+        </dt>
+        <dd>
+        <a href="../sbt/BasicAnalysis.html" target="_self">BasicAnalysis</a>.<a href="../sbt/BasicAnalysis.html#mapsToClear" target="_self">mapsToClear</a>
+        </dd>
+      </dl><hr></hr>
+<a name="mapsToRemoveSource"></a><dl>
+      <dt>
+        
+        <code>protected override</code>
+        <code>def</code>
+        <em>mapsToRemoveSource</em> : <a href="" target="contentFrame" class="scala/List">scala.List</a>[<a href="" target="contentFrame" class="scala/collection/mutable/Map">scala.collection.mutable.Map</a>]
+      </dt>
+      <dd></dd>
+    </dl><dl>
+        <dt style="margin:10px 0 0 20px;">
+          <b>Overrides</b>
+        </dt>
+        <dd>
+        <a href="../sbt/BasicAnalysis.html" target="_self">BasicAnalysis</a>.<a href="../sbt/BasicAnalysis.html#mapsToRemoveSource" target="_self">mapsToRemoveSource</a>
+        </dd>
+      </dl><hr></hr>
+<a name="allTests"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>allTests</em> : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="../sbt/TestDefinition.html" target="_self">TestDefinition</a>]
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="allProjects"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>allProjects</em> : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="addTest%28sbt.Path%2Csbt.TestDefinition%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>addTest</em>(<em>source</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>test</em> : <a href="../sbt/TestDefinition.html" target="_self">TestDefinition</a>) : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="addProjectDefinition%28sbt.Path%2CString%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>addProjectDefinition</em>(<em>source</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>className</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>) : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="setHash%28sbt.Path%2CArray%5BByte%5D%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>setHash</em>(<em>source</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>hash</em> : <a href="" target="contentFrame" class="scala/Array">scala.Array</a>[<a href="http://www.scala-lang.org/docu/files/api/scala/Byte.html" target="_self">Byte</a>]) : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="clearHash%28sbt.Path%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>clearHash</em>(<em>source</em> : <a href="../sbt/Path.html" target="_self">Path</a>) : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="hash%28sbt.Path%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>hash</em>(<em>source</em> : <a href="../sbt/Path.html" target="_self">Path</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="scala/Array">scala.Array</a>[<a href="http://www.scala-lang.org/docu/files/api/scala/Byte.html" target="_self">Byte</a>]]
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="clearHashes%28%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>clearHashes</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="getClasses%28sbt.PathFinder%2Csbt.Path%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>getClasses</em>(<em>sources</em> : <a href="../sbt/PathFinder.html" target="_self">PathFinder</a>, <em>outputDirectory</em> : <a href="../sbt/Path.html" target="_self">Path</a>) : <a href="../sbt/PathFinder.html" target="_self">PathFinder</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="loadExtra%28%29"></a><dl>
+      <dt>
+        
+        <code>protected override</code>
+        <code>def</code>
+        <em>loadExtra</em> : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+      </dt>
+      <dd></dd>
+    </dl><dl>
+        <dt style="margin:10px 0 0 20px;">
+          <b>Overrides</b>
+        </dt>
+        <dd>
+        <a href="../sbt/BasicAnalysis.html" target="_self">BasicAnalysis</a>.<a href="../sbt/BasicAnalysis.html#loadExtra%28%29" target="_self">loadExtra</a>
+        </dd>
+      </dl><hr></hr>
+<a name="saveExtra%28%29"></a><dl>
+      <dt>
+        
+        <code>protected override</code>
+        <code>def</code>
+        <em>saveExtra</em> : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+      </dt>
+      <dd></dd>
+    </dl><dl>
+        <dt style="margin:10px 0 0 20px;">
+          <b>Overrides</b>
+        </dt>
+        <dd>
+        <a href="../sbt/BasicAnalysis.html" target="_self">BasicAnalysis</a>.<a href="../sbt/BasicAnalysis.html#saveExtra%28%29" target="_self">saveExtra</a>
+        </dd>
+      </dl><hr></hr></div>
+
+
+    <hr></hr>
+        <table summary="" class="navigation">
+        <tr>
+          <td class="navigation-links" valign="top">
+            <!-- <table><tr></tr></table> -->
+          </td>
+          <td align="right" valign="top" style="white-space:nowrap;" rowspan="2">
+            <div class="doctitle-larger">Simple Build Tool 0.3.7 API</div>
+          </td>
+        </tr>
+        <tr><td></td></tr>
+      </table>
+      </body>
+      </html>
