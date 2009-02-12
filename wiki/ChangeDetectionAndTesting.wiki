@@ -150,6 +150,10 @@ All paths are relative to the project directory.
 `pause`
     Pauses until enter is pressed.  It is useful for inspecting the current test state.
 
+== Further Examples ==
+
+See the existing tests for more examples.  They are in the [http://code.google.com/p/simple-build-tool/source/browse/#svn/trunk/src/test/resources/sbt-test-resources src/test/resources/sbt-test-resources/] directory.
+
 = Running Tests =
 
  # Download the 0.3.7 release that includes the scripted test framework.
