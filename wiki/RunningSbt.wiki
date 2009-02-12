@@ -72,6 +72,8 @@ $ sbt clean compile
   Displays a help message and lists these interactive actions and their descriptions.
  * `actions`
   List all available actions.
+ * `cc`
+  Monitors sources in Scala projects for changes and runs `test-compile` when changes are detected.
  * `current`
   Print the current project and logging level.
  * `info`
