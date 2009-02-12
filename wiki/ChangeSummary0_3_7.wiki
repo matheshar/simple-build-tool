@@ -5,7 +5,8 @@
 === General ===
  * `sbt` now exits with a nonzero exit code if an action fails in batch mode.
  * `trace` is no longer a logging level but is instead a flag to determine whether stack traces are printed.
- * Hidden files and files that start with '.' are excluded by default (previously, `.svn` and `.cvs` directories were excluded by default).  '.*' is necessary in addition to the hidden file requirement because subversion does not mark `.svn` directories hidden on Windows.
+ * Hidden files and files that start with '.' are excluded by default (previously, `.svn` and `.cvs` directories were excluded by default).  `'.*'` is necessary in addition to the hidden file requirement because subversion does not mark `.svn` directories hidden on Windows.
+ * Added continuous compilation command `cc` that polls for changes to your source files and runs `test-compile` when they change.
  
 === Testing sbt ===
  * There is now a scripted test framework for functional testing of `sbt`.  Writing tests for `sbt` is as straightforward as creating a project, determining changes to make to the project (e.g. add/remove/modify a file), and a simple script to run the project and make the changes.  Please see [ChangeDetectionAndTesting Change Detection and Testing] for details.
