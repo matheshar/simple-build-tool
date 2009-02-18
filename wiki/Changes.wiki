@@ -1,3 +1,11 @@
+=== 0.3.7 to trunk ===
+ * Fixed issue with `build.properties` being unnecessarily updated in sub-projects when loading.
+ * Added method to compute the SHA-1 hash of a `String`
+ * Added pack200 methods
+ * Added initial process interface
+ * Added initial webstart support
+ * Added gzip methods
+
 === 0.3.6 to 0.3.7 ===
  * Improved classpath methods
  * Refactored various features into separate project traits
