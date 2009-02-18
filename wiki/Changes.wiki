@@ -5,6 +5,11 @@
  * Added initial process interface
  * Added initial webstart support
  * Added gzip methods
+ * Added `sleep` and `newer` commands to scripted testing.
+ * Scripted tests now test the version of `sbt` being built instead of the version doing the building.
+ * `testResources` is put on the test classpath instead of `testResourcesPath`
+ * Added `jetty-restart`, which does `jetty-stop` and then `jetty-run`
+ * Added automatic reloading of default web application
 
 === 0.3.6 to 0.3.7 ===
  * Improved classpath methods
