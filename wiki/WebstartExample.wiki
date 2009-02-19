@@ -22,10 +22,9 @@ class WebstartTest(info: ProjectInfo) extends ParentProject(info)
   class ApplicationProject(info: ProjectInfo) extends DefaultWebstartProject(info)
   {
     import SignJar._
-    // Difficulties with jarsigner currently, so signing is commented out:
-    //override def webstartSignConfiguration = Some(SignConfiguration("user", storePassword("password") :: Nil))
+    override def webstartSignConfiguration = Some(SignConfiguration("user", storePassword("password") :: Nil))
     override def defaultJarBaseName = "webstart-test"
-    //override def webstartPack200 = false // uncomment to disable pack200 compression
+    //override def webstartPack200 = false // uncomment to disable pack200 compression, which is enabled by default
     //override def webstartGzip = false // uncomment to disable gzip compression, which is enabled by default
 
     def jnlpXML(libraries: Seq[WebstartJarResource]) =
