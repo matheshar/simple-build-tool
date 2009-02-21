@@ -10,6 +10,10 @@
  * `testResources` is put on the test classpath instead of `testResourcesPath`
  * Added `jetty-restart`, which does `jetty-stop` and then `jetty-run`
  * Added automatic reloading of default web application
+ * Changed packaging behaviors (still likely to change)
+ * Inline configurations now allowed (can be used with configurations in inline XML)
+ * Split out some code related to managed dependencies from `BasicScalaProject` to new class `BasicManagedProject`
+ * Can specify that maven-like configurations should be automatically declared
 
 === 0.3.6 to 0.3.7 ===
  * Improved classpath methods
