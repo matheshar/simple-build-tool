@@ -7,14 +7,16 @@ Comments and suggestions are welcome.
 == Features ==
  * Test reporting improvements
  * Parallel test running
+ * Actions that accept arguments
+ * `test-quick` action that only runs test specified as arguments
+ * `publish` action to publish to a repository
  * Ability to declare expected Scala, Java version
 
 == Documentation ==
 
 This list describes the documentation to be done.
 
- * API Documentation, especially:
-  * `Project` and subclasses
+ * API Documentation
  * Parallel execution
 
 == Testing ==
