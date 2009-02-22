@@ -1,8 +1,6 @@
 == Introduction ==
 
-This is the roadmap for `sbt`.  The current goals are mainly usability, documentation, and testing.
-
-Comments and suggestions are welcome.
+This is the roadmap for `sbt`.  Comments and suggestions are welcome!
 
 == Features ==
  * Test reporting improvements
@@ -23,3 +21,4 @@ This list describes the documentation to be done.
 
  * Dependency analysis
  * More testing on `FileUtilities`.
+ * Contribute tests! See [ChangeDetectionAndTesting].
