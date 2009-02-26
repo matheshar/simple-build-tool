@@ -14,6 +14,7 @@
  * Inline configurations now allowed (can be used with configurations in inline XML)
  * Split out some code related to managed dependencies from `BasicScalaProject` to new class `BasicManagedProject`
  * Can specify that maven-like configurations should be automatically declared
+ * Fixed problem with nested modules being detected as tests
 
 === 0.3.6 to 0.3.7 ===
  * Improved classpath methods
