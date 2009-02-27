@@ -20,7 +20,7 @@ scala -cp sbt_home/sbt.jar sbt.Main $*
 }}}
 or
 {{{
-scala -cp sbt_home/sbt.jar:ivy_home/ivy.jar sbt.Main $*)
+scala -cp sbt_home/sbt.jar:ivy_home/ivy.jar sbt.Main $*
 }}}
 in a file called `sbt` in your `~/bin` directory and do
 {{{
