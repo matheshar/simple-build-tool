@@ -11,12 +11,16 @@ The basic steps are:
 
 = Launching Sbt =
 
-The easiest way to launch sbt is to create a one-line script.  Download [http://simple-build-tool.googlecode.com/files/sbt-0.3.7.jar sbt.jar] if you have not already.  I will refer to the full path to `sbt.jar` as `sbt_home/sbt.jar` in the scripts.
+The easiest way to launch sbt is to create a one-line script.  Download [http://simple-build-tool.googlecode.com/files/sbt-0.3.7.jar sbt.jar] if you have not already.  I will refer to the full path to `sbt.jar` as `sbt_home/sbt.jar` in the scripts.  If you would like to use automatic dependency management, please [http://ant.apache.org/ivy/download.cgi download Ivy] and include it on the classpath with `sbt.jar`.
 
 === Unix ===
 Put the line
 {{{
 scala -cp sbt_home/sbt.jar sbt.Main $*
+}}}
+or
+{{{
+scala -cp sbt_home/sbt.jar:ivy_home/ivy.jar sbt.Main $*)
 }}}
 in a file called `sbt` in your `~/bin` directory and do
 {{{
@@ -28,6 +32,10 @@ This allows you to launch sbt in any directory by typing `sbt` at the command pr
 Create a batch file `sbt.bat`:
 {{{
 scala -cp sbt_home\sbt.jar sbt.Main %*
+}}}
+or
+{{{
+scala -cp sbt_home\sbt.jar;ivy_home\ivy.jar sbt.Main %*
 }}}
 Put `sbt.bat` on your path so that you can launch sbt in any directory by typing `sbt` at the command prompt.
 

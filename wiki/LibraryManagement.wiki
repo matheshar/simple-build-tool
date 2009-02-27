@@ -10,7 +10,15 @@ Manually managing dependencies involves copying any jars that you want to use to
 
 = Automatic Dependency Management =
 
-This method of dependency management involves specifying the direct dependencies of your project and letting `sbt` handle retrieving and updating your dependencies.  `sbt` performs this dependency handling when the `update` action is executed.  By default, `sbt` does *not* update your dependencies before every compilation, but only does so when you execute `update`.  `sbt` supports three ways of specifying these dependencies:
+This method of dependency management involves specifying the direct dependencies of your project and letting `sbt` handle retrieving and updating your dependencies.
+
+== Setup ==
+
+To use automatic dependency management, you will need to [http://ant.apache.org/ivy/download.cgi download Ivy] and include it on `sbt`'s classpath (see [http://code.google.com/p/simple-build-tool/wiki/Setup#Launching_Sbt Launching Sbt]).
+
+== Usage ==
+
+`sbt` performs this dependency handling when the `update` action is executed.  By default, `sbt` does *not* update your dependencies before every compilation, but only does so when you execute `update`.  `sbt` supports three ways of specifying these dependencies:
  * Declarations in your project definition
  * Maven POM files
  * Ivy configuration and settings files
@@ -24,7 +32,7 @@ The default repositories when `ivysettings.xml` is not present are the standard 
 
 The following sections describe how to use each method of automatic dependency management.
 
-== Inline Declarations ==
+=== Inline Declarations ===
 
 Inline declarations are a very basic way of specifying the dependencies to be automatically retrieved.  They are intended as a lightweight alternative to a full configuration using Ivy or Maven.  To use inline declarations, do the following:
 
@@ -76,7 +84,7 @@ For example:
     </dependencies>
 }}}
 
-== Maven/Ivy ==
+=== Maven/Ivy ===
 
 For this method, create the configuration files as you would for Maven (`pom.xml`) or Ivy (`ivy.xml` and optionally `ivysettings.xml`).  `sbt` will use these configurations to resolve and retrieve dependencies when you execute `update`.  No modifications to your project definition are necessary.
 
