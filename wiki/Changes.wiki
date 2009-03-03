@@ -15,6 +15,9 @@
  * Split out some code related to managed dependencies from `BasicScalaProject` to new class `BasicManagedProject`
  * Can specify that maven-like configurations should be automatically declared
  * Fixed problem with nested modules being detected as tests
+ * `testResources`, `integrationTestResources`, and `mainResources` should now be added to appropriate classpaths
+ * Added project organization as a property that defaults to inheriting from the parent project.
+ * Project creation now prompts for the organization.
 
 === 0.3.6 to 0.3.7 ===
  * Improved classpath methods
