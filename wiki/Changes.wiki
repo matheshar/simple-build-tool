@@ -18,6 +18,9 @@
  * `testResources`, `integrationTestResources`, and `mainResources` should now be added to appropriate classpaths
  * Added project organization as a property that defaults to inheriting from the parent project.
  * Project creation now prompts for the organization.
+ * Added method tasks, which are top-level actions with parameters.
+ * Added `test-quick` method task, which only runs the tests passed as arguments.
+ * Made `help`, `actions`, and `methods` commands available to batch-style invocation.
 
 === 0.3.6 to 0.3.7 ===
  * Improved classpath methods
