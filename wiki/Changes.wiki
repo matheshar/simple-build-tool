@@ -21,6 +21,24 @@
  * Added method tasks, which are top-level actions with parameters.
  * Added `test-quick` method task, which only runs the tests passed as arguments.
  * Made `help`, `actions`, and `methods` commands available to batch-style invocation.
+ * Applied Mikko's two fixes for webstart
+ * Added `control` method to `Logger` for action lifecycle logging
+ * Made standard logging level convenience methods final
+ * Made `BufferedLogger` have a per-actor buffer instead of a global buffer
+ * Added a `SynchronizedLogger` and a `MultiLogger` (intended to be used with the yet unwritten `FileLogger`)
+ * Changed method of atomic logging to be a method `logAll` accepting `List[LogEvent]` instead of `doSynchronized`
+ * Improved action lifecycle logging
+ * Parallel logging now provides immediate feedback about starting an action
+ * General cleanup, including removing unused classes and methods and reducing dependencies between classes
+ * `run` is now a method task that accepts options to pass to the `main` method (`runOptions` has been removed, `runTask` is no longer interactive, and `run` no longer starts a console if `mainClass` is undefined)
+ * Major task execution changes:
+  * Tasks automatically have implicit dependencies on tasks with the same name in dependent projects
+  * Implicit dependencies on interactive tasks are ignored, explicit dependencies produce an error
+  * Interactive tasks must be executed directly on the project on which they are defined
+  * Method tasks accept input arguments (`Array[String]`) and dynamically create the task to run
+  * Tasks can depend on tasks in other projects
+  * Tasks are run in parallel breadth-first style
+
 
 === 0.3.6 to 0.3.7 ===
  * Improved classpath methods
