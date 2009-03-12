@@ -19,7 +19,6 @@
  * Added project organization as a property that defaults to inheriting from the parent project.
  * Project creation now prompts for the organization.
  * Added method tasks, which are top-level actions with parameters.
- * Added `test-quick` method task, which only runs the tests passed as arguments.
  * Made `help`, `actions`, and `methods` commands available to batch-style invocation.
  * Applied Mikko's two fixes for webstart
  * Added `control` method to `Logger` for action lifecycle logging
@@ -38,6 +37,9 @@
   * Method tasks accept input arguments (`Array[String]`) and dynamically create the task to run
   * Tasks can depend on tasks in other projects
   * Tasks are run in parallel breadth-first style
+ * Added `test-only` method task, which restricts the tests to run to only those passed as arguments.
+ * Added `test-failed` method task, which restricts the tests to run.  First, only tests passed as arguments are run.  If no tests are passed, no filtering is done.  Then, only tests that failed the previous run are run.
+ * Added `test-quick` method task, which restricts the tests to run.  First, only tests passed as arguments are run.  If no tests are passed, no filtering is done.  Then, only tests that failed the previous run or had a dependency change are run.
 
 
 === 0.3.6 to 0.3.7 ===
