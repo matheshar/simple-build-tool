@@ -1,0 +1,141 @@
+= Changes from 0.3.7 to 0.4 =
+
+This release includes a number of new features and improvements.  They are summarized in the first sections and then described in more detail in later sections.  Comments, questions, and suggestions are welcome.
+
+<wiki:toc max_depth="3" />
+
+= Summary =
+
+== Major Features ==
+ * Webstart project support.  See the Webstart section for details
+ * Automatic reloading of web-application
+ * Triggered execution of any action by prefixing the line with `~`.  The action will run when any Scala source files are modified.  Thanks to Mikko for the work on continuous compilation that made this feature possible!  See the Triggered Execution Examples section.
+ * Method tasks, which take arguments and produce the task to run.  See the Method Tasks section.
+ * Added `test-quick`, `test-failed`, and `test-only` methods.  See the Triggered Execution Examples section for details.
+ * Reworked task execution model across multiple projects.  See the Multi-Project Tasks section.
+
+== Improvements ==
+ * Added `jetty-restart` action, which first executes `jetty-stop` and then executes `jetty-run`
+ * Added project organization as a property that defaults to inheriting from the parent project.  Project creation organization now prompts for organization, which can be left blank
+ * `help`, `actions`, and `methods` commands are now available when executing `sbt` batch style
+ * Modified logging subsystem for improved labeling of logging by action and project and for better usage with parallel execution
+ * `run` now accepts arguments to pass to the `main` method of the class being run.
+
+== Fixes ==
+ * Fixed bug #17 - resources not added to classpath
+ * Fixed issue with `build.properties` being unnecessarily updated in sub-projects when loading.
+ * Fixed problem with nested modules being detected as tests (as occurred when testing specs itself)
+
+= Details and Examples =
+
+== Triggered Execution Examples ==
+
+Some practical uses of the triggered execution feature, in combination with some of the other new features, are described here.  Note that the triggered execution is currently limited to triggering on changes to main and test sources.
+
+=== Compile ===
+
+The original use-case was continuous compilation, and you can still use `cc` to use it.  `cc` is now equivalent to
+{{{
+> ~ test-compile
+}}}
+
+If you only want to recompile main sources, you can do
+{{{
+> ~ compile
+}}}
+
+=== Testing ===
+
+You can use the new triggered execution feature to run any action or method.  One use is for test driven development, as suggested by Erick on the mailing list.
+
+The following will poll for changes to your source code (main or test) and run `test-quick` on affected tests.
+{{{
+> ~ test-quick
+}}}
+  The `test-quick` method only runs tests that either have not succeeded yet (that is, tests that failed or haven't been run yet) or were recompiled.  A test is recompiled if any of its transitive dependencies changed, so this is one way to automatically run tests potentially affected by changes to the code.
+
+If you find that the `test-quick` method runs too many tests, you might use the `test-failed` method instead.
+{{{
+> ~ test-failed
+}}}
+ The `test-failed` method only runs tests that have not succeeded (that is, tests that failed or haven't been run yet).  It does not rerun tests just because they were recompiled, unlike the `test-quick` method.
+
+There is another level of control, which is to explicitly filter the tests to run.  All of the new `test-*` commands use the explicit filter methods available in the project defintion for use with the standard `test` action (the ExcludeTests and TestFilter test options and the includeTest method).  However, you can additionally restrict the tests to run by specifying the tests to include as arguments to the `test-quick` or `test-failed` methods.  Also, if you don't want the additional functionality of `test-quick` or `test-failed`, there is the `test-only` method, which always runs the tests passed as arguments even if the test previously succeeded and was not recompiled.
+
+{{{
+> ~ test-quick example.MySpecification
+}}}
+ On source changes, this will rerun `example.MySpecification` if it had to be recompiled (because it or a dependency changed) or if it had not successfully run.  It will not rerun other tests, even if they had to be recompiled or have not successfully run.
+
+{{{
+> ~ test-only example.MySpecification
+}}}
+ On source changes, this will always rerun `example.MySpecification`.
+
+=== Web Applications ===
+
+If you use `jetty-run`, you can automatically build and reload your web application on changes to your source:
+
+{{{
+> jetty-run
+> ~ prepare-webapp
+}}}
+This will first start Jetty and then trigger execution of the action that builds the web application provided to Jetty.  The `jetty-run` action will pick up changes and redeploy.
+
+== Multi-Project Task Execution==
+
+There have been some changes in how tasks are executed, mainly with respect to multiple projects.
+ * Tasks can now explicitly depend on tasks in other projects.
+ * A task (call it T) implicitly depends on tasks in projects that T's project depends on that have the same name as T.
+ * Methods and interactive tasks (such as `run` and `console`) must be executed directly on the desired project.
+
+Some consequences of these changes are:
+ * Tasks will run in parallel within a given project if `parallelExecution` is set to `true`.  Previously, only one task per project could run at a time.
+ * Tasks are run breadth-first.  For example, the default project type defines a `package` task that depends on a `compile` task.  If you execute `package` on multiple projects, `compile` will be run across all projects first and then `package` will be run across all projects.  Previously, the specified action (`package` in this case) would be executed on each project in the order required by project-level dependencies.  This resulted in depth-first execution.
+ * Tasks no longer have to be explicitly called to have implicit dependencies across multiple projects.  For example, the web application project type defines the `jetty-run` action.  One of its dependencies is `compile`.  Previously, `compile` would not be invoked in other projects that did not have a `jetty-run` task.  This would be the case if you had one web application subproject that depended on another subproject that was not a web application.
+
+== Method Tasks ==
+
+As shown in the Triggered Execution Examples section, a method task accepts an array of arguments and creates the task to be run from those arguments.  You can view a description of all method tasks in a project using the `methods` action.  Usage of a method task from the interactive prompt looks like:
+{{{
+> run 10000 5 0.3
+}}}
+or
+{{{
+> test-only example.TestSpecification
+}}}
+
+Defining your own method task is similar to defining a normal action, as shown in the following example.
+{{{
+lazy val example =
+   task { args =>
+     if(args.length == 2)
+       actionConstructor(args(0).toInt, args(1))
+     else
+       task { Some("Usage: example <integer> <string>") }
+   }
+def actionConstructor(a: Int, b: String) =
+    task {
+      println("Arguments were: " + a + " and " + b)
+      None
+    }
+}}}
+The type of `args` is `Array[String]`.
+
+You can then call `example` like:
+{{{
+> example 5 text
+Arguments were: 5 and text
+}}}
+
+Additionally, you can use quotes to include whitespace in arguments.  Quotes must be escaped (`\"`) and so must backslashes (`\\`):
+{{{
+> example "5" "Text with \"spaces\" and a backslash \\ included."
+Arguments were: 5 and Text with "spaces" and a backslash \ included.
+}}}
+
+== Webstart ==
+
+There is a new project type for webstart projects.  Instead of extending `DefaultProject`, extend `DefaultWebstartProject`.  There only required method you need to define is `jnlpXML`, which should be inline XML for your jnlp file.  Other methods of interest include `webstartSignConfiguration`, `webstartPack200`, and `webstartGzip`.  `webstartSignConfiguration` configures signing.  If it is `None` (the default), signing jars is disabled.  Otherwise, it is contains an instance of `SignConfiguration`.  `webstartPack200` is a flag enabling (`true`) or disabling (`false`) Pack200 compression of jars.  Similarly, `webstartGzip` enables or disables gzip compression of jars.  Both compression options are enabled by default.
+
+A webstart project generates its output when `package` is executed.  The output is by default put in `target/webstart` and produces a zip of that directory.  You can add a web application project to test it out.  An example project definition is shown on the WebstartExample page.
