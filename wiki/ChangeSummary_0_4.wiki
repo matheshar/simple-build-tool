@@ -1,14 +1,14 @@
 = Changes from 0.3.7 to 0.4 =
 
-This release includes a number of new features and improvements.  They are summarized in the first sections and then described in more detail in later sections.  Comments, questions, and suggestions are welcome.
+This release includes a number of new features and improvements.  They are summarized in the first section and then described in more detail in the second section.  Comments, questions, and suggestions are welcome.
 
 <wiki:toc max_depth="3" />
 
 = Summary =
 
 == Major Features ==
- * Webstart project support.  See the Webstart section for details
- * Automatic reloading of web-application
+ * Webstart project support.  See the Webstart section below for details.
+ * Automatic reloading of web application run with `jetty-run`.
  * Triggered execution of any action by prefixing the line with `~`.  The action will run when any Scala source files are modified.  Thanks to Mikko for the work on continuous compilation that made this feature possible!  See the Triggered Execution Examples section.
  * Method tasks, which take arguments and produce the task to run.  See the Method Tasks section.
  * Added `test-quick`, `test-failed`, and `test-only` methods.  See the Triggered Execution Examples section for details.
@@ -18,13 +18,14 @@ This release includes a number of new features and improvements.  They are summa
  * Added `jetty-restart` action, which first executes `jetty-stop` and then executes `jetty-run`
  * Added project organization as a property that defaults to inheriting from the parent project.  Project creation organization now prompts for organization, which can be left blank
  * `help`, `actions`, and `methods` commands are now available when executing `sbt` batch style
- * Modified logging subsystem for improved labeling of logging by action and project and for better usage with parallel execution
+ * Modified logging subsystem for improved labeling of logging by action and project and for better support for buffered logging from actors.
  * `run` now accepts arguments to pass to the `main` method of the class being run.
+ * Added `publish-local` action for publishing to the local Ivy repository.
 
 == Fixes ==
- * Fixed bug #17 - resources not added to classpath
- * Fixed issue with `build.properties` being unnecessarily updated in sub-projects when loading.
- * Fixed problem with nested modules being detected as tests (as occurred when testing specs itself)
+ * Fixed bug #17 - resources not added to classpath.
+ * Fixed issue with `build.properties` being unnecessarily updated in sub-projects during startup.
+ * Fixed problem with nested modules being detected as tests (as occurred when testing specs itself).
 
 = Details and Examples =
 
