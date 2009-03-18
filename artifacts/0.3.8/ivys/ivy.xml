@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ivy-module version="1.0">
-	<info organisation="sbt" module="simple-build-tool" revision="0.3.8" status="release" publication="20090318003140"/>
+	<info organisation="sbt" module="simple-build-tool" revision="0.3.8" status="release" publication="20090318003737"/>
 	<configurations>
 		<conf name="base" visibility="public"/>
 		<conf name="2.7.2" visibility="public" extends="base"/>
