@@ -6,7 +6,6 @@ This is the roadmap for `sbt`.  Comments and suggestions are welcome!
  * Test reporting improvements
  * Parallel test running
  * Sandboxed test running/forking
- * Ability to declare expected Scala, Java version
 
 == Documentation ==
 
