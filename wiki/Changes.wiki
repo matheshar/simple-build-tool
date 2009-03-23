@@ -20,7 +20,7 @@
  * Project creation now prompts for the organization.
  * Added method tasks, which are top-level actions with parameters.
  * Made `help`, `actions`, and `methods` commands available to batch-style invocation.
- * Applied Mikko's two fixes for webstart and fixed problem with pack200+sign.
+ * Applied Mikko's two fixes for webstart and fixed problem with pack200+sign.  Also, fixed nonstandard behavior when gzip enabled.
  * Added `control` method to `Logger` for action lifecycle logging
  * Made standard logging level convenience methods final
  * Made `BufferedLogger` have a per-actor buffer instead of a global buffer
@@ -41,6 +41,10 @@
  * Added `test-failed` method task, which restricts the tests to run.  First, only tests passed as arguments are run.  If no tests are passed, no filtering is done.  Then, only tests that failed the previous run are run.
  * Added `test-quick` method task, which restricts the tests to run.  First, only tests passed as arguments are run.  If no tests are passed, no filtering is done.  Then, only tests that failed the previous run or had a dependency change are run.
  * Added launcher that allows declaring version of sbt/scala to build project with.
+ * Added tab completion with ~
+ * Added basic tab completion for method tasks, including test-*
+ * Changed default pack options to be the default options of Pack200.Packer
+ * Fixed ~ behavior when action doesn't exist
 
 
 === 0.3.6 to 0.3.7 ===
