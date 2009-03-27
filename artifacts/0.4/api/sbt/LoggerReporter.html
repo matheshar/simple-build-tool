@@ -1,0 +1,206 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head><title>class LoggerReporter in sbt</title>
+        <meta http-equiv="content-type" content="text/html; charset=UTF8"></meta><meta content="scaladoc (version 2.7.3.final)" name="generator"></meta><link href="../style.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../script.js"></script>
+        </head>
+        <body onload="init()">
+        <table summary="" class="navigation">
+        <tr>
+          <td class="navigation-links" valign="top">
+            <!-- <table><tr></tr></table> -->
+          </td>
+          <td align="right" valign="top" style="white-space:nowrap;" rowspan="2">
+            <div class="doctitle-larger">Simple Build Tool 0.4 API</div>
+          </td>
+        </tr>
+        <tr><td></td></tr>
+      </table>
+        
+      <div class="entity">
+        <a href="../sbt$package.html" target="_self">sbt</a>
+        <br></br>
+        <span class="entity">class  LoggerReporter</span>
+      </div><hr></hr>
+      <div class="source">
+        [source: <a href="" class="sbt/LoggerReporter"><code>sbt/LoggerReporter.scala</code></a>]
+      </div><hr></hr>
+      <a name="LoggerReporter"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>class</code>
+        <em>LoggerReporter</em>(<em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>)
+      </dt>
+      <dd><code> extends </code><a href="" target="contentFrame" class="scala/tools/nsc/reporters/Reporter">scala.tools.nsc.reporters.Reporter</a></dd>
+    </dl>
+      
+
+<table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Values and Variables inherited from <a href="" target="contentFrame" class="scala/tools/nsc/reporters/Reporter">scala.tools.nsc.reporters.Reporter</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="#INFO" target="contentFrame" class="scala/tools/nsc/reporters/Reporter">scala.tools.nsc.reporters.Reporter.INFO</a>, <a href="#WARNING" target="contentFrame" class="scala/tools/nsc/reporters/Reporter">scala.tools.nsc.reporters.Reporter.WARNING</a>, <a href="#ERROR" target="contentFrame" class="scala/tools/nsc/reporters/Reporter">scala.tools.nsc.reporters.Reporter.ERROR</a>, <a href="#cancelled" target="contentFrame" class="scala/tools/nsc/reporters/Reporter">scala.tools.nsc.reporters.Reporter.cancelled</a>, <a href="#incompleteInputError" target="contentFrame" class="scala/tools/nsc/reporters/Reporter">scala.tools.nsc.reporters.Reporter.incompleteInputError</a>
+        </td></tr>
+      </table>
+<table summary="" cellpadding="3" class="member">
+      <tr><td class="title" colspan="2">Method Summary</td></tr>
+      <tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/LoggerReporter.html#display%28scala.tools.nsc.util.Position%2CString%2CLoggerReporter.this.Severity%29" target="_self">display</a></em>
+        (<em>pos</em> : <a href="" target="contentFrame" class="scala/tools/nsc/util/Position">scala.tools.nsc.util.Position</a>, <em>msg</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <em>severity</em> : <a href="" target="contentFrame" class="scala/tools/nsc/reporters/Reporter/Severity">scala.tools.nsc.reporters.Reporter.Severity</a>) : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/LoggerReporter.html#error%28String%29" target="_self">error</a></em>
+        (<em>msg</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>) : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>protected def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/LoggerReporter.html#info0%28scala.tools.nsc.util.Position%2CString%2CLoggerReporter.this.Severity%2CBoolean%29" target="_self">info0</a></em>
+        (<em>pos</em> : <a href="" target="contentFrame" class="scala/tools/nsc/util/Position">scala.tools.nsc.util.Position</a>, <em>msg</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <em>severity</em> : <a href="" target="contentFrame" class="scala/tools/nsc/reporters/Reporter/Severity">scala.tools.nsc.reporters.Reporter.Severity</a>, <em>force</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/Boolean.html" target="_self">Boolean</a>) : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/LoggerReporter.html#printSummary%28%29" target="_self">printSummary</a></em>
+         : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>override def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/LoggerReporter.html#reset" target="_self">reset</a></em>
+         : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+        
+        
+      </td>
+    </tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="" target="contentFrame" class="scala/tools/nsc/reporters/Reporter">scala.tools.nsc.reporters.Reporter</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="#hasErrors" target="contentFrame" class="scala/tools/nsc/reporters/Reporter">scala.tools.nsc.reporters.Reporter.hasErrors</a>, <a href="#flush" target="contentFrame" class="scala/tools/nsc/reporters/Reporter">scala.tools.nsc.reporters.Reporter.flush</a>, <a href="#setSource" target="contentFrame" class="scala/tools/nsc/reporters/Reporter">scala.tools.nsc.reporters.Reporter.setSource</a>, <a href="#getSource" target="contentFrame" class="scala/tools/nsc/reporters/Reporter">scala.tools.nsc.reporters.Reporter.getSource</a>, <a href="#info" target="contentFrame" class="scala/tools/nsc/reporters/Reporter">scala.tools.nsc.reporters.Reporter.info</a>, <a href="#warning" target="contentFrame" class="scala/tools/nsc/reporters/Reporter">scala.tools.nsc.reporters.Reporter.warning</a>, <a href="#error" target="contentFrame" class="scala/tools/nsc/reporters/Reporter">scala.tools.nsc.reporters.Reporter.error</a>, <a href="#withIncompleteHandler" target="contentFrame" class="scala/tools/nsc/reporters/Reporter">scala.tools.nsc.reporters.Reporter.withIncompleteHandler</a>, <a href="#countElementsAsString" target="contentFrame" class="scala/tools/nsc/reporters/Reporter">scala.tools.nsc.reporters.Reporter.countElementsAsString</a>, <a href="#countAsString" target="contentFrame" class="scala/tools/nsc/reporters/Reporter">scala.tools.nsc.reporters.Reporter.countAsString</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#getClass%28%29" target="_self">getClass</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#hashCode%28%29" target="_self">hashCode</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#equals%28Any%29" target="_self">equals</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#clone%28%29" target="_self">clone</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#toString%28%29" target="_self">toString</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#notify%28%29" target="_self">notify</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#notifyAll%28%29" target="_self">notifyAll</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#wait%28Long%29" target="_self">wait</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#wait%28Long%2CInt%29" target="_self">wait</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#wait%28%29" target="_self">wait</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#finalize%28%29" target="_self">finalize</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#%3D%3D%28AnyRef%29" target="_self">==</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#%21%3D%28AnyRef%29" target="_self">!=</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#eq%28AnyRef%29" target="_self">eq</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#ne%28AnyRef%29" target="_self">ne</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#synchronized%28T0%29" target="_self">synchronized</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html" target="_self">Any</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html#%3D%3D%28Any%29" target="_self">==</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html#%21%3D%28Any%29" target="_self">!=</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html#isInstanceOf" target="_self">isInstanceOf</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html#asInstanceOf" target="_self">asInstanceOf</a>
+        </td></tr>
+      </table>
+
+
+      
+
+
+<table summary="" cellpadding="3" class="member-detail">
+          <tr><td class="title">Method Details</td></tr>
+        </table><div><a name="error%28String%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>error</em>(<em>msg</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>) : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="printSummary%28%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>printSummary</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="display%28scala.tools.nsc.util.Position%2CString%2CLoggerReporter.this.Severity%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>display</em>(<em>pos</em> : <a href="" target="contentFrame" class="scala/tools/nsc/util/Position">scala.tools.nsc.util.Position</a>, <em>msg</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <em>severity</em> : <a href="" target="contentFrame" class="scala/tools/nsc/reporters/Reporter/Severity">scala.tools.nsc.reporters.Reporter.Severity</a>) : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="reset"></a><dl>
+      <dt>
+        
+        <code>override</code>
+        <code>def</code>
+        <em>reset</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+      </dt>
+      <dd></dd>
+    </dl><dl>
+        <dt style="margin:10px 0 0 20px;">
+          <b>Overrides</b>
+        </dt>
+        <dd>
+        <a href="" target="contentFrame" class="scala/tools/nsc/reporters/Reporter">scala.tools.nsc.reporters.Reporter</a>.<a href="#reset" target="contentFrame" class="scala/tools/nsc/reporters/Reporter">scala.tools.nsc.reporters.Reporter.reset</a>
+        </dd>
+      </dl><hr></hr>
+<a name="info0%28scala.tools.nsc.util.Position%2CString%2CLoggerReporter.this.Severity%2CBoolean%29"></a><dl>
+      <dt>
+        
+        <code>protected</code>
+        <code>def</code>
+        <em>info0</em>(<em>pos</em> : <a href="" target="contentFrame" class="scala/tools/nsc/util/Position">scala.tools.nsc.util.Position</a>, <em>msg</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <em>severity</em> : <a href="" target="contentFrame" class="scala/tools/nsc/reporters/Reporter/Severity">scala.tools.nsc.reporters.Reporter.Severity</a>, <em>force</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/Boolean.html" target="_self">Boolean</a>) : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+      </dt>
+      <dd></dd>
+    </dl><dl>
+        <dt style="margin:10px 0 0 20px;">
+          <b>Overrides</b>
+        </dt>
+        <dd>
+        <a href="" target="contentFrame" class="scala/tools/nsc/reporters/Reporter">scala.tools.nsc.reporters.Reporter</a>.<a href="#info0" target="contentFrame" class="scala/tools/nsc/reporters/Reporter">scala.tools.nsc.reporters.Reporter.info0</a>
+        </dd>
+      </dl><hr></hr></div>
+
+
+    <hr></hr>
+        <table summary="" class="navigation">
+        <tr>
+          <td class="navigation-links" valign="top">
+            <!-- <table><tr></tr></table> -->
+          </td>
+          <td align="right" valign="top" style="white-space:nowrap;" rowspan="2">
+            <div class="doctitle-larger">Simple Build Tool 0.4 API</div>
+          </td>
+        </tr>
+        <tr><td></td></tr>
+      </table>
+      </body>
+      </html>
