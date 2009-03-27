@@ -2,8 +2,6 @@
 
 This page describes how the `sbt` loader helps you use different versions of Scala and `sbt` to build your projects.
 
-<wiki:toc max_depth="3" />
-
 == Previously ==
 
 `sbt` versions before 0.3.8 were compiled against a specific version of Scala and test libraries (ScalaCheck, ScalaTest, and specs).  You could only use this version of Scala to build your project unless you built `sbt` from source.  You could also only use the version of a test library that was binary compatible with  the version of Scala that `sbt` was compiled with.
@@ -45,7 +43,7 @@ in your project definition.  (Note: the above is just an example and is not test
 {{{
   java -Xmx256M -jar sbt-launcher.jar $*
 }}}
-This means Scala doesn't have to be installed already.
+ This means Scala doesn't have to be installed already.
  # Run `sbt` in an existing project and you will be prompted for the versions of Scala and `sbt` to use.  Currently, Scala 2.7.2 and 2.7.3 and sbt 0.4 are available options.  The `sbt` loader will download the proper version of Scala and the right version of the `sbt` builder compiled with that version of Scala and put them in project/boot.
  # The launcher will use these downloaded jars to build your project.
  # Proceed using `sbt` as usual.

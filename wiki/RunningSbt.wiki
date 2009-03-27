@@ -52,13 +52,13 @@ See TriggeredExecution for details.
   Creates a jar file containing classes compiled from `src/test/scala` and the files in `src/test/resources`.  Runs `test-compile` first.
  * `package-docs`
   Creates a jar file containing API documentation generated from Scala source files in `src/main/scala`.  Runs `doc` first.
-  * `package-all`
+ * `package-all`
   Runs all package tasks except package-project.
-  * `package-project`:
+ * `package-project`:
   Creates a zip file containing the entire project, excluding generated files.
-  * `package-src`:
+ * `package-src`:
   Creates a jar file containing all main source files and resources.  The packaged paths are relative to `src/main/scala` and `src/main/resources`.
-  * `package-test-src`:
+ * `package-test-src`:
   Creates a jar file containing all test source files and resources.  The packaged paths are relative to `src/test/scala` and `src/test/resources`.
  * `release`
   Compiles, tests, generates documentation, packages, and increments the version.
@@ -77,13 +77,13 @@ See TriggeredExecution for details.
 
 A method action is an action that accepts arguments.
 
- * `run argument*`
+ * `run <argument>*`
   Runs the class specified in the project definition (see BuildConfiguration for specifying the main class) in the same virtual machine as `sbt`.  The main class is specified the `argument`s provided.  Please see RunningProjectCode for details on the use of `System.exit` and multithreading (including GUIs) in code run by this action.  Runs `compile` first.
- * `test-failed test*`
+ * `test-failed <test>*`
   Runs the tests provided as arguments if they have not succeeded (either failed on the previous test run or have not been run yet).  `*` is interpreted as a wildcard in the test name.
- * `test-quick test*`
+ * `test-quick <test>*`
   Runs the tests provided as arguments if they have not succeeded (either failed on the previous test run or have not been run yet) or their dependencies changed.  `*` is interpreted as a wildcard in the test name.
- * `test-only test*`
+ * `test-only <test>*`
   Runs the tests provided as arguments.  `*` is interpreted as a wildcard in the test name.
   
 == Interactive Commands ==
