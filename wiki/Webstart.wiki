@@ -1,7 +1,6 @@
-
 = Webstart =
 
-A webstart project is used to generate outputs for [http://java.sun.com/javase/6/docs/technotes/guides/javaws/developersguide/contents.html Java Webstart].  To create a webstart project, extend `DefaultWebstartProject` instead of extending `DefaultProject`.  There only method required to be defined is:
+A webstart project is used to generate outputs for [http://java.sun.com/javase/6/docs/technotes/guides/javaws/developersguide/contents.html Java Webstart].  To create a webstart project, extend `DefaultWebstartProject` instead of extending `DefaultProject`.  The only method required to be defined is:
  * `jnlpXML` - Inline XML [http://java.sun.com/javase/6/docs/technotes/guides/javaws/developersguide/syntax.html JNLP file]
 
 Other methods of interest include:
