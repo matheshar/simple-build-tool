@@ -1,6 +1,6 @@
 This page lists some examples of project definitions, mostly drawn from the project definitions of sbt and [http://technically.us/code/x/sling-shot/ Sling].  Contributions are welcome!
 
-<wiki:toc max_depth="2" />
+<wiki:toc max_depth="3" />
 
 === Overriding Package Name ===
 
