@@ -98,7 +98,7 @@ class SampleProject(info: ProjectInfo) extends DefaultProject(info)
     val snapshots = "Databinder Snapshots" at "http://databinder.net/snapshot/"
     val dispatch = "net.databinder" % "databinder-dispatch" % "1.2.2-SNAPSHOT"
 }
-}}}}
+}}}
 
 === Insert Task Dependency ===
 
