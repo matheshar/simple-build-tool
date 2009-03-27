@@ -1,0 +1,178 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head><title>object ReflectUtilities in sbt</title>
+        <meta http-equiv="content-type" content="text/html; charset=UTF8"></meta><meta content="scaladoc (version 2.7.2)" name="generator"></meta><link href="../style.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../script.js"></script>
+        </head>
+        <body onload="init()">
+        <table summary="" class="navigation">
+        <tr>
+          <td class="navigation-links" valign="top">
+            <!-- <table><tr></tr></table> -->
+          </td>
+          <td align="right" valign="top" style="white-space:nowrap;" rowspan="2">
+            <div class="doctitle-larger">Simple Build Tool 0.4 API</div>
+          </td>
+        </tr>
+        <tr><td></td></tr>
+      </table>
+        
+      <div class="entity">
+        <a href="../sbt$package.html" target="_self">sbt</a>
+        <br></br>
+        <span class="entity">object  ReflectUtilities</span>
+      </div><hr></hr>
+      <div class="source">
+        [source: <a href="" class="sbt/ReflectUtilities"><code>sbt/ReflectUtilities.scala</code></a>]
+      </div><hr></hr>
+      <a name="ReflectUtilities"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>object</code>
+        <em>ReflectUtilities</em>
+      </dt>
+      <dd><code> extends </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a></dd>
+    </dl>
+      
+
+
+<table summary="" cellpadding="3" class="member">
+      <tr><td class="title" colspan="2">Method Summary</td></tr>
+      <tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/ReflectUtilities$object.html#allVals%28AnyRef%29" target="_self">allVals</a></em>
+        [<em>T</em>](<em>self</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>)(<code>implicit </code><em>mt</em> : <a href="" target="contentFrame" class="scala/reflect/Manifest">scala.reflect.Manifest</a>[<a href="../sbt/ReflectUtilities$object.html#allVals%28AnyRef%29#T" target="_self">T</a>]) : <a href="" target="contentFrame" class="scala/collection/Map">scala.collection.Map</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="../sbt/ReflectUtilities$object.html#allVals%28AnyRef%29#T" target="_self">T</a>]
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/ReflectUtilities$object.html#allValsC%28AnyRef%2CClass%5BT%5D%29" target="_self">allValsC</a></em>
+        [<em>T</em>](<em>self</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>, <em>clazz</em> : <a href="" target="contentFrame" class="java/lang/Class">java.lang.Class</a>[<a href="../sbt/ReflectUtilities$object.html#allValsC%28AnyRef%2CClass%5BT%5D%29#T" target="_self">T</a>]) : <a href="" target="contentFrame" class="scala/collection/Map">scala.collection.Map</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="../sbt/ReflectUtilities$object.html#allValsC%28AnyRef%2CClass%5BT%5D%29#T" target="_self">T</a>]
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/ReflectUtilities$object.html#ancestry%28Class%5B_%5D%29" target="_self">ancestry</a></em>
+        (<em>clazz</em> : <a href="" target="contentFrame" class="java/lang/Class">java.lang.Class</a>[<a href="http://www.scala-lang.org/docu/files/api/scala/Any.html" target="_self">Any</a>]) : <a href="" target="contentFrame" class="scala/List">scala.List</a>[<a href="" target="contentFrame" class="java/lang/Class">java.lang.Class</a>[<a href="http://www.scala-lang.org/docu/files/api/scala/Any.html" target="_self">Any</a>]]
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/ReflectUtilities$object.html#fields%28Class%5B_%5D%29" target="_self">fields</a></em>
+        (<em>clazz</em> : <a href="" target="contentFrame" class="java/lang/Class">java.lang.Class</a>[<a href="http://www.scala-lang.org/docu/files/api/scala/Any.html" target="_self">Any</a>]) : <a href="" target="contentFrame" class="scala/collection/mutable/OpenHashMap">scala.collection.mutable.OpenHashMap</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="" target="contentFrame" class="java/lang/reflect/Field">java.lang.reflect.Field</a>]
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/ReflectUtilities$object.html#transformCamelCase%28String%2CChar%29" target="_self">transformCamelCase</a></em>
+        (<em>name</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <em>separator</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/Char.html" target="_self">Char</a>) : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+        
+        
+      </td>
+    </tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#getClass%28%29" target="_self">getClass</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#hashCode%28%29" target="_self">hashCode</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#equals%28Any%29" target="_self">equals</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#clone%28%29" target="_self">clone</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#toString%28%29" target="_self">toString</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#notify%28%29" target="_self">notify</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#notifyAll%28%29" target="_self">notifyAll</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#wait%28Long%29" target="_self">wait</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#wait%28Long%2CInt%29" target="_self">wait</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#wait%28%29" target="_self">wait</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#finalize%28%29" target="_self">finalize</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#%3D%3D%28AnyRef%29" target="_self">==</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#%21%3D%28AnyRef%29" target="_self">!=</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#eq%28AnyRef%29" target="_self">eq</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#ne%28AnyRef%29" target="_self">ne</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#synchronized%28T0%29" target="_self">synchronized</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html" target="_self">Any</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html#%3D%3D%28Any%29" target="_self">==</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html#%21%3D%28Any%29" target="_self">!=</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html#isInstanceOf" target="_self">isInstanceOf</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html#asInstanceOf" target="_self">asInstanceOf</a>
+        </td></tr>
+      </table>
+
+
+      
+
+
+<table summary="" cellpadding="3" class="member-detail">
+          <tr><td class="title">Method Details</td></tr>
+        </table><div><a name="transformCamelCase%28String%2CChar%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>transformCamelCase</em>(<em>name</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <em>separator</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/Char.html" target="_self">Char</a>) : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="ancestry%28Class%5B_%5D%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>ancestry</em>(<em>clazz</em> : <a href="" target="contentFrame" class="java/lang/Class">java.lang.Class</a>[<a href="http://www.scala-lang.org/docu/files/api/scala/Any.html" target="_self">Any</a>]) : <a href="" target="contentFrame" class="scala/List">scala.List</a>[<a href="" target="contentFrame" class="java/lang/Class">java.lang.Class</a>[<a href="http://www.scala-lang.org/docu/files/api/scala/Any.html" target="_self">Any</a>]]
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="fields%28Class%5B_%5D%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>fields</em>(<em>clazz</em> : <a href="" target="contentFrame" class="java/lang/Class">java.lang.Class</a>[<a href="http://www.scala-lang.org/docu/files/api/scala/Any.html" target="_self">Any</a>]) : <a href="" target="contentFrame" class="scala/collection/mutable/OpenHashMap">scala.collection.mutable.OpenHashMap</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="" target="contentFrame" class="java/lang/reflect/Field">java.lang.reflect.Field</a>]
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="allValsC%28AnyRef%2CClass%5BT%5D%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>allValsC</em>[<em>T</em>](<em>self</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>, <em>clazz</em> : <a href="" target="contentFrame" class="java/lang/Class">java.lang.Class</a>[<a href="../sbt/ReflectUtilities$object.html#allValsC%28AnyRef%2CClass%5BT%5D%29#T" target="_self">T</a>]) : <a href="" target="contentFrame" class="scala/collection/Map">scala.collection.Map</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="../sbt/ReflectUtilities$object.html#allValsC%28AnyRef%2CClass%5BT%5D%29#T" target="_self">T</a>]
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="allVals%28AnyRef%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>allVals</em>[<em>T</em>](<em>self</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>)(<code>implicit </code><em>mt</em> : <a href="" target="contentFrame" class="scala/reflect/Manifest">scala.reflect.Manifest</a>[<a href="../sbt/ReflectUtilities$object.html#allVals%28AnyRef%29#T" target="_self">T</a>]) : <a href="" target="contentFrame" class="scala/collection/Map">scala.collection.Map</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="../sbt/ReflectUtilities$object.html#allVals%28AnyRef%29#T" target="_self">T</a>]
+      </dt>
+      <dd></dd>
+    </dl><hr></hr></div>
+
+
+    <hr></hr>
+        <table summary="" class="navigation">
+        <tr>
+          <td class="navigation-links" valign="top">
+            <!-- <table><tr></tr></table> -->
+          </td>
+          <td align="right" valign="top" style="white-space:nowrap;" rowspan="2">
+            <div class="doctitle-larger">Simple Build Tool 0.4 API</div>
+          </td>
+        </tr>
+        <tr><td></td></tr>
+      </table>
+      </body>
+      </html>
