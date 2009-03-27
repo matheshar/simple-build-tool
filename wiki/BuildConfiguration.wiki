@@ -13,8 +13,7 @@ First, create a new project:
 $ sbt
 > No project found. Create new project? (y/N) y
 Project Name: Test Project
-Version: 1.0
-Create new project Test Project 1.0 ? (Y/n) y
+...
 }}}
 
 Make a source file called
@@ -30,7 +29,7 @@ object Test
 {
   def main(args: Array[String])
   {
-    println("Hello World!")
+    println("Hello World! " + args.mkString(" "))
   }
 }
 }}}
@@ -52,6 +51,12 @@ class TestProject(info: ProjectInfo) extends DefaultProject(info)
 }
 }}}
 
+If you have `sbt` running, you need to reload the project with the new project definition:
+{{{
+> reload
+}}}
+Otherwise, start up sbt.
+
 Now, try it out:
 {{{
 $sbt
@@ -61,9 +66,18 @@ Hello World!
 ...
 }}}
 
-On startup, `sbt` will compile `TestProject` and instantiate it.  When you execute the `run` action, `sbt` runs `Test` using the scala runner in the same virtual machine as `sbt`.  See RunningProjectCode for details.
+{{{
+$sbt
+> run (again)
+...
+Hello World! (again)
+...
+}}}
+
+On startup or reload, `sbt` will compile `TestProject` and instantiate it.  When you execute the `run` action, `sbt` runs `Test` using the scala runner in the same virtual machine as `sbt`.  See RunningProjectCode for details.
 
 Note: `sbt` only recompiles a project definition on startup or when invoking the interactive command `reload`.  Therefore, if you are running in interactive mode, invoke `reload` after making changes to your project definition for the changes to take effect.
+Note: The `project/build` directory is a project itself.  Therefore, you can put jars in the `project/build/lib` directory.
 
 = Specifying Options =
 
@@ -73,7 +87,7 @@ Setting the main class was one case of specifying options for tasks (in that cas
     def compileOptions: Seq[CompileOption] = Deprecation :: Nil
 }}}
 
-`Deprecation` is a val on `ScalaProject` that is an instance of `CompileOption` representing the command line `scalac` `-deprecation` option.  To additionally specify the `-unchecked` command line option, override `compileOptions` in your project definition (class `TestProject` above):
+`Deprecation` is a val in `ScalaProject` that is an instance of `CompileOption` and represents the command line `scalac` `-deprecation` option.  To additionally specify the `-unchecked` command line option, override `compileOptions` in your project definition (class `TestProject` above):
 
 {{{
     override def compileOptions = Unchecked :: Deprecation :: Nil
@@ -101,7 +115,6 @@ Method `compileOptions` specifies the options for task `compile` and is of type 
 == Run Options ==
 
 Method `mainClass` (as described above) is of type `Option[String]` and specifies an optional main class to run when the `run` task is invoked.  The default implementation specifies no main class (`None`).
-Method `runOptions` is a list of arguments (`Seq[String]`) to the main class run by the  `run` task.  The default implementation is the empty sequence (`Nil`).
 
 == Package Options ==
 
@@ -128,7 +141,7 @@ Method `documentOptions` specifies the options for the API documentation tasks `
 
 Method `testOptions` specifies the options for the `test` action.
   * `ExcludeTests(tests: Iterable[String])`   Specifies the class names of tests that should not be run.
-  * `TestResources(resources: PathFinder)`   Specifies the paths that should be made available on the classpath during testing.  This is the `src/test/resources/` directory by default.
+  * `TestFilter(filter: String => Boolean)`  Specifies a function that returns `true` if the test should be run.
 
 == Dependency Management (Update) Options ==
 
@@ -209,3 +222,12 @@ The paths directly used by the default actions are listed below.  Other paths ar
 Additionally, web applications use these paths defined in `sbt.WebProjectPaths`:
  * `webappPath` - The location of web application resources.
  * `temporaryWarPath` - The intermediate location used to create a war file or to run Jetty.  It should be a subpath of `outputPath`.
+ 
+Webstart applications use the paths defined in `sbt.WebstartPaths`:
+ * `webstartOutputDirectory` - The directory that the webstart products are created in.
+ * `webstartMainJar` - The jar that contains the entry point to the application.
+ * `webstartLibDirectory` - The directory that libraries will go in.
+ * `jnlpFile` - The location in the webstart output directory to write the JNLP XML file to.
+ * `webstartZip` - `Some` containing the location to write the zipped output directory to or `None` if no zip of the output directory should be created
+ * `jnlpPath` - The directory containing resources to copy to the webstart output directory.
+ * `jnlpResourcesPath` - The resources to include in the webstart output directory.  By default this is everything in `jnlpPath`

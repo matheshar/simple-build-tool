@@ -4,6 +4,13 @@ This page describes some features of `sbt` that are useful for developing web ap
 
 Instead of extending `sbt.DefaultProject` in your project definition, extend `sbt.DefaultWebProject`.  This currently does two things.  First, the `package` action creates a war file instead of a jar file.  Second, if you add [http://jetty.mortbay.com/ Jetty] as a dependency (manually or automatically), you can use `jetty-run` to start your web application from `sbt`.  Use `jetty-stop` to stop it.
 
+You can also continuously recompile and reload the web application when using Jetty:
+{{{
+> jetty-run
+> ~ prepare-webapp
+}}}
+`jetty-run` starts Jetty and the `~ prepare-webapp` means to recompile and recreate the web application whenever sources files change.
+
 `sbt` uses the directory structure of Maven by default, so your web application files should go in `src/main/webapp` by default.  You can override `webappPath` to change this.  If you need to include extra files in your web application, override `extraWebappFiles` with a `PathFinder` that selects the extra files that you want (see [Paths] for information on `PathFinder`).
 
 A minimal project definition might be:

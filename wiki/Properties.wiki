@@ -98,11 +98,18 @@ The first variant accepts the name of the system property and a formatter to con
 
 == Default Properties ==
 
-Every project has the following two properties defined.
+Every project has the following properties defined.
 
 {{{
   val projectName = propertyLocalF[String](NonEmptyStringFormat)
   val projectVersion = property[Version]
+  val projectOrganization = propertyOptional[String](name, true)
+  val scalaVersion = propertyOptional[String]("")
+  val sbtVersion = propertyOptional[String]("")
 }}}
 
 The definition of `projectName` explictly specifies the format so that a project name cannot be empty.  Additionally, the `Local` in `propertyLocalF` specifies that the value for `propertyName` is not inherited from a parent project if is not explicitly set.  `projectVersion` can be inherited, however.
+
+The project organization was introduced after a default behavior of using the name for the organization already existed.  Therefore, it is optional and the name is used by default.  The `true` argument specifies that the value in a parent environment should be used before the default.  This is so that the organization is inherited from a parent project before the project's name is used as the organization.  This means that the organization only needs to be specified on the root project.
+
+The `scalaVersion` and `sbtVersion` properties are used to determine which versions of Scala and `sbt` should be used to build the project.

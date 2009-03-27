@@ -2,8 +2,12 @@
  * Getting Started
   * [Setup] - Getting `sbt` running on your machine.
   * [RunningSbt Basic Usage] - Actions and Commands
+ * Usage
+  * [TriggeredExecution Triggered Actions]
+  * [Loader Scala and Sbt Versions]
  * Configuration
   * [BuildConfiguration Basic Configuration]
+  * [ProjectDefinitionExamples Examples]
   * [Properties]
   * [SubProjects Sub Projects]
   * [Paths]
@@ -11,9 +15,14 @@
  * Writing Actions
   * [CustomActions Creating/Modifying Actions]
   * [ActionContent Implementing Actions]
- * Web Applications
-  * [WebApplications Web Applications]
-  * [WebApplicationExample Hello Lift Example]
+  * [MethodTasks Actions with Parameters (method tasks)]
+ * Other Project Types
+  * Web Applications
+   * [WebApplications Web Applications]
+   * [WebApplicationExample Hello Lift Example]
+  * Webstart Applications
+   * [Webstart]
+   * [WebstartExample Example]
  * Project Information
   * [Credits]
   * [Roadmap]

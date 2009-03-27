@@ -1,0 +1,39 @@
+= Method Tasks =
+
+As shown in several examples on the [TriggeredExecution Triggered Execution] page, a method task accepts an array of arguments and creates the task to be run from those arguments.  You can view a description of all method tasks in a project using the `methods` action.  Usage of a method task from the interactive prompt looks like:
+{{{
+> run 10000 5 0.3
+}}}
+or
+{{{
+> test-only example.TestSpecification
+}}}
+
+Defining your own method task is similar to defining a normal action, as shown in the following example.
+{{{
+lazy val example =
+   task { args =>
+     if(args.length == 2)
+       actionConstructor(args(0).toInt, args(1))
+     else
+       task { Some("Usage: example <integer> <string>") }
+   }
+def actionConstructor(a: Int, b: String) =
+    task {
+      println("Arguments were: " + a + " and " + b)
+      None
+    }
+}}}
+The type of `args` is `Array[String]`.
+
+You can then call `example` like:
+{{{
+> example 5 text
+Arguments were: 5 and text
+}}}
+
+Additionally, you can use quotes to include whitespace in arguments.  Quotes must be escaped (`\"`) and so must backslashes (`\\`):
+{{{
+> example "5" "Text with \"spaces\" and a backslash \\ included."
+Arguments were: 5 and Text with "spaces" and a backslash \ included.
+}}}

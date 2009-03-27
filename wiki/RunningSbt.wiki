@@ -16,6 +16,14 @@ Alternatively, you can run sbt in batch mode.  You specify a space-separated lis
 $ sbt clean compile
 }}}
 
+You can make an action run when one or more source files changes by prefixing the action with `~`.  For example:
+  
+{{{
+> ~ compile
+}}}
+
+See TriggeredExecution for details.
+
 = Actions =
 
 == Build Actions ==
@@ -42,16 +50,18 @@ $ sbt clean compile
   For a web application project, creates a war file after running `compile` and `prepareWebapp` first.
  * `package-test`
   Creates a jar file containing classes compiled from `src/test/scala` and the files in `src/test/resources`.  Runs `test-compile` first.
- * `package-src`
-  Creates a jar file containing all Scala source files in `src/`
  * `package-docs`
   Creates a jar file containing API documentation generated from Scala source files in `src/main/scala`.  Runs `doc` first.
- * `package-all`
-  Runs all of the package actions.
+  * `package-all`
+  Runs all package tasks except package-project.
+  * `package-project`:
+  Creates a zip file containing the entire project, excluding generated files.
+  * `package-src`:
+  Creates a jar file containing all main source files and resources.  The packaged paths are relative to `src/main/scala` and `src/main/resources`.
+  * `package-test-src`:
+  Creates a jar file containing all test source files and resources.  The packaged paths are relative to `src/test/scala` and `src/test/resources`.
  * `release`
   Compiles, tests, generates documentation, packages, and increments the version.
- * `run`
-  Runs the class specified in the project definition (see BuildConfiguration for specifying the main class) in the same virtual machine as `sbt`.  Please see RunningProjectCode for details on the use of `System.exit` and multithreading (including GUIs) in code run by this action.  Runs `compile` first.
  * `test-compile`
   Compiles the test sources (in the `src/test/scala` directory).  Runs `compile` first.
  * `test`
@@ -62,7 +72,20 @@ $ sbt clean compile
   Starts the Jetty server and serves this project as a web application on `http://localhost:8080`.
  * `jetty-stop` (Web Projects only)
   Stops the Jetty server that was started with the `jetty-run` action.
+  
+== Build Methods ==
 
+A method action is an action that accepts arguments.
+
+ * `run argument*`
+  Runs the class specified in the project definition (see BuildConfiguration for specifying the main class) in the same virtual machine as `sbt`.  The main class is specified the `argument`s provided.  Please see RunningProjectCode for details on the use of `System.exit` and multithreading (including GUIs) in code run by this action.  Runs `compile` first.
+ * `test-failed test*`
+  Runs the tests provided as arguments if they have not succeeded (either failed on the previous test run or have not been run yet).  `*` is interpreted as a wildcard in the test name.
+ * `test-quick test*`
+  Runs the tests provided as arguments if they have not succeeded (either failed on the previous test run or have not been run yet) or their dependencies changed.  `*` is interpreted as a wildcard in the test name.
+ * `test-only test*`
+  Runs the tests provided as arguments.  `*` is interpreted as a wildcard in the test name.
+  
 == Interactive Commands ==
  * `exit` or `quit`
   End the current interactive session.
@@ -72,8 +95,10 @@ $ sbt clean compile
   Displays a help message and lists these interactive actions and their descriptions.
  * `actions`
   List all available actions.
+ * `methods`
+  List all available method actions (actions that accept parameters).
  * `cc`
-  Monitors sources in Scala projects for changes and runs `test-compile` when changes are detected.
+  Monitors sources in Scala projects for changes and runs `test-compile` when changes are detected.  Equivalent to `~ test-compile`.
  * `current`
   Print the current project and logging level.
  * `info`
@@ -94,3 +119,13 @@ $ sbt clean compile
   List all available projects (See SubProjects for more on multiple projects).
  * `project <project name>`
   Change the current project to the project named <project name>.  Further operations will be done on the given project. (See SubProjects for more on multiple projects)
+
+== Batch Commands ==
+ * `help`
+  Displays a help message and lists these batch commands and their descriptions.
+ * `actions`
+  List all available actions.
+ * `methods`
+  List all available method actions (actions that accept parameters).
+ * `reboot`
+  Use this to reload the project after changing the version of Scala or `sbt` used for building the project.  This could be used to build a project against several versions of Scala in one command, for example.

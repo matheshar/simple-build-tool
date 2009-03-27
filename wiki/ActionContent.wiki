@@ -14,9 +14,17 @@ There are methods in `sbt.Control` for working with code that can throw exceptio
 
 `sbt` includes several methods for dealing with the filesystem in `sbt.FileUtilities`.  Their capabilities are described below.  The [http://simple-build-tool.googlecode.com/svn/artifacts/0.3.7/api/sbt/FileUtilities$object.html API documentation] describes the details of using the methods.
 
-== Jar/Zip Files ==
+== Jar/Zip/GZip Files ==
 
-`FileUtilities` contains methods to create jar files or zip files and for unzipping files.  You can unzip from a `Path`, `URL`, `File`, or `InputStream` and you can optionally filter the files that are extracted using a `NameFilter`.  You can jar or zip the files selected by a `PathFinder` and optionally descend into directories recursively, which is useful if you just want to specify the directories to zip.  (See [Path] for details on `Path`, `PathFinder` and `NameFilter`).
+`FileUtilities` contains methods to create jar, zip or gzip files and for unzipping files.  You can unzip from a `Path`, `URL`, `File`, or `InputStream` and you can optionally filter the files that are extracted using a `NameFilter`.  You can jar, zip, or gzip the files selected by a `PathFinder` and optionally descend into directories recursively, which is useful if you just want to specify the directories to archive.  (See [Path] for details on `Path`, `PathFinder` and `NameFilter`).
+
+== Pack200 ==
+
+This is not in `FileUtilities`, but is in `sbt.Pack`.  You can pack and unpack a jar file with either default options or explicitly specified options as given in the `java.util.jar.Pack200.Packer` class.
+
+== Signing Jars ==
+
+This is not in `FileUtilities`, but is in `sbt.SignJar`.  It signs or verifies a jar file using the `jarsigner` executable, which must be on the system path.
 
 == Copying ==
 

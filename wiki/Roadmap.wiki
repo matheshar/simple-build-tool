@@ -13,12 +13,11 @@ This list describes the documentation to be done.
 
  * API Documentation
  * Parallel execution
- * Method tasks
  * Multi-project action behavior
- * Webstart support
 
 == Testing ==
 
  * Dependency analysis
  * More testing on `FileUtilities`.
+ * Process
  * Contribute tests! See [ChangeDetectionAndTesting].

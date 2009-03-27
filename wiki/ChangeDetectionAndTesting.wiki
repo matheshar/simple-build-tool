@@ -2,9 +2,9 @@
 
 = Introduction =
 
-A general guideline for a build tool is that you should be able to trust its outputs.  This is especially relevant to compiling Scala sources because the Scala compiler is slow and there is a sizable amount of code in `sbt` to speed up compilation times.
+A general guideline for a build tool is that you should be able to trust its outputs.  This is especially relevant to compiling Scala sources because the Scala compiler is slow and so there is a sizable amount of code in `sbt` to speed up compilation times.
 
-One simple way `sbt` speeds up compilation is to run the compiler in the same virtual machine each time.  (Note that this is not quite the same as `fsc`, which reuses the same compiler instance.)  This approach results in a consistent speedup by a factor of 2 after the first compile.
+One simple way `sbt` speeds up compilation is to run the compiler in the same virtual machine each time.  (Note that this is not quite the same as `fsc`, which reuses the same compiler instance.)  This approach results in a speedup by a factor of 2 after the first compile.
 
 A second way to speed up compilation times is to only recompile sources that are out of date.  This approach requires some work to do properly.  A sign of failing to do it properly is users running `clean` as part of their normal development cycle.  The motivation behind `sbt`'s scripted test framework is to try to find bugs in `sbt`'s change detection so that compilation works as expected and `clean` is something you don't need to do to get correct outputs.
 
@@ -41,7 +41,7 @@ Once a source is detected as out of date, there are three recompilation strategi
 
 Finally, when a source is out of date (directly or indirectly), its classes should be deleted.
 
-Through version 0.3.6, `sbt` has used methods 1, 3, 5, and 6 combined to detect changes and recompilation strategy 2.  The 0.3.7 version of `sbt` substitutes change detection method 4 (comparing hashes) for method 3 (comparing last modified times) because of the following problems with method 3:
+Through version 0.3.6, `sbt` used methods 1, 3, 5, and 6 combined to detect changes and recompilation strategy 2.  Version 0.3.7 and higher of `sbt` substitutes change detection method 4 (comparing hashes) for method 3 (comparing last modified times) because of the following problems with method 3:
 
  # Changes to a source that produces no classes are not detected (works properly with change detection method 2 or 4).
  # Changes to a source between starting a compilation and finishing it are not detected (works properly with 2 or 4).
@@ -149,6 +149,12 @@ All paths are relative to the project directory.
     Executes the given command in a separate process.
 `pause`
     Pauses until enter is pressed.  It is useful for inspecting the current test state.
+ `sleep time`
+    Calls `Thread.sleep(time)`.
+ `newer source target`
+    Succeeds if the last modification time of `source` is more recent than that of `target` or if `target` does not exist.  Fails otherwise.
+ `mkdir path+`
+    Creates directories at the given `path`s.
 
 == Further Examples ==
 
@@ -156,7 +162,7 @@ See the existing tests for more examples.  They are in the [http://code.google.c
 
 = Running Tests =
 
- # Download the 0.3.7 release that includes the scripted test framework.
- # Run this version of `sbt` on a checked out version of trunk.
- # Run the `scripted` action.  See `project/build/src/SbtProject.scala` for how to filter which tests are run (don't forget to reload after changing the project definition!).
+ # Download the latest release of sbt.
+ # Run the latest version of `sbt` on a checked out version of trunk.
+ # Run the `scripted` action.  You can change the `filter` in `project/build/src/SbtProject.scala` to select which tests are run (don't forget to reload after changing the project definition).
  # [http://groups.google.com/group/simple-build-tool Contribute] your tests! 

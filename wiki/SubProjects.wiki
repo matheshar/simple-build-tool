@@ -5,12 +5,12 @@ This page describes how to manage multiple projects within a project.  The first
 = Features =
 
 === Summary ===
-    * Can specify dependencies between projects
+    * Can specify dependencies between projects and between tasks in different projects
     * Execute tasks across multiple projects
     * Classpath of all dependencies included when compiling a project
     * Proper inter-project source dependency handling
     * Can change to a project in an interactive session to work only on that project (and its dependencies)
-    * Can build projects in parallel
+    * Can run tasks in parallel
 
 === Details ===
 
@@ -48,7 +48,7 @@ The first line
 {{{
 import sbt._
 }}}
-imports everything in the `sbt` package.  All `sbt` classes are currently in the `sbt` package.  The next line
+imports everything in the `sbt` package.  All `sbt` classes for general use are currently in the `sbt` package.  The next line
 {{{
 class SimulatorProject(info: ProjectInfo) extends ParentProject(info)
 }}}
@@ -82,10 +82,10 @@ def project(path: Path, deps: Project*): Project
 
 === Parallel Builds ===
 
-`sbt` can build projects in parallel.  Add
+`sbt` can execute tasks in parallel.  Add
 
 {{{
   override def parallelExecution = true
 }}}
 
-to your root project definition.
+to your root project definition to enable this.

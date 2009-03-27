@@ -23,10 +23,13 @@ Run `sbt` and provide the project name and version:
 
 {{{
 $ sbt
-No project found. Create new project? (y/N) y
-Project Name: Hello Lift
-Version: 1.0
-Create new project Hello Lift 1.0 ? (Y/n)
+Project does not exist, create new project? (y/N) : y
+Name: Hello Lift
+Organization [empty]:
+Version [1.0]:
+Scala version [2.7.3]:
+sbt version [0.4]:
+...
 [success] Successfully initialized directory structure.
 [info] Building project Hello Lift 1.0 using sbt.DefaultProject
 [info] No actions specified, interactive session started. Execute 'help' for more information.
@@ -42,28 +45,28 @@ import sbt._
 
 class HelloLiftProject(info: ProjectInfo) extends DefaultWebProject(info)
 {
-	val jetty = "org.mortbay.jetty" % "jetty" % "6.1.14" % "test->default"
-	val servlet = "javax.servlet" % "servlet-api" % "2.5" % "provided->default"
-	val derby = "org.apache.derby" % "derby" % "10.2.2.0" % "runtime->default"
-	override def ivyXML =
-		<configurations>
-			<conf name="compile"/>
-			<conf name="provided"/>
-			<conf name="runtime" extends="compile"/>
-			<conf name="test" extends="runtime" visibility="private"/>
-		</configurations>
-		<dependencies>
-			<dependency org="net.liftweb" name="lift-core" rev="0.10" conf="compile->default">
-				<exclude org="junit"/>
-				<exclude org="org.igniterealtime.smack"/>
-				<exclude org="org.apache.commons"/>
-				<exclude org="org.scala-lang"/>
-			</dependency>
-		</dependencies>
+  override def useMavenConfigurations = true
+  val jetty = "org.mortbay.jetty" % "jetty" % "6.1.14" % "test->default"
+  val servlet = "javax.servlet" % "servlet-api" % "2.5" % "provided->default"
+  val derby = "org.apache.derby" % "derby" % "10.2.2.0" % "runtime->default"
+  val junit = "junit" % "junit" % "3.8.1" % "test->default"
+  override def ivyXML =
+    <dependencies>
+      <dependency org="net.liftweb" name="lift-core" rev="0.10" conf="compile->default">
+        <exclude org="org.igniterealtime.smack"/>
+        <exclude org="org.apache.commons"/>
+        <exclude org="org.scala-lang"/>
+      </dependency>
+    </dependencies>
 }
 }}}
+The exclusions are because
+ * Smack has moved or something inconsistent with Ivy
+ * The pom for Apache Commons is inconsistent and Ivy won't ignore it
+ * Scala libraries are provided by sbt according to your `scala.version` property.
 
-Run `reload`:
+
+Run `reload` to use the new project definition:
 {{{
 > reload
 }}}
