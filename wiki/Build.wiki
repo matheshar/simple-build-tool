@@ -1,7 +1,6 @@
 = Building `sbt` =
 
 NOTE: Building `sbt` using `sbt` has changed in order to be able to build against multiple versions of Scala.
-NOTE: Using a development version of `sbt` with the loader is not easy yet.
 
 [http://code.google.com/p/simple-build-tool/source/checkout Checkout] `sbt` from the subversion repository.
 
@@ -23,11 +22,11 @@ If you want to compile against all versions `sbt` supports, use:
 > cross-publish-local
 }}}
 
-This also installs these versions of `sbt` to your local Ivy repository.  A future version of the loader will be able to use these installed versions in your projects like normal releases.
+This also installs these versions of `sbt` to your local Ivy repository.  Versions 0.4.1 or later of the loader can use these installed versions in your projects like normal releases.
 
 == Loader ==
 
-The loader is a separate directory `boot`.  It is not yet a subproject of the main `sbt` project and so you need to run `sbt` in the `boot` directory.  The proguard jar must be manually downloaded to this directory.
+The loader is in a separate directory `boot`.  It is not yet a subproject of the main `sbt` project and so you need to run `sbt` in the `boot` directory.
 
 {{{
 sbt_home/boot $ sbt
@@ -37,4 +36,4 @@ sbt_home/boot $ sbt
 ...
 }}}
 
-The `sbt-loader.jar` in the project directory (not the `target` directory) is the final output.
+The `sbt-launcher.jar` in the project directory (not the `target` directory) is the final output.
