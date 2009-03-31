@@ -41,9 +41,15 @@ in your project definition.  (Note: the above is just an example and is not test
 
  # Because Proguard embeds the Scala+Ivy classes the loader needs, the `sbt` script now looks like:
 {{{
-  java -Xmx256M -jar sbt-launcher.jar $*
+  java -Xmx256M -jar sbt-launcher.jar "$@"
 }}}
  This means Scala doesn't have to be installed already.
- # Run `sbt` in an existing project and you will be prompted for the versions of Scala and `sbt` to use.  Currently, Scala 2.7.2 and 2.7.3 and sbt 0.4 are available options.  The `sbt` loader will download the proper version of Scala and the right version of the `sbt` builder compiled with that version of Scala and put them in project/boot.
+ # Run `sbt` in an existing project and you will be prompted for the versions of Scala and `sbt` to use.  Currently, Scala 2.7.2 and 2.7.3 and sbt 0.4 are available options.  The `sbt` launcher will download the proper version of Scala and the right version of the `sbt` builder compiled with that version of Scala and put them in project/boot.
  # The launcher will use these downloaded jars to build your project.
  # Proceed using `sbt` as usual.
+
+== Offline Usage ==
+
+The `sbt` loader requires an internet connection to download the selected versions of the Scala and main `sbt` builder jars.  Once the jars are downloaded, the loader does not need a connection to build projects on that machine unless you use a different version of Scala or `sbt`.  Cleaning the Ivy cache, such as with the `clean-cache` action, will require downloading the jars again, however.
+
+The loader downloads the jars to the `project/boot` directory in a project.  This directory can be copied between projects.  Therefore, once you have a `project/boot` directory for the desired versions of `sbt` and Scala, you can copy this directory to other projects, including ones on other machines.
