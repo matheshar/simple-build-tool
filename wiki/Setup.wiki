@@ -16,7 +16,7 @@ The easiest way to launch sbt is to create a one-line script.  Download [http://
 === Unix ===
 Put the line
 {{{
-java -Xmx256M -jar sbt-launcher.jar $*
+java -Xmx256M -jar sbt-launcher.jar "$@"
 }}}
 in a file called `sbt` in your `~/bin` directory and do
 {{{
