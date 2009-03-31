@@ -1,4 +1,14 @@
-=== 0.3.7 to trunk ===
+=== 0.4 to 0.4.1 ===
+ * Direct dependencies on Scala libraries are checked for version equality with `scala.version`
+ * Transitive dependencies on `scala-library` and `scala-compiler` are filtered
+  * They are fixed by `scala.version` and provided on the classpath by `sbt`
+  * To access them, use the `scalaJars` method or `classOf[ScalaObject].getProtectionDomain.getCodeSource`
+ * Version of `sbt` and Scala printed on startup
+ * Launcher asks if you want to try a different version if `sbt` or Scala could not be retrieved.
+ * After changing `scala.version` or `sbt.version` with `set`, note is printed that `reboot` is required.
+ * Move managed dependency actions to `BasicManagedProject` (`update` is now available on `ParentProject`)
+
+=== 0.3.7 to 0.4 ===
  * Fixed issue with `build.properties` being unnecessarily updated in sub-projects when loading.
  * Added method to compute the SHA-1 hash of a `String`
  * Added pack200 methods
