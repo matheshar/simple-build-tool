@@ -2,11 +2,18 @@
  * Direct dependencies on Scala libraries are checked for version equality with `scala.version`
  * Transitive dependencies on `scala-library` and `scala-compiler` are filtered
   * They are fixed by `scala.version` and provided on the classpath by `sbt`
-  * To access them, use the `scalaJars` method or `classOf[ScalaObject].getProtectionDomain.getCodeSource`
+  * To access them, use the `scalaJars` method, `classOf[ScalaObject].getProtectionDomain.getCodeSource`, or mainCompileConditional.analysis.allExternals
+ * The configurations checked/filtered as described above are configurable.  Nonstandard configurations are not checked by default.
  * Version of `sbt` and Scala printed on startup
  * Launcher asks if you want to try a different version if `sbt` or Scala could not be retrieved.
  * After changing `scala.version` or `sbt.version` with `set`, note is printed that `reboot` is required.
- * Move managed dependency actions to `BasicManagedProject` (`update` is now available on `ParentProject`)
+ * Moved managed dependency actions to `BasicManagedProject` (`update` is now available on `ParentProject`)
+ * Cleaned up `sbt`'s build so that you just need to do `update` and `full-build` to build from source.  The trunk version of `sbt` will be available for use from the loader.
+  * The loader is now a subproject.
+  * For development, you'll still want the usual actions (such as `package`) for the main builder and `proguard` to build the loader.
+ * Fixed analysis plugin improperly including traits/abstract classes in subclass search
+ * `ScalaProject`s already had everything required to be parent projects: flipped the switch to enable it
+ * Proper method task support in scripted tests (`package` group tests rightly pass again)
 
 === 0.3.7 to 0.4 ===
  * Fixed issue with `build.properties` being unnecessarily updated in sub-projects when loading.
