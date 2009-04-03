@@ -6,34 +6,18 @@ NOTE: Building `sbt` using `sbt` has changed in order to be able to build agains
 
 Use the latest release of `sbt` to build trunk.
 
-== Main ==
+== Basic ==
 
 {{{
 $ sbt
 > update
 ...
-> package
+> full-build
 ...
 }}}
 
-If you want to compile against all versions `sbt` supports, use:
+This will build `sbt` against all versions of Scala that `sbt` supports and install these `sbt` variants to your local Ivy repository.  The packaged loader jar is `boot/sbt-loader.jar`.  With this loader built from trunk, you can use the trunk `sbt` in your projects like a normal release.  That is, you can set `sbt.version` to the trunk version and the loader will find it.
 
-{{{
-> cross-publish-local
-}}}
+== Development ==
 
-This also installs these versions of `sbt` to your local Ivy repository.  Versions 0.4.1 or later of the loader can use these installed versions in your projects like normal releases.
-
-== Loader ==
-
-The loader is in a separate directory `boot`.  It is not yet a subproject of the main `sbt` project and so you need to run `sbt` in the `boot` directory.
-
-{{{
-sbt_home/boot $ sbt
-> update
-...
-> proguard
-...
-}}}
-
-The `sbt-launcher.jar` in the project directory (not the `target` directory) is the final output.
+If you want to run tests, debug, or otherwise develop on `sbt`, you'll want to use the usual actions like `compile` and `package`.  Additionally, the `proguard` action builds the final loader jar `boot/sbt-loader.jar`.
