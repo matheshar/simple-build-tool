@@ -11,7 +11,7 @@ The basic steps are:
 
 = Launching Sbt =
 
-The easiest way to launch sbt is to create a one-line script.  Download [http://simple-build-tool.googlecode.com/files/sbt-launcher-0.4.2.jar sbt-launcher.jar] if you have not already.
+The easiest way to launch sbt is to create a one-line script.  Download [http://simple-build-tool.googlecode.com/files/sbt-launcher-0.4.3.jar sbt-launcher.jar] if you have not already.
 
 === Unix ===
 Put the line
@@ -38,7 +38,7 @@ When you run sbt and it does not find a project in the current directory, it ask
  * Project organization: This is used for dependency management and is optional.
  * Project version: This is used in scaladocs and as part of the default name for generated packages.
  * Scala version: This is version of scala to build the project with.  Current options are 2.7.2 and 2.7.3.
- * Sbt version: This is the version of sbt to build the project with.  Current options are 0.4 and 0.4.2.
+ * Sbt version: This is the version of sbt to build the project with.  Current options are 0.4 and 0.4.3.
 
 With this information, sbt creates the project properties file and directory structure.  See [Loader] for more information on setting the versions of Scala and `sbt` to use to build your project.  These are described in the following section.
 

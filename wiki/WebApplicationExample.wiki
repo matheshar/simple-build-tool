@@ -1,6 +1,6 @@
 = Hello Lift Example =
 
-This page provides an example of building a [http://liftweb.net Lift] web application using the new web application features in `sbt` 0.3.4.
+This page provides an example of building a [http://liftweb.net Lift] web application using the new web application features available since `sbt` 0.3.4.
 
 == Get the example ==
 
@@ -28,7 +28,7 @@ Name: Hello Lift
 Organization [empty]: net.liftweb.hello
 Version [1.0]: 1.0
 Scala version [2.7.3]:
-sbt version [0.4.2]:
+sbt version [0.4.3]:
 ...
 [success] Successfully initialized directory structure.
 [info] Building project Hello Lift 1.0 using sbt.DefaultProject

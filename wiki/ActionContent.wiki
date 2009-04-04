@@ -12,7 +12,7 @@ There are methods in `sbt.Control` for working with code that can throw exceptio
 
 = File Utilities =
 
-`sbt` includes several methods for dealing with the filesystem in `sbt.FileUtilities`.  Their capabilities are described below.  The [http://simple-build-tool.googlecode.com/svn/artifacts/0.4.2/api/sbt/FileUtilities$object.html API documentation] describes the details of using the methods.
+`sbt` includes several methods for dealing with the filesystem in `sbt.FileUtilities`.  Their capabilities are described below.  The [http://simple-build-tool.googlecode.com/svn/artifacts/0.4.3/api/sbt/FileUtilities$object.html API documentation] describes the details of using the methods.
 
 == Jar/Zip/GZip Files ==
 
