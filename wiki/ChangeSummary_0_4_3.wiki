@@ -1,4 +1,4 @@
-= Changes from 0.4 to 0.4.2 =
+= Changes from 0.4 to 0.4.3 =
 
 The changes in this release are mainly minor improvements and fixes in support of the new launcher.  There is one important change to managing Scala jars that should be noted before updating.  See the Scala Jars and Dependency Management section below and please ask if you have any questions about it.
 
@@ -10,16 +10,16 @@ The changes in this release are mainly minor improvements and fixes in support o
  * Print version of `sbt` and Scala on project startup:
  {{{
 [info] Building project dispatch 0.1-SNAPSHOT using Dispatch
-[info]    with sbt 0.4.2 and Scala 2.7.3
+[info]    with sbt 0.4.3 and Scala 2.7.3
  }}}
  *  Launcher prompts if versions could not be retrieved:
  {{{
-Could not retrieve sbt 0.4.3. Select different version? (y/N) : y
-sbt version [0.4.2]:
+Could not retrieve sbt 0.4.4. Select different version? (y/N) : y
+sbt version [0.4.3]:
  }}}
  * Print note when scala.version or sbt.version are changed that reboot is required:
  {{{
-> set sbt.version 0.4
+> set sbt.version 0.4.3
  Build will use sbt 0.4 after running 'reboot' command or restarting sbt.
 
 > set scala.version 2.7.3
