@@ -20,4 +20,4 @@ This will build `sbt` against all versions of Scala that `sbt` supports and inst
 
 == Development ==
 
-If you want to run tests, debug, or otherwise develop on `sbt`, you'll want to use the usual actions like `compile` and `package`.  Additionally, the `proguard` action builds the final loader jar `boot/sbt-loader.jar`.
+If you want to run tests, debug, or otherwise develop on `sbt`, you will want to use the usual actions like `compile` and `package`.  In addition to the usual actions, the `proguard` action builds the final loader jar `boot/sbt-launcher.jar`.

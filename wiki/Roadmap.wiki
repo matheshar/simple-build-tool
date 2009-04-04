@@ -19,5 +19,4 @@ This list describes the documentation to be done.
 
  * Dependency analysis
  * More testing on `FileUtilities`.
- * Process
  * Contribute tests! See [ChangeDetectionAndTesting].

@@ -1,4 +1,4 @@
-=== 0.4 to 0.4.1 ===
+=== 0.4 to 0.4.2 ===
  * Direct dependencies on Scala libraries are checked for version equality with `scala.version`
  * Transitive dependencies on `scala-library` and `scala-compiler` are filtered
   * They are fixed by `scala.version` and provided on the classpath by `sbt`
@@ -14,6 +14,7 @@
  * Fixed analysis plugin improperly including traits/abstract classes in subclass search
  * `ScalaProject`s already had everything required to be parent projects: flipped the switch to enable it
  * Proper method task support in scripted tests (`package` group tests rightly pass again)
+ * Improved tests in loader that check that all necessary libraries were downloaded properly
 
 === 0.3.7 to 0.4 ===
  * Fixed issue with `build.properties` being unnecessarily updated in sub-projects when loading.

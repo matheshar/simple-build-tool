@@ -10,7 +10,7 @@ Download the [http://liftweb.net/index.php/HowTo_start_a_new_liftwebapp Hello Li
 $ mvn archetype:create -U \
  -DarchetypeGroupId=net.liftweb \
  -DarchetypeArtifactId=lift-archetype-basic \
- -DarchetypeVersion=0.10 \
+ -DarchetypeVersion=1.0 \
  -DremoteRepositories=http://scala-tools.org/repo-releases \
  -DgroupId=net.liftweb.hello -DartifactId=hello-lift
 
@@ -25,10 +25,10 @@ Run `sbt` and provide the project name and version:
 $ sbt
 Project does not exist, create new project? (y/N) : y
 Name: Hello Lift
-Organization [empty]:
-Version [1.0]:
+Organization [empty]: net.liftweb.hello
+Version [1.0]: 1.0
 Scala version [2.7.3]:
-sbt version [0.4]:
+sbt version [0.4.2]:
 ...
 [success] Successfully initialized directory structure.
 [info] Building project Hello Lift 1.0 using sbt.DefaultProject
@@ -46,25 +46,17 @@ import sbt._
 class HelloLiftProject(info: ProjectInfo) extends DefaultWebProject(info)
 {
   override def useMavenConfigurations = true
+
+  val lift = "net.liftweb" % "lift-core" % "1.0" % "compile->default"
   val jetty = "org.mortbay.jetty" % "jetty" % "6.1.14" % "test->default"
   val servlet = "javax.servlet" % "servlet-api" % "2.5" % "provided->default"
   val derby = "org.apache.derby" % "derby" % "10.2.2.0" % "runtime->default"
   val junit = "junit" % "junit" % "3.8.1" % "test->default"
-  override def ivyXML =
-    <dependencies>
-      <dependency org="net.liftweb" name="lift-core" rev="0.10" conf="compile->default">
-        <exclude org="org.igniterealtime.smack"/>
-        <exclude org="org.apache.commons"/>
-        <exclude org="org.scala-lang"/>
-      </dependency>
-    </dependencies>
+
+  // required because Ivy doesn't pull repositories from poms
+  val smackRepo = "m2-repository-smack" at "http://maven.reucon.com/public"
 }
 }}}
-The exclusions are because
- * Smack has moved or something inconsistent with Ivy
- * The pom for Apache Commons is inconsistent and Ivy won't ignore it
- * Scala libraries are provided by sbt according to your `scala.version` property.
-
 
 Run `reload` to use the new project definition:
 {{{

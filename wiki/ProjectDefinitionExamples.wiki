@@ -164,6 +164,7 @@ import sbt._
 class SampleProject(info: ProjectInfo) extends DefaultProject(info)
 {
     override def runClasspath = super.runClasspath +++ extraRunClasspath
+    def extraRunClasspath = ...
 }
 }}}
 
@@ -184,9 +185,10 @@ class SampleProject(info: ProjectInfo) extends DefaultProject(info)
 
 This examples shows a parent project with two subprojects that have a new task `tool` that is configured with two paths.  One path is from the parent project's directory and the other is in the sub project's directory.
 
-import sbt._
 
 {{{
+import sbt._
+
 class ExampleProject(info: ProjectInfo) extends ParentProject(info)
 {
    def toolConfigurationFile = path("config")

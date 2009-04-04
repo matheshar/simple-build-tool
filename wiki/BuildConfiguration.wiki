@@ -77,7 +77,7 @@ Hello World! (again)
 On startup or reload, `sbt` will compile `TestProject` and instantiate it.  When you execute the `run` action, `sbt` runs `Test` using the scala runner in the same virtual machine as `sbt`.  See RunningProjectCode for details.
 
 Note: `sbt` only recompiles a project definition on startup or when invoking the interactive command `reload`.  Therefore, if you are running in interactive mode, invoke `reload` after making changes to your project definition for the changes to take effect.
-Note: The `project/build` directory is a project itself.  Therefore, you can put jars in the `project/build/lib` directory.
+Note: The `project/build` directory is a project itself.  Therefore, you can add jars to the `project/build/lib` directory to use from your project definition.
 
 = Specifying Options =
 

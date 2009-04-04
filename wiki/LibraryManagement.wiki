@@ -64,24 +64,12 @@ For example:
 
 For example:
 {{{
-  val jetty = "org.mortbay.jetty" % "jetty" % "6.1.14" % "test->default"
-  val servlet = "javax.servlet" % "servlet-api" % "2.5" % "provided->default"
-  val derby = "org.apache.derby" % "derby" % "10.2.2.0" % "runtime->default"
-  override def ivyXML =
-    <configurations>
-      <conf name="compile"/>
-      <conf name="provided"/>
-      <conf name="runtime" extends="compile"/>
-      <conf name="test" extends="runtime" visibility="private"/>
-    </configurations>
-    <dependencies>
-      <dependency org="net.liftweb" name="lift-core" rev="0.10" conf="compile->default">
-        <exclude org="junit"/>
-        <exclude org="org.igniterealtime.smack"/>
-        <exclude org="org.apache.commons"/>
-        <exclude org="org.scala-lang"/>
-      </dependency>
-    </dependencies>
+    override def ivyXML =
+        <dependencies>
+            <dependency org="slinky" name="slinky" rev="2.1" conf="default">
+                <artifact name="slinky" url="http://slinky2.googlecode.com/svn/artifacts/2.1/slinky.jar" />
+            </dependency>
+        </dependencies>
 }}}
 
 === Maven/Ivy ===
