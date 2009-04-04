@@ -20,7 +20,7 @@ sbt version [0.4.3]:
  * Print note when scala.version or sbt.version are changed that reboot is required:
  {{{
 > set sbt.version 0.4.3
- Build will use sbt 0.4 after running 'reboot' command or restarting sbt.
+ Build will use sbt 0.4.3 after running 'reboot' command or restarting sbt.
 
 > set scala.version 2.7.3
  Build will use Scala 2.7.3 after running 'reboot' command or restarting sbt.
