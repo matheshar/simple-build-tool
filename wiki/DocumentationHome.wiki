@@ -28,5 +28,5 @@
   * [Roadmap]
   * [Changes]
   * [Build] from source
-  * [http://simple-build-tool.googlecode.com/svn/artifacts/0.4.3/api/index.html API Documentation]
+  * [http://simple-build-tool.googlecode.com/svn/artifacts/latest/api/index.html API Documentation]
   * [ChangeDetectionAndTesting Change Detection and Testing]
