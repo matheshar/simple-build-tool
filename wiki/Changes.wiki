@@ -60,7 +60,7 @@
  * Added `test-quick` method task, which restricts the tests to run.  First, only tests passed as arguments are run.  If no tests are passed, no filtering is done.  Then, only tests that failed the previous run or had a dependency change are run.
  * Added launcher that allows declaring version of sbt/scala to build project with.
  * Added tab completion with ~
- * Added basic tab completion for method tasks, including test-*
+ * Added basic tab completion for method tasks, including `test-*`
  * Changed default pack options to be the default options of Pack200.Packer
  * Fixed ~ behavior when action doesn't exist
 
