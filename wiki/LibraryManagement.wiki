@@ -12,10 +12,6 @@ Manually managing dependencies involves copying any jars that you want to use to
 
 This method of dependency management involves specifying the direct dependencies of your project and letting `sbt` handle retrieving and updating your dependencies.
 
-== Setup ==
-
-To use automatic dependency management, you will need to [http://ant.apache.org/ivy/download.cgi download Ivy] and include it on `sbt`'s classpath (see [http://code.google.com/p/simple-build-tool/wiki/Setup#Launching_Sbt Launching Sbt]).
-
 == Usage ==
 
 `sbt` performs this dependency handling when the `update` action is executed.  By default, `sbt` does *not* update your dependencies before every compilation, but only does so when you execute `update`.  `sbt` supports three ways of specifying these dependencies:
