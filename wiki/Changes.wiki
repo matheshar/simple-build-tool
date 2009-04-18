@@ -1,4 +1,8 @@
-=== 0.4 to 0.4.2 ===
+=== 0.4.3 to trunk ===
+ * Sorted out repository situation in loader
+ * Added support for `http_proxy` environment variable
+
+=== 0.4 to 0.4.3 ===
  * Direct dependencies on Scala libraries are checked for version equality with `scala.version`
  * Transitive dependencies on `scala-library` and `scala-compiler` are filtered
   * They are fixed by `scala.version` and provided on the classpath by `sbt`
