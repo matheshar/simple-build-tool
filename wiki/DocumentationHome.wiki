@@ -12,6 +12,7 @@
   * [SubProjects Sub Projects]
   * [Paths]
   * [LibraryManagement Library Management]
+  * [CompilerPlugins Using Compiler Plugins]
  * Writing Actions
   * [CustomActions Creating/Modifying Actions]
   * [ActionContent Implementing Actions]
