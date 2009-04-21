@@ -5,6 +5,7 @@
  * Added special support for compiler plugins, see CompilerPlugins page.
  * `reload` command in scripted tests will now properly handle success/failure
  * Very basic support for Java sources: mixin `JavaProject` to your project definition and Java sources under `src/main/java` will be compiled.
+ * `parallelExecution` defaults to value in parent project if there is one.
 
 === 0.4 to 0.4.3 ===
  * Direct dependencies on Scala libraries are checked for version equality with `scala.version`
