@@ -2,6 +2,8 @@
  * Sorted out repository situation in loader
  * Added support for `http_proxy` environment variable
  * Added `download` method from Nathan to `FileUtilities` to retrieve the contents of a URL.
+ * Added special support for compiler plugins, see CompilerPlugins page.
+ * `reload` command in scripted tests will now properly handle success/failure
 
 === 0.4 to 0.4.3 ===
  * Direct dependencies on Scala libraries are checked for version equality with `scala.version`
