@@ -7,6 +7,8 @@
  * Very basic support for Java sources: mixin `JavaProject` to your project definition and Java sources under `src/main/java` will be compiled.
  * `parallelExecution` defaults to value in parent project if there is one.
  * Added 'console-project' that enters the Scala interpreter with the current `Project` bound to the variable `project`.
+ * The default Ivy cache manager is now configured with `useOrigin=true` so that it doesn't cache artifacts from the local filesystem.
+ * For users building from trunk, if a project specifies a version of `sbt` that ends in `-SNAPSHOT`, the loader will update `sbt` every time it starts up.  The trunk version of `sbt` will always end in `-SNAPSHOT` now.
 
 === 0.4 to 0.4.3 ===
  * Direct dependencies on Scala libraries are checked for version equality with `scala.version`
