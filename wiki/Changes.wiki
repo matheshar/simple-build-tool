@@ -9,6 +9,8 @@
  * Added 'console-project' that enters the Scala interpreter with the current `Project` bound to the variable `project`.
  * The default Ivy cache manager is now configured with `useOrigin=true` so that it doesn't cache artifacts from the local filesystem.
  * For users building from trunk, if a project specifies a version of `sbt` that ends in `-SNAPSHOT`, the loader will update `sbt` every time it starts up.  The trunk version of `sbt` will always end in `-SNAPSHOT` now.
+ * Added automatic detection of classes with main methods for use when `mainClass` is not explicitly specified in the project definition.  If exactly one main class is detected, it is used for `run` and `package`.  If multiple main classes are detected, the user is prompted for which one to use for `run`.  For `package`, no `Main-Class` attribute is automatically added and a warning is printed.
+ * Updated build to cross-compile against Scala 2.7.4.
 
 === 0.4 to 0.4.3 ===
  * Direct dependencies on Scala libraries are checked for version equality with `scala.version`
