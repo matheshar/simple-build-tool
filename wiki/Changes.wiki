@@ -11,6 +11,9 @@
  * For users building from trunk, if a project specifies a version of `sbt` that ends in `-SNAPSHOT`, the loader will update `sbt` every time it starts up.  The trunk version of `sbt` will always end in `-SNAPSHOT` now.
  * Added automatic detection of classes with main methods for use when `mainClass` is not explicitly specified in the project definition.  If exactly one main class is detected, it is used for `run` and `package`.  If multiple main classes are detected, the user is prompted for which one to use for `run`.  For `package`, no `Main-Class` attribute is automatically added and a warning is printed.
  * Updated build to cross-compile against Scala 2.7.4.
+ * Fixed `proguard` task in `sbt`'s project definition
+ * Added `manifestClassPath` method that accepts the value for the `Class-Path` attribute
+ * Added `PackageOption` called `ManifestAttributes` that accepts `(java.util.jar.Attributes.Name, String)` or `(String, String)` pairs and adds them to the main manifest attributes
 
 === 0.4 to 0.4.3 ===
  * Direct dependencies on Scala libraries are checked for version equality with `scala.version`
