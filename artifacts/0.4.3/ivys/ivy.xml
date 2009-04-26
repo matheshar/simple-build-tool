@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ivy-module version="1.0">
-	<info organisation="sbt" module="simple-build-tool" revision="0.4.3" status="release" publication="20090425083117"/>
+	<info organisation="sbt" module="simple-build-tool" revision="0.4.3" status="release" publication="20090426183121"/>
 	<configurations>
 		<conf name="base" visibility="public"/>
 		<conf name="2.7.2" visibility="public" extends="base"/>
@@ -21,7 +21,7 @@
 	<publications>
 		<artifact name="sbt_2.7.2" type="jar" ext="jar" conf="2.7.2"/>
 		<artifact name="sbt_2.7.3" type="jar" ext="jar" conf="2.7.3"/>
-		<artifact name="sbt_2.7.4" type="jar" ext="jar" conf="2.7.3"/>
+		<artifact name="sbt_2.7.4" type="jar" ext="jar" conf="2.7.4"/>
 		<artifact name="sbt_2.8.0-SNAPSHOT" type="jar" ext="jar" conf="2.8.0-SNAPSHOT"/>
 	</publications>
 	<dependencies>
