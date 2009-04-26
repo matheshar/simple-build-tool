@@ -14,6 +14,9 @@
  * Fixed `proguard` task in `sbt`'s project definition
  * Added `manifestClassPath` method that accepts the value for the `Class-Path` attribute
  * Added `PackageOption` called `ManifestAttributes` that accepts `(java.util.jar.Attributes.Name, String)` or `(String, String)` pairs and adds them to the main manifest attributes
+ * Fixed some situations where characters would not be echoed at prompts other than main prompt.
+ * Fixed issue #20 (use `http_proxy` environment variable)
+ * Fixed issue #22 (rebuilding and republishing released versions of `sbt` against new Scala versions, specifically Scala 2.7.4)
 
 === 0.4 to 0.4.3 ===
  * Direct dependencies on Scala libraries are checked for version equality with `scala.version`
