@@ -16,7 +16,7 @@
  * Added `PackageOption` called `ManifestAttributes` that accepts `(java.util.jar.Attributes.Name, String)` or `(String, String)` pairs and adds them to the main manifest attributes
  * Fixed some situations where characters would not be echoed at prompts other than main prompt.
  * Fixed issue #20 (use `http_proxy` environment variable)
- * Enhancement #21 (native process wrapper)
+ * Implemented issue #21 (native process wrapper)
  * Fixed issue #22 (rebuilding and republishing released versions of `sbt` against new Scala versions, specifically Scala 2.7.4)
 
 === 0.4 to 0.4.3 ===
