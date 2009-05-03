@@ -5,6 +5,7 @@
  * Added 'console-project' command that enters the Scala interpreter with the current `Project` bound to the variable `project`.  See ProjectConsole for details.
  * Added automatic detection of classes with main methods for use when `mainClass` is not explicitly specified in the project definition.  If exactly one main class is detected, it is used for `run` and `package`.  If multiple main classes are detected, the user is prompted for which one to use for `run`.  For `package`, no `Main-Class` attribute is automatically added and a warning is printed.  In summary, if you only have one main class, you don't need to explicitly specify it in your project definition.
  * Added very basic support for compiling Java sources under `src/main/java` and `src/test/java`.  Please see JavaSources for details.
+ * Added `API` for running external processes.  See [Process External Processes] for details.
 
 == Improvements ==
  * Added Nathan's `download` method to `FileUtilities` for retrieving the contents of a `URL`.
