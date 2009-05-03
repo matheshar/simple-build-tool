@@ -1,0 +1,111 @@
+= Test Framework Extensions =
+
+== Introduction ==
+
+This page describes adding support for additional testing libraries and defining additional test reporters.  You do this by implementing `sbt` interfaces (described below) in a separate project, packaging the project, and including the jar in the `project/build/lib` directory of a project to use your extensions in the project's build definition.
+
+== Custom Test Framework ==
+
+`sbt` contains builtin support for the three main Scala testing libraries.  This section describes how to implement support for another testing library.
+
+Implement `sbt.TestFramework`.  The best way to do this is to extend `sbt.LazyTestFramework`.  The implementation of `sbt`'s support for ScalaCheck is shown below as an example:
+
+{{{
+object ScalaCheckFramework extends LazyTestFramework
+{
+   val name = "ScalaCheck"
+
+   def testSuperClassName = "org.scalacheck.Properties"
+   def testSubClassType = ClassType.Module
+
+   def testRunnerClassName = "sbt.impl.ScalaCheckRunner"
+}
+}}}
+
+The `testSuperClassName` method returns the name of the class that is the superclass of all tests for the framework.  In the case of ScalaCheck, it is `org.scalacheck.Properties`.  The `testSubClassType` is either `ClassType.Module` or `ClassType.Class` to indicate whether test implementations should be a module or a class.  For ScalaCheck and specs, it is `ClassType.Module`.  For ScalaTest, it is `ClassType.Class`.  In the case of a class, the class will be instantiated by the test framework using a no-argument constructor.
+
+Finally, `testRunnerClassName` is the name of the implementing test runner.  This runner will be reflectively loaded by `sbt`'s testing code.  This allows the runner to directly use classes from the test library and have the test library jars loaded from the project's classpath instead of requiring them to be on `sbt`'s classpath at startup.
+
+The test runner must be of type `sbt.TestRunner`, but will typically subclass `sbt.BasicTestRunner`.  The constructor should look like:
+{{{
+   (val log: Logger, val listeners: Seq[TestReportListener], testLoader: ClassLoader)
+}}}
+The sequence of reporters is used to log test status.  The class loader is used to load the test classes.
+
+The single method to implement in `sbt.BasicTestRunner` accepts the name of the test to run and returns the result of running it:
+{{{
+   def runTest(testClassName: String): Result.Value
+}}}
+The result is one of `Result.Error`,`Result.Passed`, or `Result.Failed`.
+
+The implementation for the ScalaCheck runner is shown here:
+{{{
+package sbt.impl
+class ScalaCheckRunner(val log: Logger, val listeners: Seq[TestReportListener], val testLoader: ClassLoader) extends BasicTestRunner
+{
+   import org.scalacheck.{Pretty, Properties, Test}
+   def runTest(testClassName: String): Result.Value =
+   {
+      val test = ModuleUtilities.getObject(testClassName, testLoader).asInstanceOf[Properties]
+      if(Test.checkProperties(test, Test.defaultParams, propReport, testReport).find(!_._2.passed).isEmpty)
+         Result.Passed
+      else
+         Result.Failed
+   }
+   private def propReport(pName: String, s: Int, d: Int) {}
+   private def testReport(pName: String, res: Test.Result) =
+   {
+      if(res.passed)
+         fire(PassedEvent(pName, Pretty.pretty(res)))
+      else
+         fire(FailedEvent(pName, Pretty.pretty(res)))
+   }
+}
+}}}
+
+All references to the ScalaCheck library are kept within the class body.  The `runTest` method is implemented to load the module corresponding to the test using the right class loader and casting the test class to the the test type.  The test is run and the result is returned.  The last two methods report test status by using the `fire` method to send an event object to all listeners.  A framework defines its own test events and a test reporter to handle those events.  This is described in the next section on test reporters.
+
+== Custom Test Reporters ==
+
+Test frameworks report status and results to test reporters.  Each test framework provides its own classes that extend `sbt.TestEvent`.  Test reporters then pattern match on the event and handle it appropriately.  You can create a new test reporter by implementing either `TestReportListener` or `TestsListener`.  Their definitions are shown below.
+
+{{{
+trait TestReportListener
+{
+  /** called for each class or equivalent grouping */
+  def startGroup(name: String)
+  /** called for each test method or equivalent */
+  def testEvent(event: TestEvent)
+  /** called if there was an error during test */
+  def endGroup(name: String, t: Throwable)
+  /** called if test completed */
+  def endGroup(name: String, result: Result.Value)
+}
+
+trait TestsListener extends TestReportListener
+{
+  /** called once, at beginning. */
+  def doInit
+  /** called once, at end. */
+  def doComplete(finalResult: Result.Value)
+  /** called once, at end, if the test framework throws an exception. */
+  def doComplete(t: Throwable)
+}
+}}}
+
+The simplest way to add support for `TestEvent`s from new frameworks is to extend the default `LogTestReportListener` and implement `handleOtherTestEvent`.  The default implementation will process events from the builtin frameworks (ScalaCheck, ScalaTest, and specs) and pass any unknown ones to `handleOtherTestEvent`.  By default, `handleOtherTestEvent` does nothing.
+
+== Using Extensions ==
+
+To use your extensions in a project definition, put the packaged jar with the extensions in the `project/build/lib` directory of a project.
+
+Specify the test frameworks you want to use by overriding the `testFrameworks` method in your project definition.  The default is:
+{{{
+  def testFrameworks: Iterable[TestFramework] = ScalaCheckFramework :: SpecsFramework :: ScalaTestFramework :: Nil
+}}}
+
+Specify the test reporters you want to use by overriding the `testListeners` method in your project definition.  The default is:
+{{{
+  def testListeners: Seq[TestReportListener] = new LogTestReportListener(log) :: Nil
+}}}
+which logs all output to the project's `Logger`.

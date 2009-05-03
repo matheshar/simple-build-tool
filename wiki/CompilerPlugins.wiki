@@ -1,6 +1,6 @@
 = Compiler Plugin Support =
 
-As of `sbt` 0.4.4 (currently trunk), there is special support for compiler plugins.  You can mixin the `AutoCompilerPlugins` trait to your project definition to enable this functionality.
+As of `sbt` 0.4.5, there is special support for using compiler plugins.  You can mixin the `AutoCompilerPlugins` trait to your project definition to enable this functionality.
 
 To use a compiler plugin, you either put it in your unmanaged library directory (`lib`) or add it as managed dependency in the `plugin` configuration.
 

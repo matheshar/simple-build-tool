@@ -155,6 +155,8 @@ All paths are relative to the project directory.
     Succeeds if the last modification time of `source` is more recent than that of `target` or if `target` does not exist.  Fails otherwise.
  `mkdir path+`
     Creates directories at the given `path`s.
+ `reload`
+    Reloads the project.  If reloading fails and failure is expected, the next command or action will run with the last successfully loaded project.
 
 == Further Examples ==
 

@@ -5,9 +5,9 @@ This page describes how to manage multiple projects within a project.  The first
 = Features =
 
 === Summary ===
-    * Can specify dependencies between projects and between tasks in different projects
+    * Declare dependencies between projects and between tasks in different projects
     * Execute tasks across multiple projects
-    * Classpath of all dependencies included when compiling a project
+    * Classpath of all dependencies is included when compiling a project
     * Proper inter-project source dependency handling
     * Can change to a project in an interactive session to work only on that project (and its dependencies)
     * Can run tasks in parallel
@@ -70,7 +70,7 @@ ProjectInfo => Project
 
 As is shown for the definition of `examples`, this is usually just the constructor of a `Project` subclass.
 
-The first note about `Examples` is that it is embedded in `SimulatorProject`.  This is important so that `sbt` only finds one top-level subclass of `Project` and automatically loads it on startup. Next, `Examples` subclasses `ParentProject` and so it defines subprojects itself.  These subprojects can depend on projects in the outer class, as is done in `Examples`.
+The first note about `Examples` is that it is embedded in `SimulatorProject`.  This is important so that `sbt` only finds one public, concrete, top-level subclass of `Project` and automatically loads it on startup.  Alternatively, the class could be top-level but prefixed with `protected`.  Next, `Examples` subclasses `ParentProject` and so it defines subprojects itself.  These subprojects can depend on projects in the outer class, as is done in `Examples`.
 
 Using a `Project` definition other than `sbt.DefaultProject` is also useful for projects containing code (usually subclasses of `ScalaProject`), although this is not shown here.  This way, all project configuration can be done in the parent project if desired.
 
@@ -89,3 +89,7 @@ def project(path: Path, deps: Project*): Project
 }}}
 
 to your root project definition to enable this.
+
+=== sbt and Scala Versions ===
+
+All projects in a multi-project build must use the same version of `sbt` and Scala for building.  If a different version of `sbt` or Scala is set on a subproject, it is ignored.  In a future release, this may generate a warning or an error.

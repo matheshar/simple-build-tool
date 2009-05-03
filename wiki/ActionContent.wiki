@@ -26,9 +26,9 @@ This is not in `FileUtilities`, but is in `sbt.Pack`.  You can pack and unpack a
 
 This is not in `FileUtilities`, but is in `sbt.SignJar`.  It signs or verifies a jar file using the `jarsigner` executable, which must be on the system path.
 
-== Copying ==
+== Copying/Downloading ==
 
-There are several methods for copying files and data.  You can transfer data from an `InputStream` to an `OutputStream` and optionally close the `InputStream` on completion.  You can copy a single file or a single directory (recursively).  There are also methods to copy a list of files to a directory, optionally flattening the file hierarchy in the process.  Additionally, there is a method to mirror/synchronize the contents of two directories.
+There are several methods for copying files and data.  You can transfer data from an `InputStream` to an `OutputStream` and optionally close the `InputStream` on completion.  You can download data from a `URL` to a `File`.  You can copy a single file or a single directory (recursively).  There are also methods to copy a list of files to a directory, optionally flattening the file hierarchy in the process.  Additionally, there is a method to mirror/synchronize the contents of two directories.
 
 == Creating Directories and Files ==
 

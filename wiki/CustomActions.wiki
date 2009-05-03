@@ -90,3 +90,7 @@ where:
  * `products` is of type `Path` or `Iterable[Path]`
  * `sources` is of type `Iterable[Path]` or `PathFinder` (note that `Path` is a subtype of `PathFinder`)
  * `doWork` has type `Option[String]`
+ 
+== Tasks with Parameters ==
+
+You can use [MethodTasks Method Tasks] to create the task to be run from arguments given by the user.

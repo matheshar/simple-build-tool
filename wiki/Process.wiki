@@ -1,0 +1,72 @@
+= External Processes =
+
+== Usage ==
+
+`sbt` includes a process library to simplify working with external processes.  To use it in your project definition, import the implicits defined in `sbt.Process`:
+
+{{{
+import Process._
+}}}
+Note: the interpreter started by the [ProjectConsole console-project] command imports the members of `Process` on startup.
+
+To run a command, follow it with an exclamation mark `!`:
+
+{{{
+"find project -name *.jar" !
+}}}
+
+An implicit converts the `String` to `sbt.ProcessBuilder`, which defines the `!` method.  This method runs the constructed command, waits until the command completes, and returns the exit code.  Alternatively, the `run` method defined on `ProcessBuilder` runs the command and returns an instance of `sbt.Process`, which can be used to `destroy` the process before it completes.  With no arguments, the `!` method sends output to standard output and and standard error.  You can pass a `Logger` to the `!` method to send output to the `Logger`:
+
+{{{
+"find project -name *.jar" ! log
+}}}
+
+Operators are defined to combine commands.  These operators start with `#` in order to keep the precendence the same and to separate them from the operators defined elsewhere in `sbt` for filters.  In the following operator definitions, `a` and `b` are subcommands.
+
+ * `a #&& b`   Execute `a`.  If the exit code is nonzero, return that exit code and do not execute `b`.  If the exit code is zero, execute `b` and return its exit code.
+ * `a #|| b`   Execute `a`.  If the exit code is zero, return zero for the exit code and do not execute `b`.  If the exit code is nonzero, execute `b` and return its exit code.
+ * `a #| b`   Execute `a` and `b`, piping the output of `a` to the input of `b`.
+ * `a #| b`   Execute `a` and `b`, piping the output of `a` to the input of `b`.
+
+There are also operators defined for redirecting output to `File`s and input from `File`s and `URL`s.  In the following definitions, `url` is an instance of `URL` and `file` is an instance of `File`.
+
+ * `a #< url` or `url #> a`   Use `url` as the input to `a`.  `a` may be a `File` or a command.
+ * `a #< file` or `file #> a`   Use `file` as the input to `a`.  `a` may be a `File` or a command.
+ * `a #> file` or `file #< a`   Write the output of `a` to `file`.  `a` may be a `File`, `URL`, or a command.
+ * `a #>> file` or file #<< a`   Append the output of `a` to `file`.  `a` may be a `File`, `URL`, or a command.
+
+== Examples ==
+
+These examples assume the following imports:
+
+{{{
+import java.io.File
+import java.io.URL
+import Process._
+}}}
+
+Download a `URL` to a `File`:
+{{{
+new URL("http://databinder.net/dispatch/About") #> new File("About.html") !
+or
+new File("About.html") #< new URL("http://databinder.net/dispatch/About") !
+}}}
+
+Copy a `File`:
+{{{
+new File("About.html") #> new File("About_copy.html") !
+or
+new File("About_copy.html") #< new File("About.html") !
+}}}
+
+Append the contents of a `URL` to a `File` after filtering through `grep`:
+{{{
+new URL("http://databinder.net/dispatch/About") #> "grep JSON" #>> new File("About_JSON") !
+or
+new File("About_JSON") #<< ( "grep JSON" #< new URL("http://databinder.net/dispatch/About") )  !
+}}}
+
+Search for uses of `null` in the source directory:
+{{{
+"find src -name *.scala -exec grep null {} ;"  #|  "xargs test -z"  #&&  "echo null-free"  #||  "echo null detected"  !
+}}}

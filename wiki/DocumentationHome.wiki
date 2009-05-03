@@ -5,6 +5,7 @@
  * Usage
   * [TriggeredExecution Triggered Actions]
   * [Loader Scala and Sbt Versions]
+  * [ProjectConsole Project Console]
  * Configuration
   * [BuildConfiguration Basic Configuration]
   * [ProjectDefinitionExamples Examples]
@@ -13,10 +14,13 @@
   * [Paths]
   * [LibraryManagement Library Management]
   * [CompilerPlugins Using Compiler Plugins]
+  * [ScalaJars Scala Jars and Dependency Management]
+  * [TestFrameworkExtensions Extending the Test Framework]
  * Writing Actions
   * [CustomActions Creating/Modifying Actions]
   * [ActionContent Implementing Actions]
   * [MethodTasks Actions with Parameters (method tasks)]
+  * [Process External Processes]
  * Other Project Types
   * Web Applications
    * [WebApplications Web Applications]
@@ -24,6 +28,7 @@
   * Webstart Applications
    * [Webstart]
    * [WebstartExample Example]
+  * [JavaSources Java Sources]
  * Project Information
   * [Credits]
   * [Roadmap]

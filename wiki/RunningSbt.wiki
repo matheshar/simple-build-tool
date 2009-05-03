@@ -45,6 +45,10 @@ See TriggeredExecution for details.
   Starts the Scala interpreter with a classpath including the compiled sources and all jars in the `lib` directory.  To return to sbt, type `:quit`, Ctrl+D (Unix), or Ctrl+Z (Windows).  Runs `test-compile` first.
  * console-quick
   Starts the Scala interpreter with the project classes on the classpath without running any other action first.
+ * `jetty-run` (Web Projects only)
+  Starts the Jetty server and serves this project as a web application on `http://localhost:8080`.
+ * `jetty-stop` (Web Projects only)
+  Stops the Jetty server that was started with the `jetty-run` action.
  * `package`
   For a normal project, creates a jar file containing classes compiled from `src/main/scala` and the files in `src/main/resources` after running `compile` first.
   For a web application project, creates a war file after running `compile` and `prepareWebapp` first.
@@ -62,29 +66,21 @@ See TriggeredExecution for details.
   Creates a jar file containing all test source files and resources.  The packaged paths are relative to `src/test/scala` and `src/test/resources`.
  * `release`
   Compiles, tests, generates documentation, packages, and increments the version.
- * `test-compile`
-  Compiles the test sources (in the `src/test/scala` directory).  Runs `compile` first.
+ * `run <argument>*`
+  Runs the main class for the project in the same virtual machine as `sbt`.  The main class is passed the `argument`s provided.  Please see RunningProjectCode for details on the use of `System.exit` and multithreading (including GUIs) in code run by this action.  Runs `compile` first.
  * `test`
   Runs all tests detected during compilation.  Runs `test-compile` first.
- * `update`
-  Resolves and retrieves external dependencies as described in LibraryManagement.
- * `jetty-run` (Web Projects only)
-  Starts the Jetty server and serves this project as a web application on `http://localhost:8080`.
- * `jetty-stop` (Web Projects only)
-  Stops the Jetty server that was started with the `jetty-run` action.
-  
-== Build Methods ==
-
-A method action is an action that accepts arguments.
-
- * `run <argument>*`
-  Runs the class specified in the project definition (see BuildConfiguration for specifying the main class) in the same virtual machine as `sbt`.  The main class is specified the `argument`s provided.  Please see RunningProjectCode for details on the use of `System.exit` and multithreading (including GUIs) in code run by this action.  Runs `compile` first.
  * `test-failed <test>*`
   Runs the tests provided as arguments if they have not succeeded (either failed on the previous test run or have not been run yet).  `*` is interpreted as a wildcard in the test name.
  * `test-quick <test>*`
   Runs the tests provided as arguments if they have not succeeded (either failed on the previous test run or have not been run yet) or their dependencies changed.  `*` is interpreted as a wildcard in the test name.
  * `test-only <test>*`
   Runs the tests provided as arguments.  `*` is interpreted as a wildcard in the test name.
+ * `test-compile`
+  Compiles the test sources (in the `src/test/scala` directory).  Runs `compile` first.
+ * `update`
+  Resolves and retrieves external dependencies as described in LibraryManagement.
+
   
 == Interactive Commands ==
  * `exit` or `quit`
@@ -119,6 +115,8 @@ A method action is an action that accepts arguments.
   List all available projects (See SubProjects for more on multiple projects).
  * `project <project name>`
   Change the current project to the project named <project name>.  Further operations will be done on the given project. (See SubProjects for more on multiple projects)
+ * `console-project`
+  Enters an interactive session with the project instance bound to the 'current' variable.  See ProjectConsole for more information.
 
 == Batch Commands ==
  * `help`

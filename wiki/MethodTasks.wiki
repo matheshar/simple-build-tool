@@ -1,6 +1,6 @@
 = Method Tasks =
 
-As shown in several examples on the [TriggeredExecution Triggered Execution] page, a method task accepts an array of arguments and creates the task to be run from those arguments.  You can view a description of all method tasks in a project using the `methods` action.  Usage of a method task from the interactive prompt looks like:
+As shown in several examples on the [TriggeredExecution Triggered Execution] page, a method task accepts an array of arguments and creates the task to be run from those arguments.  Usage of a method task from the interactive prompt looks like:
 {{{
 > run 10000 5 0.3
 }}}

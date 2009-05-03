@@ -1,0 +1,33 @@
+= Changes from 0.4.3 to 0.4.5 =
+
+== New Features ==
+ * Added special support for using compiler plugins: see CompilerPlugins page.
+ * Added 'console-project' command that enters the Scala interpreter with the current `Project` bound to the variable `project`.  See ProjectConsole for details.
+ * Added automatic detection of classes with main methods for use when `mainClass` is not explicitly specified in the project definition.  If exactly one main class is detected, it is used for `run` and `package`.  If multiple main classes are detected, the user is prompted for which one to use for `run`.  For `package`, no `Main-Class` attribute is automatically added and a warning is printed.  In summary, if you only have one main class, you don't need to explicitly specify it in your project definition.
+ * Added very basic support for compiling Java sources under `src/main/java` and `src/test/java`.  Please see JavaSources for details.
+
+== Improvements ==
+ * Added Nathan's `download` method to `FileUtilities` for retrieving the contents of a `URL`.
+ * Added `manifestClassPath` method that accepts the value for the `Class-Path` attribute in the packaged jar.
+ * Added `PackageOption` called `ManifestAttributes` that accepts `(java.util.jar.Attributes.Name, String)` or `(String, String)` pairs and adds them to the main manifest attributes in the packaged jar.
+ * For multi-projects, `parallelExecution` defaults to the value in the parent project (if there is one).
+ * Merged `methods` command into `actions` command.
+ * Subprojects inherit repository definitions in their parent.
+
+== Fixes ==
+ * Fixed issue #20 (use `http_proxy` environment variable)
+ * Fixed issue #22 (rebuilding and republishing released versions of `sbt` against new Scala versions, specifically Scala 2.7.4)
+ * Fixed some issues with prompts other than the main prompt not echoing characters.
+
+== sbt's Build ==
+ * If a project specifies a version of `sbt` that ends in `-SNAPSHOT`, the loader will update `sbt` every time it starts up.
+ * The version string for the trunk version of `sbt` will now always end in `-SNAPSHOT`.
+ * Fixed `proguard` task in `sbt`'s project definition.  Thanks to Walter, Nathan, and Rob for reporting this and pointing out the fix.
+ 
+== New Documentation Summary ==
+ * [ProjectConsole console-project action]
+ * [JavaSources Java sources]
+ * [CompilerPlugins compiler plugins]
+ * [Process External processes]
+ * [ScalaJars Scala library handling]
+ * [TestFrameworkExtensions Extending sbt's test framework]

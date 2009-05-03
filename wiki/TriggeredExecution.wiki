@@ -2,7 +2,7 @@
 
 You can make an action run when one or more source files changes by prefixing the action with `~`.
 
-Some examples are described below.  Again, triggered execution is currently limited to triggering on changes to main and test sources.
+Some examples are described below.  Triggered execution is currently limited to triggering on changes to main and test sources.
 
 == Compile ==
 
@@ -32,7 +32,7 @@ If you find that the `test-quick` method runs too many tests, you might use the 
 }}}
  The `test-failed` method only runs tests that have not succeeded (that is, tests that failed or haven't been run yet).  It does not rerun tests just because they were recompiled, unlike the `test-quick` method.
 
-There is another level of control, which is to explicitly filter the tests to run.  All of the new `test-*` commands use the explicit filter methods available in the project defintion for use with the standard `test` action (the ExcludeTests and TestFilter test options and the includeTest method).  However, you can additionally restrict the tests to run by specifying the tests to include as arguments to the `test-quick` or `test-failed` methods.  Also, if you don't want the additional functionality of `test-quick` or `test-failed`, there is the `test-only` method, which always runs the tests passed as arguments even if the test previously succeeded and was not recompiled.
+There is another level of control, which is to explicitly filter the tests to run.  All of the `test-*` commands for running tests use the explicit filter methods available in the project defintion for use with the standard `test` action (the ExcludeTests and TestFilter test options and the includeTest method).  However, you can additionally restrict the tests to run by specifying the tests to include as arguments to the `test-quick` or `test-failed` methods.  Also, if you don't want the additional functionality of `test-quick` or `test-failed`, there is the `test-only` method, which always runs the tests passed as arguments even if the test previously succeeded and was not recompiled.
 
 {{{
 > ~ test-quick example.MySpecification

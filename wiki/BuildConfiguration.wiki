@@ -6,13 +6,13 @@ This page describes build configuration for when the default actions or paths ar
 
 = Example =
 
-This example will show you how to specify the main class executed by the `run` action.
+As of `sbt` 0.4.5, if you only have one main class in your project, sbt will detect it automatically.  This class will be run when the `run` action is executed and will be the value of the `Main-Class` attribute for the `package` action.  If you have more than one main class, you need to specify the main class to use explicitly.  This example will show you how to do this.
 
 First, create a new project:
 {{{
 $ sbt
-> No project found. Create new project? (y/N) y
-Project Name: Test Project
+Project does not exist, create new project? (y/N) : y
+Name: Test Project
 ...
 }}}
 
@@ -34,30 +34,7 @@ object Test
 }
 }}}
 
-
-Customize the build by creating a new file called
-{{{
-project/build/src/TestProject.scala
-}}}
-
-with the following content:
-
-{{{
-import sbt._
-
-class TestProject(info: ProjectInfo) extends DefaultProject(info)
-{
-  override def mainClass = Some("Test")
-}
-}}}
-
-If you have `sbt` running, you need to reload the project with the new project definition:
-{{{
-> reload
-}}}
-Otherwise, start up sbt.
-
-Now, try it out:
+Now, run it:
 {{{
 $sbt
 > run
@@ -74,11 +51,62 @@ Hello World! (again)
 ...
 }}}
 
-On startup or reload, `sbt` will compile `TestProject` and instantiate it.  When you execute the `run` action, `sbt` runs `Test` using the scala runner in the same virtual machine as `sbt`.  See RunningProjectCode for details.
+When you execute the `run` action, `sbt` runs `Test` using the scala runner in the same virtual machine as `sbt` (see RunningProjectCode for details).  Now, add another source file
+
+{{{
+src/main/scala/Test2.scala
+}}}
+
+with a main method:
+
+{{{
+object Test2
+{
+  def main(args: Array[String])
+  {
+    println("Hello World 2! " + args.mkString(" "))
+  }
+}
+}}}
+
+If you try `run`, you are prompted for which one to run:
+
+{{{
+Multiple main classes detected, select one to run:
+
+ [1] Test2
+ [2] Test
+
+Enter number:
+}}}
+
+Explicitly specify the main class by configuring your build.  Do this by creating a new file called
+{{{
+project/build/src/TestProject.scala
+}}}
+
+with the following content:
+
+{{{
+import sbt._
+
+class TestProject(info: ProjectInfo) extends DefaultProject(info)
+{
+  override def mainClass = Some("Test")
+}
+}}}
+
+This build configuration is referred to as your project definition.  If you have `sbt` running, you need to reload the project with the new project definition:
+{{{
+> reload
+}}}
+Otherwise, start up sbt and execute `run`.  `sbt` will run the requested class without prompting.  In addition, `package` will know which main class to use for the `Main-Class` attribute in the manifest (it will not add a `Main-Class` attribute if multiple main classes exist and one is not specified explicitly).
+
+= Configuration Details =
 
 `sbt` only recompiles a project definition on startup or when invoking the interactive command `reload`.  Therefore, if you are running in interactive mode, invoke `reload` after making changes to your project definition for the changes to take effect.
 
-The `project/build` directory is a project itself.  Therefore, you can add jars to the `project/build/lib` directory to use from your project definition.  You can have multiple sources as well.  The only requirement is there must be exactly one public and concrete subclass of `Project` with a constructor that accepts a `ProjectInfo` instance.  `sbt` finds this subclass when it compiles the project definition, so the names of source files are not important.
+The `project/build` directory is a project itself.  Therefore, you can add jars to the `project/build/lib` directory to use from your project definition.  You can also have multiple sources for your project definition.  The only requirement is there must be exactly one public, concrete subclass of `Project` with a constructor that accepts a `ProjectInfo` instance.  `sbt` finds this subclass when it compiles the project definition, so the names of source files are not important.
 
 = Specifying Options =
 
@@ -88,22 +116,17 @@ Setting the main class was one case of specifying options for tasks (in that cas
     def compileOptions: Seq[CompileOption] = Deprecation :: Nil
 }}}
 
-`Deprecation` is a val in `ScalaProject` that is an instance of `CompileOption` and represents the command line `scalac` `-deprecation` option.  To additionally specify the `-unchecked` command line option, override `compileOptions` in your project definition (class `TestProject` above):
+`Deprecation` is a val in `ScalaProject` that is an instance of `CompileOption` and represents the command line `scalac` option `-deprecation`.  To additionally specify the `-unchecked` command line option, override `compileOptions` in your project definition (class `TestProject` above):
 
-{{{
-    override def compileOptions = Unchecked :: Deprecation :: Nil
-}}}
-or
 {{{
     override def compileOptions = Unchecked :: super.compileOptions.toList
 }}}
 
-
-The currently available options are listed below.
+The currently available options for tasks are listed below.
 
 == Compile Options ==
 
-Method `compileOptions` specifies the options for task `compile` and is of type `Seq[CompileOption]`.  Provided options are:
+Method `compileOptions` specifies additional options for task `compile` to pass to the Scala compiler.  It has type `Seq[CompileOption]`.  There is a similar method `testCompileOptions` for `test-compile`.  Provided options are:
   * `Deprecation`
   * `Unchecked`
   * `ExplainTypes`
@@ -111,17 +134,21 @@ Method `compileOptions` specifies the options for task `compile` and is of type 
   * `Verbose`
   * `DisableWarnings`
   * `target(t: Target.Value)`   (accepts values of the `Target` enumeration: `Java1_5`, `Java1_4`, `Msil`)
-  * `CompileOption(optionString)`   (for arbitrary options)
+  * `CompileOption(option: String)`   (for arbitrary options)
+
+Method `javaCompileOptions` specifies the options passed to the Java compiler by the `compile` task.  There is a similar method `testJavaCompileOptions` for `test-compile`.  Currently, all options are specified by:
+  * `JavaCompileOption(option: String)`
 
 == Run Options ==
 
-Method `mainClass` (as described above) is of type `Option[String]` and specifies an optional main class to run when the `run` task is invoked.  The default implementation specifies no main class (`None`).
+Method `mainClass` is of type `Option[String]` and specifies an optional main class to run when the `run` task is invoked.  The default implementation specifies no main class (`None`).  When `mainClass` is not specified, the `run` task will determine which class to run automatically.  If exactly one main class is detected, it is run.  If multiple main classes are detected, the user is prompted for which one to run.
 
 == Package Options ==
 
-Method `packageOptions` specifies the options for task `package` and is of type `Seq[PackageOption]`.  Provided options are:
-  * `JarManifest(m: Manifest)`   Specifies the manifest to use for the jar.  The default manifest includes the `Main-Class` attribute if `mainClass` (as described above) is not empty and nothing else.
-  * `MainClass(mainClassName: String)`   Specifies the `Main-Class` attribute in the manifest.  By default, this is the value of the `mainClass` method (as described above).
+If defined, the `mainClass` method specifies the value of the `Main-Class` attribute in the manifest.  The `manifestClassPath`method, if defined, specifies the value of `Class-Path` attribute.  Method `packageOptions` specifies general options for task `package` and is of type `Seq[PackageOption]`.  Provided options are:
+  * `MainClass(mainClassName: String)`   Specifies the `Main-Class` attribute in the manifest.  By default, this option is included with the value of the `mainClass` method if it is defined.  When `mainClass` is not specified explicitly, the `package` task will try to determine which class to use automatically.  If exactly one main class is detected, it is used.  If multiple main classes are detected, a warning is printed and no `Main-Class` attribute is added to the manifest.
+  * `ManifestAttributes(attributes: (java.util.Attributes.Name, String)*)` or `ManifestAttributes(attributes: (java.util.Attributes.Name, String)*)`   Defines main attributes to add to the manifest.
+  * `JarManifest(m: Manifest)`   Specifies the manifest to use for the jar.  The default manifest includes the `Main-Class` attribute if `mainClass` (as described above) is not empty and the `Class-Path` attribute if `manifestClassPath` is not empty.
 
 == Document Options ==
 
@@ -143,6 +170,7 @@ Method `documentOptions` specifies the options for the API documentation tasks `
 Method `testOptions` specifies the options for the `test` action.
   * `ExcludeTests(tests: Iterable[String])`   Specifies the class names of tests that should not be run.
   * `TestFilter(filter: String => Boolean)`  Specifies a function that returns `true` if the test should be run.
+  * `TestListeners(listeners: Iterable[TestReportListener])`  Specifies the reporters used when running tests.  `testOptions` by default includes a reporter that sends output to the project logger.
 
 == Dependency Management (Update) Options ==
 
@@ -154,6 +182,7 @@ Method `updateOptions` specifies the options for the dependency management task 
  * `AddScalaToolsReleases`   Specifying this adds the `http://scala-tools.org/repo-releases` repository to the configured repositories if `ivysettings.xml` is not present.  This is used by default.
  * `LibraryManager(manager: Manager)`   Explicitly specifies the method to use for handling dependencies.
  * `CacheDirectory(directory: Path)`   Explicitly specifies the directory to use for the download and metadata cache for Ivy.
+ * `CheckScalaVersion(configs, checkExplicit, filterImplicit)`   Configures checking and filtering of Scala dependencies.  See [ScalaJars Scala Jars and Dependency Management] for details.
 
 = Changing Paths =
 
@@ -209,8 +238,10 @@ The paths directly used by the default actions are listed below.  Other paths ar
  * `dependencyPath`- This is the location of manually managed jars.
  * `managedDependencyPath` - This is the location that automatic dependency management puts downloaded artifacts.  When executed, the `clean-lib` action removes this directory.
  * `mainScalaSourcePath` - The path to Scala sources comprising the project.
+ * `mainJavaSourcePath`: The path to the main Java sources for the project.
  * `mainResourcesPath` - The path to resources to include in the project jar.
  * `testScalaSourcePath` - The path to Scala sources defining tests.
+ * `testJavaSourcePath`: The path to the test Java sources for the project.
  * `testResourcesPath` - The path to resources to include in the test jar.
  * `outputPath` - The path containing all `sbt`-generated files (besides the managed artifacts that go in `managedDependencyPath`).  All files generated by tasks should go in this directory.  When executed, the `clean` action removes this directory.  The following are subpaths of `outputPath`:
   * `mainDocPath` - The path where API documentation for main sources goes.

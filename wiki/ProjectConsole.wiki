@@ -1,0 +1,50 @@
+= Project Console =
+
+== Description ==
+
+The `console-project` action starts the Scala interpreter with access to your project and to `sbt`.  Specifically, the interpreter is started up with these commands already executed:
+{{{
+> val current: <YourProjectType> = <your project definition>
+> import sbt._
+> import current._
+> 
+}}}
+
+This can be useful for creating and modifying your build in the same way that the Scala interpreter is normally used to explore writing code.  Note that this gives you raw access to your build.  Think about what you pass to `FileUtilities.clean`, for example.
+
+== Examples ==
+
+Clean classes directory:
+{{{
+> FileUtilities.clean(mainCompilePath.asFile :: Nil, log)
+}}}
+
+Show current compile options:
+{{{
+> compileOptions.foreach(println)
+}}}
+
+Show additionally configured repositories:
+{{{
+> repositories.foreach(println)
+}}}
+
+Run the `console` task to drop to another interactive prompt with your project (not the build) on the classpath:
+{{{
+> console.run
+}}}
+
+Run external processes:
+{{{
+> "tar -zcvf project-src.tar.gz src" !
+> "find project -name *.jar" !
+> "cat project/build.properties" #| "grep sbt.version" #> new File("sbt-version") !
+> "grep -r null src" #|| "echo null-free" !
+> new URL("http://databinder.net/dispatch/About") #> new File("About.html") !
+}}}
+
+Show the dependencies on external jars computed during compilation:
+{{{
+> compile.run
+> mainCompileConditional.analysis.allExternals.foreach(println)
+}}}
