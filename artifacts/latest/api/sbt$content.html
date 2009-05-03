@@ -1,0 +1,2774 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head><title>All classes and objects in sbt</title>
+        <meta http-equiv="content-type" content="text/html; charset=UTF8"></meta><meta content="scaladoc (version 2.7.2)" name="generator"></meta><link href="style.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="script.js"></script>
+        </head>
+        <body onload="init()"><div class="page-title"><div>Simple Build Tool 0.4.5 API</div></div><p><div>This document is the API specification for Simple Build Tool 0.4.5 API</div></p><table summary="" cellpadding="3" class="member">
+        <tr><td class="title" colspan="2">Class Summary</td></tr>
+        <tr>
+      <td class="modifiers" valign="top"> 
+        <code> trait</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/AnalysisCallback.html" target="_self">AnalysisCallback</a></em>
+        <code> extends </code><a href="" target="contentFrame" class="scala/NotNull">scala.NotNull</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/Analyzer.html" target="_self">Analyzer</a></em>
+        (<code>val </code><em>global</em> : <a href="" target="contentFrame" class="scala/tools/nsc/Global">scala.tools.nsc.Global</a>)<code> extends </code><a href="" target="contentFrame" class="scala/tools/nsc/plugins/Plugin">scala.tools.nsc.plugins.Plugin</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> trait</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/AutoCompilerPlugins.html" target="_self">AutoCompilerPlugins</a></em>
+        <code> extends </code><a href="sbt/BasicScalaProject.html" target="_self">BasicScalaProject</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>final class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/AutoDetectManager.html" target="_self">AutoDetectManager</a></em>
+        (<code>val </code><em>module</em> : <a href="sbt/ModuleID.html" target="_self">ModuleID</a>)<code> extends </code><a href="sbt/Manager.html" target="_self">Manager</a>
+        
+        <div>This explicitly requests auto detection as a dependency manager.  It will first check for a 'pom.xml' file and if that does not exist, an 'ivy.xml' file.
+ Ivy is configured using the detected file or uses defaults.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>sealed class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/BasicAnalysis.html" target="_self">BasicAnalysis</a></em>
+        (<em>analysisPath</em> : <a href="sbt/Path.html" target="_self">Path</a>, <em>projectPath</em> : <a href="sbt/Path.html" target="_self">Path</a>, <em>log</em> : <a href="sbt/Logger.html" target="_self">Logger</a>)<code> extends </code><a href="sbt/TaskAnalysis.html" target="_self">TaskAnalysis</a>[<a href="sbt/Path.html" target="_self">Path</a>, <a href="sbt/Path.html" target="_self">Path</a>, <a href="" target="contentFrame" class="java/io/File">java.io.File</a>]<code> with </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>abstract class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/BasicAnalysisCallback.html" target="_self">BasicAnalysisCallback</a></em>
+        (<code>val </code><em>basePath</em> : <a href="sbt/Path.html" target="_self">Path</a>, <code>val </code><em>superclassNames</em> : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>], <code>protected val </code><em>analysis</em> : <a href="sbt/CompileAnalysis.html" target="_self">CompileAnalysis</a>)<code> extends </code><a href="sbt/AnalysisCallback.html" target="_self">AnalysisCallback</a><code> with </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> trait</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/BasicDependencyPaths.html" target="_self">BasicDependencyPaths</a></em>
+        <code> extends </code><a href="sbt/Project.html" target="_self">Project</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> trait</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/BasicDependencyProject.html" target="_self">BasicDependencyProject</a></em>
+        <code> extends </code><a href="sbt/BasicManagedProject.html" target="_self">BasicManagedProject</a><code> with </code><a href="sbt/UnmanagedClasspathProject.html" target="_self">UnmanagedClasspathProject</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> trait</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/BasicEnvironment.html" target="_self">BasicEnvironment</a></em>
+        <code> extends </code><a href="sbt/Environment.html" target="_self">Environment</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>abstract class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/BasicLogger.html" target="_self">BasicLogger</a></em>
+        <code> extends </code><a href="sbt/Logger.html" target="_self">Logger</a>
+        
+        <div>Implements the level-setting methods of Logger.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> trait</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/BasicManagedProject.html" target="_self">BasicManagedProject</a></em>
+        <code> extends </code><a href="sbt/ManagedProject.html" target="_self">ManagedProject</a><code> with </code><a href="sbt/ReflectiveManagedProject.html" target="_self">ReflectiveManagedProject</a><code> with </code><a href="sbt/BasicDependencyPaths.html" target="_self">BasicDependencyPaths</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> trait</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/BasicProjectPaths.html" target="_self">BasicProjectPaths</a></em>
+        <code> extends </code><a href="sbt/Project.html" target="_self">Project</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> trait</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/BasicScalaIntegrationTesting.html" target="_self">BasicScalaIntegrationTesting</a></em>
+        <code> extends </code><a href="sbt/ScalaIntegrationTesting.html" target="_self">ScalaIntegrationTesting</a><code> with </code><a href="sbt/IntegrationTestPaths.html" target="_self">IntegrationTestPaths</a><code> with </code><a href="sbt/BasicDependencyProject.html" target="_self">BasicDependencyProject</a>
+        
+        <div>A fully featured integration testing that may be mixed in with any subclass of <code>BasicScalaProject</code>.
+ Pre-suite setup and post-suite cleanup are provide by overriding <code>pretests</code> and <code>posttests</code> respectively.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>abstract class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/BasicScalaProject.html" target="_self">BasicScalaProject</a></em>
+        <code> extends </code><a href="sbt/ScalaProject.html" target="_self">ScalaProject</a><code> with </code><a href="sbt/BasicDependencyProject.html" target="_self">BasicDependencyProject</a><code> with </code><a href="sbt/BasicProjectPaths.html" target="_self">BasicProjectPaths</a>
+        
+        <div>This class defines concrete instances of actions from ScalaProject using overridable paths,
+ options, and configuration.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>abstract class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/BasicTestRunner.html" target="_self">BasicTestRunner</a></em>
+        <code> extends </code><a href="sbt/TestRunner.html" target="_self">TestRunner</a><code> with </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>case class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/BasicVersion.html" target="_self">BasicVersion</a></em>
+        (<code>val </code><em>major</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/Int.html" target="_self">Int</a>, <code>val </code><em>minor</em> : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="http://www.scala-lang.org/docu/files/api/scala/Int.html" target="_self">Int</a>], <code>val </code><em>micro</em> : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="http://www.scala-lang.org/docu/files/api/scala/Int.html" target="_self">Int</a>], <code>val </code><em>extra</em> : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>])<code> extends </code><a href="sbt/Version.html" target="_self">Version</a><code> with </code><a href="" target="contentFrame" class="scala/Product">scala.Product</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>abstract class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/BasicWebScalaProject.html" target="_self">BasicWebScalaProject</a></em>
+        <code> extends </code><a href="sbt/BasicScalaProject.html" target="_self">BasicScalaProject</a><code> with </code><a href="sbt/WebScalaProject.html" target="_self">WebScalaProject</a><code> with </code><a href="sbt/WebProjectPaths.html" target="_self">WebProjectPaths</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>abstract class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/BasicWebstartProject.html" target="_self">BasicWebstartProject</a></em>
+        <code> extends </code><a href="sbt/BasicScalaProject.html" target="_self">BasicScalaProject</a><code> with </code><a href="sbt/WebstartScalaProject.html" target="_self">WebstartScalaProject</a><code> with </code><a href="sbt/WebstartPaths.html" target="_self">WebstartPaths</a>
+        
+        <div>Defines default implementations of all methods in WebstartOptions except for jnlpXML.  packageAction is overridden
+ to create a webstart distribution after the normal package operation.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>final class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/BufferedLogger.html" target="_self">BufferedLogger</a></em>
+        (<em>delegate</em> : <a href="sbt/Logger.html" target="_self">Logger</a>)<code> extends </code><a href="sbt/Logger.html" target="_self">Logger</a>
+        
+        <div>A logger that can buffer the logging done on it by currently executing actor and
+ then can flush the buffer to the delegate logger provided in the constructor.  Use
+ 'startRecording' to start buffering and then 'play' from to flush the buffer for the
+ current actor to the backing logger.  The logging level set at the
+ time a message is originally logged is used, not the level at the time 'play' is
+ called.
+
+ This class assumes that it is the only client of the delegate logger.
+
+ This logger is thread-safe.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>final class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/BuilderProject.html" target="_self">BuilderProject</a></em>
+        (<code>val </code><em>info</em> : <a href="sbt/ProjectInfo.html" target="_self">ProjectInfo</a>, <code>protected val override </code><em>logImpl</em> : <a href="sbt/Logger.html" target="_self">Logger</a>)<code> extends </code><a href="sbt/ScalaProject.html" target="_self">ScalaProject</a>
+        
+        <div>The project definition used to build project definitions.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> trait</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/ClasspathProject.html" target="_self">ClasspathProject</a></em>
+        <code> extends </code><a href="sbt/Project.html" target="_self">Project</a>
+        
+        <div>A project that provides a classpath.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/CloseableJarFile.html" target="_self">CloseableJarFile</a></em>
+        (<em>f</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>verify</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/Boolean.html" target="_self">Boolean</a>)<code> extends </code><a href="" target="contentFrame" class="java/util/jar/JarFile">java.util.jar.JarFile</a><code> with </code><a href="" target="contentFrame" class="java/io/Closeable">java.io.Closeable</a><code> with </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>final class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/CompileAnalysis.html" target="_self">CompileAnalysis</a></em>
+        (<em>analysisPath</em> : <a href="sbt/Path.html" target="_self">Path</a>, <em>projectPath</em> : <a href="sbt/Path.html" target="_self">Path</a>, <em>log</em> : <a href="sbt/Logger.html" target="_self">Logger</a>)<code> extends </code><a href="sbt/BasicAnalysis.html" target="_self">BasicAnalysis</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/CompileConditional.html" target="_self">CompileConditional</a></em>
+        (<em>config</em> : <a href="sbt/CompileConfiguration.html" target="_self">CompileConfiguration</a>)<code> extends </code><a href="sbt/Conditional.html" target="_self">Conditional</a>[<a href="sbt/Path.html" target="_self">Path</a>, <a href="sbt/Path.html" target="_self">Path</a>, <a href="" target="contentFrame" class="java/io/File">java.io.File</a>]
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>abstract class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/CompileConfiguration.html" target="_self">CompileConfiguration</a></em>
+        <code> extends </code><a href="" target="contentFrame" class="scala/NotNull">scala.NotNull</a><code> with </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>abstract class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/CompilerCore.html" target="_self">CompilerCore</a></em>
+        <code> extends </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/Completors.html" target="_self">Completors</a></em>
+        (<code>val </code><em>projectAction</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <code>val </code><em>projectNames</em> : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>], <code>val </code><em>generalCommands</em> : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>], <code>val </code><em>propertyActions</em> : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>], <code>val </code><em>prefixes</em> : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>])<code> extends </code><a href="" target="contentFrame" class="scala/NotNull">scala.NotNull</a><code> with </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> trait</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/Conditional.html" target="_self">Conditional</a></em>
+        [<em>Source</em>, <em>Product</em>, <em>External</em>]<code> extends </code><a href="" target="contentFrame" class="scala/NotNull">scala.NotNull</a><code> with </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>final class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/Configuration.html" target="_self">Configuration</a></em>
+        (<code>val </code><em>name</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <code>val </code><em>description</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <code>val </code><em>isPublic</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/Boolean.html" target="_self">Boolean</a>, <code>val </code><em>extendsConfigs</em> : <a href="" target="contentFrame" class="scala/List">scala.List</a>[<a href="sbt/Configuration.html" target="_self">Configuration</a>], <code>val </code><em>transitive</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/Boolean.html" target="_self">Boolean</a>)<code> extends </code><a href="" target="contentFrame" class="scala/NotNull">scala.NotNull</a><code> with </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        <div>Represents an Ivy configuration.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/ConsoleLogger.html" target="_self">ConsoleLogger</a></em>
+        <code> extends </code><a href="sbt/BasicLogger.html" target="_self">BasicLogger</a>
+        
+        <div>A logger that logs to the console.  On non-windows systems, the level labels are
+ colored. 
+
+ This logger is not thread-safe.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>case final class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/ContinueResult.html" target="_self">ContinueResult</a></em>
+        [<em>T</em>](<code>val </code><em>f</em> : (<a href="sbt/Project.html" target="_self">Project</a>) =&gt; <a href="sbt/WithProjectResult.html" target="_self">WithProjectResult</a>[<a href="sbt/ContinueResult.html#T" target="_self">T</a>], <code>val </code><em>reload</em> : <a href="sbt/ReloadProject.html" target="_self">ReloadProject</a>)<code> extends </code><a href="sbt/WithProjectResult.html" target="_self">WithProjectResult</a>[<a href="sbt/ContinueResult.html#T" target="_self">T</a>]<code> with </code><a href="" target="contentFrame" class="scala/Product">scala.Product</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>final class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/ControlEvent.html" target="_self">ControlEvent</a></em>
+        (<code>val </code><em>event</em> : <a href="" target="contentFrame" class="scala/Enumeration/Value">scala.Enumeration.Value</a>, <code>val </code><em>msg</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>)<code> extends </code><a href="sbt/LogEvent.html" target="_self">LogEvent</a><code> with </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> trait</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/Dag.html" target="_self">Dag</a></em>
+        [<em>Node</em> &lt;: <a href="sbt/Dag.html" target="_self">Dag</a>[<a href="sbt/Dag.html#Node" target="_self">Node</a>]]<code> extends </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/DefaultProject.html" target="_self">DefaultProject</a></em>
+        (<code>val </code><em>info</em> : <a href="sbt/ProjectInfo.html" target="_self">ProjectInfo</a>)<code> extends </code><a href="sbt/BasicScalaProject.html" target="_self">BasicScalaProject</a>
+        
+        <div>The default project when no project is explicitly configured and the common base class for
+ configuring a project.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/DefaultWebProject.html" target="_self">DefaultWebProject</a></em>
+        (<code>val </code><em>info</em> : <a href="sbt/ProjectInfo.html" target="_self">ProjectInfo</a>)<code> extends </code><a href="sbt/BasicWebScalaProject.html" target="_self">BasicWebScalaProject</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>abstract class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/DefaultWebstartProject.html" target="_self">DefaultWebstartProject</a></em>
+        (<code>val </code><em>info</em> : <a href="sbt/ProjectInfo.html" target="_self">ProjectInfo</a>)<code> extends </code><a href="sbt/BasicWebstartProject.html" target="_self">BasicWebstartProject</a>
+        
+        <div>The default extension point for a webstart project.  There is one method that is required to be defined: jnlpXML.
+ 'webstartSignConfiguration', 'webstartPack200', and 'webstartGzip' are methods of interest.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>case final class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/DefinedValue.html" target="_self">DefinedValue</a></em>
+        [<em>T</em>](<code>val </code><em>value</em> : <a href="sbt/DefinedValue.html#T" target="_self">T</a>, <code>val </code><em>isInherited</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/Boolean.html" target="_self">Boolean</a>, <code>val </code><em>isDefault</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/Boolean.html" target="_self">Boolean</a>)<code> extends </code><a href="sbt/PropertyResolution.html" target="_self">PropertyResolution</a>[<a href="sbt/DefinedValue.html#T" target="_self">T</a>]<code> with </code><a href="" target="contentFrame" class="scala/Product">scala.Product</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> trait</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/Described.html" target="_self">Described</a></em>
+        <code> extends </code><a href="" target="contentFrame" class="scala/NotNull">scala.NotNull</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>final class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/Distributor.html" target="_self">Distributor</a></em>
+        [<em>D</em>](<em>scheduler</em> : <a href="sbt/Scheduler.html" target="_self">Scheduler</a>[<a href="sbt/Distributor.html#D" target="_self">D</a>], <em>doWork</em> : (<a href="sbt/Distributor.html#D" target="_self">D</a>) =&gt; <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>], <em>workers</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/Int.html" target="_self">Int</a>, <em>log</em> : (<a href="sbt/Distributor.html#D" target="_self">D</a>) =&gt; <a href="sbt/Logger.html" target="_self">Logger</a>)<code> extends </code><a href="" target="contentFrame" class="scala/actors/Actor">scala.actors.Actor</a><code> with </code><a href="" target="contentFrame" class="scala/NotNull">scala.NotNull</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> trait</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/Environment.html" target="_self">Environment</a></em>
+        <code> extends </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>case final class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/ErrorEvent.html" target="_self">ErrorEvent</a></em>
+        (<code>val </code><em>msg</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>)<code> extends </code><a href="sbt/ScalaTestEvent.html" target="_self">ScalaTestEvent</a><code> with </code><a href="" target="contentFrame" class="scala/Product">scala.Product</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>final class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/ErrorResult.html" target="_self">ErrorResult</a></em>
+        (<code>val </code><em>message</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>)<code> extends </code><a href="sbt/WithProjectResult.html" target="_self">WithProjectResult</a>[<a href="http://www.scala-lang.org/docu/files/api/scala/Nothing.html" target="_self">Nothing</a>]<code> with </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> trait</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/EventOutput.html" target="_self">EventOutput</a></em>
+        [<em>E</em> &lt;: <a href="sbt/TestEvent.html" target="_self">TestEvent</a>]<code> extends </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/ExactFilter.html" target="_self">ExactFilter</a></em>
+        (<code>val </code><em>matchName</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>)<code> extends </code><a href="sbt/NameFilter.html" target="_self">NameFilter</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>case final class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/ExampleReportEvent.html" target="_self">ExampleReportEvent</a></em>
+        (<code>val </code><em>description</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <code>val </code><em>errors</em> : <a href="" target="contentFrame" class="scala/Seq">scala.Seq</a>[<a href="" target="contentFrame" class="java/lang/Throwable">java.lang.Throwable</a>], <code>val </code><em>failures</em> : <a href="" target="contentFrame" class="scala/Seq">scala.Seq</a>[<a href="" target="contentFrame" class="java/lang/RuntimeException">java.lang.RuntimeException</a>], <code>val </code><em>skipped</em> : <a href="" target="contentFrame" class="scala/Seq">scala.Seq</a>[<a href="" target="contentFrame" class="java/lang/RuntimeException">java.lang.RuntimeException</a>], <code>val </code><em>subExamples</em> : <a href="" target="contentFrame" class="scala/Seq">scala.Seq</a>[<a href="sbt/ExampleReportEvent.html" target="_self">ExampleReportEvent</a>])<code> extends </code><a href="sbt/SpecsEvent.html" target="_self">SpecsEvent</a><code> with </code><a href="" target="contentFrame" class="scala/Product">scala.Product</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> trait</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/ExitHook.html" target="_self">ExitHook</a></em>
+        <code> extends </code><a href="" target="contentFrame" class="scala/NotNull">scala.NotNull</a>
+        
+        <div>Defines a function to call as sbt exits.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>case final class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/FailedEvent.html" target="_self">FailedEvent</a></em>
+        (<code>val </code><em>name</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <code>val </code><em>msg</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>)<code> extends </code><a href="sbt/ScalaCheckEvent.html" target="_self">ScalaCheckEvent</a><code> with </code><a href="" target="contentFrame" class="scala/Product">scala.Product</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> trait</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/FileFilter.html" target="_self">FileFilter</a></em>
+        <code> extends </code><a href="" target="contentFrame" class="java/io/FileFilter">java.io.FileFilter</a><code> with </code><a href="" target="contentFrame" class="scala/NotNull">scala.NotNull</a><code> with </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> trait</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/FilePartialBuilder.html" target="_self">FilePartialBuilder</a></em>
+        <code> extends </code><a href="" target="contentFrame" class="scala/NotNull">scala.NotNull</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/FileReportListener.html" target="_self">FileReportListener</a></em>
+        (<code>val </code><em>file</em> : <a href="sbt/Path.html" target="_self">Path</a>, <em>log</em> : <a href="sbt/Logger.html" target="_self">Logger</a>)<code> extends </code><a href="sbt/WriterReportListener.html" target="_self">WriterReportListener</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> trait</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/FileTasks.html" target="_self">FileTasks</a></em>
+        <code> extends </code><a href="sbt/Project.html" target="_self">Project</a>
+        
+        <div>Provides methods to define tasks with basic conditional execution based on the sources
+ and products of the task.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> trait</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/Format.html" target="_self">Format</a></em>
+        [<em>T</em>]<code> extends </code><a href="" target="contentFrame" class="scala/NotNull">scala.NotNull</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>final class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/GroupArtifactID.html" target="_self">GroupArtifactID</a></em>
+        (<em>groupID</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <em>artifactID</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>)<code> extends </code><a href="" target="contentFrame" class="scala/NotNull">scala.NotNull</a><code> with </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>final class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/GroupID.html" target="_self">GroupID</a></em>
+        (<em>groupID</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>)<code> extends </code><a href="" target="contentFrame" class="scala/NotNull">scala.NotNull</a><code> with </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>case final class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/IgnoredEvent.html" target="_self">IgnoredEvent</a></em>
+        (<code>val </code><em>name</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <code>val </code><em>msg</em> : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>])<code> extends </code><a href="sbt/ScalaTestEvent.html" target="_self">ScalaTestEvent</a><code> with </code><a href="" target="contentFrame" class="scala/Product">scala.Product</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> trait</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/IntegrationTestPaths.html" target="_self">IntegrationTestPaths</a></em>
+        <code> extends </code><a href="sbt/BasicProjectPaths.html" target="_self">BasicProjectPaths</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> trait</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/IntegrationTesting.html" target="_self">IntegrationTesting</a></em>
+        <code> extends </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>final class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/IvyConfiguration.html" target="_self">IvyConfiguration</a></em>
+        (<code>val </code><em>paths</em> : <a href="sbt/IvyPaths.html" target="_self">IvyPaths</a>, <code>val </code><em>manager</em> : <a href="sbt/Manager.html" target="_self">Manager</a>, <code>val </code><em>flags</em> : <a href="sbt/IvyFlags.html" target="_self">IvyFlags</a>, <code>val </code><em>ivyScala</em> : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="sbt/IvyScala.html" target="_self">IvyScala</a>], <code>val </code><em>log</em> : <a href="sbt/Logger.html" target="_self">Logger</a>)<code> extends </code><a href="" target="contentFrame" class="scala/NotNull">scala.NotNull</a><code> with </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>final class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/IvyFlags.html" target="_self">IvyFlags</a></em>
+        (<code>val </code><em>validate</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/Boolean.html" target="_self">Boolean</a>, <code>val </code><em>addScalaTools</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/Boolean.html" target="_self">Boolean</a>, <code>val </code><em>errorIfNoConfiguration</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/Boolean.html" target="_self">Boolean</a>)<code> extends </code><a href="" target="contentFrame" class="scala/NotNull">scala.NotNull</a><code> with </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>final class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/IvyManager.html" target="_self">IvyManager</a></em>
+        (<code>val </code><em>configuration</em> : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="sbt/Path.html" target="_self">Path</a>], <code>val </code><em>dependencies</em> : <a href="sbt/Path.html" target="_self">Path</a>)<code> extends </code><a href="sbt/Manager.html" target="_self">Manager</a>
+        
+        <div>This explicitly requests that the Ivy file 'dependencies' be used to determine dependencies.  An Ivy configuration file to use may be specified in
+ 'configuration'.  Otherwise, defaults are used.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>final class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/IvyPaths.html" target="_self">IvyPaths</a></em>
+        (<code>val </code><em>projectDirectory</em> : <a href="sbt/Path.html" target="_self">Path</a>, <code>val </code><em>managedLibDirectory</em> : <a href="sbt/Path.html" target="_self">Path</a>, <code>val </code><em>cacheDirectory</em> : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="sbt/Path.html" target="_self">Path</a>])<code> extends </code><a href="" target="contentFrame" class="scala/NotNull">scala.NotNull</a><code> with </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>final class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/IvyScala.html" target="_self">IvyScala</a></em>
+        (<code>val </code><em>scalaVersion</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <code>val </code><em>configurations</em> : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="sbt/Configuration.html" target="_self">Configuration</a>], <code>val </code><em>checkExplicit</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/Boolean.html" target="_self">Boolean</a>, <code>val </code><em>filterImplicit</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/Boolean.html" target="_self">Boolean</a>)<code> extends </code><a href="" target="contentFrame" class="scala/NotNull">scala.NotNull</a><code> with </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>abstract class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/JLine.html" target="_self">JLine</a></em>
+        <code> extends </code><a href="sbt/LineReader.html" target="_self">LineReader</a><code> with </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/JLineReader.html" target="_self">JLineReader</a></em>
+        (<em>historyPath</em> : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="sbt/Path.html" target="_self">Path</a>], <em>completors</em> : <a href="sbt/Completors.html" target="_self">Completors</a>, <em>log</em> : <a href="sbt/Logger.html" target="_self">Logger</a>)<code> extends </code><a href="sbt/JLine.html" target="_self">JLine</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>sealed abstract class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/LazyEventOutput.html" target="_self">LazyEventOutput</a></em>
+        [<em>E</em> &lt;: <a href="sbt/TestEvent.html" target="_self">TestEvent</a>](<code>val </code><em>log</em> : <a href="sbt/Logger.html" target="_self">Logger</a>)<code> extends </code><a href="sbt/EventOutput.html" target="_self">EventOutput</a>[<a href="sbt/LazyEventOutput.html#E" target="_self">E</a>]<code> with </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>abstract class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/LazyTestFramework.html" target="_self">LazyTestFramework</a></em>
+        <code> extends </code><a href="sbt/TestFramework.html" target="_self">TestFramework</a><code> with </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> trait</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/LineReader.html" target="_self">LineReader</a></em>
+        <code> extends </code><a href="" target="contentFrame" class="scala/NotNull">scala.NotNull</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>final class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/Log.html" target="_self">Log</a></em>
+        (<code>val </code><em>level</em> : <a href="" target="contentFrame" class="scala/Enumeration/Value">scala.Enumeration.Value</a>, <code>val </code><em>msg</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>)<code> extends </code><a href="sbt/LogEvent.html" target="_self">LogEvent</a><code> with </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>sealed trait</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/LogEvent.html" target="_self">LogEvent</a></em>
+        <code> extends </code><a href="" target="contentFrame" class="scala/NotNull">scala.NotNull</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/LogTestReportListener.html" target="_self">LogTestReportListener</a></em>
+        (<code>val </code><em>log</em> : <a href="sbt/Logger.html" target="_self">Logger</a>)<code> extends </code><a href="sbt/TestReportListener.html" target="_self">TestReportListener</a><code> with </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>abstract class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/Logger.html" target="_self">Logger</a></em>
+        <code> extends </code><a href="" target="contentFrame" class="scala/NotNull">scala.NotNull</a><code> with </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/LoggerReporter.html" target="_self">LoggerReporter</a></em>
+        (<em>log</em> : <a href="sbt/Logger.html" target="_self">Logger</a>)<code> extends </code><a href="" target="contentFrame" class="scala/tools/nsc/reporters/Reporter">scala.tools.nsc.reporters.Reporter</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> trait</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/ManagedProject.html" target="_self">ManagedProject</a></em>
+        <code> extends </code><a href="sbt/ClasspathProject.html" target="_self">ClasspathProject</a>
+        
+        <div>A project that provides automatic dependency management.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>sealed abstract class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/Manager.html" target="_self">Manager</a></em>
+        <code> extends </code><a href="" target="contentFrame" class="scala/NotNull">scala.NotNull</a><code> with </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>final class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/MavenManager.html" target="_self">MavenManager</a></em>
+        (<code>val </code><em>configuration</em> : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="sbt/Path.html" target="_self">Path</a>], <code>val </code><em>pom</em> : <a href="sbt/Path.html" target="_self">Path</a>)<code> extends </code><a href="sbt/Manager.html" target="_self">Manager</a>
+        
+        <div>This explicitly requests that the Maven pom 'pom' be used to determine dependencies.  An Ivy configuration file to use may be specified in
+ 'configuration', since Ivy currently cannot extract Maven repositories from a pom file. Otherwise, defaults are used.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>sealed case class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/MavenRepository.html" target="_self">MavenRepository</a></em>
+        (<code>val </code><em>name</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <code>val </code><em>root</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>)<code> extends </code><a href="sbt/Resolver.html" target="_self">Resolver</a><code> with </code><a href="" target="contentFrame" class="scala/Product">scala.Product</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>case final class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/MessageEvent.html" target="_self">MessageEvent</a></em>
+        (<code>val </code><em>msg</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>)<code> extends </code><a href="sbt/ScalaTestEvent.html" target="_self">ScalaTestEvent</a><code> with </code><a href="" target="contentFrame" class="scala/Product">scala.Product</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>case final class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/ModuleID.html" target="_self">ModuleID</a></em>
+        (<code>val </code><em>organization</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <code>val </code><em>name</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <code>val </code><em>revision</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <code>val </code><em>configurations</em> : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>])<code> extends </code><a href="" target="contentFrame" class="scala/NotNull">scala.NotNull</a><code> with </code><a href="" target="contentFrame" class="scala/Product">scala.Product</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>final class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/ModuleIDConfigurable.html" target="_self">ModuleIDConfigurable</a></em>
+        (<em>moduleID</em> : <a href="sbt/ModuleID.html" target="_self">ModuleID</a>)<code> extends </code><a href="" target="contentFrame" class="scala/NotNull">scala.NotNull</a><code> with </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>final class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/MultiLogger.html" target="_self">MultiLogger</a></em>
+        (<em>delegates</em> : <a href="" target="contentFrame" class="scala/List">scala.List</a>[<a href="sbt/Logger.html" target="_self">Logger</a>])<code> extends </code><a href="sbt/BasicLogger.html" target="_self">BasicLogger</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> trait</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/NameFilter.html" target="_self">NameFilter</a></em>
+        <code> extends </code><a href="sbt/FileFilter.html" target="_self">FileFilter</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>sealed trait</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/NoPropertyValue.html" target="_self">NoPropertyValue</a></em>
+        <code> extends </code><a href="sbt/PropertyResolution.html" target="_self">PropertyResolution</a>[<a href="http://www.scala-lang.org/docu/files/api/scala/Nothing.html" target="_self">Nothing</a>]<code> with </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>case class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/OpaqueVersion.html" target="_self">OpaqueVersion</a></em>
+        (<code>val </code><em>value</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>)<code> extends </code><a href="sbt/Version.html" target="_self">Version</a><code> with </code><a href="" target="contentFrame" class="scala/Product">scala.Product</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/ParentProject.html" target="_self">ParentProject</a></em>
+        (<code>val </code><em>info</em> : <a href="sbt/ProjectInfo.html" target="_self">ProjectInfo</a>)<code> extends </code><a href="sbt/BasicDependencyProject.html" target="_self">BasicDependencyProject</a>
+        
+        <div>This Project subclass is used to contain other projects as dependencies.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>case final class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/PassedEvent.html" target="_self">PassedEvent</a></em>
+        (<code>val </code><em>name</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <code>val </code><em>msg</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>)<code> extends </code><a href="sbt/ScalaCheckEvent.html" target="_self">ScalaCheckEvent</a><code> with </code><a href="" target="contentFrame" class="scala/Product">scala.Product</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>sealed abstract class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/Path.html" target="_self">Path</a></em>
+        <code> extends </code><a href="sbt/PathFinder.html" target="_self">PathFinder</a>
+        
+        <div>A Path represents a file in a project.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>sealed abstract class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/PathFinder.html" target="_self">PathFinder</a></em>
+        <code> extends </code><a href="" target="contentFrame" class="scala/NotNull">scala.NotNull</a><code> with </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        <div>A path finder constructs a set of paths.  The set is evaluated by a call to the <code>get</code>
+ method.  The set will be different for different calls to <code>get</code> if the underlying filesystem
+ has changed.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/PatternFilter.html" target="_self">PatternFilter</a></em>
+        (<code>val </code><em>pattern</em> : <a href="" target="contentFrame" class="java/util/regex/Pattern">java.util.regex.Pattern</a>)<code> extends </code><a href="sbt/NameFilter.html" target="_self">NameFilter</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> trait</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/Process.html" target="_self">Process</a></em>
+        <code> extends </code><a href="" target="contentFrame" class="scala/NotNull">scala.NotNull</a>
+        
+        <div>Represents a process that is running or has finished running.
+ It may be a compound process with several underlying native processes (such as 'a #&& b`).</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> trait</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/ProcessBuilder.html" target="_self">ProcessBuilder</a></em>
+        <code> extends </code><a href="" target="contentFrame" class="scala/NotNull">scala.NotNull</a>
+        
+        <div>Represents a runnable process.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>final class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/ProcessIO.html" target="_self">ProcessIO</a></em>
+        (<code>val </code><em>writeInput</em> : (<a href="" target="contentFrame" class="java/io/OutputStream">java.io.OutputStream</a>) =&gt; <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>, <code>val </code><em>processOutput</em> : (<a href="" target="contentFrame" class="java/io/InputStream">java.io.InputStream</a>) =&gt; <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>, <code>val </code><em>processError</em> : (<a href="" target="contentFrame" class="java/io/InputStream">java.io.InputStream</a>) =&gt; <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>)<code> extends </code><a href="" target="contentFrame" class="scala/NotNull">scala.NotNull</a><code> with </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        <div>Each method will be called in a separate thread.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>sealed trait</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/ProductsSources.html" target="_self">ProductsSources</a></em>
+        <code> extends </code><a href="" target="contentFrame" class="scala/NotNull">scala.NotNull</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>sealed trait</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/ProductsWrapper.html" target="_self">ProductsWrapper</a></em>
+        <code> extends </code><a href="" target="contentFrame" class="scala/NotNull">scala.NotNull</a><code> with </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> trait</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/Project.html" target="_self">Project</a></em>
+        <code> extends </code><a href="sbt/TaskManager.html" target="_self">TaskManager</a><code> with </code><a href="sbt/Dag.html" target="_self">Dag</a>[<a href="sbt/Project.html" target="_self">Project</a>]<code> with </code><a href="sbt/BasicEnvironment.html" target="_self">BasicEnvironment</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>case final class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/ProjectInfo.html" target="_self">ProjectInfo</a></em>
+        (<code>val </code><em>projectDirectory</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <code>val </code><em>dependencies</em> : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="sbt/Project.html" target="_self">Project</a>], <code>val </code><em>parent</em> : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="sbt/Project.html" target="_self">Project</a>])<code> extends </code><a href="" target="contentFrame" class="scala/NotNull">scala.NotNull</a><code> with </code><a href="" target="contentFrame" class="scala/Product">scala.Product</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>sealed trait</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/PropertyResolution.html" target="_self">PropertyResolution</a></em>
+        [+<em>T</em>]<code> extends </code><a href="" target="contentFrame" class="scala/NotNull">scala.NotNull</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> trait</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/PublishConfiguration.html" target="_self">PublishConfiguration</a></em>
+        <code> extends </code><a href="" target="contentFrame" class="scala/NotNull">scala.NotNull</a>
+        
+        <div>This class groups required configuration for the deliver and publish tasks.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> trait</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/ReflectiveConfigurations.html" target="_self">ReflectiveConfigurations</a></em>
+        <code> extends </code><a href="sbt/Project.html" target="_self">Project</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> trait</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/ReflectiveLibraryDependencies.html" target="_self">ReflectiveLibraryDependencies</a></em>
+        <code> extends </code><a href="sbt/ManagedProject.html" target="_self">ManagedProject</a>
+        
+        <div>A Project that determines its library dependencies by reflectively finding all vals with a type
+ that conforms to ModuleID.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> trait</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/ReflectiveManagedProject.html" target="_self">ReflectiveManagedProject</a></em>
+        <code> extends </code><a href="sbt/ReflectiveProject.html" target="_self">ReflectiveProject</a><code> with </code><a href="sbt/ReflectiveRepositories.html" target="_self">ReflectiveRepositories</a><code> with </code><a href="sbt/ReflectiveLibraryDependencies.html" target="_self">ReflectiveLibraryDependencies</a><code> with </code><a href="sbt/ReflectiveConfigurations.html" target="_self">ReflectiveConfigurations</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> trait</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/ReflectiveMethods.html" target="_self">ReflectiveMethods</a></em>
+        <code> extends </code><a href="sbt/Project.html" target="_self">Project</a>
+        
+        <div>A Project that determines its method tasks by reflectively finding all vals with a type
+ that conforms to MethodTask.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> trait</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/ReflectiveModules.html" target="_self">ReflectiveModules</a></em>
+        <code> extends </code><a href="sbt/Project.html" target="_self">Project</a>
+        
+        <div>A Project that determines its dependencies on other projects by reflectively
+ finding all vals with a type that conforms to Project.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> trait</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/ReflectiveProject.html" target="_self">ReflectiveProject</a></em>
+        <code> extends </code><a href="sbt/ReflectiveModules.html" target="_self">ReflectiveModules</a><code> with </code><a href="sbt/ReflectiveTasks.html" target="_self">ReflectiveTasks</a><code> with </code><a href="sbt/ReflectiveMethods.html" target="_self">ReflectiveMethods</a>
+        
+        <div>A Project that determines its dependencies on other projects by reflectively
+ finding all vals with a type that conforms to Project and determines its tasks
+ by reflectively finding all vals with a type that conforms to Task.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> trait</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/ReflectiveRepositories.html" target="_self">ReflectiveRepositories</a></em>
+        <code> extends </code><a href="sbt/Project.html" target="_self">Project</a>
+        
+        <div>A Project that determines its library dependencies by reflectively finding all vals with a type
+ that conforms to ModuleID.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> trait</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/ReflectiveTasks.html" target="_self">ReflectiveTasks</a></em>
+        <code> extends </code><a href="sbt/Project.html" target="_self">Project</a>
+        
+        <div>A Project that determines its tasks by reflectively finding all vals with a type
+ that conforms to Task.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>sealed trait</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/ReloadProject.html" target="_self">ReloadProject</a></em>
+        <code> extends </code><a href="" target="contentFrame" class="scala/NotNull">scala.NotNull</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>final class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/ReloadSuccessExpected.html" target="_self">ReloadSuccessExpected</a></em>
+        (<code>val </code><em>prefixIfError</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>)<code> extends </code><a href="sbt/ReloadProject.html" target="_self">ReloadProject</a><code> with </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>final class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/RepositoryName.html" target="_self">RepositoryName</a></em>
+        (<em>name</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>)<code> extends </code><a href="" target="contentFrame" class="scala/NotNull">scala.NotNull</a><code> with </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>case final class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/ResolutionException.html" target="_self">ResolutionException</a></em>
+        (<code>val </code><em>message</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <code>val </code><em>exception</em> : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/Throwable">java.lang.Throwable</a>])<code> extends </code><a href="" target="contentFrame" class="java/lang/RuntimeException">java.lang.RuntimeException</a><code> with </code><a href="sbt/NoPropertyValue.html" target="_self">NoPropertyValue</a><code> with </code><a href="" target="contentFrame" class="scala/Product">scala.Product</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>sealed trait</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/Resolver.html" target="_self">Resolver</a></em>
+        <code> extends </code><a href="" target="contentFrame" class="scala/NotNull">scala.NotNull</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/Resources.html" target="_self">Resources</a></em>
+        (<code>val </code><em>baseDirectory</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>)<code> extends </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>sealed trait</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/SbtManager.html" target="_self">SbtManager</a></em>
+        <code> extends </code><a href="sbt/Manager.html" target="_self">Manager</a>
+        
+        <div>This manager directly specifies the dependencies, resolvers, and configurations through sbt wrapper classes and through an in-memory
+ Ivy XML file.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>sealed abstract class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/ScalaCheckEvent.html" target="_self">ScalaCheckEvent</a></em>
+        <code> extends </code><a href="sbt/TestEvent.html" target="_self">TestEvent</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/ScalaCheckOutput.html" target="_self">ScalaCheckOutput</a></em>
+        (<em>log</em> : <a href="sbt/Logger.html" target="_self">Logger</a>)<code> extends </code><a href="sbt/LazyEventOutput.html" target="_self">LazyEventOutput</a>[<a href="sbt/ScalaCheckEvent.html" target="_self">ScalaCheckEvent</a>]
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> trait</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/ScalaIntegrationTesting.html" target="_self">ScalaIntegrationTesting</a></em>
+        <code> extends </code><a href="sbt/IntegrationTesting.html" target="_self">IntegrationTesting</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> trait</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/ScalaProject.html" target="_self">ScalaProject</a></em>
+        <code> extends </code><a href="sbt/FileTasks.html" target="_self">FileTasks</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>sealed abstract class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/ScalaTestEvent.html" target="_self">ScalaTestEvent</a></em>
+        (<code>val </code><em>result</em> : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="scala/Enumeration/Value">scala.Enumeration.Value</a>])<code> extends </code><a href="sbt/TestEvent.html" target="_self">TestEvent</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/ScalaTestOutput.html" target="_self">ScalaTestOutput</a></em>
+        (<em>log</em> : <a href="sbt/Logger.html" target="_self">Logger</a>)<code> extends </code><a href="sbt/LazyEventOutput.html" target="_self">LazyEventOutput</a>[<a href="sbt/ScalaTestEvent.html" target="_self">ScalaTestEvent</a>]
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> trait</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/Scheduler.html" target="_self">Scheduler</a></em>
+        [<em>D</em>]<code> extends </code><a href="" target="contentFrame" class="scala/NotNull">scala.NotNull</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>final class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/SetLevel.html" target="_self">SetLevel</a></em>
+        (<code>val </code><em>newLevel</em> : <a href="" target="contentFrame" class="scala/Enumeration/Value">scala.Enumeration.Value</a>)<code> extends </code><a href="sbt/LogEvent.html" target="_self">LogEvent</a><code> with </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>final class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/SetTrace.html" target="_self">SetTrace</a></em>
+        (<code>val </code><em>enabled</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/Boolean.html" target="_self">Boolean</a>)<code> extends </code><a href="sbt/LogEvent.html" target="_self">LogEvent</a><code> with </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>final class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/SignConfiguration.html" target="_self">SignConfiguration</a></em>
+        (<code>val </code><em>alias</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <code>val </code><em>options</em> : <a href="" target="contentFrame" class="scala/Seq">scala.Seq</a>[<a href="sbt/SignJar$object.SignOption.html" target="_self">SignOption</a>])<code> extends </code><a href="" target="contentFrame" class="scala/NotNull">scala.NotNull</a><code> with </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        <div>Configuration for signing jars.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/SimpleFileFilter.html" target="_self">SimpleFileFilter</a></em>
+        (<code>val </code><em>acceptFunction</em> : (<a href="" target="contentFrame" class="java/io/File">java.io.File</a>) =&gt; <a href="http://www.scala-lang.org/docu/files/api/scala/Boolean.html" target="_self">Boolean</a>)<code> extends </code><a href="sbt/FileFilter.html" target="_self">FileFilter</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/SimpleFilter.html" target="_self">SimpleFilter</a></em>
+        (<code>val </code><em>acceptFunction</em> : (<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>) =&gt; <a href="http://www.scala-lang.org/docu/files/api/scala/Boolean.html" target="_self">Boolean</a>)<code> extends </code><a href="sbt/NameFilter.html" target="_self">NameFilter</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>abstract class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/SimpleFormat.html" target="_self">SimpleFormat</a></em>
+        [<em>T</em>]<code> extends </code><a href="sbt/Format.html" target="_self">Format</a>[<a href="sbt/SimpleFormat.html#T" target="_self">T</a>]<code> with </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>final class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/SimpleManager.html" target="_self">SimpleManager</a></em>
+        (<code>val </code><em>dependenciesXML</em> : <a href="" target="contentFrame" class="scala/xml/NodeSeq">scala.xml.NodeSeq</a>, <code>val </code><em>autodetectUnspecified</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/Boolean.html" target="_self">Boolean</a>, <code>val </code><em>module</em> : <a href="sbt/ModuleID.html" target="_self">ModuleID</a>, <code>val </code><em>resolvers</em> : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="sbt/Resolver.html" target="_self">Resolver</a>], <code>val </code><em>configurations</em> : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="sbt/Configuration.html" target="_self">Configuration</a>], <code>val </code><em>defaultConfiguration</em> : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="sbt/Configuration.html" target="_self">Configuration</a>], <code>val </code><em>dependencies</em> : <a href="sbt/ModuleID.html" target="_self">ModuleID</a>*)<code> extends </code><a href="sbt/SbtManager.html" target="_self">SbtManager</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>case final class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/SpecificationReportEvent.html" target="_self">SpecificationReportEvent</a></em>
+        (<code>val </code><em>successes</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/Int.html" target="_self">Int</a>, <code>val </code><em>failures</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/Int.html" target="_self">Int</a>, <code>val </code><em>errors</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/Int.html" target="_self">Int</a>, <code>val </code><em>skipped</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/Int.html" target="_self">Int</a>, <code>val </code><em>pretty</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <code>val </code><em>systems</em> : <a href="" target="contentFrame" class="scala/Seq">scala.Seq</a>[<a href="sbt/SystemReportEvent.html" target="_self">SystemReportEvent</a>], <code>val </code><em>subSpecs</em> : <a href="" target="contentFrame" class="scala/Seq">scala.Seq</a>[<a href="sbt/SpecificationReportEvent.html" target="_self">SpecificationReportEvent</a>])<code> extends </code><a href="sbt/SpecsEvent.html" target="_self">SpecsEvent</a><code> with </code><a href="" target="contentFrame" class="scala/Product">scala.Product</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>sealed abstract class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/SpecsEvent.html" target="_self">SpecsEvent</a></em>
+        <code> extends </code><a href="sbt/TestEvent.html" target="_self">TestEvent</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/SpecsOutput.html" target="_self">SpecsOutput</a></em>
+        (<code>val </code><em>log</em> : <a href="sbt/Logger.html" target="_self">Logger</a>)<code> extends </code><a href="sbt/EventOutput.html" target="_self">EventOutput</a>[<a href="sbt/SpecsEvent.html" target="_self">SpecsEvent</a>]<code> with </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>final class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/Success.html" target="_self">Success</a></em>
+        (<code>val </code><em>msg</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>)<code> extends </code><a href="sbt/LogEvent.html" target="_self">LogEvent</a><code> with </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>final class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/SynchronizedLogger.html" target="_self">SynchronizedLogger</a></em>
+        (<em>delegate</em> : <a href="sbt/Logger.html" target="_self">Logger</a>)<code> extends </code><a href="sbt/Logger.html" target="_self">Logger</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>case final class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/SystemReportEvent.html" target="_self">SystemReportEvent</a></em>
+        (<code>val </code><em>description</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <code>val </code><em>verb</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <code>val </code><em>skippedSus</em> : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/Throwable">java.lang.Throwable</a>], <code>val </code><em>literateDescription</em> : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="scala/Seq">scala.Seq</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]], <code>val </code><em>examples</em> : <a href="" target="contentFrame" class="scala/Seq">scala.Seq</a>[<a href="sbt/ExampleReportEvent.html" target="_self">ExampleReportEvent</a>])<code> extends </code><a href="sbt/SpecsEvent.html" target="_self">SpecsEvent</a><code> with </code><a href="" target="contentFrame" class="scala/Product">scala.Product</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> trait</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/TaskAnalysis.html" target="_self">TaskAnalysis</a></em>
+        [<em>Source</em>, <em>Product</em>, <em>External</em>]<code> extends </code><a href="" target="contentFrame" class="scala/NotNull">scala.NotNull</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> trait</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/TaskManager.html" target="_self">TaskManager</a></em>
+        <code> extends </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>case final class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/TestDefinition.html" target="_self">TestDefinition</a></em>
+        (<code>val </code><em>isModule</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/Boolean.html" target="_self">Boolean</a>, <code>val </code><em>testClassName</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <code>val </code><em>superClassName</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>)<code> extends </code><a href="" target="contentFrame" class="scala/NotNull">scala.NotNull</a><code> with </code><a href="" target="contentFrame" class="scala/Product">scala.Product</a>
+        
+        <div>Represents a test implemented by 'testClassName' of type 'superClassName'.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>abstract class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/TestEvent.html" target="_self">TestEvent</a></em>
+        <code> extends </code><a href="" target="contentFrame" class="scala/NotNull">scala.NotNull</a><code> with </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> trait</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/TestFramework.html" target="_self">TestFramework</a></em>
+        <code> extends </code><a href="" target="contentFrame" class="scala/NotNull">scala.NotNull</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>final class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/TestParser.html" target="_self">TestParser</a></em>
+        <code> extends </code><a href="" target="contentFrame" class="scala/util/parsing/combinator/RegexParsers">scala.util.parsing.combinator.RegexParsers</a><code> with </code><a href="" target="contentFrame" class="scala/NotNull">scala.NotNull</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> trait</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/TestReportListener.html" target="_self">TestReportListener</a></em>
+        <code> extends </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> trait</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/TestRunner.html" target="_self">TestRunner</a></em>
+        <code> extends </code><a href="" target="contentFrame" class="scala/NotNull">scala.NotNull</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> trait</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/TestsListener.html" target="_self">TestsListener</a></em>
+        <code> extends </code><a href="sbt/TestReportListener.html" target="_self">TestReportListener</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>final class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/Trace.html" target="_self">Trace</a></em>
+        (<code>val </code><em>exception</em> : <a href="" target="contentFrame" class="java/lang/Throwable">java.lang.Throwable</a>)<code> extends </code><a href="sbt/LogEvent.html" target="_self">LogEvent</a><code> with </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>case final class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/TypedErrorEvent.html" target="_self">TypedErrorEvent</a></em>
+        (<code>val </code><em>name</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <code>val </code><em>type</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <code>val </code><em>msg</em> : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>], <em>result</em> : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="scala/Enumeration/Value">scala.Enumeration.Value</a>])<code> extends </code><a href="sbt/ScalaTestEvent.html" target="_self">ScalaTestEvent</a><code> with </code><a href="" target="contentFrame" class="scala/Product">scala.Product</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>case final class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/TypedEvent.html" target="_self">TypedEvent</a></em>
+        (<code>val </code><em>name</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <code>val </code><em>type</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <code>val </code><em>msg</em> : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>], <em>result</em> : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="scala/Enumeration/Value">scala.Enumeration.Value</a>])<code> extends </code><a href="sbt/ScalaTestEvent.html" target="_self">ScalaTestEvent</a><code> with </code><a href="" target="contentFrame" class="scala/Product">scala.Product</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> trait</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/URLPartialBuilder.html" target="_self">URLPartialBuilder</a></em>
+        <code> extends </code><a href="" target="contentFrame" class="scala/NotNull">scala.NotNull</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>case final class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/UndefinedValue.html" target="_self">UndefinedValue</a></em>
+        (<code>val </code><em>name</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <code>val </code><em>environmentLabel</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>)<code> extends </code><a href="" target="contentFrame" class="java/lang/RuntimeException">java.lang.RuntimeException</a><code> with </code><a href="sbt/NoPropertyValue.html" target="_self">NoPropertyValue</a><code> with </code><a href="" target="contentFrame" class="scala/Product">scala.Product</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> trait</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/UnmanagedClasspathProject.html" target="_self">UnmanagedClasspathProject</a></em>
+        <code> extends </code><a href="sbt/ClasspathProject.html" target="_self">ClasspathProject</a>
+        
+        <div>A project that provides a directory in which jars can be manually managed.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>final class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/UpdateConfiguration.html" target="_self">UpdateConfiguration</a></em>
+        (<code>val </code><em>outputPattern</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <code>val </code><em>synchronize</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/Boolean.html" target="_self">Boolean</a>, <code>val </code><em>quiet</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/Boolean.html" target="_self">Boolean</a>)<code> extends </code><a href="" target="contentFrame" class="scala/NotNull">scala.NotNull</a><code> with </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>case final class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/ValueResult.html" target="_self">ValueResult</a></em>
+        [<em>T</em>](<code>val </code><em>value</em> : <a href="sbt/ValueResult.html#T" target="_self">T</a>)<code> extends </code><a href="sbt/WithProjectResult.html" target="_self">WithProjectResult</a>[<a href="sbt/ValueResult.html#T" target="_self">T</a>]<code> with </code><a href="" target="contentFrame" class="scala/Product">scala.Product</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>sealed trait</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/Version.html" target="_self">Version</a></em>
+        <code> extends </code><a href="" target="contentFrame" class="scala/NotNull">scala.NotNull</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> trait</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/WebProjectPaths.html" target="_self">WebProjectPaths</a></em>
+        <code> extends </code><a href="sbt/BasicProjectPaths.html" target="_self">BasicProjectPaths</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> trait</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/WebScalaProject.html" target="_self">WebScalaProject</a></em>
+        <code> extends </code><a href="sbt/ScalaProject.html" target="_self">ScalaProject</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>final class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/WebstartJarResource.html" target="_self">WebstartJarResource</a></em>
+        (<code>val </code><em>name</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <code>val </code><em>href</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <code>val </code><em>isMain</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/Boolean.html" target="_self">Boolean</a>)<code> extends </code><a href="" target="contentFrame" class="scala/NotNull">scala.NotNull</a><code> with </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        <div>Represents a library included in the webstart distribution.  Name is the filename of the jar.
+ href is the path of the jar relative to the webstart output directory.  isMain is true only for
+ the main jar.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> trait</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/WebstartOptions.html" target="_self">WebstartOptions</a></em>
+        <code> extends </code><a href="" target="contentFrame" class="scala/NotNull">scala.NotNull</a>
+        
+        <div>Defines the configurable parameters for the webstart task.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> trait</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/WebstartPaths.html" target="_self">WebstartPaths</a></em>
+        <code> extends </code><a href="sbt/BasicProjectPaths.html" target="_self">BasicProjectPaths</a><code> with </code><a href="sbt/WebstartOptions.html" target="_self">WebstartOptions</a>
+        
+        <div>Defines default paths for a webstart project.  It directly extends WebstartOptions to make
+ it easy to implement and override webstart options in the common case of one webstartTask per
+ project.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> trait</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/WebstartScalaProject.html" target="_self">WebstartScalaProject</a></em>
+        <code> extends </code><a href="sbt/ScalaProject.html" target="_self">ScalaProject</a>
+        
+        <div>A scala project that produces a webstart distribution.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>sealed trait</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/WithProjectResult.html" target="_self">WithProjectResult</a></em>
+        [+<em>T</em>]<code> extends </code><a href="" target="contentFrame" class="scala/NotNull">scala.NotNull</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>case final class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/WorkFailure.html" target="_self">WorkFailure</a></em>
+        [<em>D</em>](<code>val </code><em>work</em> : <a href="sbt/WorkFailure.html#D" target="_self">D</a>, <code>val </code><em>message</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>)<code> extends </code><a href="" target="contentFrame" class="scala/NotNull">scala.NotNull</a><code> with </code><a href="" target="contentFrame" class="scala/Product">scala.Product</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>abstract class</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/WriterReportListener.html" target="_self">WriterReportListener</a></em>
+        (<code>val </code><em>log</em> : <a href="sbt/Logger.html" target="_self">Logger</a>)<code> extends </code><a href="sbt/TestsListener.html" target="_self">TestsListener</a><code> with </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>        
+        </table>
+<table summary="" cellpadding="3" class="member">
+        <tr><td class="title" colspan="2">Object Summary</td></tr>
+        <tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/AllPassFilter$object.html" target="_self">AllPassFilter</a></em>
+        <code> extends </code><a href="sbt/NameFilter.html" target="_self">NameFilter</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/AnalysisCallback$object.html" target="_self">AnalysisCallback</a></em>
+        <code> extends </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/Analyzer$object.html" target="_self">Analyzer</a></em>
+        <code> extends </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/BasicAnalysis$object.html" target="_self">BasicAnalysis</a></em>
+        <code> extends </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/BasicDependencyPaths$object.html" target="_self">BasicDependencyPaths</a></em>
+        <code> extends </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/BasicManagedProject$object.html" target="_self">BasicManagedProject</a></em>
+        <code> extends </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/BasicProjectPaths$object.html" target="_self">BasicProjectPaths</a></em>
+        <code> extends </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/BasicScalaIntegrationTesting$object.html" target="_self">BasicScalaIntegrationTesting</a></em>
+        <code> extends </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/BasicScalaProject$object.html" target="_self">BasicScalaProject</a></em>
+        <code> extends </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/BasicVersion$object.html" target="_self">BasicVersion</a></em>
+        <code> extends </code>(<a href="http://www.scala-lang.org/docu/files/api/scala/Int.html" target="_self">Int</a>, <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="http://www.scala-lang.org/docu/files/api/scala/Int.html" target="_self">Int</a>], <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="http://www.scala-lang.org/docu/files/api/scala/Int.html" target="_self">Int</a>], <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]) =&gt; <a href="sbt/BasicVersion.html" target="_self">BasicVersion</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/BasicWebScalaProject$object.html" target="_self">BasicWebScalaProject</a></em>
+        <code> extends </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/ChangeDetection$object.html" target="_self">ChangeDetection</a></em>
+        <code> extends </code><a href="" target="contentFrame" class="scala/Enumeration">scala.Enumeration</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/ClassType$object.html" target="_self">ClassType</a></em>
+        <code> extends </code><a href="" target="contentFrame" class="scala/Enumeration">scala.Enumeration</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/Compile$object.html" target="_self">Compile</a></em>
+        <code> extends </code><a href="sbt/CompilerCore.html" target="_self">CompilerCore</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/CompileAnalysis$object.html" target="_self">CompileAnalysis</a></em>
+        <code> extends </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/Configurations$object.html" target="_self">Configurations</a></em>
+        <code> extends </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/ConsoleLogger$object.html" target="_self">ConsoleLogger</a></em>
+        <code> extends </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/ContinueResult$object.html" target="_self">ContinueResult</a></em>
+        <code> extends </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/Control$object.html" target="_self">Control</a></em>
+        <code> extends </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        <div>The trap methods execute the provided code in a try block and handle a thrown exception.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/ControlEvent$object.html" target="_self">ControlEvent</a></em>
+        <code> extends </code><a href="" target="contentFrame" class="scala/Enumeration">scala.Enumeration</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/DefaultMavenRepository$object.html" target="_self">DefaultMavenRepository</a></em>
+        <code> extends </code><a href="sbt/MavenRepository.html" target="_self">MavenRepository</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/DefinedValue$object.html" target="_self">DefinedValue</a></em>
+        <code> extends </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/DirectoryFilter$object.html" target="_self">DirectoryFilter</a></em>
+        <code> extends </code><a href="sbt/FileFilter.html" target="_self">FileFilter</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/DotGraph$object.html" target="_self">DotGraph</a></em>
+        <code> extends </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/ErrorEvent$object.html" target="_self">ErrorEvent</a></em>
+        <code> extends </code>(<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>) =&gt; <a href="sbt/ErrorEvent.html" target="_self">ErrorEvent</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/ExampleReportEvent$object.html" target="_self">ExampleReportEvent</a></em>
+        <code> extends </code>(<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="" target="contentFrame" class="scala/Seq">scala.Seq</a>[<a href="" target="contentFrame" class="java/lang/Throwable">java.lang.Throwable</a>], <a href="" target="contentFrame" class="scala/Seq">scala.Seq</a>[<a href="" target="contentFrame" class="java/lang/RuntimeException">java.lang.RuntimeException</a>], <a href="" target="contentFrame" class="scala/Seq">scala.Seq</a>[<a href="" target="contentFrame" class="java/lang/RuntimeException">java.lang.RuntimeException</a>], <a href="" target="contentFrame" class="scala/Seq">scala.Seq</a>[<a href="sbt/ExampleReportEvent.html" target="_self">ExampleReportEvent</a>]) =&gt; <a href="sbt/ExampleReportEvent.html" target="_self">ExampleReportEvent</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/ExistsFileFilter$object.html" target="_self">ExistsFileFilter</a></em>
+        <code> extends </code><a href="sbt/FileFilter.html" target="_self">FileFilter</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/ExitHooks$object.html" target="_self">ExitHooks</a></em>
+        <code> extends </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/FailedEvent$object.html" target="_self">FailedEvent</a></em>
+        <code> extends </code>(<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>) =&gt; <a href="sbt/FailedEvent.html" target="_self">FailedEvent</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/FileTasks$object.html" target="_self">FileTasks</a></em>
+        <code> extends </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/FileUtilities$object.html" target="_self">FileUtilities</a></em>
+        <code> extends </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        <div>A collection of file related methods.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/GlobFilter$object.html" target="_self">GlobFilter</a></em>
+        <code> extends </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/Hash$object.html" target="_self">Hash</a></em>
+        <code> extends </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/HiddenFileFilter$object.html" target="_self">HiddenFileFilter</a></em>
+        <code> extends </code><a href="sbt/FileFilter.html" target="_self">FileFilter</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/IgnoredEvent$object.html" target="_self">IgnoredEvent</a></em>
+        <code> extends </code>(<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]) =&gt; <a href="sbt/IgnoredEvent.html" target="_self">IgnoredEvent</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/IntegrationTestPaths$object.html" target="_self">IntegrationTestPaths</a></em>
+        <code> extends </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/JettyRun$object.html" target="_self">JettyRun</a></em>
+        <code> extends </code><a href="sbt/ExitHook.html" target="_self">ExitHook</a><code> with </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/Level$object.html" target="_self">Level</a></em>
+        <code> extends </code><a href="" target="contentFrame" class="scala/Enumeration">scala.Enumeration</a><code> with </code><a href="" target="contentFrame" class="scala/NotNull">scala.NotNull</a>
+        
+        <div>An enumeration defining the levels available for logging.  A level includes all of the levels
+ with id larger than its own id.  For example, Warn (id=3) includes Error (id=4).</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/LoggerReporter$object.html" target="_self">LoggerReporter</a></em>
+        <code> extends </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/Main$object.html" target="_self">Main</a></em>
+        <code> extends </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        <div>This class is the entry point for sbt.  If it is given any arguments, it interprets them
+ as actions, executes the corresponding actions, and exits.  If there were no arguments provided,
+ sbt enters interactive mode.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/ManageDependencies$object.html" target="_self">ManageDependencies</a></em>
+        <code> extends </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/MapUtilities$object.html" target="_self">MapUtilities</a></em>
+        <code> extends </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/MavenRepository$object.html" target="_self">MavenRepository</a></em>
+        <code> extends </code>(<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>) =&gt; <a href="sbt/MavenRepository.html" target="_self">MavenRepository</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/MessageEvent$object.html" target="_self">MessageEvent</a></em>
+        <code> extends </code>(<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>) =&gt; <a href="sbt/MessageEvent.html" target="_self">MessageEvent</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/ModuleID$object.html" target="_self">ModuleID</a></em>
+        <code> extends </code>(<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]) =&gt; <a href="sbt/ModuleID.html" target="_self">ModuleID</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/ModuleUtilities$object.html" target="_self">ModuleUtilities</a></em>
+        <code> extends </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/NoReload$object.html" target="_self">NoReload</a></em>
+        <code> extends </code><a href="sbt/ReloadProject.html" target="_self">ReloadProject</a><code> with </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/OpaqueVersion$object.html" target="_self">OpaqueVersion</a></em>
+        <code> extends </code>(<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>) =&gt; <a href="sbt/OpaqueVersion.html" target="_self">OpaqueVersion</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/Pack$object.html" target="_self">Pack</a></em>
+        <code> extends </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/ParallelRunner$object.html" target="_self">ParallelRunner</a></em>
+        <code> extends </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/PassedEvent$object.html" target="_self">PassedEvent</a></em>
+        <code> extends </code>(<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>) =&gt; <a href="sbt/PassedEvent.html" target="_self">PassedEvent</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/Path$object.html" target="_self">Path</a></em>
+        <code> extends </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/Process$object.html" target="_self">Process</a></em>
+        <code> extends </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        <div>Methods for constructing simple commands that can then be combined.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/Project$object.html" target="_self">Project</a></em>
+        <code> extends </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/ProjectInfo$object.html" target="_self">ProjectInfo</a></em>
+        <code> extends </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/PropertiesUtilities$object.html" target="_self">PropertiesUtilities</a></em>
+        <code> extends </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/ReflectUtilities$object.html" target="_self">ReflectUtilities</a></em>
+        <code> extends </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/Reflective$object.html" target="_self">Reflective</a></em>
+        <code> extends </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/ReloadErrorExpected$object.html" target="_self">ReloadErrorExpected</a></em>
+        <code> extends </code><a href="sbt/ReloadProject.html" target="_self">ReloadProject</a><code> with </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/ResolutionException$object.html" target="_self">ResolutionException</a></em>
+        <code> extends </code>(<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/Throwable">java.lang.Throwable</a>]) =&gt; <a href="sbt/ResolutionException.html" target="_self">ResolutionException</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/Resolver$object.html" target="_self">Resolver</a></em>
+        <code> extends </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/Resources$object.html" target="_self">Resources</a></em>
+        <code> extends </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/Result$object.html" target="_self">Result</a></em>
+        <code> extends </code><a href="" target="contentFrame" class="scala/Enumeration">scala.Enumeration</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/Run$object.html" target="_self">Run</a></em>
+        <code> extends </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        <div>This module is an interface to starting the scala interpreter or runner.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/ScalaCheckFramework$object.html" target="_self">ScalaCheckFramework</a></em>
+        <code> extends </code><a href="sbt/LazyTestFramework.html" target="_self">LazyTestFramework</a>
+        
+        <div>The test framework definition for ScalaCheck.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/ScalaProject$object.html" target="_self">ScalaProject</a></em>
+        <code> extends </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/ScalaTestFramework$object.html" target="_self">ScalaTestFramework</a></em>
+        <code> extends </code><a href="sbt/LazyTestFramework.html" target="_self">LazyTestFramework</a>
+        
+        <div>The test framework definition for ScalaTest.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/ScalaToolsReleases$object.html" target="_self">ScalaToolsReleases</a></em>
+        <code> extends </code><a href="sbt/MavenRepository.html" target="_self">MavenRepository</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/ScalaToolsSnapshots$object.html" target="_self">ScalaToolsSnapshots</a></em>
+        <code> extends </code><a href="sbt/MavenRepository.html" target="_self">MavenRepository</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/Scaladoc$object.html" target="_self">Scaladoc</a></em>
+        <code> extends </code><a href="sbt/CompilerCore.html" target="_self">CompilerCore</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/SignJar$object.html" target="_self">SignJar</a></em>
+        <code> extends </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        <div>This is somewhat of a mess and is not entirely correct.  jarsigner doesn't work properly
+ on scalaz and it is difficult to determine whether a jar is both signed and valid.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/SimpleReader$object.html" target="_self">SimpleReader</a></em>
+        <code> extends </code><a href="sbt/JLine.html" target="_self">JLine</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/SourceModificationWatch$object.html" target="_self">SourceModificationWatch</a></em>
+        <code> extends </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/SpecificationReportEvent$object.html" target="_self">SpecificationReportEvent</a></em>
+        <code> extends </code>(<a href="http://www.scala-lang.org/docu/files/api/scala/Int.html" target="_self">Int</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/Int.html" target="_self">Int</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/Int.html" target="_self">Int</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/Int.html" target="_self">Int</a>, <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="" target="contentFrame" class="scala/Seq">scala.Seq</a>[<a href="sbt/SystemReportEvent.html" target="_self">SystemReportEvent</a>], <a href="" target="contentFrame" class="scala/Seq">scala.Seq</a>[<a href="sbt/SpecificationReportEvent.html" target="_self">SpecificationReportEvent</a>]) =&gt; <a href="sbt/SpecificationReportEvent.html" target="_self">SpecificationReportEvent</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/SpecsFramework$object.html" target="_self">SpecsFramework</a></em>
+        <code> extends </code><a href="sbt/LazyTestFramework.html" target="_self">LazyTestFramework</a>
+        
+        <div>The test framework definition for specs.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/StringUtilities$object.html" target="_self">StringUtilities</a></em>
+        <code> extends </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/SystemReportEvent$object.html" target="_self">SystemReportEvent</a></em>
+        <code> extends </code>(<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/Throwable">java.lang.Throwable</a>], <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="scala/Seq">scala.Seq</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]], <a href="" target="contentFrame" class="scala/Seq">scala.Seq</a>[<a href="sbt/ExampleReportEvent.html" target="_self">ExampleReportEvent</a>]) =&gt; <a href="sbt/SystemReportEvent.html" target="_self">SystemReportEvent</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/TestDefinition$object.html" target="_self">TestDefinition</a></em>
+        <code> extends </code>(<a href="http://www.scala-lang.org/docu/files/api/scala/Boolean.html" target="_self">Boolean</a>, <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>) =&gt; <a href="sbt/TestDefinition.html" target="_self">TestDefinition</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/TestFramework$object.html" target="_self">TestFramework</a></em>
+        <code> extends </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/TestParser$object.html" target="_self">TestParser</a></em>
+        <code> extends </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/TrapExit$object.html" target="_self">TrapExit</a></em>
+        <code> extends </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        <div>This provides functionality to catch System.exit calls to prevent the JVM from terminating.
+ This is useful for executing user code that may call System.exit, but actually exiting is
+ undesirable.  This file handles the call to exit by disposing all top-level windows and interrupting
+ all user started threads.  It does not stop the threads and does not call shutdown hooks.  It is
+ therefore inappropriate to use this with code that requires shutdown hooks or creates threads that
+ do not terminate.  This category of code should only be called by forking the JVM.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/TypedErrorEvent$object.html" target="_self">TypedErrorEvent</a></em>
+        <code> extends </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/TypedEvent$object.html" target="_self">TypedEvent</a></em>
+        <code> extends </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/UndefinedValue$object.html" target="_self">UndefinedValue</a></em>
+        <code> extends </code>(<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>) =&gt; <a href="sbt/UndefinedValue.html" target="_self">UndefinedValue</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/ValueResult$object.html" target="_self">ValueResult</a></em>
+        <code> extends </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/Version$object.html" target="_self">Version</a></em>
+        <code> extends </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/WebProjectPaths$object.html" target="_self">WebProjectPaths</a></em>
+        <code> extends </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="sbt/WorkFailure$object.html" target="_self">WorkFailure</a></em>
+        <code> extends </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>        
+        </table></body>
+      </html>
