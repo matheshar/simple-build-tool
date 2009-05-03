@@ -26,14 +26,13 @@ Operators are defined to combine commands.  These operators start with `#` in or
  * `a #&& b`   Execute `a`.  If the exit code is nonzero, return that exit code and do not execute `b`.  If the exit code is zero, execute `b` and return its exit code.
  * `a #|| b`   Execute `a`.  If the exit code is zero, return zero for the exit code and do not execute `b`.  If the exit code is nonzero, execute `b` and return its exit code.
  * `a #| b`   Execute `a` and `b`, piping the output of `a` to the input of `b`.
- * `a #| b`   Execute `a` and `b`, piping the output of `a` to the input of `b`.
 
 There are also operators defined for redirecting output to `File`s and input from `File`s and `URL`s.  In the following definitions, `url` is an instance of `URL` and `file` is an instance of `File`.
 
  * `a #< url` or `url #> a`   Use `url` as the input to `a`.  `a` may be a `File` or a command.
  * `a #< file` or `file #> a`   Use `file` as the input to `a`.  `a` may be a `File` or a command.
  * `a #> file` or `file #< a`   Write the output of `a` to `file`.  `a` may be a `File`, `URL`, or a command.
- * `a #>> file` or file #<< a`   Append the output of `a` to `file`.  `a` may be a `File`, `URL`, or a command.
+ * `a #>> file` or `file #<< a`   Append the output of `a` to `file`.  `a` may be a `File`, `URL`, or a command.
 
 == Examples ==
 
