@@ -8,7 +8,7 @@ This page describes adding support for additional testing libraries and defining
 
 `sbt` contains builtin support for the three main Scala testing libraries.  This section describes how to implement support for another testing library.
 
-Implement `sbt.TestFramework`.  The best way to do this is to extend `sbt.LazyTestFramework`.  The implementation of `sbt`'s support for ScalaCheck is shown below as an example:
+Implement `sbt.TestFramework`.  The best way to do this is to extend `sbt.LazyTestFramework`.  The implementation of `sbt`'s support for `ScalaCheck` is shown below as an example:
 
 {{{
 object ScalaCheckFramework extends LazyTestFramework
@@ -22,7 +22,7 @@ object ScalaCheckFramework extends LazyTestFramework
 }
 }}}
 
-The `testSuperClassName` method returns the name of the class that is the superclass of all tests for the framework.  In the case of ScalaCheck, it is `org.scalacheck.Properties`.  The `testSubClassType` is either `ClassType.Module` or `ClassType.Class` to indicate whether test implementations should be a module or a class.  For ScalaCheck and specs, it is `ClassType.Module`.  For ScalaTest, it is `ClassType.Class`.  In the case of a class, the class will be instantiated by the test framework using a no-argument constructor.
+The `testSuperClassName` method returns the name of the class that is the superclass of all tests for the framework.  In the case of `ScalaCheck`, it is `org.scalacheck.Properties`.  The `testSubClassType` is either `ClassType.Module` or `ClassType.Class` to indicate whether test implementations should be a module or a class.  For ScalaCheck and specs, it is `ClassType.Module`.  For `ScalaTest`, it is `ClassType.Class`.  In the case of a class, the class will be instantiated by the test framework using a no-argument constructor.
 
 Finally, `testRunnerClassName` is the name of the implementing test runner.  This runner will be reflectively loaded by `sbt`'s testing code.  This allows the runner to directly use classes from the test library and have the test library jars loaded from the project's classpath instead of requiring them to be on `sbt`'s classpath at startup.
 
@@ -63,7 +63,7 @@ class ScalaCheckRunner(val log: Logger, val listeners: Seq[TestReportListener], 
 }
 }}}
 
-All references to the ScalaCheck library are kept within the class body.  The `runTest` method is implemented to load the module corresponding to the test using the right class loader and casting the test class to the the test type.  The test is run and the result is returned.  The last two methods report test status by using the `fire` method to send an event object to all listeners.  A framework defines its own test events and a test reporter to handle those events.  This is described in the next section on test reporters.
+All references to the `ScalaCheck` library are kept within the class body.  The `runTest` method is implemented to load the module corresponding to the test using the right class loader and casting the test class to the the test type.  The test is run and the result is returned.  The last two methods report test status by using the `fire` method to send an event object to all listeners.  A framework defines its own test events and a test reporter to handle those events.  This is described in the next section on test reporters.
 
 == Custom Test Reporters ==
 
@@ -93,7 +93,7 @@ trait TestsListener extends TestReportListener
 }
 }}}
 
-The simplest way to add support for `TestEvent`s from new frameworks is to extend the default `LogTestReportListener` and implement `handleOtherTestEvent`.  The default implementation will process events from the builtin frameworks (ScalaCheck, ScalaTest, and specs) and pass any unknown ones to `handleOtherTestEvent`.  By default, `handleOtherTestEvent` does nothing.
+The simplest way to add support for `TestEvent`s from new frameworks is to extend the default `LogTestReportListener` and implement `handleOtherTestEvent`.  The default implementation will process events from the builtin frameworks (`ScalaCheck`, `specs` and `ScalaTest`) and pass any unknown ones to `handleOtherTestEvent`.  By default, `handleOtherTestEvent` does nothing.
 
 == Using Extensions ==
 
