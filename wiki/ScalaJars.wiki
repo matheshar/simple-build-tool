@@ -19,8 +19,8 @@ To disable this check, set:
 `sbt` excludes all dependencies on `scala-library.jar` and `scala-compiler.jar` so that these will not be downloaded.  `sbt` does this because it already provides the right versions of `scala-library.jar` and `scala-compiler.jar` required for normal use.
 
 If you need to explicitly reference the Scala jars used by `sbt`, you should use one of the following solutions:
- * The `scalaJars` method returns a two `File`s, one for the location of `scala-compiler.jar` and one for `scala-library.jar`.
- * `mainCompileConditional.analysis.allExternals` provides `File`s for all jars that your main classes depend on.  This includes `rt.jar` (or `classes.jar on a Mac).
+ * The `scalaJars` method returns two `File`s, one for the location of `scala-compiler.jar` and one for `scala-library.jar`.
+ * `mainCompileConditional.analysis.allExternals` provides `File`s for all jars that your main classes depend on.  This includes `rt.jar` (or `classes.jar` on a Mac).
  
 `sbt` can be configured to skip these checks in certain cases, but this should be considered atypical.  `sbt`'s build does it in order to build `sbt` across several versions of Scala, but that is a bootstrapping issue.  If you want to do this anyway, you should define a non-standard configuration and exclude it from the configurations on which `sbt` performs checks and filtering:
 {{{
