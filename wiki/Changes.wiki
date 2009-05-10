@@ -1,3 +1,10 @@
+=== 0.4.5 to trunk ===
+ * Publishing to ssh/sftp/filesystem repository supported
+ * Exception traces are printed by default
+ * Fixed warning message about no `Class-Path` attribute from showing up for `run`
+ * Fixed `package-project` operation
+ * Fixed `Path.fromFile`
+
 === 0.4.3 to 0.4.5 ===
  * Sorted out repository situation in loader
  * Added support for `http_proxy` environment variable
