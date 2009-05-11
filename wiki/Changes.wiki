@@ -4,6 +4,8 @@
  * Fixed warning message about no `Class-Path` attribute from showing up for `run`
  * Fixed `package-project` operation
  * Fixed `Path.fromFile`
+ * Fixed issue with external process output being lost when sent to a `BufferedLogger` with `parallelExecution` enabled.
+ * Preserve history across `clean`
 
 === 0.4.3 to 0.4.5 ===
  * Sorted out repository situation in loader
