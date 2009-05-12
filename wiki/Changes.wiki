@@ -6,6 +6,14 @@
  * Fixed `Path.fromFile`
  * Fixed issue with external process output being lost when sent to a `BufferedLogger` with `parallelExecution` enabled.
  * Preserve history across `clean`
+ * Fixed issue with making relative path in jar with wrong separator
+ * Added cross-build functionality. Add the versions of Scala to build against:
+     override def crossScalaVersions = Set("2.7.3", "2.7.4")
+   Then, invoke the action to cross-build using a leading '+' :
+     > + update
+     > + compile
+   Currently, interactive support only.  Batch support to follow.
+
 
 === 0.4.3 to 0.4.5 ===
  * Sorted out repository situation in loader
