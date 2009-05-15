@@ -6,9 +6,9 @@ This page describes adding support for additional testing libraries and defining
 
 == Custom Test Framework ==
 
-`sbt` contains builtin support for the three main Scala testing libraries.  This section describes how to implement support for another testing library.
+`sbt` contains built-in support for the three main Scala testing libraries.  This section describes how to implement support for another testing library.
 
-Implement `sbt.TestFramework`.  The best way to do this is to extend `sbt.LazyTestFramework`.  The implementation of `sbt`'s support for `ScalaCheck` is shown below as an example:
+First, implement `sbt.TestFramework`.  The best way to do this is to extend `sbt.LazyTestFramework`.  The implementation of `sbt`'s support for `ScalaCheck` is shown below as an example:
 
 {{{
 object ScalaCheckFramework extends LazyTestFramework
