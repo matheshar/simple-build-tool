@@ -7,7 +7,15 @@
  * Fixed issue with external process output being lost when sent to a `BufferedLogger` with `parallelExecution` enabled.
  * Preserve history across `clean`
  * Fixed issue with making relative path in jar with wrong separator
- * Added cross-build functionality.
+ * Added cross-build functionality (prefix action with `+`).
+ * Added methods `scalaLibraryJar` and `scalaCompilerJar` to `FileUtilities`
+ * Include project dependencies for `deliver`/`publish`
+ * Add Scala dependencies for `make-pom`/`deliver`/`publish`, which requires these to depend on `package`
+ * Properly add compiler jar to run/test classpaths when main sources depend on it
+ * `TestFramework` root `ClassLoader` filters compiler classes used by `sbt`, which is required for projects using the compiler.
+ * Better access to dependencies:
+  * `mainDependencies` and `testDependencies` provide an analysis of the dependencies of your code as determined during compilation
+  * `scalaJars` is deprecated, use `mainDependencies.scalaJars` instead (provides a `PathFinder`, which is generally more useful)
 
 
 === 0.4.3 to 0.4.5 ===
