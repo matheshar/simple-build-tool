@@ -16,7 +16,7 @@
  * Better access to dependencies:
   * `mainDependencies` and `testDependencies` provide an analysis of the dependencies of your code as determined during compilation
   * `scalaJars` is deprecated, use `mainDependencies.scalaJars` instead (provides a `PathFinder`, which is generally more useful)
-
+ * Added `jettyPort` method to `DefaultWebProject`.
 
 === 0.4.3 to 0.4.5 ===
  * Sorted out repository situation in loader
