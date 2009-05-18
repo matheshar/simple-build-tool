@@ -19,7 +19,7 @@ This method of dependency management involves specifying the direct dependencies
  * Maven POM files
  * Ivy configuration and settings files
 
-Behind the scenes, `sbt` uses [http://ant.apache.org/ivy/ Apache Ivy] to implement dependency management in all three cases.  If multiple configurations are present, the follow precedence is used by default:
+Behind the scenes, `sbt` uses [http://ant.apache.org/ivy/ Apache Ivy] to implement dependency management in all three cases.  If multiple configurations are present, the following precedence is used by default:
  * Inline repositories take precedence over configuration done in `ivysettings.xml`.
  * Maven and Ivy configurations (`pom.xml` and `ivy.xml`) are ignored when inline dependency declarations are present.  Note that `ivysettings.xml` can be used with inline dependencies if no inline repositories are used.
  * A Maven configuration `pom.xml` is ignored when an Ivy `ivy.xml` configuration is present.  Note that `ivysettings.xml` can be used with a Maven `pom.xml`.
@@ -36,7 +36,7 @@ Inline declarations are a very basic way of specifying the dependencies to be au
  {{{
   val dep = groupID % artifactID % revision
  }}}
-or
+ or
  {{{
   val dep = groupID % artifactID % revision % configuration
  }}}
