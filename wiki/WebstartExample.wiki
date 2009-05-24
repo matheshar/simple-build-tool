@@ -30,7 +30,7 @@ class WebstartTest(info: ProjectInfo) extends ParentProject(info)
     override def defaultJarBaseName = normalizedName + "-" + version.toString
       
     def jnlpXML(libraries: Seq[WebstartJarResource]) =
-      <jnlp spec="1.0+" codebase="http://localhost:8080/" href={defaultJarBaseName + ".jnlp"}>
+      <jnlp spec="1.0+" codebase="http://localhost:8080/" href={artifactBaseName + ".jnlp"}>
         <information>
           <title>Webstart Test</title>
           <vendor>Vendor</vendor>

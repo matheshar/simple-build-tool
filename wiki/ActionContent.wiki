@@ -45,3 +45,7 @@ There is a method to create a temporary directory and a method to execute code u
 == General I/O ==
 
 There are methods to read from, write to, and append to files, streams, and readers/writers and let `FileUtilities` open and close the streams, readers, or writers.  There are convenience methods to read or write text or an array of bytes to or from a `File`.
+
+== Access to Jars ==
+
+There are methods to get the jar file or directory containing a given class.  There are convenience methods for getting the location of `scala-library.jar`, `scala-compiler.jar`, and `sbt.jar` used to build the project.

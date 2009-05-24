@@ -9,9 +9,9 @@ This example overrides the name of the produced jar.
 {{{
 import sbt._
 
-class SampleProject(info: ProjectInfo) extends DefaultProject(info)
+class SamplesProject(info: ProjectInfo) extends DefaultProject(info)
 {
-    override def defaultJarBaseName = "sample-" + version.toString
+    override def artifactID = "samplez"
 }
 }}}
 

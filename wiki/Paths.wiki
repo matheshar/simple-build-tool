@@ -125,16 +125,32 @@ Note that the `##` operator is also defined for `PathFinder`s.
 A common problem is excluding version control directories.  This can be accomplished as follows:
 
 {{{
-val sources = ("src" ** "*.scala") --- ("src" ** ".svn" ** "*.scala")
+def sources = ("src" ** "*.scala") --- ("src" ** ".svn" ** "*.scala")
 }}}
 
 The first selector selects all Scala sources and the second removes all sources that are a descendent of a `.svn` directory.  This pattern is common enough that there is a method `descendentsExcept` that does the same thing as the above:
 
 {{{
-val sources = "src".descendentsExcept("*.scala", ".svn")
+def sources = "src".descendentsExcept("*.scala", ".svn")
 }}}
 
-=== Name Filters ===
+Two methods are available for use in a project definition to consistently exclude paths.  They are `descendents` and `defaultExcludes`.  `defaultExcludes` provides a filter that `descendents` uses to exclude paths from its results.  The definitions of `descendents` and `defaultExcludes` are:
+{{{
+  def descendents(parent: PathFinder, include: FileFilter) = parent.descendentsExcept(include, defaultExcludes)
+  def defaultExcludes: FileFilter = (".*"  - ".") || HiddenFileFilter
+}}}
+
+You could use this for the above examples like:
+{{{
+def sources = descendents("src", "*.scala")
+}}}
+
+If you want to change the default exclusions, you can do so by overriding `defaultExcludes`.  For example,
+{{{
+override def defaultExcludes = super.defaultExcludes || "*~"
+}}}
+
+=== Name and File Filters ===
 
 There are some useful operations on `NameFilter`s.  The `|` operator declares alternative `NameFilter`s:
 
@@ -148,3 +164,5 @@ val imageResources = "src"/"main"/"resources" * ("*.png" - "logo.png")
 }}}
 
 This will get `right.png` and `left.png`.  `-` is also available as a prefix operator.
+
+`NameFilter` can be used for filtering Strings in general using its `accept` method directly.  Additionally `NameFilter` is a subclass of `java.io.FileFilter` by way of `sbt.FileFilter`, which is a thin wrapper around `java.io.FileFilter` that provides operators for combining filters.  Infix operators for `sbt.FileFilter` are doubled to distinguish them from the operators for `NameFilter`.

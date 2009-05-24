@@ -16,7 +16,10 @@ To disable this check, set:
 
 == Filtering Scala Dependencies ==
 
-`sbt` excludes all dependencies on `scala-library.jar` and `scala-compiler.jar` so that these will not be downloaded.  `sbt` does this because it already provides the right versions of `scala-library.jar` and `scala-compiler.jar` required for normal use.
+`sbt` excludes all dependencies on `scala-library.jar` and `scala-compiler.jar` so that these will not be downloaded.  `sbt` does this because it already provides the right versions of `scala-library.jar` and `scala-compiler.jar` required for normal use.  In particular,
+   * If your main sources depend on `scala-compiler.jar`, `scala-compiler.jar` is added to `runClasspath` so that compiler classes are available for the `run` command.
+   * If your test sources depend on `scala-compiler.jar`, `scala-compiler.jar` is added to testClasspath so that the compiler classes are available for tests.
+   * You have access to these jars as described in the next section
 
 If you need to explicitly reference the Scala jars used by `sbt`, you should use one of the following solutions:
  * The `scalaJars` method returns two `File`s, one for the location of `scala-compiler.jar` and one for `scala-library.jar`.
@@ -34,3 +37,7 @@ To completely disable all filtering of dependencies, set
 {{{
   override def filterScalaJars = false
 }}}
+
+== Access to Scala Jars and Dependencies ==
+ * Two methods in `FileUtilities`, `scalaLibraryJar` and `scalaCompilerJar`, provide the location of `scala-library.jar` and `scala-compiler.jar` used to build the project.
+ * Two methods on a project definition, `mainDependencies` and `testDependencies`, provide an analysis of the external dependencies (jars) of your code as determined during compilation.  Because it relies on information determined during compilation, the information is only valid when compilation is up to date.  These methods return an instance of `LibraryDependencies`.  Read the [http://simple-build-tool.googlecode.com/svn/artifacts/latest/api/sbt/LibraryDependencies.html API Documentation] for more information.

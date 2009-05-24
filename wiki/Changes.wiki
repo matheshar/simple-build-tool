@@ -19,6 +19,8 @@
  * Added `jettyPort` method to `DefaultWebProject`.
  * Fixed `package-project` to exclude `project/boot` and `project/build/target`
  * Support specs 1.5.0 for Scala 2.7.4 version.
+ * Parallelization at the subtask level
+ * Parallel test execution at the suite/specification level.
 
 === 0.4.3 to 0.4.5 ===
  * Sorted out repository situation in loader

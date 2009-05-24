@@ -3,14 +3,14 @@
 This is the roadmap for `sbt`.  Comments and suggestions are welcome!
 
 == Features ==
- * Parallel test running
+ * Dependency management and multiple versions of Scala
  * Sandboxed test running/forking
 
 == Documentation ==
 
 This list describes the documentation to be done.
 
- * API Documentation
+ * General API Documentation
  * Parallel execution
 
 == Testing ==

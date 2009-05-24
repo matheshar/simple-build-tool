@@ -164,7 +164,7 @@ See the existing tests for more examples.  They are in the [http://code.google.c
 
 = Running Tests =
 
- # Download the latest release of sbt.
+ # Download the latest release of `sbt`.
  # Run the latest version of `sbt` on a checked out version of trunk.
- # Run the `scripted` action.  You can change the `filter` in `project/build/src/SbtProject.scala` to select which tests are run (don't forget to reload after changing the project definition).
+ # Run the `scripted` action.  You can change the `filter` in `project/build/src/SbtProject.scala` to select which tests are run (don't forget to `reload` after changing the project definition).
  # [http://groups.google.com/group/simple-build-tool Contribute] your tests! 

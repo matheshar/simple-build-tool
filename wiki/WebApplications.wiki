@@ -11,7 +11,7 @@ You can also continuously recompile and reload the web application when using Je
 }}}
 `jetty-run` starts Jetty and the `~ prepare-webapp` means to recompile and recreate the web application whenever sources files change.
 
-`sbt` uses the directory structure of Maven by default, so your web application files should go in `src/main/webapp` by default.  You can override `webappPath` to change this.  If you need to include extra files in your web application, override `extraWebappFiles` with a `PathFinder` that selects the extra files that you want (see [Paths] for information on `PathFinder`).
+`sbt` uses the directory structure of Maven by default, so your web application files should go in `src/main/webapp` by default.  You can override `webappPath` to change this.  If you need to include extra files in your web application, override `extraWebappFiles` with a `PathFinder` that selects the extra files that you want (see [Paths] for information on `PathFinder`).  To change the port Jetty starts up on, override `jettyPort`.
 
 A minimal project definition might be:
 
