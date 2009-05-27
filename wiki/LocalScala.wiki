@@ -19,7 +19,7 @@
 {{{
  $SCALA_HOME/project/build/src/ScalaJars.scala
 }}}
- This is just a quick definition to locally publish the already built jars `build/pack/lib/scala-compiler.jar` and `build/pack/lib/scala-library.jar`.  In `$SCALA_HOME`, do:
+ # This is just a quick definition to locally publish the already built jars `build/pack/lib/scala-compiler.jar` and `build/pack/lib/scala-library.jar`.  In `$SCALA_HOME`, do:
 {{{
  $ sbt publish-local
 }}}
