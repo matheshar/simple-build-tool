@@ -3,33 +3,33 @@
  # Get the 0.4.6 loader setup on your system (proguard is used on the loader, so it is self contained) according to the [Setup#Launching_Sbt Launching Sbt] section.
  # Checkout `sbt`
 {{{
-  svn checkout http://simple-build-tool.googlecode.com/svn/trunk/ sbt
+ svn checkout http://simple-build-tool.googlecode.com/svn/trunk/ sbt
 }}}
-3) Edit `$SBT_HOME/project/build/src/CrossCompileProject.scala`:
-  a) Change the 2.8 version string to identify the local Scala version (around line 17)
+ # Edit `$SBT_HOME/project/build/src/CrossCompileProject.scala`:
+  # Change the 2.8 version string to identify the local Scala version (around line 17)
 {{{
-    private val version2_8_0 = "2.8.0-local"
+  private val version2_8_0 = "2.8.0-local"
 }}}
-  b) To save time by building only 2.8 make these changes to lines 20 and 30:
+  # To save time by building only 2.8 make these changes to lines 20 and 30:
 {{{
-    private def developmentVersion = version2_8_0
-    private val buildConfigurations = conf_2_8_0 :: Nil
+  private def developmentVersion = version2_8_0
+  private val buildConfigurations = conf_2_8_0 :: Nil
 }}}
-4) For the Scala build you want to use, put the [LocalScala#Project_Definition project definition below] in:
+ # For the Scala build you want to use, put the [LocalScala#Project_Definition project definition below] in:
 {{{
-  $SCALA_HOME/project/build/src/ScalaJars.scala
+ $SCALA_HOME/project/build/src/ScalaJars.scala
 }}}
-This is just a quick definition to locally publish the already built jars `build/pack/lib/scala-compiler.jar` and `build/pack/lib/scala-library.jar`.  In `$SCALA_HOME`, do:
+ This is just a quick definition to locally publish the already built jars `build/pack/lib/scala-compiler.jar` and `build/pack/lib/scala-library.jar`.  In `$SCALA_HOME`, do:
 {{{
-  $ sbt publish-local
+ $ sbt publish-local
 }}}
-5) Then, run the following in `$SBT_HOME`
+ # Then, run the following in `$SBT_HOME`
 {{{
-  $ sbt
-  > update
-  > cross-publish-local
+ $ sbt
+ > update
+ > cross-publish-local
 }}}
-6) Run `sbt` in your project directory.  You will be prompted for name, organization and version.  Enter `2.8.0-local` for Scala and `0.4.7-SNAPSHOT` for `sbt`.  You should be all set now.  When you want to update the compiler follow the steps in the next section.
+ # Run `sbt` in your project directory.  You will be prompted for name, organization and version.  Enter `2.8.0-local` for Scala and `0.4.7-SNAPSHOT` for `sbt`.  You should be all set now.  When you want to update the compiler follow the steps in the next section.
 
 == New compiler ==
 For a new compiler:
