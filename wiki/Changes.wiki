@@ -1,4 +1,9 @@
-=== 0.4.5 to trunk ===
+=== 0.4.6 to trunk ===
+ * Fixed ScalaTest framework dropping stack traces
+ * Publish only public configurations by default
+ * Loader now adds .m2/repository for Scala jars
+
+=== 0.4.5 to 0.4.6 ===
  * Publishing to ssh/sftp/filesystem repository supported
  * Exception traces are printed by default
  * Fixed warning message about no `Class-Path` attribute from showing up for `run`
