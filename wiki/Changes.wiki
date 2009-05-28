@@ -1,7 +1,7 @@
 === 0.4.6 to trunk ===
- * Fixed ScalaTest framework dropping stack traces
+ * Fixed `ScalaTest` framework dropping stack traces
  * Publish only public configurations by default
- * Loader now adds .m2/repository for Scala jars
+ * Loader now adds `.m2/repository` for Scala jars
 
 === 0.4.5 to 0.4.6 ===
  * Publishing to ssh/sftp/filesystem repository supported
