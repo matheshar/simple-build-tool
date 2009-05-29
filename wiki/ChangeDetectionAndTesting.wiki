@@ -96,6 +96,8 @@ The directory structure for a test that verifies correctness in the case mention
      test
 }}}
 
+The `scripted` action runs the test by copying the directory to the temporary directory for your system, loads the project, and runs the `test` script.  For example, on a unix system, the above test might be run from `/tmp/sbt_f723ecf/remove-test/`, where the `f723ecf` part is randomly generated.
+
 The next section describes scripts and provides an example of the `test` script.
 
 = Scripts =
@@ -148,7 +150,7 @@ All paths are relative to the project directory.
 `exec command args*`
     Executes the given command in a separate process.
 `pause`
-    Pauses until enter is pressed.  It is useful for inspecting the current test state.
+    Pauses until enter is pressed.  It is useful for inspecting the current test state.  As noted above, the project directory for tests is copied to the temporary directory and run from there.
 `sleep time`
     Calls `Thread.sleep(time)`.
 `newer source target`
