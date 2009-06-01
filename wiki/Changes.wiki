@@ -2,6 +2,7 @@
  * Fixed `ScalaTest` framework dropping stack traces
  * Publish only public configurations by default
  * Loader now adds `.m2/repository` for Scala jars
+ * Can now fork the compiler and runner.
 
 === 0.4.5 to 0.4.6 ===
  * Publishing to ssh/sftp/filesystem repository supported
