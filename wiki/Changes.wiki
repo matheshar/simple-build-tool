@@ -1,9 +1,10 @@
 === 0.4.6 to trunk ===
  * Fixed `ScalaTest` framework dropping stack traces
  * Publish only public configurations by default
- * Loader now adds `.m2/repository` for Scala jars
- * Can now fork the compiler and runner and runner can use different working directory.
+ * Loader now adds `.m2/repository` for downloading Scala jars
+ * Can now fork the compiler and runner and the runner can use a different working directory.
  * Maximum compiler errors shown is now configurable
+ * Fixed rebuilding and republishing released versions of `sbt` against new Scala versions (attempt #2)
 
 === 0.4.5 to 0.4.6 ===
  * Publishing to ssh/sftp/filesystem repository supported
