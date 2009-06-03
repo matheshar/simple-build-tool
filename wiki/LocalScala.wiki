@@ -1,18 +1,17 @@
 == Setup ==
 
- # Get the 0.4.6 loader setup on your system (proguard is used on the loader, so it is self contained) according to the [Setup#Launching_Sbt Launching Sbt] section.
+ # Get the 0.4.6 loader setup on your system (Proguard is used on the loader, so it is self contained) according to the [Setup#Launching_Sbt Launching Sbt] section.
  # Checkout `sbt`
 {{{
  svn checkout http://simple-build-tool.googlecode.com/svn/trunk/ sbt
 }}}
  # Edit `$SBT_HOME/project/build/src/CrossCompileProject.scala`:
-  # Change the 2.8 version string to identify the local Scala version (around line 17)
+  # Change the 2.8 version string to identify the local Scala version (around line 18)
 {{{
   private val version2_8_0 = "2.8.0-local"
 }}}
-  # To save time by building only 2.8 make these changes to lines 20 and 30:
+  # To save time by building only 2.8 make this change to line 31:
 {{{
-  private def developmentVersion = version2_8_0
   private val buildConfigurations = conf_2_8_0 :: Nil
 }}}
  # For the Scala build you want to use, put the [LocalScala#Project_Definition project definition below] in:
@@ -44,7 +43,7 @@ For a new compiler:
    > update
    > cross-publish-local
 }}}
- # Remove the `project/boot` directory from your project (`sbt` is not designed to update Scala jars after they have been copied to a project, so you have to manually delete them.  If this is popular, maybe this could change.)
+ # Remove the `project/boot` directory from your project (`sbt` is not designed to update Scala jars after they have been copied to a project, so you have to manually delete them.  If using a local Scala version is popular, maybe this could change.)
  # Then, run `sbt` on your project as normal.
 
 == Project Definition ==
