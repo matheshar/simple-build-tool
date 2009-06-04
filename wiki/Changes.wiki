@@ -5,6 +5,7 @@
  * Can now fork the compiler and runner and the runner can use a different working directory.
  * Maximum compiler errors shown is now configurable
  * Fixed rebuilding and republishing released versions of `sbt` against new Scala versions (attempt #2)
+ * Fixed snapshot reversion handling (Ivy needs changing pattern set on cache, apparently)
 
 === 0.4.5 to 0.4.6 ===
  * Publishing to ssh/sftp/filesystem repository supported
