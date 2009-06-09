@@ -14,9 +14,9 @@ The basic steps are:
 The easiest way to launch sbt is to create a one-line script.  Download [http://simple-build-tool.googlecode.com/files/sbt-launcher-0.4.6.jar sbt-launcher.jar] if you have not already.
 
 === Unix ===
-Put the line
+Put the jar in your `~/bin` directory, put the line
 {{{
-java -Xmx256M -jar sbt-launcher.jar "$@"
+java -Xmx256M -jar `dirname $0`/sbt-launcher.jar "$@"
 }}}
 in a file called `sbt` in your `~/bin` directory and do
 {{{
@@ -24,12 +24,15 @@ $ chmod u+x ~/bin/sbt
 }}}
 This allows you to launch sbt in any directory by typing `sbt` at the command prompt.
 
+`sbt` will pick up any HTTP proxy settings from the `http.proxy` environment variable.
+
 === Windows ===
 Create a batch file `sbt.bat`:
 {{{
-java -Xmx256M -jar sbt-launcher.jar %*
+set SCRIPT_DIR=%~dp0
+java -Xmx256M -jar "%SCRIPT_DIR%sbt-launcher.jar" %*
 }}}
-Put `sbt.bat` on your path so that you can launch sbt in any directory by typing `sbt` at the command prompt.
+and put the jar in the same directory as the batch file.  Put `sbt.bat` on your path so that you can launch sbt in any directory by typing `sbt` at the command prompt.
 
 = Create Project =
 
