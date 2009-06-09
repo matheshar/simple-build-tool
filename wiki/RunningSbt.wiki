@@ -86,13 +86,13 @@ See TriggeredExecution for details.
  * `exit` or `quit`
   End the current interactive session.
  * `reload`
-  Reloads the current interactive session.  The project definition is recompiled and reloaded.
+  Reloads the current interactive session.  The project definition is recompiled and reloaded.  Any change to the Scala or `sbt` version does not take effect (see `reboot`).
+ * `reboot`
+  Use this to reload the project after changing the version of Scala or `sbt` used for building the project.
  * `help`
   Displays a help message and lists these interactive actions and their descriptions.
  * `actions`
   List all available actions.
- * `methods`
-  List all available method actions (actions that accept parameters).
  * `cc`
   Monitors sources in Scala projects for changes and runs `test-compile` when changes are detected.  Equivalent to `~ test-compile`.
  * `current`
@@ -123,7 +123,5 @@ See TriggeredExecution for details.
   Displays a help message and lists these batch commands and their descriptions.
  * `actions`
   List all available actions.
- * `methods`
-  List all available method actions (actions that accept parameters).
  * `reboot`
   Use this to reload the project after changing the version of Scala or `sbt` used for building the project.  This could be used to build a project against several versions of Scala in one command, for example.
