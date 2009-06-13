@@ -6,6 +6,11 @@
  * Maximum compiler errors shown is now configurable
  * Fixed rebuilding and republishing released versions of `sbt` against new Scala versions (attempt #2)
  * Fixed snapshot reversion handling (Ivy needs changing pattern set on cache, apparently)
+ * Fixed handling of default configuration when `useMavenConfiguration` is `true`
+ * Cleanup on Environment, Analysis, Conditional, MapUtilities, and more...
+ * Tests for Environment, source dependencies, library dependency management, and more...
+ * Dependency management and multiple Scala versions
+ * Experimental plugin for producing project bootstrapper in a self-extracting jar
 
 === 0.4.5 to 0.4.6 ===
  * Publishing to ssh/sftp/filesystem repository supported
