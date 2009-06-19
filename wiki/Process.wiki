@@ -21,7 +21,13 @@ An implicit converts the `String` to `sbt.ProcessBuilder`, which defines the `!`
 "find project -name *.jar" ! log
 }}}
 
-Operators are defined to combine commands.  These operators start with `#` in order to keep the precendence the same and to separate them from the operators defined elsewhere in `sbt` for filters.  In the following operator definitions, `a` and `b` are subcommands.
+If you need to set the working directory or modify the environment, use a `java.lang.ProcessBuilder` instead of a `String`:
+
+{{{
+ ( (new java.lang.ProcessBuilder("ls", "-l")) directory new File(System.getProperty("user.home")) ) ! log
+}}}
+
+Operators are defined to combine commands.  These operators start with `#` in order to keep the precedence the same and to separate them from the operators defined elsewhere in `sbt` for filters.  In the following operator definitions, `a` and `b` are subcommands.
 
  * `a #&& b`   Execute `a`.  If the exit code is nonzero, return that exit code and do not execute `b`.  If the exit code is zero, execute `b` and return its exit code.
  * `a #|| b`   Execute `a`.  If the exit code is zero, return zero for the exit code and do not execute `b`.  If the exit code is nonzero, execute `b` and return its exit code.
