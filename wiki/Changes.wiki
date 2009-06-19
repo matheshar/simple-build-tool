@@ -11,6 +11,8 @@
  * Tests for Environment, source dependencies, library dependency management, and more...
  * Dependency management and multiple Scala versions
  * Experimental plugin for producing project bootstrapper in a self-extracting jar
+ * Added ability to directly specify `URL` to use for dependency with the `from(url: URL)` method defined on `ModuleID`
+ * Fixed issue #30
 
 === 0.4.5 to 0.4.6 ===
  * Publishing to ssh/sftp/filesystem repository supported
