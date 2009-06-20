@@ -14,6 +14,7 @@
  * Added ability to directly specify `URL` to use for dependency with the `from(url: URL)` method defined on `ModuleID`
  * Fixed issue #30
  * Support cross-building with `+` when running batch actions
+ * Additional flattening for project definitions: sources can go either in `project/build/src` (recursively) or `project/build` (flat)
 
 === 0.4.5 to 0.4.6 ===
  * Publishing to ssh/sftp/filesystem repository supported
