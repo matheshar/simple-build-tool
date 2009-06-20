@@ -59,7 +59,7 @@ For example:
 If your project requires a dependency that is not present in a Maven repository, a direct URL to its jar can be specified as follows:
 
 {{{
-  val slinky = "slinky" % "slinky" % "2.1" % from "http://slinky2.googlecode.com/svn/artifacts/2.1/slinky.jar"
+  val slinky = "slinky" % "slinky" % "2.1" from "http://slinky2.googlecode.com/svn/artifacts/2.1/slinky.jar"
 }}}
 
 Note that this feature requires `sbt` version 0.4.7-p10 or greater.
