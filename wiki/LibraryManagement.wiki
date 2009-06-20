@@ -4,7 +4,7 @@ There are two ways for you to manage libraries with `sbt`, manually or automatic
 
 <wiki:toc max_depth="3" />
 
-= Manual Dependency Management ==
+= Manual Dependency Management =
 
 Manually managing dependencies involves copying any jars that you want to use to the `lib` directory.  `sbt` will put these jars on the classpath during compilation, testing, running, and when using the interpreter.  You are responsible for adding, removing, updating, and otherwise managing the jars in this directory.  No modifications to your [BuildConfiguration project definition] are required to use this method unless you would like to change the location of the directory you store the jars in.
 
@@ -56,7 +56,21 @@ For example:
   val scalaToolsSnapshots = "Scala-Tools Maven2 Snapshots Repository" at "http://scala-tools.org/repo-snapshots"
 }}}
 
-`sbt` additionally support directly specifying the configurations or dependencies sections of an Ivy configuration file inline.  You can mix this with inline Scala dependency and repository declarations.
+If your project requires a dependency that is not present in a Maven repository, a direct URL to its jar can be specified as follows:
+
+{{{
+  val slinky = "slinky" % "slinky" % "2.1" % from "http://slinky2.googlecode.com/svn/artifacts/2.1/slinky.jar"
+}}}
+
+Note that this feature requires `sbt` version 0.4.7-p10 or greater.
+
+By default, these declarations fetch all project dependencies. In some instances, you may find that the dependencies listed for a project aren't necessary for it to build. Projects using the Felix OSGI framework, for instance, only explicitly require its main jar to compile and run. Avoid fetching artifact dependencies with either `intransitive()` or `notTransitive()`, as in this example:
+
+{{{
+  val felix = "org.apache.felix" % "org.apache.felix.framework" % "1.8.0" intransitive()
+}}}
+
+`sbt` additionally supports directly specifying the configurations or dependencies sections of an Ivy configuration file inline.  You can mix this with inline Scala dependency and repository declarations.
 
 For example:
 {{{
