@@ -1,6 +1,7 @@
-The following people have contributed ideas or code to `sbt`:
+The following people have contributed ideas, documentation, or code to `sbt`:
 
  * Steven Blundy
+ * Nolan Darilek
  * Nathan Hamblen
  * Mark Harrah
  * David R. !MacIver
