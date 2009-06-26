@@ -11,7 +11,7 @@ The basic steps are:
 
 = Launching Sbt =
 
-The easiest way to launch sbt is to create a one-line script.  Download [http://simple-build-tool.googlecode.com/files/sbt-launcher-0.4.6.jar sbt-launcher.jar] if you have not already.
+The easiest way to launch sbt is to create a one-line script.  Download [http://simple-build-tool.googlecode.com/files/sbt-launcher-0.5.jar sbt-launcher.jar] if you have not already.
 
 === Unix ===
 Put the jar in your `~/bin` directory, put the line
@@ -32,20 +32,38 @@ Create a batch file `sbt.bat`:
 set SCRIPT_DIR=%~dp0
 java -Xmx256M -jar "%SCRIPT_DIR%sbt-launcher.jar" %*
 }}}
-and put the jar in the same directory as the batch file.  Put `sbt.bat` on your path so that you can launch sbt in any directory by typing `sbt` at the command prompt.
+and put the jar in the same directory as the batch file.  Put `sbt.bat` on your path so that you can launch `sbt` in any directory by typing `sbt` at the command prompt.
 
 = Create Project =
 
-When you run sbt and it does not find a project in the current directory, it asks if you want to create a new project.  If you say yes, sbt will prompt for some basic information:
+== Full Setup ==
+
+When you run `sbt` and it does not find a project in the current directory, it asks if you want to create a new project.  If you say yes, `sbt` will prompt for some basic information:
  * Project name: This name will be used in scaladocs and as part of the default name for generated packages.
  * Project organization: This is used for dependency management and is optional.
  * Project version: This is used in scaladocs and as part of the default name for generated packages.
- * Scala version: This is version of scala to build the project with.  Current options are 2.7.2, 2.7.3, and 2.7.4.
- * Sbt version: This is the version of sbt to build the project with.  Current options are 0.4, 0.4.3, 0.4.5, and 0.4.6.
+ * Scala version: This is version of scala to build the project with.  Current options are 2.7.2, 2.7.3, 2.7.4, and 2.7.5.
+ * Sbt version: This is the version of sbt to build the project with.  Current options are 0.4, 0.4.3, 0.4.5, 0.4.6, and 0.5.
 
-See [Loader] for more information on setting the versions of Scala and `sbt` to use to build your project.  With the above information, sbt creates the project properties file and directory structure.  These are described in the following section.
+See [Loader] for more information on setting the versions of Scala and `sbt` to use to build your project.  With the above information, `sbt` creates the project properties file and directory structure.  These are described in the following section.
+
+== Quick Setup ==
+
+A new option in `sbt` 0.5 is to choose `s` (for `scratch`) when prompted to create a new project.  This can be used to quickly get `sbt` compiling and running code without needing to do a full project setup.  This option skips all of the prompts in a full setup and configures `sbt` to look in the current directory for sources and jars in addition to the usual places in a full project.  Using `sbt` for a hello world might look like:
+
+{{{
+  $ echo 'object Hi { def main(args: Array[String]) { println("Hi!") } }' > hw.scala
+  $ sbt
+  Project does not exist, create new project? (y/N/s) : s
+  ...
+  > run
+  ...
+  Hi!
+}}}
 
 = Directory Layout =
+
+== Sources ==
 
 Sbt uses the same directory structure as [http://maven.apache.org/ Maven] for source files by default (all paths are relative to the project directory):
 
@@ -56,20 +74,28 @@ Sbt uses the same directory structure as [http://maven.apache.org/ Maven] for so
          <files to include in main jar here>
       scala/
          <main Scala sources>
+      java/
+         <main Java sources>
     test/
       resources
          <files to include in test jar here>
       scala/
          <test Scala sources>
+      java/
+         <test Java sources>
 }}}
 
 Other directories in `src/` will be ignored.  Additionally, all hidden directories will be ignored.
+
+== Dependencies ==
 
 All dependencies (jars) go in the
 {{{
   lib/
 }}}
 directory or any subdirectory of `lib`.  Again, hidden directories will be ignored.  If you want to use [http://code.google.com/p/scalacheck/ ScalaCheck], [http://code.google.com/p/specs/ specs], or [http://www.artima.com/scalatest/ ScalaTest] for testing, those jars should go in here as well.  Alternatively, you can configure `sbt` to automatically manage your dependencies (see LibraryManagement).
+
+== Build Configuration ==
 
 Build configuration is done in the `project` directory:
 {{{
@@ -81,11 +107,29 @@ Build configuration is done in the `project` directory:
 
 The `build.properties` file contains the project name, version, and organization, the versions of Scala and `sbt` used to build the project, and any other user-defined properties (see [Properties]).  You can directly edit this file to change these properties or you can use the `set` command at the interactive prompt (see [RunningSbt Basic Usage]). The `build` directory is where further configuration is done and is described in BuildConfiguration.  The `boot` directory is where the versions of Scala and `sbt` used to build the project are downloaded to.
 
+== Products ==
+
 Generated files (classes, jars, analysis, and documentation) will be written to the
 {{{
   target/
 }}}
-directory.
+directory.  Automatically managed dependencies are downloaded to:
+{{{
+  lib_managed/
+}}}
+
+== Version Control ==
+
+`sbt` creates and uses several directories that you will normally want to exclude from version control:
+{{{
+  target/
+  lib_managed/
+  project/boot/
+  project/build/target/
+  project/plugins/target/
+  project/plugins/lib_managed/
+  project/plugins/src_managed/
+}}}
 
 = Next Step =
 

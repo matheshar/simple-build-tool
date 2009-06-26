@@ -1,8 +1,8 @@
 = Triggered Execution =
 
-You can make an action run when one or more source files changes by prefixing the action with `~`.
+You can make an action run when certain files change by prefixing the action with `~`.  The files that are monitored for changes are defined by the `watchPaths` method of the current project and the projects it depends on.  By default, a project watches resources and Scala and Java sources.
 
-Some examples are described below.  Triggered execution is currently limited to triggering on changes to main and test sources.
+Some example usages are described below.
 
 == Compile ==
 
@@ -52,4 +52,4 @@ If you use `jetty-run`, you can automatically build and reload your web applicat
 > jetty-run
 > ~ prepare-webapp
 }}}
-This will first start Jetty and then trigger execution of the action that builds the web application provided to Jetty.  The `jetty-run` action will pick up changes and redeploy.
+This will first start Jetty and then trigger execution of the action that builds the web application provided to Jetty.  The `jetty-run` action will pick up changes and redeploy.  See the [WebApplications] page for details on configuring `jetty-run`, including configuring redeployment.

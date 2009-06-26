@@ -112,4 +112,4 @@ The definition of `projectName` explictly specifies the format so that a project
 
 The project organization was introduced after a default behavior of using the name for the organization already existed.  Therefore, it is optional and the name is used by default.  The `true` argument specifies that the value in a parent environment should be used before the default.  This is so that the organization is inherited from a parent project before the project's name is used as the organization.  This means that the organization only needs to be specified on the root project.
 
-The `scalaVersion` and `sbtVersion` properties are used to determine which versions of Scala and `sbt` should be used to build the project.
+The `scalaVersion` and `sbtVersion` properties are used to determine which versions of Scala and `sbt` should be used to build the project.  Note that project definitions should use `ScalaVersion.current` or `ScalaVersion.currentString` instead of directly using `scalaVersion`.

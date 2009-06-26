@@ -1,0 +1,10 @@
+ = sbt Plugins =
+
+This page will describe creating `sbt` plugins.  For now, it includes a demo of a plugin that creates a self-extracting jar out of a project.
+
+ * Download the [http://simple-build-tool.googlecode.com/svn/artifacts/0.5/examples/hello-lift-1.0-setup.jar jar]
+ * Run `java -jar hello-lift-1.0-setup.jar` .  The Hello Lift project and an embedded `sbt` launcher will be extracted.  The project will be loaded and predefined actions run.  In this case, the project will be set up, dependencies will be downloaded, and the project will be compiled and packaged as a war.
+ * You then have a ready example Lift project.  For example, you can enter the extracted project directory and start sbt with `java -jar sbt-launcher-0.5.jar`.  Run `jetty-run` and browse to [http://localhost:8080].
+ * The project uses [http://github.com/harrah/browse/ Scala X-Ray] to generate browsable sources.  You can view these in the `project/target/classes.sxr` directory.
+ * You can run `installer` to regenerate the self-extracting jar from the project.  Note: there is currently the issue of including the sbt-launcher in the project zip, making the jar substantially larger than necessary.
+ * See the `project/plugins/Plugins.scala` directory for how the plugin is defined.

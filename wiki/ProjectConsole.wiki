@@ -29,6 +29,11 @@ Show additionally configured repositories:
 > repositories.foreach(println)
 }}}
 
+Show the test classpath:
+{{{
+> testClasspath.get.foreach(println)
+}}}
+
 Run the `console` task to drop to another interactive prompt with your project (not the build) on the classpath:
 {{{
 > console.run

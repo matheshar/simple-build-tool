@@ -13,7 +13,7 @@ Example:
   lazy val print = task { log.info("This is a test."); None }
 }}}
 
-The `val` is required so that `sbt` can discover the task using reflection and so that the task can used as a dependency of other tasks.  Using `lazy` avoids initialization issues.
+The `val` is required so that `sbt` can discover the task using reflection and so that the task can be used as a dependency of other tasks.  Using `lazy` avoids initialization issues.
 
 You specify the dependencies of a task with the `dependsOn` method.  You provide a description using the `describedAs` method.
 

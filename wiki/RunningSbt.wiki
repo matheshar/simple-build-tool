@@ -24,6 +24,8 @@ You can make an action run when one or more source files changes by prefixing th
 
 See TriggeredExecution for details.
 
+You can run an action for multiple versions of Scala by prefixing the action with `+`.  See [CrossBuild] for details.
+
 = Actions =
 
 == Build Actions ==

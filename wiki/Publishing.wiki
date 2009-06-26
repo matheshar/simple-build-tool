@@ -1,0 +1,31 @@
+= Publish =
+
+This page describes how to publish your project.  Publishing consists of uploading a descriptor, such as an Ivy file or Maven POM, and artifacts, such as a jar or war, to a repository so that other projects can specify your project as a dependency.
+
+The `publish-local`  action is used to publish your project to a local Ivy repository.  By default, this local repository is in `${user.home}/.ivy2/local`.  You can then use this project from other projects on the same machine.
+
+The `publish` action is used to publish your project to a remote repository.  To use publishing, you need to specify the repository to publish to and the credentials to use.  To specify the repository, assign a repository to `val publishTo` and define the publishing style.  For example,
+{{{
+  override def managedStyle = ManagedStyle.Maven
+  val publishTo = "Scala Tools Nexus" at "http://nexus.scala-tools.org/content/repositories/releases/"
+}}}
+Note that the `file` protocol is allowed in the URL here.
+
+There are two ways to specify credentials.  The first is to specify them inline:
+{{{
+  Credentials.add("Sonatype Nexus Repository Manager", "nexus.scala-tools.org", "admin", "admin123")
+}}}
+The second and better way is to load them from a file, for example:
+{{{
+  Credentials(Path.userHome / ".ivy2" / ".credentials", log)
+}}}
+The credentials file is a properties file with keys `realm`, `host`, `user`, and `password`.  For example:
+{{{
+realm=Sonatype Nexus Repository Manager
+host=nexus.scala-tools.org
+user=admin
+password=admin123
+}}}
+
+
+Once this is set up, you can run `publish`.  Even better, enable [CrossBuild cross-building] and do `+publish`.

@@ -24,7 +24,7 @@ Behind the scenes, `sbt` uses [http://ant.apache.org/ivy/ Apache Ivy] to impleme
  * Maven and Ivy configurations (`pom.xml` and `ivy.xml`) are ignored when inline dependency declarations are present.  Note that `ivysettings.xml` can be used with inline dependencies if no inline repositories are used.
  * A Maven configuration `pom.xml` is ignored when an Ivy `ivy.xml` configuration is present.  Note that `ivysettings.xml` can be used with a Maven `pom.xml`.
 
-The default repositories when `ivysettings.xml` is not present are the standard Maven2 repository and the Scala Tools Releases (http://scala-tools.org/repo-releases) repository.  There is no support for publishing to a repository yet.
+The default repositories when `ivysettings.xml` is not present are the standard Maven2 repository and the Scala Tools Releases (http://scala-tools.org/repo-releases) repository.
 
 The following sections describe how to use each method of automatic dependency management.
 
@@ -40,13 +40,17 @@ Inline declarations are a very basic way of specifying the dependencies to be au
  {{{
   val dep = groupID % artifactID % revision % configuration
  }}}
-
- The actual name for the `val` is currently unimportant.
+ The actual identifier for the `val` is currently unimportant.  See [Configurations] for details on configuration mappings.  If you are using a dependency that was built using `sbt`'s [CrossBuild cross-building], double the first `%` to be `%%`:
+ {{{
+  val dep = groupID %% artifactID % revision
+ }}}
+ This will download the right jar for the dependency built with the version of Scala that you are currently using.  See [CrossBuild cross-building] for details.
+ 
  * Declare additional repositories besides the default Maven2 and Scala Tools Releases repositories that you want to use with the form:
  {{{
   val rep = name at location
  }}}
- (The actual name for the `val` is currently unimportant.)
+ (The actual identifier for the `val` is unimportant except for publishing.)
 
 For example:
 {{{
@@ -62,8 +66,6 @@ If your project requires a dependency that is not present in a Maven repository,
   val slinky = "slinky" % "slinky" % "2.1" from "http://slinky2.googlecode.com/svn/artifacts/2.1/slinky.jar"
 }}}
 
-Note that this feature requires `sbt` version 0.4.7-p10 or greater.
-
 By default, these declarations fetch all project dependencies. In some instances, you may find that the dependencies listed for a project aren't necessary for it to build. Projects using the Felix OSGI framework, for instance, only explicitly require its main jar to compile and run. Avoid fetching artifact dependencies with either `intransitive()` or `notTransitive()`, as in this example:
 
 {{{
@@ -74,13 +76,15 @@ By default, these declarations fetch all project dependencies. In some instances
 
 For example:
 {{{
-    override def ivyXML =
-        <dependencies>
-            <dependency org="slinky" name="slinky" rev="2.1" conf="default">
-                <artifact name="slinky" url="http://slinky2.googlecode.com/svn/artifacts/2.1/slinky.jar" />
-            </dependency>
-        </dependencies>
+  override def ivyXML =
+    <dependencies>
+      <dependency org="javax.mail" name="mail" rev="1.4.2">
+        <exclude module="activation"/>
+      </dependency>
+    </dependencies>
 }}}
+
+See [Publishing] for how to publish your project.
 
 === Maven/Ivy ===
 

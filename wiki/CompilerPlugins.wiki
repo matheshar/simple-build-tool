@@ -4,29 +4,31 @@ As of `sbt` 0.4.5, there is special support for using compiler plugins.  You can
 
 To use a compiler plugin, you either put it in your unmanaged library directory (`lib`) or add it as managed dependency in the `plugin` configuration.
 
-`compilerPlugin` is a convenience method for specifying `plugin->default` as the configuration for a dependency:
+`compilerPlugin` is a convenience method for specifying `plugin->default(compile)` as the configuration for a dependency:
 {{{
-   val sxr = compilerPlugin("sxr" % "sxr" % "0.1")
+   val sxr = compilerPlugin("org.scala-tools.sxr" % "sxr" % "0.2")
 }}}
 
 Alternatively, you can use inline Ivy XML:
 {{{
    override def ivyXML =
       <dependencies>
-         <dependency org="sxr" name="sxr" rev="0.1" conf="plugin->default"/>
+         <dependency org="org.scala-tools.sxr" name="sxr" rev="0.2" conf="plugin->default(compile)"/>
       </dependencies>
 }}}
 
-A managed dependency has to be resolved and retrieved like usual by running `update`.
+A managed dependency is resolved and retrieved like usual by running `update`.
 
 The `compile` and `test-compile` actions will use any compiler plugins found in the `lib` directory or in the `plugin` configuration.  You are responsible for configuring the plugins as necessary.  For example:
 
 {{{
-  override def compileOptions = CompileOption("-Psxr:base-directory:...") :: super.compileOptions.toList
+  override def compileOptions =
+    CompileOption("-Psxr:base-directory:" + mainScalaSourcePath.absolutePath) ::
+    super.compileOptions.toList
 }}}
 
 You can still specify compiler plugins manually.  For example:
 
 {{{
-  override def compileOptions = CompileOption("-Xplugin:<path-to-sxr>/sxr-0.1.jar") :: super.compileOptions.toList
+  override def compileOptions = CompileOption("-Xplugin:<path-to-sxr>/sxr-0.2.jar") :: super.compileOptions.toList
 }}}

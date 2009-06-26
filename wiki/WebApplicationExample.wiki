@@ -27,8 +27,8 @@ Project does not exist, create new project? (y/N) : y
 Name: Hello Lift
 Organization [empty]: net.liftweb.hello
 Version [1.0]: 1.0
-Scala version [2.7.4]: 2.7.3
-sbt version [0.4.4]:
+Scala version [2.7.5]: 2.7.3
+sbt version [0.5]:
 ...
 [success] Successfully initialized directory structure.
 [info] Building project Hello Lift 1.0 using sbt.DefaultProject
@@ -38,7 +38,7 @@ sbt version [0.4.4]:
 
 == Create the custom project configuration ==
 
-Use the following project definition (put it in `project/build/src/HelloLiftProject.scala`) to enable the web application features and declare dependencies.  Afterwards, run `reload` so that `sbt` reloads the project definition.
+Use the following project definition (put it in `project/build/HelloLiftProject.scala`) to enable the web application features and declare dependencies.  Afterwards, run `reload` so that `sbt` reloads the project definition.
 
 {{{
 import sbt._

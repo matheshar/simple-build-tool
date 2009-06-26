@@ -4,21 +4,32 @@ This page describes some features of `sbt` that are useful for developing web ap
 
 Instead of extending `sbt.DefaultProject` in your project definition, extend `sbt.DefaultWebProject`.  This currently does two things.  First, the `package` action creates a war file instead of a jar file.  Second, if you add [http://jetty.mortbay.com/ Jetty] as a dependency (manually or automatically), you can use `jetty-run` to start your web application from `sbt`.  Use `jetty-stop` to stop it.
 
+`sbt` uses the directory structure of Maven by default, so your web application files should go in `src/main/webapp` by default.  You can override `webappPath` to change this.  If you need to include extra files in your web application, override `extraWebappFiles` with a `PathFinder` that selects the extra files that you want (see [Paths] for information on `PathFinder`).  To change the port Jetty starts up on, override `jettyPort`.
+
 You can also continuously recompile and reload the web application when using Jetty:
 {{{
 > jetty-run
 > ~ prepare-webapp
 }}}
-`jetty-run` starts Jetty and the `~ prepare-webapp` means to recompile and recreate the web application whenever sources files change.
+`jetty-run` starts Jetty and the `~ prepare-webapp` recompiles and recreates the web application whenever sources files change (see TriggeredExecution for details on `~`).  The `jetty-run` action monitors the directories given by `scanDirectories` and redeploys on changes.  By default, the entire temporary web application directory is monitored.  You might want to change `scanDirectories` in some cases.  For example, set `scanDirectories` to `Nil` if you do not want to redeploy on changes.  Or, set `scanDirectories` to only monitor the library and classes directories:
+{{{
+  override def scanDirectories = ( temporaryWarPath / "WEB-INF" / ("classes" | "lib") ).get.map(_.asFile).toSeq
+}}}
+You might do these if your web application picks up changes to resource files and therefore does not need to be redeployed.
 
-`sbt` uses the directory structure of Maven by default, so your web application files should go in `src/main/webapp` by default.  You can override `webappPath` to change this.  If you need to include extra files in your web application, override `extraWebappFiles` with a `PathFinder` that selects the extra files that you want (see [Paths] for information on `PathFinder`).  To change the port Jetty starts up on, override `jettyPort`.
+Another possibility is to directly run the web application out of the the source web application path:
+{{{
+  override def jettyWebappPath  = webappPath
+  override def scanDirectories = mainCompilePath :: testCompilePath :: Nil
+}}}
 
 A minimal project definition might be:
 
 {{{
 class WebappBuild(info: ProjectInfo) extends DefaultWebProject(info)
 {
-  val jetty = "org.mortbay.jetty" % "jetty" % "6.1.14"
+  override def useMavenConfigurations = true
+  val jetty = "org.mortbay.jetty" % "jetty" % "6.1.14" % "test->default"  // jetty is only need for testing
 }
 }}}
 

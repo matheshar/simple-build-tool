@@ -16,7 +16,7 @@ This page describes how to manage multiple projects within a project.  The first
 
 With subproject support in `sbt`, you can specify project-level dependencies and execute tasks across multiple projects.  For example, assume you have three projects A, B, and C and you specify that C depends on B and B depends on A. When you execute the `compile` action on project C, it will first execute `compile` on A, then B, and finally on C.
 
-Additionally, the classpath of a project's dependencies is available to that project.  So, in the situation above, the classpath of C includes the classpath of A and B.  This includes the compiled classes of A and B and all libraries of A and B in addition to those explicitly specified for C.
+Additionally, the classpath of a project's dependency is available to that project.  So, in the situation above, the classpath of C includes the A and B classpaths.  This includes the compiled classes of A and B and all libraries of A and B in addition to those explicitly specified for C.
 
 Source dependencies are tracked between projects, so that the right sources are recompiled when a dependency is updated.  For example, assume each project has two classes.  A has A1 and A2, B has B1 and B2, and C has C1 and C2.  Let C1 depend on B1 and B1 depend on A1.  Now, assume class A1 is modified.  Executing compile on project C will recompile class A1 in project A, then class B1 in project B, and finally, class C1 in project C.  A2 will only be recompiled if it depends on A1. B2 will only be recompiled if it depends on A1 or B1 (or A2 if A2 depends on A1).  C2 will only be recompiled if it depends on A1 or B1 or C1 (or A2 or B2 if they required recompilation).
 
@@ -24,7 +24,7 @@ Finally, when working in an interactive session, you can switch to a specific pr
 
 = Usage =
 
-To demonstrate subprojects, consider a project for a simulator (flight simulator, circuit simulator, ...).  It might have the backend as one project and the user interface as a separate project.  Then, there might be some examples demonstrating using the backend as a library or some examples showing how to use the user interface.  The following project definition (which goes in `project/build/src` as described in BuildConfiguration) would be one way of describing this project:
+To demonstrate subprojects, consider a project for a simulator (flight simulator, circuit simulator, ...).  It might have the backend as one project and the user interface as a separate project.  Then, there might be some examples demonstrating using the backend as a library or some examples showing how to use the user interface.  The following project definition (which goes in `project/build` as described in BuildConfiguration) would be one way of describing this project:
 
 {{{
 import sbt._

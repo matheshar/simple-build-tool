@@ -4,18 +4,23 @@
   * [RunningSbt Basic Usage] - Actions and Commands
  * Usage
   * [TriggeredExecution Triggered Actions]
+  * [CrossBuild Cross-building]
   * [Loader Scala and Sbt Versions]
   * [ProjectConsole Project Console]
  * Configuration
   * [BuildConfiguration Basic Configuration]
   * [ProjectDefinitionExamples Examples]
+  * [Forking]
   * [Properties]
   * [SubProjects Sub Projects]
   * [Paths]
-  * [LibraryManagement Library Management]
   * [CompilerPlugins Using Compiler Plugins]
   * [ScalaJars Scala Jars and Dependency Management]
   * [TestFrameworkExtensions Extending the Test Framework]
+  * Managed Dependencies
+   * [LibraryManagement Basics]
+   * [ManagedConfigurations Configurations]
+   * [Publishing]
  * Writing Actions
   * [CustomActions Creating/Modifying Actions]
   * [ActionContent Implementing Actions]

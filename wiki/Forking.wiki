@@ -1,0 +1,38 @@
+= Forking =
+
+== Introduction ==
+
+Version 0.5 of `sbt` adds the ability to fork the Scala compiler and runner.  Forking is required when you want to use a version of Scala that `sbt` does not support (such as Scala trunk).  When forking the compiler is enabled, not all `sbt` features are available.  In particular, partial recompilation, testing, and main class detection are not available.
+
+== Usage ==
+
+You can choose to enable forking the compiler, runner, or both.  You can change the Java and Scala locations used to build the project and the working directory for the runner.
+
+The method to override in your project definition is `fork`, which is of type `Option[ForkScala]`.  By default it is `None`, which indicates forking is disabled.  To enable forking, create a new `ForkScalaRun`, `ForkScalaCompile`, or `ForkScalaCompile with ForkScalaRun`.  For example, to override the working directory used when running, use:
+
+{{{
+  override def fork = Some(new ForkScalaRun { override def workingDirectory = Some(info.projectPath.asFile) } )
+}}}
+
+`ForkScalaRun` and `ForkScalaCompiler` inherit from `ForkScala`, which defines the following two methods:
+{{{
+    def javaHome: Option[File] = None
+    def scalaJars: Iterable[File] = None
+}}}
+
+By default, the forked process uses the same Java and Scala that `sbt` is using.  Override the above methods to use a different version.  `scalaJars` needs to include `scala-compiler.jar` and `scala-library.jar`.
+
+`ForkScalaRun` also defines these methods:
+{{{
+    def workingDirectory: Option[File] = None
+    def runJVMOptions: Seq[String] = Nil
+}}}
+
+These allow you to change the working directory when using the `run` action and to provide options to the forked Java Virtual Machine.
+
+`ForkScalaCompiler` defines:
+{{{
+    def compileJVMOptions: Seq[String] = Nil
+}}}
+
+for providing options to the forked Java process for the Scala compiler.

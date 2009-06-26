@@ -6,7 +6,7 @@ This page describes build configuration for when the default actions or paths ar
 
 = Example =
 
-As of `sbt` 0.4.5, if you only have one main class in your project, sbt will detect it automatically.  This class will be run when the `run` action is executed and will be the value of the `Main-Class` attribute for the `package` action.  If you have more than one main class, you need to specify the main class to use explicitly.  This example will show you how to do this.
+As of `sbt` 0.4.5, if you only have one main class in your project, `sbt` will detect it automatically.  This class will be run when the `run` action is executed and will be the value of the `Main-Class` attribute for the `package` action.  If you have more than one main class, you need to specify the main class to use explicitly.  This example will show you how to do this.
 
 First, create a new project:
 {{{
@@ -82,7 +82,7 @@ Enter number:
 
 Explicitly specify the main class by configuring your build.  Do this by creating a new file called
 {{{
-project/build/src/TestProject.scala
+project/build/TestProject.scala
 }}}
 
 with the following content:
@@ -106,7 +106,7 @@ Otherwise, start up sbt and execute `run`.  `sbt` will run the requested class w
 
 `sbt` only recompiles a project definition on startup or when invoking the interactive command `reload`.  Therefore, if you are running in interactive mode, invoke `reload` after making changes to your project definition for the changes to take effect.
 
-The `project/build` directory is a project itself.  Therefore, you can add jars to the `project/build/lib` directory to use from your project definition.  You can also have multiple sources for your project definition.  The only requirement is there must be exactly one public, concrete subclass of `Project` with a constructor that accepts a `ProjectInfo` instance.  `sbt` finds this subclass when it compiles the project definition, so the names of source files are not important.
+The `project/build` directory is a project itself.  Therefore, you can add jars to the `project/build/lib` directory to use from your project definition.  You can also have multiple sources for your project definition.  The only requirement is there must be exactly one public, concrete subclass of `Project` with a constructor that accepts a `ProjectInfo` instance.  `sbt` finds this subclass when it compiles the project definition, so the names of source files and classes are not important.
 
 = Specifying Options =
 
@@ -134,6 +134,7 @@ Method `compileOptions` specifies additional options for task `compile` to pass 
   * `Verbose`
   * `DisableWarnings`
   * `target(t: Target.Value)`   (accepts values of the `Target` enumeration: `Java1_5`, `Java1_4`, `Msil`)
+  * `MaxCompileErrors(max: Int)`   Specifies the maximum number of compiler errors to show.  The default value is 100.
   * `CompileOption(option: String)`   (for arbitrary options)
 
 Method `javaCompileOptions` specifies the options passed to the Java compiler by the `compile` task.  There is a similar method `testJavaCompileOptions` for `test-compile`.  Currently, all options are specified by:
@@ -188,7 +189,7 @@ Method `updateOptions` specifies the options for the dependency management task 
 
 The only paths in `sbt` that are completely fixed are the locations of the files in the `project` directory.  The other paths, such as the path to sources, jars, and outputs, are configurable.  Overriding the default paths is described in this section.  See [Paths] for details on constructing paths.
 
-Paths in `sbt` are incrementally built up out of path components so that you can easily rename any directory in the path or modify the path structure.
+Paths in `sbt` are incrementally built up out of path components so that you can easily rename any directory in the path or modify the path structure.  You should always refer to a path by its `sbt` method instead of constructing a `Path` literal.  For example, always refer to the output directory as `outputPath` instead of `path("target")` and refer to the directory that classes are compiled to as `mainCompilePath` instead of `"target" / "classes"`.
 
 The paths and the names used to construct them are defined in `BasicProjectPaths`, which is mixed into the default project definition, as members that you can override.  If you only want to rename a directory, override the member that specifies the name.  For example, to rename the output directory from `target` to `build`,
 
@@ -198,11 +199,10 @@ The paths and the names used to construct them are defined in `BasicProjectPaths
 
 The outputs for compilation and API documentation are defined as:
 {{{
-  def outputPath = path(outputDirectoryName)
+  def outputPath = crossPath(outputDirectoryName)
 
-  def compilePath = outputPath / compileDirectoryName
+  def mainCompilePath = outputPath / compileDirectoryName
   def docPath = outputPath / docDirectoryName
-  def graphPath = outputPath / graphDirectoryName
   def analysisPath = outputPath / analysisDirectoryName
 }}}
 
