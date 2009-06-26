@@ -1,0 +1,189 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head><title>class CompileConditional in sbt</title>
+        <meta http-equiv="content-type" content="text/html; charset=UTF8"></meta><meta content="scaladoc (version 2.7.2)" name="generator"></meta><link href="../style.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../script.js"></script>
+        </head>
+        <body onload="init()">
+        <table summary="" class="navigation">
+        <tr>
+          <td class="navigation-links" valign="top">
+            <!-- <table><tr></tr></table> -->
+          </td>
+          <td align="right" valign="top" style="white-space:nowrap;" rowspan="2">
+            <div class="doctitle-larger">Simple Build Tool 0.5 API</div>
+          </td>
+        </tr>
+        <tr><td></td></tr>
+      </table>
+        
+      <div class="entity">
+        <a href="../sbt$package.html" target="_self">sbt</a>
+        <br></br>
+        <span class="entity">class  CompileConditional</span>
+      </div><hr></hr>
+      <div class="source">
+        [source: <a href="" class="sbt/CompileConditional"><code>sbt/CompileConditional.scala</code></a>]
+      </div><hr></hr>
+      <a name="CompileConditional"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>class</code>
+        <em>CompileConditional</em>(<code>val override </code><em>config</em> : <a href="../sbt/CompileConfiguration.html" target="_self">CompileConfiguration</a>)
+      </dt>
+      <dd><code> extends </code><a href="../sbt/AbstractCompileConditional.html" target="_self">AbstractCompileConditional</a></dd>
+    </dl>
+      
+<table summary="" cellpadding="3" class="member">
+      <tr><td class="title" colspan="2">Type Summary</td></tr>
+      <tr>
+      <td class="modifiers" valign="top"> 
+        <code> type</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/CompileConditional.html#AnalysisType" target="_self">AnalysisType</a></em>
+        
+        
+        
+      </td>
+    </tr>
+      </table>
+<table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Values and Variables inherited from <a href="../sbt/Conditional.html" target="_self">Conditional</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="../sbt/Conditional.html#analysis" target="_self">analysis</a>
+        </td></tr>
+      </table>
+<table summary="" cellpadding="3" class="member">
+      <tr><td class="title" colspan="2">Method Summary</td></tr>
+      <tr>
+      <td class="modifiers" valign="top"> 
+        <code>protected def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/CompileConditional.html#analysisCallback" target="_self">analysisCallback</a></em>
+         : <a href="../sbt/CompileConditional.CompileAnalysisCallback.html" target="_self">CompileAnalysisCallback</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>protected def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/CompileConditional.html#constructAnalysis%28sbt.Path%2Csbt.Path%2Csbt.Logger%29" target="_self">constructAnalysis</a></em>
+        (<em>analysisPath</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>projectPath</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="../sbt/CompileAnalysis.html" target="_self">CompileAnalysis</a>
+        
+        
+      </td>
+    </tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="../sbt/AbstractCompileConditional.html" target="_self">AbstractCompileConditional</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="../sbt/AbstractCompileConditional.html#loadAnalysis" target="_self">loadAnalysis</a>, <a href="../sbt/AbstractCompileConditional.html#log" target="_self">log</a>, <a href="../sbt/AbstractCompileConditional.html#productType" target="_self">productType</a>, <a href="../sbt/AbstractCompileConditional.html#productTypePlural" target="_self">productTypePlural</a>, <a href="../sbt/AbstractCompileConditional.html#sourcesToProcess" target="_self">sourcesToProcess</a>, <a href="../sbt/AbstractCompileConditional.html#sourceExists%28sbt.Path%29" target="_self">sourceExists</a>, <a href="../sbt/AbstractCompileConditional.html#sourceLastModified%28sbt.Path%29" target="_self">sourceLastModified</a>, <a href="../sbt/AbstractCompileConditional.html#productExists%28sbt.Path%29" target="_self">productExists</a>, <a href="../sbt/AbstractCompileConditional.html#productLastModified%28sbt.Path%29" target="_self">productLastModified</a>, <a href="../sbt/AbstractCompileConditional.html#externalInfo%28Iterable%5Bjava.io.File%5D%29" target="_self">externalInfo</a>, <a href="../sbt/AbstractCompileConditional.html#changeDetectionMethod" target="_self">changeDetectionMethod</a>, <a href="../sbt/AbstractCompileConditional.html#checkLastModified" target="_self">checkLastModified</a>, <a href="../sbt/AbstractCompileConditional.html#noProductsImpliesModified" target="_self">noProductsImpliesModified</a>, <a href="../sbt/AbstractCompileConditional.html#isSourceModified%28sbt.Path%29" target="_self">isSourceModified</a>, <a href="../sbt/AbstractCompileConditional.html#hashModified%28sbt.Path%29" target="_self">hashModified</a>, <a href="../sbt/AbstractCompileConditional.html#execute%28AbstractCompileConditional.this.ConditionalAnalysis%29" target="_self">execute</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="../sbt/Conditional.html" target="_self">Conditional</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="../sbt/Conditional.html#run" target="_self">run</a>, <a href="../sbt/Conditional.html#processingComplete%28Boolean%29" target="_self">processingComplete</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#getClass%28%29" target="_self">getClass</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#hashCode%28%29" target="_self">hashCode</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#equals%28Any%29" target="_self">equals</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#clone%28%29" target="_self">clone</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#toString%28%29" target="_self">toString</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#notify%28%29" target="_self">notify</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#notifyAll%28%29" target="_self">notifyAll</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#wait%28Long%29" target="_self">wait</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#wait%28Long%2CInt%29" target="_self">wait</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#wait%28%29" target="_self">wait</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#finalize%28%29" target="_self">finalize</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#%3D%3D%28AnyRef%29" target="_self">==</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#%21%3D%28AnyRef%29" target="_self">!=</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#eq%28AnyRef%29" target="_self">eq</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#ne%28AnyRef%29" target="_self">ne</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#synchronized%28T0%29" target="_self">synchronized</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html" target="_self">Any</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html#%3D%3D%28Any%29" target="_self">==</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html#%21%3D%28Any%29" target="_self">!=</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html#isInstanceOf" target="_self">isInstanceOf</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html#asInstanceOf" target="_self">asInstanceOf</a>
+        </td></tr>
+      </table>
+<table summary="" cellpadding="3" class="member">
+      <tr><td class="title" colspan="2">Class Summary</td></tr>
+      <tr>
+      <td class="modifiers" valign="top"> 
+        <code>protected class</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/CompileConditional.CompileAnalysisCallback.html" target="_self">CompileAnalysisCallback</a></em>
+        <code> extends </code><a href="../sbt/BasicCompileAnalysisCallback.html" target="_self">BasicCompileAnalysisCallback</a>
+        
+        
+      </td>
+    </tr>
+      </table>
+
+      
+<table summary="" cellpadding="3" class="member-detail">
+          <tr><td class="title">Type Details</td></tr>
+        </table><div><a name="AnalysisType"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>type</code>
+        <em>AnalysisType</em>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr></div>
+
+<table summary="" cellpadding="3" class="member-detail">
+          <tr><td class="title">Method Details</td></tr>
+        </table><div><a name="constructAnalysis%28sbt.Path%2Csbt.Path%2Csbt.Logger%29"></a><dl>
+      <dt>
+        
+        <code>protected</code>
+        <code>def</code>
+        <em>constructAnalysis</em>(<em>analysisPath</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>projectPath</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="../sbt/CompileAnalysis.html" target="_self">CompileAnalysis</a>
+      </dt>
+      <dd></dd>
+    </dl><dl>
+        <dt style="margin:10px 0 0 20px;">
+          <b>Overrides</b>
+        </dt>
+        <dd>
+        <a href="../sbt/AbstractCompileConditional.html" target="_self">AbstractCompileConditional</a>.<a href="../sbt/AbstractCompileConditional.html#constructAnalysis%28sbt.Path%2Csbt.Path%2Csbt.Logger%29" target="_self">constructAnalysis</a>
+        </dd>
+      </dl><hr></hr>
+<a name="analysisCallback"></a><dl>
+      <dt>
+        
+        <code>protected</code>
+        <code>def</code>
+        <em>analysisCallback</em> : <a href="../sbt/CompileConditional.CompileAnalysisCallback.html" target="_self">CompileAnalysisCallback</a>
+      </dt>
+      <dd></dd>
+    </dl><dl>
+        <dt style="margin:10px 0 0 20px;">
+          <b>Overrides</b>
+        </dt>
+        <dd>
+        <a href="../sbt/AbstractCompileConditional.html" target="_self">AbstractCompileConditional</a>.<a href="../sbt/AbstractCompileConditional.html#analysisCallback" target="_self">analysisCallback</a>
+        </dd>
+      </dl><hr></hr></div>
+
+
+    <hr></hr>
+        <table summary="" class="navigation">
+        <tr>
+          <td class="navigation-links" valign="top">
+            <!-- <table><tr></tr></table> -->
+          </td>
+          <td align="right" valign="top" style="white-space:nowrap;" rowspan="2">
+            <div class="doctitle-larger">Simple Build Tool 0.5 API</div>
+          </td>
+        </tr>
+        <tr><td></td></tr>
+      </table>
+      </body>
+      </html>
