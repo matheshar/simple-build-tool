@@ -28,7 +28,7 @@
  > update
  > cross-publish-local
 }}}
- # Run `sbt` in your project directory.  You will be prompted for name, organization and version.  Enter `2.8.0-local` for Scala and `0.5.1-SNAPSHOT` for `sbt`.  You should be all set now.  When you want to update the compiler follow the steps in the next section.
+ # Run `sbt` in your project directory.  You will be prompted for name, organization and version.  Enter `2.8.0-local` for Scala and `0.5.2-SNAPSHOT` for `sbt`.  You should be all set now.  When you want to update the compiler follow the steps in the next section.
 
 == New compiler ==
 For a new compiler:

@@ -48,7 +48,9 @@ You can run an action for multiple versions of Scala by prefixing the action wit
  * console-quick
   Starts the Scala interpreter with the project classes on the classpath without running any other action first.
  * `jetty-run` (Web Projects only)
-  Starts the Jetty server and serves this project as a web application on `http://localhost:8080`.
+  Starts the Jetty server and serves this project as a web application on `http://localhost:8080` by default.  This variant of starting Jetty is intended to be run from the interactive prompt.
+ * `jetty` (Web Projects only)
+  Starts the Jetty server and serves this project as a web application on `http://localhost:8080` by default.  This variant of `jetty-run` is intended to be run batch-style (such as `sbt jetty`), so it waits for a keypress before completing.
  * `jetty-stop` (Web Projects only)
   Stops the Jetty server that was started with the `jetty-run` action.
  * `package`
