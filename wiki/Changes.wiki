@@ -17,6 +17,7 @@
  * Additional flattening for project definitions: sources can go either in `project/build/src` (recursively) or `project/build` (flat)
  * Fixed manual `reboot` not changing the version of Scala when it is manually `set`
  * Fixed tab completion for cross-building
+ * Fixed a class loading issue with web applications
 
 === 0.4.5 to 0.4.6 ===
  * Publishing to ssh/sftp/filesystem repository supported
