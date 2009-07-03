@@ -8,7 +8,7 @@ Version 0.5 of `sbt` adds the ability to fork the Scala compiler and runner.  Fo
 
 You can choose to enable forking the compiler, runner, or both.  You can change the Java and Scala locations used to build the project and the working directory for the runner.
 
-The method to override in your project definition is `fork`, which is of type `Option[ForkScala]`.  By default it is `None`, which indicates forking is disabled.  To enable forking, create a new `ForkScalaRun`, `ForkScalaCompile`, or `ForkScalaCompile with ForkScalaRun`.  For example, to override the working directory used when running, use:
+The method to override in your project definition is `fork`, which is of type `Option[ForkScala]`.  By default it is `None`, which indicates forking is disabled.  To enable forking, create a new `ForkScalaRun`, `ForkScalaCompiler`, or `ForkScalaCompiler with ForkScalaRun`.  For example, to override the working directory used when running, use:
 
 {{{
   override def fork = Some(new ForkScalaRun { override def workingDirectory = Some(info.projectPath.asFile) } )
