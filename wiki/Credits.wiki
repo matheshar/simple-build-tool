@@ -7,3 +7,4 @@ The following people have contributed ideas, documentation, or code to `sbt`:
  * David R. !MacIver
  * Mikko Peltonen
  * Harshad RJ
+ * Francisco Treacy
