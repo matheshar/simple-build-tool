@@ -1,0 +1,20 @@
+= Introduction =
+
+This page describes approaches to using `sbt` with an IDE.  It is a work in progress.
+
+= Eclipse =
+
+=== Initial Setup ===
+
+ # Install [http://ant.apache.org/ivy/ivyde/ IvyDE]
+ # Set up your `sbt` project (dependencies, repos, settings, ...)
+ # Issue `reload` and `deliver-local` at the `sbt` prompt.
+ # Set up the Eclipse classpath container using IvyDE as follows:
+  # Go to `project properties -> Java Build Path`. Make sure you use the same version of Scala in both Eclipse and `sbt`.
+  # Then, `Add Library... -> IvyDE managed dependencies -> Ivy file: target/ivy-1.0.xml`.  Select appropriate configurations.
+ 
+=== Updating ===
+
+ # Add/remove dependencies in your project definition.
+ # Issue `reload` and `deliver-local` in the `sbt` console
+ # Update Eclipse classpath container as follows: right-click on the Ivy container in your project (should look like: `target/ivy-1.0.xml [compile]`) and click on the bottommost `Refresh` (not the one with `F5`, but just below `Resolve`)
