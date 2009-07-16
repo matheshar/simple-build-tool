@@ -4,6 +4,8 @@
  * Added implicit conversion from `scala.xml.Elem` to `sbt.ProcessBuilder` that takes the element's text content, trims it, and splits it around whitespace to obtain the command.
  * Processes can now redirect standard input (see run with Boolean argument or !< operator on `ProcessBuilder`), off by default
  * Made scripted framework a plugin and scripted tests now go in `src/sbt-test` by default
+ * Can define and use an sbt test framework extension in a project
+ * Fixed `run` action swallowing exceptions
 
 === 0.4.6 to 0.5/0.5.1 ===
  * Fixed `ScalaTest` framework dropping stack traces
