@@ -4,7 +4,7 @@ This page describes approaches to using `sbt` with an IDE.  It is a work in prog
 
 = Eclipse =
 
-There are currently two options for Eclipse integration.  There is an [http://github.com/frank06/sbt-eclipse-plugin/ Eclipse plugin] to use dependencies from your `lib_managed` directory.  An alternative approach using IvyDE is described below.
+There are currently two options for Eclipse integration.  There is an [http://github.com/frank06/sbt-eclipse-plugin/ Eclipse plugin] to pick up dependencies from your `lib_managed` directory.  Another approach using IvyDE is described below.
 
 === Initial Setup ===
 
