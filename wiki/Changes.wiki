@@ -6,7 +6,20 @@
  * Made scripted framework a plugin and scripted tests now go in `src/sbt-test` by default
  * Can define and use an sbt test framework extension in a project
  * Fixed `run` action swallowing exceptions
-
+ * Fixed tab completion for method tasks for multi-project builds
+ * Check that tasks in `compoundTask` do not reference static tasks
+ * Make `toString` of `Path`s in subprojects relative to root project directory
+ * `crossScalaVersions` is now inherited from parent if not specified
+ * Added `scala-library.jar` to the `javac` classpath
+ * Added `Process.cat` that will send contents of `URL`s and `File`s to standard output. Alternatively, `cat` can be used on a single `URL` or `File`.  Example:
+{{{
+    import java.net.URL
+    import java.io.File
+    val spde = new URL("http://technically.us/spde/About")
+    val dispatch = new URL("http://databinder.net/dispatch/About")
+    val build = new File("project/build.properties")
+    cat(spde, dispatch, build) #| "grep -i scala" !
+}}}
 === 0.4.6 to 0.5/0.5.1 ===
  * Fixed `ScalaTest` framework dropping stack traces
  * Publish only public configurations by default
