@@ -1,6 +1,10 @@
 = Introduction =
 
-This page describes approaches to using `sbt` with an IDE.  It is a work in progress.
+This page describes approaches to using `sbt` with third-party tools.  It is a work in progress.
+
+= Emacs =
+
+There is a [http://github.com/RayRacine/scallap/tree/master/tools/emacs script] to run `sbt` as an inferior-mode process from within emacs.  It uses `compile.el` well, allowing one to migrate through the compiler errors.
 
 = Eclipse =
 
