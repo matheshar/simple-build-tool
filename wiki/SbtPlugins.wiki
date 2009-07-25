@@ -1,6 +1,26 @@
  = sbt Plugins =
 
-This page describe `sbt` plugins.  The first part shows the results of a plugin that creates a self-extracting jar out of a project.   The second part shows how to create a simple plugin that provides a new action to a project.
+== Basics ==
+
+Plugins are libraries for your project definition.  Declare them like dependencies for your project, except in a plugin definition in the `project/plugins/` directory.  For example, to use [http://code.google.com/p/markdownj/ MarkdownJ] in your project definition, create:
+
+`project/plugins/Plugins.scala`
+{{{
+import sbt._
+class Plugins(info: ProjectInfo) extends PluginDefinition(info)
+{
+  val a = "org.markdownj" % "markdownj" % "0.3.0-1.0.2b4"
+}
+}}}
+
+Verify it is correct by doing `reload` and then [ProjectConsole console-project].  Call some MarkdownJ code:
+
+{{{
+scala> new com.petebevin.markdown.MarkdownProcessor
+res1: com.petebevin.markdown.MarkdownProcessor = Markdown Processor for Java 0.3.0 (compatible with Markdown 1.0.2b2)
+}}}
+
+This dependency was independent of `sbt`.  You can also create and use plugins that extend or use `sbt`.  The rest of this page describes `sbt` plugins.  The first part shows the results of a plugin that creates a self-extracting jar out of a project.   The second part shows how to create a simple plugin that provides a new action to a project.
 
 == Installer Example ==
 
