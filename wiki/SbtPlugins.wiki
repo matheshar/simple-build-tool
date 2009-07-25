@@ -41,6 +41,7 @@ Publish it by running the `publish-local` action.
 To use the plugin, create a new project.  Declare plugins by putting a plugin definition (basically a project definition that extends `PluginDefinition`) in `project/plugins/`.  The following example assumes that the plugin above had was setup with the name "test" and with version "1.0".
 
 {{{
+import sbt._
 class Plugins(info: ProjectInfo) extends PluginDefinition(info) {
   val a = "test" % "test" % "1.0"
 }
@@ -49,6 +50,7 @@ class Plugins(info: ProjectInfo) extends PluginDefinition(info) {
 Define the project definition in `project/build/` to use the `HelloWorldPlugin` :
 
 {{{
+import sbt._
 class TestProject(info: ProjectInfo) extends DefaultProject(info) with hw.HelloWorldPlugin
 }}}
 
