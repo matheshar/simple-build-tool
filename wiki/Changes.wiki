@@ -11,6 +11,8 @@
  * Make `toString` of `Path`s in subprojects relative to root project directory
  * `crossScalaVersions` is now inherited from parent if not specified
  * Added `scala-library.jar` to the `javac` classpath
+ * Project dependencies are added to published `ivy.xml`
+ * Added dependency tracking for Java sources using classfile parsing (with the usual limitations)
  * Added `Process.cat` that will send contents of `URL`s and `File`s to standard output. Alternatively, `cat` can be used on a single `URL` or `File`.  Example:
 {{{
     import java.net.URL
