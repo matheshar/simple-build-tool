@@ -12,9 +12,8 @@ class WebstartTest(info: ProjectInfo) extends ParentProject(info)
   // webstart application from http://localhost:8080 using jetty.
   class ServerProject(info: ProjectInfo) extends DefaultWebProject(info)
   {
-    override def useMavenConfigurations = true
     // Jetty is only need for the 'test' classpath
-    val jetty = "org.mortbay.jetty" % "jetty" % "6.1.14" % "test->default"
+    val jetty6 = "org.mortbay.jetty" % "jetty" % "6.1.14" % "test->default"
     // We need the packaged jar from the application project
     override def prepareWebappAction = super.prepareWebappAction dependsOn app.`package`
     // Include the webstart files directly in the web app root directory.

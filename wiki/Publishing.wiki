@@ -29,3 +29,10 @@ password=admin123
 
 
 Once this is set up, you can run `publish`.  Even better, enable [CrossBuild cross-building] and do `+publish`.
+
+To publish sources and javadocs, add artifact declarations and make the `publish-local` and `publish` actions depend on `package-src` and `package-docs`:
+{{{
+  val sourceArtifact = Artifact("test", "src")
+  val docArtifact = Artifact("test", "docs")
+  override def packageToPublishActions = `packageDocs` :: `packageSrc` :: super.packageToPublishActions
+}}}

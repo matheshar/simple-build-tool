@@ -90,7 +90,10 @@ where:
  * `products` is of type `Path` or `Iterable[Path]`
  * `sources` is of type `Iterable[Path]` or `PathFinder` (note that `Path` is a subtype of `PathFinder`)
  * `doWork` has type `Option[String]`
- 
-== Tasks with Parameters ==
 
-You can use [MethodTasks Method Tasks] to create the task to be run from arguments given by the user.
+== Special Tasks ==
+
+There are some methods for constructing certain types of tasks:
+  * You can use [MethodTasks Method Tasks] to create the task to be run from arguments given by the user.
+ * `execTask(ProcessBuilder)`  Creates a task that, when invoked, runs the provided process and checks its exit value.
+ * `dynamic(=> Task)`  This creates a special task that, when invoked, evaluates its argument (which is call-by-name) and returns it as the root of a new subgraph of tasks to run.  The subgraph must be entirely self-contained.  That is, nodes in the subgraph cannot depend on statically defined tasks.

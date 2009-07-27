@@ -2,18 +2,15 @@
 
 == Description ==
 
-There is very rudimentary support for compiling Java sources in `sbt`.  It comes with almost none of the usual `sbt` features for Scala sources and is not very flexible yet.  In particular,
+`sbt` has support for compiling Java sources in `sbt` with the following limitations:
  * The compiler used is the `javac` on your path.
- * There is no interdependency tracking between Java sources
- * There is no tracking between Java sources and their generated class files.
  * There is no support for running tests written in Java
-
-A scala file depending on a changed java file *will* get recompiled properly.  Nevertheless, you might want to run 'clean' before 'compile' if you change your java sources and want to be sure of correct recompilation.
+ * Dependency tracking is limited to the dependencies present in compiled class files.
 
 == Usage ==
 
  * `compile` will compile the sources under `src/main/java`
- * `test-compile` will compile the sources under `src/main/java`.
+ * `test-compile` will compile the sources under `src/test/java`.
  
 Pass options to the Java compiler by adding instances of `JavaCompileOption` to your `compileOptions`.  For example:
 {{{

@@ -21,6 +21,12 @@ An implicit converts the `String` to `sbt.ProcessBuilder`, which defines the `!`
 "find project -name *.jar" ! log
 }}}
 
+Two alternative implicit conversions are from `scala.xml.Elem` or `List[String]` to `sbt.ProcessBuilder`.  These are useful for constructing commands.  An example of the first variant from the android plugin:
+
+{{{
+  <x> {dxPath.absolutePath} --dex --output={classesDexPath.absolutePath} {classesMinJarPath.absolutePath}</x> !
+}}}
+
 If you need to set the working directory or modify the environment, use a `java.lang.ProcessBuilder` instead of a `String`:
 
 {{{
@@ -39,6 +45,8 @@ There are also operators defined for redirecting output to `File`s and input fro
  * `a #< file` or `file #> a`   Use `file` as the input to `a`.  `a` may be a `File` or a command.
  * `a #> file` or `file #< a`   Write the output of `a` to `file`.  `a` may be a `File`, `URL`, or a command.
  * `a #>> file` or `file #<< a`   Append the output of `a` to `file`.  `a` may be a `File`, `URL`, or a command.
+
+Finally, there is a `cat` method to send the contents of `File`s and `URL`s to standard output.
 
 == Examples ==
 
@@ -74,4 +82,12 @@ new File("About_JSON") #<< ( "grep JSON" #< new URL("http://databinder.net/dispa
 Search for uses of `null` in the source directory:
 {{{
 "find src -name *.scala -exec grep null {} ;"  #|  "xargs test -z"  #&&  "echo null-free"  #||  "echo null detected"  !
+}}}
+
+Use `cat`:
+ {{{
+    val spde = new URL("http://technically.us/spde/About")
+    val dispatch = new URL("http://databinder.net/dispatch/About")
+    val build = new File("project/build.properties")
+    cat(spde, dispatch, build) #| "grep -i scala" !
 }}}

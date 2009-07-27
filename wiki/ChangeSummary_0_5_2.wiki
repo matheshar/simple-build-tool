@@ -1,0 +1,32 @@
+= Changes from 0.5.1 to 0.5.2 =
+
+== New Feature ==
+ * Better support for Java sources.  Dependency tracking of Java sources is implemented by class file parsing, with the usual limitations of this approach.
+
+== Improvements ==
+ * Added 'classifier' method for inline dependency declarations.  This provides support for publishing artifacts with classifiers and retrieving dependencies with classifiers.  One limitation is that in your project's published pom, the classifier for dependencies is not listed.
+ * Project dependencies are now added to published Ivy files (were already added for POMs)
+ * `crossScalaVersions` is now inherited from parent
+ * Added `execTask` that accepts an `sbt.ProcessBuilder` to run when invoked
+ * Added implicit conversion in `sbt.Process` that takes `scala.xml.Elem` to `sbt.ProcessBuilder`.  This conversion takes the element's text content, trims it, and splits it around whitespace to obtain the command.
+ * Check that dynamic tasks in do not reference static tasks
+ * `managedStyle` in a sub project inherits its value from parent project if unspecified
+ * Added `Process.cat` that will send contents of `URL`s and `File`s to standard output.  Example:
+{{{
+    import java.net.URL
+    import java.io.File
+    val spde = new URL("http://technically.us/spde/About")
+    val dispatch = new URL("http://databinder.net/dispatch/About")
+    val build = new File("project/build.properties")
+    cat(spde, dispatch, build) #| "grep -i scala" !
+}}}
+
+== Fixes ==
+ * Issue #29 (Java sources always recompiled)
+ * Fix issue where no tests were run when no arguments were provided to `test-failed` or `test-quick`
+ * Fixed tab completion for method tasks for multi-project builds
+ * Make `Path`s in subprojects print relative to root project directory
+ * Properly track dependencies on sources not included in recompilation
+ * Added `scala-library.jar` to the `javac` classpath
+ * Fixed `run` action swallowing exceptions
+ * Fixed problem where dependencies of `sbt` plugins were not on the compile classpath

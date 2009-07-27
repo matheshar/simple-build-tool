@@ -17,7 +17,7 @@ Implementation details: `sbt` still has to be compiled with the version of Scala
 When a new version of `sbt` is released, you only have to do:
 
 {{{
-> set sbt.version 0.5.2
+> set sbt.version 0.5.3
 > reboot
 }}}
 
@@ -58,7 +58,7 @@ If you use custom output directories or you redefine paths, you will want to wra
   java -Xmx256M -jar sbt-launcher.jar "$@"
 }}}
  This means Scala doesn't have to be installed already.
- # Run `sbt` in an existing project and you will be prompted for the versions of Scala and `sbt` to use.  Currently, Scala 2.7.2, 2.7.3, 2.7.4, and 2.7.5 and sbt 0.4, 0.4.3, 0.4.5, 0.4.6, 0.5, and 0.5.1 are available options.  The `sbt` launcher will download the proper version of Scala and the right version of the `sbt` builder compiled with that version of Scala and put them in project/boot.
+ # Run `sbt` in an existing project and you will be prompted for the versions of Scala and `sbt` to use.  Currently, Scala 2.7.2, 2.7.3, 2.7.4, and 2.7.5 and sbt 0.4, 0.4.3, 0.4.5, 0.4.6, 0.5, 0.5.1, 0.5.2 are available options.  The `sbt` launcher will download the proper version of Scala and the right version of the `sbt` builder compiled with that version of Scala and put them in project/boot.
  # The launcher will use these downloaded jars to build your project.
  # Proceed using `sbt` as usual.
 

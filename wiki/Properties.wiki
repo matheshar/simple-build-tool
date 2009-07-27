@@ -60,7 +60,7 @@ There are three methods for reading a property's value that differ by how they h
 
 A property's value may be explicitly set using the `update` method.
 
-Behind the scenes, a property's value is converted to and from a `String` representation as needed according to the `sbt.Format` instance provided when defining the property (described later).  For a system property, every read and write converts to or from the `String` representation for `getProperty/setProperty` in `java.lang.System`.  User-defined properties are read from a standard `java.util.Properties`-formatted file (`project/build.properties`) at startup and are synchronized to that properties file after each explicitly invoked action executes.
+A property's value is converted to and from a `String` representation as needed according to the `sbt.Format` instance provided when defining the property (described later).  For a system property, every read and write converts to or from the `String` representation for `getProperty/setProperty` in `java.lang.System`.  User-defined properties are read from a standard `java.util.Properties`-formatted file (`project/build.properties`) at startup and are synchronized to that properties file after each explicitly invoked action executes.
 
 == User-Defined Property Definition ==
 

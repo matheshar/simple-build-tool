@@ -96,7 +96,7 @@ import sbt._
 
 class SampleProject(info: ProjectInfo) extends DefaultProject(info)
 {
-    val jetty = "org.mortbay.jetty" % "jetty-ajp" % "6.1.14"
+    val jetty6 = "org.mortbay.jetty" % "jetty-ajp" % "6.1.14"
 }
 }}}
 

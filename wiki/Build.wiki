@@ -14,12 +14,12 @@ $ sbt
 ...
 }}}
 
-This will build `sbt` against all versions of Scala that `sbt` supports.  These `sbt` variants are installed to your local Ivy repository.  The packaged loader jar is created at `target/sbt-launcher-0.5.2-SNAPSHOT.jar`.  Specify `sbt.version` as `0.5.2-SNAPSHOT` in your projects to use the trunk version of `sbt` to build them.  If you update trunk, build, and publish to local again, the loader will update the version of sbt used in your projects.  Note that this behavior of updating an existing version of `sbt` in a project only happens for locally built and published `*-SNAPSHOT` versions of `sbt`.
+This will build `sbt` against all versions of Scala that `sbt` supports.  These `sbt` variants are installed to your local Ivy repository.  The packaged loader jar is created at `target/sbt-launcher-0.5.3-SNAPSHOT.jar`.  Specify `sbt.version` as `0.5.3-SNAPSHOT` in your projects to use the trunk version of `sbt` to build them.  If you update trunk, build, and publish to local again, the loader will update the version of sbt used in your projects.  Note that this behavior of updating an existing version of `sbt` in a project only happens for locally built and published `*-SNAPSHOT` versions of `sbt`.
 
 == Basic Details ==
 
-`full-build` consists of two main tasks.  The first is `proguard`, which compiles, packages, and minifies the loader.  The other is `cross-publish-local`, which builds the main `sbt` project against all supported versions of Scala (in parallel if you have multiple cores/processors) and publishes to the local repository.
+`full-build` consists of two main tasks.  The first is `proguard`, which compiles, packages, and minifies the loader.  The other is `cross-publish-local`, which builds the main `sbt` project against all supported versions of Scala and publishes to the local repository.
 
 == Development ==
 
-If you want to run tests, debug, or otherwise develop on `sbt`, you will want to use the usual actions like `compile` and `package`.  In addition to the usual actions, the `proguard` action builds the final loader jar to `target/sbt-launcher-0.5.2-SNAPSHOT.jar` as mentioned above.
+If you want to run tests, debug, or otherwise develop on `sbt`, you will want to use the usual actions like `compile` and `package`.  In addition to the usual actions, the `proguard` action builds the final loader jar to `target/sbt-launcher-0.5.3-SNAPSHOT.jar` as mentioned above.
