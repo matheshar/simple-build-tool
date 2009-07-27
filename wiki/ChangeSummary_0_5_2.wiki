@@ -1,9 +1,7 @@
 = Changes from 0.5.1 to 0.5.2 =
 
-== New Feature ==
- * Better support for Java sources.  Dependency tracking of Java sources is implemented by class file parsing, with the usual limitations of this approach.
-
 == Improvements ==
+ * Better support for Java sources.  Dependency tracking of Java sources is implemented by class file parsing.
  * Added 'classifier' method for inline dependency declarations.  This provides support for publishing artifacts with classifiers and retrieving dependencies with classifiers.  One limitation is that in your project's published pom, the classifier for dependencies is not listed.
  * Project dependencies are now added to published Ivy files (were already added for POMs)
  * `crossScalaVersions` is now inherited from parent
