@@ -46,10 +46,12 @@
         <code> def</code>
       </td>
       <td class="signature">
-        <em><a href="../sbt/SourcePartialBuilder.html#%23%3E%28java.io.File%29" target="_self">#&gt;</a></em>
-        (<em>f</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>) : <a href="../sbt/ProcessBuilder.html" target="_self">ProcessBuilder</a>
+        <em><a href="../sbt/SourcePartialBuilder.html#%23%3E%28%3D%3Ejava.io.OutputStream%29" target="_self">#&gt;</a></em>
+        (<em>out</em> : =&gt; <a href="" target="contentFrame" class="java/io/OutputStream">java.io.OutputStream</a>) : <a href="../sbt/ProcessBuilder.html" target="_self">ProcessBuilder</a>
         
-        <div>Writes the output stream of this process to the given file.</div>
+        <div>Writes the output stream of this process to the given OutputStream. The
+ argument is call-by-name, so the stream is recreated, written, and closed each
+ time this process is executed.</div>
       </td>
     </tr>
 <tr>
@@ -57,12 +59,10 @@
         <code> def</code>
       </td>
       <td class="signature">
-        <em><a href="../sbt/SourcePartialBuilder.html#%23%3E%28%3D%3Ejava.io.OutputStream%29" target="_self">#&gt;</a></em>
-        (<em>out</em> : =&gt; <a href="" target="contentFrame" class="java/io/OutputStream">java.io.OutputStream</a>) : <a href="../sbt/ProcessBuilder.html" target="_self">ProcessBuilder</a>
+        <em><a href="../sbt/SourcePartialBuilder.html#%23%3E%28java.io.File%29" target="_self">#&gt;</a></em>
+        (<em>f</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>) : <a href="../sbt/ProcessBuilder.html" target="_self">ProcessBuilder</a>
         
-        <div>Writes the output stream of this process to the given OutputStream. The
- argument is call-by-name, so the stream is recreated, written, and closed each
- time this process is executed.</div>
+        <div>Writes the output stream of this process to the given file.</div>
       </td>
     </tr>
 <tr>

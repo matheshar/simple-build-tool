@@ -112,8 +112,8 @@
         <code> def</code>
       </td>
       <td class="signature">
-        <em><a href="../sbt/Path$object.html#fromFile%28String%29" target="_self">fromFile</a></em>
-        (<em>file</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>) : <a href="../sbt/Path.html" target="_self">Path</a>
+        <em><a href="../sbt/Path$object.html#fromFile%28java.io.File%29" target="_self">fromFile</a></em>
+        (<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>) : <a href="../sbt/Path.html" target="_self">Path</a>
         
         
       </td>
@@ -123,8 +123,8 @@
         <code> def</code>
       </td>
       <td class="signature">
-        <em><a href="../sbt/Path$object.html#fromFile%28java.io.File%29" target="_self">fromFile</a></em>
-        (<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>) : <a href="../sbt/Path.html" target="_self">Path</a>
+        <em><a href="../sbt/Path$object.html#fromFile%28String%29" target="_self">fromFile</a></em>
+        (<em>file</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>) : <a href="../sbt/Path.html" target="_self">Path</a>
         
         
       </td>
@@ -157,11 +157,10 @@
         <code> def</code>
       </td>
       <td class="signature">
-        <em><a href="../sbt/Path$object.html#makeRelativeString%28Iterable%5Bsbt.Path%5D%29" target="_self">makeRelativeString</a></em>
-        (<em>paths</em> : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="../sbt/Path.html" target="_self">Path</a>]) : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+        <em><a href="../sbt/Path$object.html#makeRelativeString%28Iterable%5Bsbt.Path%5D%2CString%29" target="_self">makeRelativeString</a></em>
+        (<em>paths</em> : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="../sbt/Path.html" target="_self">Path</a>], <em>separator</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>) : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
         
-        <div>Constructs a String representation of <code>Path</code>s.  The relative path String of each <code>Path</code> is
- separated by the platform's path separator.</div>
+        
       </td>
     </tr>
 <tr>
@@ -169,10 +168,11 @@
         <code> def</code>
       </td>
       <td class="signature">
-        <em><a href="../sbt/Path$object.html#makeRelativeString%28Iterable%5Bsbt.Path%5D%2CString%29" target="_self">makeRelativeString</a></em>
-        (<em>paths</em> : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="../sbt/Path.html" target="_self">Path</a>], <em>separator</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>) : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+        <em><a href="../sbt/Path$object.html#makeRelativeString%28Iterable%5Bsbt.Path%5D%29" target="_self">makeRelativeString</a></em>
+        (<em>paths</em> : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="../sbt/Path.html" target="_self">Path</a>]) : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
         
-        
+        <div>Constructs a String representation of <code>Path</code>s.  The relative path String of each <code>Path</code> is
+ separated by the platform's path separator.</div>
       </td>
     </tr>
 <tr>

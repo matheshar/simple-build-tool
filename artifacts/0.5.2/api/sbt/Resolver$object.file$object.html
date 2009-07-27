@@ -46,10 +46,11 @@
         <code> def</code>
       </td>
       <td class="signature">
-        <em><a href="../sbt/Resolver$object.file$object.html#apply%28String%2Cjava.io.File%29" target="_self">apply</a></em>
-        (<em>name</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <em>baseDirectory</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>)(<code>implicit </code><em>basePatterns</em> : <a href="../sbt/RepositoryHelpers$object.Patterns.html" target="_self">Patterns</a>) : <a href="../sbt/FileRepository.html" target="_self">FileRepository</a>
+        <em><a href="../sbt/Resolver$object.file$object.html#apply%28String%29" target="_self">apply</a></em>
+        (<em>name</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>) : <a href="../sbt/FileRepository.html" target="_self">FileRepository</a>
         
-        <div>Constructs a file resolver with the given name and base directory.</div>
+        <div>Constructs a file resolver with the given name.  The patterns to use must be explicitly specified
+	 using the `ivys` or `artifacts` methods on the constructed resolver object.</div>
       </td>
     </tr>
 <tr>
@@ -57,11 +58,10 @@
         <code> def</code>
       </td>
       <td class="signature">
-        <em><a href="../sbt/Resolver$object.file$object.html#apply%28String%29" target="_self">apply</a></em>
-        (<em>name</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>) : <a href="../sbt/FileRepository.html" target="_self">FileRepository</a>
+        <em><a href="../sbt/Resolver$object.file$object.html#apply%28String%2Cjava.io.File%29" target="_self">apply</a></em>
+        (<em>name</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <em>baseDirectory</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>)(<code>implicit </code><em>basePatterns</em> : <a href="../sbt/RepositoryHelpers$object.Patterns.html" target="_self">Patterns</a>) : <a href="../sbt/FileRepository.html" target="_self">FileRepository</a>
         
-        <div>Constructs a file resolver with the given name.  The patterns to use must be explicitly specified
-	 using the `ivys` or `artifacts` methods on the constructed resolver object.</div>
+        <div>Constructs a file resolver with the given name and base directory.</div>
       </td>
     </tr>
       </table><table summary="" cellpadding="3" class="inherited">

@@ -521,28 +521,6 @@
     </tr>
 <tr>
       <td class="modifiers" valign="top"> 
-        <code>protected override def</code>
-      </td>
-      <td class="signature">
-        <em><a href="../sbt/BasicScalaProject.html#deliverAction" target="_self">deliverAction</a></em>
-         : <a href="../sbt/TaskManager.Task.html" target="_self">Task</a>
-        
-        
-      </td>
-    </tr>
-<tr>
-      <td class="modifiers" valign="top"> 
-        <code>protected override def</code>
-      </td>
-      <td class="signature">
-        <em><a href="../sbt/BasicScalaProject.html#deliverLocalAction" target="_self">deliverLocalAction</a></em>
-         : <a href="../sbt/TaskManager.Task.html" target="_self">Task</a>
-        
-        
-      </td>
-    </tr>
-<tr>
-      <td class="modifiers" valign="top"> 
         <code>override def</code>
       </td>
       <td class="signature">
@@ -789,17 +767,6 @@
     </tr>
 <tr>
       <td class="modifiers" valign="top"> 
-        <code>protected override def</code>
-      </td>
-      <td class="signature">
-        <em><a href="../sbt/BasicScalaProject.html#makePomAction" target="_self">makePomAction</a></em>
-         : <a href="../sbt/TaskManager.Task.html" target="_self">Task</a>
-        
-        
-      </td>
-    </tr>
-<tr>
-      <td class="modifiers" valign="top"> 
         <code> def</code>
       </td>
       <td class="signature">
@@ -905,6 +872,17 @@
       <td class="signature">
         <em><a href="../sbt/BasicScalaProject.html#packageTestSrcAction" target="_self">packageTestSrcAction</a></em>
          : <a href="../sbt/TaskManager.Task.html" target="_self">Task</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>override def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/BasicScalaProject.html#packageToPublishActions" target="_self">packageToPublishActions</a></em>
+         : <a href="" target="contentFrame" class="scala/Seq">scala.Seq</a>[<a href="../sbt/TaskManager.Task.html" target="_self">Task</a>]
         
         
       </td>
@@ -1177,7 +1155,7 @@
           Methods inherited from <a href="../sbt/BasicManagedProject.html" target="_self">BasicManagedProject</a>
         </td></tr>
         <tr><td class="signature" colspan="2">
-          <a href="../sbt/BasicManagedProject.html#manager" target="_self">manager</a>, <a href="../sbt/BasicManagedProject.html#outputPattern" target="_self">outputPattern</a>, <a href="../sbt/BasicManagedProject.html#ivyXML" target="_self">ivyXML</a>, <a href="../sbt/BasicManagedProject.html#baseUpdateOptions" target="_self">baseUpdateOptions</a>, <a href="../sbt/BasicManagedProject.html#ivyConfigurations" target="_self">ivyConfigurations</a>, <a href="../sbt/BasicManagedProject.html#useIntegrationTestConfiguration" target="_self">useIntegrationTestConfiguration</a>, <a href="../sbt/BasicManagedProject.html#defaultConfiguration" target="_self">defaultConfiguration</a>, <a href="../sbt/BasicManagedProject.html#useMavenConfigurations" target="_self">useMavenConfigurations</a>, <a href="../sbt/BasicManagedProject.html#useDefaultConfigurations" target="_self">useDefaultConfigurations</a>, <a href="../sbt/BasicManagedProject.html#managedStyle" target="_self">managedStyle</a>, <a href="../sbt/BasicManagedProject.html#updateOptions" target="_self">updateOptions</a>, <a href="../sbt/BasicManagedProject.html#deliverOptions" target="_self">deliverOptions</a>, <a href="../sbt/BasicManagedProject.html#publishOptions" target="_self">publishOptions</a>, <a href="../sbt/BasicManagedProject.html#includeProvidedWithCompile" target="_self">includeProvidedWithCompile</a>, <a href="../sbt/BasicManagedProject.html#defaultConfigurationExtensions" target="_self">defaultConfigurationExtensions</a>, <a href="../sbt/BasicManagedProject.html#checkExplicitScalaDependencies" target="_self">checkExplicitScalaDependencies</a>, <a href="../sbt/BasicManagedProject.html#filterScalaJars" target="_self">filterScalaJars</a>, <a href="../sbt/BasicManagedProject.html#checkScalaInConfigurations" target="_self">checkScalaInConfigurations</a>, <a href="../sbt/BasicManagedProject.html#checkScalaVersion" target="_self">checkScalaVersion</a>, <a href="../sbt/BasicManagedProject.html#defaultPublishRepository" target="_self">defaultPublishRepository</a>, <a href="../sbt/BasicManagedProject.html#managedClasspath%28sbt.Configuration%29" target="_self">managedClasspath</a>, <a href="../sbt/BasicManagedProject.html#updateAction" target="_self">updateAction</a>, <a href="../sbt/BasicManagedProject.html#cleanLibAction" target="_self">cleanLibAction</a>, <a href="../sbt/BasicManagedProject.html#cleanCacheAction" target="_self">cleanCacheAction</a>, <a href="../sbt/BasicManagedProject.html#deliverProjectDependencies" target="_self">deliverProjectDependencies</a>, <a href="../sbt/BasicManagedProject.html#publishLocalAction" target="_self">publishLocalAction</a>, <a href="../sbt/BasicManagedProject.html#publishLocalConfiguration" target="_self">publishLocalConfiguration</a>, <a href="../sbt/BasicManagedProject.html#publishAction" target="_self">publishAction</a>, <a href="../sbt/BasicManagedProject.html#publishConfiguration" target="_self">publishConfiguration</a>
+          <a href="../sbt/BasicManagedProject.html#manager" target="_self">manager</a>, <a href="../sbt/BasicManagedProject.html#outputPattern" target="_self">outputPattern</a>, <a href="../sbt/BasicManagedProject.html#ivyXML" target="_self">ivyXML</a>, <a href="../sbt/BasicManagedProject.html#baseUpdateOptions" target="_self">baseUpdateOptions</a>, <a href="../sbt/BasicManagedProject.html#ivyConfigurations" target="_self">ivyConfigurations</a>, <a href="../sbt/BasicManagedProject.html#useIntegrationTestConfiguration" target="_self">useIntegrationTestConfiguration</a>, <a href="../sbt/BasicManagedProject.html#defaultConfiguration" target="_self">defaultConfiguration</a>, <a href="../sbt/BasicManagedProject.html#useMavenConfigurations" target="_self">useMavenConfigurations</a>, <a href="../sbt/BasicManagedProject.html#useDefaultConfigurations" target="_self">useDefaultConfigurations</a>, <a href="../sbt/BasicManagedProject.html#managedStyle" target="_self">managedStyle</a>, <a href="../sbt/BasicManagedProject.html#updateOptions" target="_self">updateOptions</a>, <a href="../sbt/BasicManagedProject.html#deliverOptions" target="_self">deliverOptions</a>, <a href="../sbt/BasicManagedProject.html#publishOptions" target="_self">publishOptions</a>, <a href="../sbt/BasicManagedProject.html#includeProvidedWithCompile" target="_self">includeProvidedWithCompile</a>, <a href="../sbt/BasicManagedProject.html#defaultConfigurationExtensions" target="_self">defaultConfigurationExtensions</a>, <a href="../sbt/BasicManagedProject.html#checkExplicitScalaDependencies" target="_self">checkExplicitScalaDependencies</a>, <a href="../sbt/BasicManagedProject.html#filterScalaJars" target="_self">filterScalaJars</a>, <a href="../sbt/BasicManagedProject.html#checkScalaInConfigurations" target="_self">checkScalaInConfigurations</a>, <a href="../sbt/BasicManagedProject.html#checkScalaVersion" target="_self">checkScalaVersion</a>, <a href="../sbt/BasicManagedProject.html#defaultPublishRepository" target="_self">defaultPublishRepository</a>, <a href="../sbt/BasicManagedProject.html#managedClasspath%28sbt.Configuration%29" target="_self">managedClasspath</a>, <a href="../sbt/BasicManagedProject.html#updateAction" target="_self">updateAction</a>, <a href="../sbt/BasicManagedProject.html#cleanLibAction" target="_self">cleanLibAction</a>, <a href="../sbt/BasicManagedProject.html#cleanCacheAction" target="_self">cleanCacheAction</a>, <a href="../sbt/BasicManagedProject.html#deliverProjectDependencies" target="_self">deliverProjectDependencies</a>, <a href="../sbt/BasicManagedProject.html#makePomAction" target="_self">makePomAction</a>, <a href="../sbt/BasicManagedProject.html#deliverLocalAction" target="_self">deliverLocalAction</a>, <a href="../sbt/BasicManagedProject.html#publishLocalAction" target="_self">publishLocalAction</a>, <a href="../sbt/BasicManagedProject.html#publishLocalConfiguration" target="_self">publishLocalConfiguration</a>, <a href="../sbt/BasicManagedProject.html#deliverAction" target="_self">deliverAction</a>, <a href="../sbt/BasicManagedProject.html#publishAction" target="_self">publishAction</a>, <a href="../sbt/BasicManagedProject.html#publishConfiguration" target="_self">publishConfiguration</a>
         </td></tr>
       </table><table summary="" cellpadding="3" class="inherited">
         <tr><td class="title" colspan="2">
@@ -2200,30 +2178,12 @@
       </dt>
       <dd></dd>
     </dl><hr></hr>
-<a name="makePomAction"></a><dl>
+<a name="packageToPublishActions"></a><dl>
       <dt>
         
-        <code>protected override</code>
+        <code>override</code>
         <code>def</code>
-        <em>makePomAction</em> : <a href="../sbt/TaskManager.Task.html" target="_self">Task</a>
-      </dt>
-      <dd></dd>
-    </dl><hr></hr>
-<a name="deliverLocalAction"></a><dl>
-      <dt>
-        
-        <code>protected override</code>
-        <code>def</code>
-        <em>deliverLocalAction</em> : <a href="../sbt/TaskManager.Task.html" target="_self">Task</a>
-      </dt>
-      <dd></dd>
-    </dl><hr></hr>
-<a name="deliverAction"></a><dl>
-      <dt>
-        
-        <code>protected override</code>
-        <code>def</code>
-        <em>deliverAction</em> : <a href="../sbt/TaskManager.Task.html" target="_self">Task</a>
+        <em>packageToPublishActions</em> : <a href="" target="contentFrame" class="scala/Seq">scala.Seq</a>[<a href="../sbt/TaskManager.Task.html" target="_self">Task</a>]
       </dt>
       <dd></dd>
     </dl><hr></hr>

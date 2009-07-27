@@ -113,8 +113,8 @@
         <code> def</code>
       </td>
       <td class="signature">
-        <em><a href="../sbt/ScalaProject.html#consoleTask%28sbt.PathFinder%29" target="_self">consoleTask</a></em>
-        (<em>classpath</em> : <a href="../sbt/PathFinder.html" target="_self">PathFinder</a>) : <a href="../sbt/TaskManager.Task.html" target="_self">Task</a>
+        <em><a href="../sbt/ScalaProject.html#consoleTask%28sbt.PathFinder%2Csbt.ScalaRun%29" target="_self">consoleTask</a></em>
+        (<em>classpath</em> : <a href="../sbt/PathFinder.html" target="_self">PathFinder</a>, <em>runner</em> : <a href="../sbt/ScalaRun.html" target="_self">ScalaRun</a>) : <a href="../sbt/TaskManager.Task.html" target="_self">Task</a>
         
         
       </td>
@@ -124,8 +124,8 @@
         <code> def</code>
       </td>
       <td class="signature">
-        <em><a href="../sbt/ScalaProject.html#consoleTask%28sbt.PathFinder%2Csbt.ScalaRun%29" target="_self">consoleTask</a></em>
-        (<em>classpath</em> : <a href="../sbt/PathFinder.html" target="_self">PathFinder</a>, <em>runner</em> : <a href="../sbt/ScalaRun.html" target="_self">ScalaRun</a>) : <a href="../sbt/TaskManager.Task.html" target="_self">Task</a>
+        <em><a href="../sbt/ScalaProject.html#consoleTask%28sbt.PathFinder%29" target="_self">consoleTask</a></em>
+        (<em>classpath</em> : <a href="../sbt/PathFinder.html" target="_self">PathFinder</a>) : <a href="../sbt/TaskManager.Task.html" target="_self">Task</a>
         
         
       </td>
@@ -256,17 +256,6 @@
         <code> def</code>
       </td>
       <td class="signature">
-        <em><a href="../sbt/ScalaProject.html#packageTask%28sbt.PathFinder%2C%3D%3Esbt.Path%2C%3D%3ESeq%5BScalaProject.this.PackageOption%5D%29" target="_self">packageTask</a></em>
-        (<em>sources</em> : <a href="../sbt/PathFinder.html" target="_self">PathFinder</a>, <em>jarPath</em> : =&gt; <a href="../sbt/Path.html" target="_self">Path</a>, <em>options</em> : =&gt; <a href="" target="contentFrame" class="scala/Seq">scala.Seq</a>[<a href="../sbt/ScalaProject.PackageOption.html" target="_self">PackageOption</a>]) : <a href="../sbt/TaskManager.Task.html" target="_self">Task</a>
-        
-        
-      </td>
-    </tr>
-<tr>
-      <td class="modifiers" valign="top"> 
-        <code> def</code>
-      </td>
-      <td class="signature">
         <em><a href="../sbt/ScalaProject.html#packageTask%28sbt.PathFinder%2Csbt.Path%2C%3D%3EString%2C%3D%3ESeq%5BScalaProject.this.PackageOption%5D%29" target="_self">packageTask</a></em>
         (<em>sources</em> : <a href="../sbt/PathFinder.html" target="_self">PathFinder</a>, <em>outputDirectory</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>jarName</em> : =&gt; <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <em>options</em> : =&gt; <a href="" target="contentFrame" class="scala/Seq">scala.Seq</a>[<a href="../sbt/ScalaProject.PackageOption.html" target="_self">PackageOption</a>]) : <a href="../sbt/TaskManager.Task.html" target="_self">Task</a>
         
@@ -289,6 +278,17 @@
         <code> def</code>
       </td>
       <td class="signature">
+        <em><a href="../sbt/ScalaProject.html#packageTask%28sbt.PathFinder%2C%3D%3Esbt.Path%2C%3D%3ESeq%5BScalaProject.this.PackageOption%5D%29" target="_self">packageTask</a></em>
+        (<em>sources</em> : <a href="../sbt/PathFinder.html" target="_self">PathFinder</a>, <em>jarPath</em> : =&gt; <a href="../sbt/Path.html" target="_self">Path</a>, <em>options</em> : =&gt; <a href="" target="contentFrame" class="scala/Seq">scala.Seq</a>[<a href="../sbt/ScalaProject.PackageOption.html" target="_self">PackageOption</a>]) : <a href="../sbt/TaskManager.Task.html" target="_self">Task</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
         <em><a href="../sbt/ScalaProject.html#packageTask%28sbt.PathFinder%2Csbt.Path%2C%3D%3EString%2CScalaProject.this.PackageOption*%29" target="_self">packageTask</a></em>
         (<em>sources</em> : <a href="../sbt/PathFinder.html" target="_self">PathFinder</a>, <em>outputDirectory</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>jarName</em> : =&gt; <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <em>options</em> : <a href="../sbt/ScalaProject.PackageOption.html" target="_self">PackageOption</a>*) : <a href="../sbt/TaskManager.Task.html" target="_self">Task</a>
         
@@ -300,8 +300,8 @@
         <code> def</code>
       </td>
       <td class="signature">
-        <em><a href="../sbt/ScalaProject.html#runTask%28%3D%3EOption%5BString%5D%2Csbt.PathFinder%2C%3D%3ESeq%5BString%5D%2Csbt.ScalaRun%29" target="_self">runTask</a></em>
-        (<em>mainClass</em> : =&gt; <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>], <em>classpath</em> : <a href="../sbt/PathFinder.html" target="_self">PathFinder</a>, <em>options</em> : =&gt; <a href="" target="contentFrame" class="scala/Seq">scala.Seq</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>], <em>runner</em> : <a href="../sbt/ScalaRun.html" target="_self">ScalaRun</a>) : <a href="../sbt/TaskManager.Task.html" target="_self">Task</a>
+        <em><a href="../sbt/ScalaProject.html#runTask%28%3D%3EOption%5BString%5D%2Csbt.PathFinder%2C%3D%3ESeq%5BString%5D%29" target="_self">runTask</a></em>
+        (<em>mainClass</em> : =&gt; <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>], <em>classpath</em> : <a href="../sbt/PathFinder.html" target="_self">PathFinder</a>, <em>options</em> : =&gt; <a href="" target="contentFrame" class="scala/Seq">scala.Seq</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]) : <a href="../sbt/TaskManager.Task.html" target="_self">Task</a>
         
         
       </td>
@@ -311,8 +311,8 @@
         <code> def</code>
       </td>
       <td class="signature">
-        <em><a href="../sbt/ScalaProject.html#runTask%28%3D%3EOption%5BString%5D%2Csbt.PathFinder%2C%3D%3ESeq%5BString%5D%29" target="_self">runTask</a></em>
-        (<em>mainClass</em> : =&gt; <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>], <em>classpath</em> : <a href="../sbt/PathFinder.html" target="_self">PathFinder</a>, <em>options</em> : =&gt; <a href="" target="contentFrame" class="scala/Seq">scala.Seq</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]) : <a href="../sbt/TaskManager.Task.html" target="_self">Task</a>
+        <em><a href="../sbt/ScalaProject.html#runTask%28%3D%3EOption%5BString%5D%2Csbt.PathFinder%2C%3D%3ESeq%5BString%5D%2Csbt.ScalaRun%29" target="_self">runTask</a></em>
+        (<em>mainClass</em> : =&gt; <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>], <em>classpath</em> : <a href="../sbt/PathFinder.html" target="_self">PathFinder</a>, <em>options</em> : =&gt; <a href="" target="contentFrame" class="scala/Seq">scala.Seq</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>], <em>runner</em> : <a href="../sbt/ScalaRun.html" target="_self">ScalaRun</a>) : <a href="../sbt/TaskManager.Task.html" target="_self">Task</a>
         
         
       </td>

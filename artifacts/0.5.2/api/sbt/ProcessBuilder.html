@@ -46,11 +46,11 @@
         <code>abstract def</code>
       </td>
       <td class="signature">
-        <em><a href="../sbt/ProcessBuilder.html#%21%28sbt.Logger%29" target="_self">!</a></em>
-        (<em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="http://www.scala-lang.org/docu/files/api/scala/Int.html" target="_self">Int</a>
+        <em><a href="../sbt/ProcessBuilder.html#%21" target="_self">!</a></em>
+         : <a href="http://www.scala-lang.org/docu/files/api/scala/Int.html" target="_self">Int</a>
         
         <div>Starts the process represented by this builder, blocks until it exits, and returns the exit code.  Standard output and error are
- sent to the given Logger.</div>
+ sent to the console.</div>
       </td>
     </tr>
 <tr>
@@ -58,11 +58,11 @@
         <code>abstract def</code>
       </td>
       <td class="signature">
-        <em><a href="../sbt/ProcessBuilder.html#%21" target="_self">!</a></em>
-         : <a href="http://www.scala-lang.org/docu/files/api/scala/Int.html" target="_self">Int</a>
+        <em><a href="../sbt/ProcessBuilder.html#%21%28sbt.Logger%29" target="_self">!</a></em>
+        (<em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="http://www.scala-lang.org/docu/files/api/scala/Int.html" target="_self">Int</a>
         
         <div>Starts the process represented by this builder, blocks until it exits, and returns the exit code.  Standard output and error are
- sent to the console.</div>
+ sent to the given Logger.</div>
       </td>
     </tr>
 <tr>
@@ -149,21 +149,11 @@
         <code>abstract def</code>
       </td>
       <td class="signature">
-        <em><a href="../sbt/ProcessBuilder.html#run%28sbt.Logger%29" target="_self">run</a></em>
-        (<em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="../sbt/Process.html" target="_self">Process</a>
+        <em><a href="../sbt/ProcessBuilder.html#run%28Boolean%29" target="_self">run</a></em>
+        (<em>connectInput</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/Boolean.html" target="_self">Boolean</a>) : <a href="../sbt/Process.html" target="_self">Process</a>
         
-        <div>Starts the process represented by this builder.  Standard output and error are sent to the given Logger.</div>
-      </td>
-    </tr>
-<tr>
-      <td class="modifiers" valign="top"> 
-        <code>abstract def</code>
-      </td>
-      <td class="signature">
-        <em><a href="../sbt/ProcessBuilder.html#run%28sbt.ProcessIO%29" target="_self">run</a></em>
-        (<em>io</em> : <a href="../sbt/ProcessIO.html" target="_self">ProcessIO</a>) : <a href="../sbt/Process.html" target="_self">Process</a>
-        
-        <div>Starts the process represented by this builder.  I/O is handled by the given ProcessIO instance.</div>
+        <div>Starts the process represented by this builder.  Standard output and error are sent to the console.
+ The newly started process reads from standard input of the current process if `connectInput` is true.</div>
       </td>
     </tr>
 <tr>
@@ -182,11 +172,21 @@
         <code>abstract def</code>
       </td>
       <td class="signature">
-        <em><a href="../sbt/ProcessBuilder.html#run%28Boolean%29" target="_self">run</a></em>
-        (<em>connectInput</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/Boolean.html" target="_self">Boolean</a>) : <a href="../sbt/Process.html" target="_self">Process</a>
+        <em><a href="../sbt/ProcessBuilder.html#run%28sbt.ProcessIO%29" target="_self">run</a></em>
+        (<em>io</em> : <a href="../sbt/ProcessIO.html" target="_self">ProcessIO</a>) : <a href="../sbt/Process.html" target="_self">Process</a>
         
-        <div>Starts the process represented by this builder.  Standard output and error are sent to the console.
- The newly started process reads from standard input of the current process if `connectInput` is true.</div>
+        <div>Starts the process represented by this builder.  I/O is handled by the given ProcessIO instance.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>abstract def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/ProcessBuilder.html#run%28sbt.Logger%29" target="_self">run</a></em>
+        (<em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="../sbt/Process.html" target="_self">Process</a>
+        
+        <div>Starts the process represented by this builder.  Standard output and error are sent to the given Logger.</div>
       </td>
     </tr>
 <tr>

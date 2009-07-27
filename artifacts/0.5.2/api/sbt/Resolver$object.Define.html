@@ -49,6 +49,18 @@
         <code> def</code>
       </td>
       <td class="signature">
+        <em><a href="../sbt/Resolver$object.Define.html#apply%28String%29" target="_self">apply</a></em>
+        (<em>name</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>)(<code>implicit </code><em>basePatterns</em> : <a href="../sbt/RepositoryHelpers$object.Patterns.html" target="_self">Patterns</a>) : <a href="../sbt/Resolver$object.Define.html#RepositoryType" target="_self">RepositoryType</a>
+        
+        <div>Constructs this repository type with the given `name`.  `basePatterns` are the initial patterns to use.  A ManagedProject
+	 has an implicit defining these initial patterns based on a setting for either Maven or Ivy style patterns.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
         <em><a href="../sbt/Resolver$object.Define.html#apply%28String%2CString%2CString%29" target="_self">apply</a></em>
         (<em>name</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <em>hostname</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <em>basePath</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>)(<code>implicit </code><em>basePatterns</em> : <a href="../sbt/RepositoryHelpers$object.Patterns.html" target="_self">Patterns</a>) : <a href="../sbt/Resolver$object.Define.html#RepositoryType" target="_self">RepositoryType</a>
         
@@ -74,6 +86,19 @@
         <code> def</code>
       </td>
       <td class="signature">
+        <em><a href="../sbt/Resolver$object.Define.html#apply%28String%2CString%2CInt%2CString%29" target="_self">apply</a></em>
+        (<em>name</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <em>hostname</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <em>port</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/Int.html" target="_self">Int</a>, <em>basePath</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>)(<code>implicit </code><em>basePatterns</em> : <a href="../sbt/RepositoryHelpers$object.Patterns.html" target="_self">Patterns</a>) : <a href="../sbt/Resolver$object.Define.html#RepositoryType" target="_self">RepositoryType</a>
+        
+        <div>Constructs this repository type with the given `name`, `hostname`, `port`, and the `basePath` against which the initial
+	 patterns will be resolved.  `basePatterns` are the initial patterns to use.
+	 A ManagedProject has an implicit defining these initial patterns based on a setting for either Maven or Ivy style patterns.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
         <em><a href="../sbt/Resolver$object.Define.html#apply%28String%2COption%5BString%5D%2COption%5BInt%5D%2COption%5BString%5D%29" target="_self">apply</a></em>
         (<em>name</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <em>hostname</em> : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>], <em>port</em> : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="http://www.scala-lang.org/docu/files/api/scala/Int.html" target="_self">Int</a>], <em>basePath</em> : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>])(<code>implicit </code><em>basePatterns</em> : <a href="../sbt/RepositoryHelpers$object.Patterns.html" target="_self">Patterns</a>) : <a href="../sbt/Resolver$object.Define.html#RepositoryType" target="_self">RepositoryType</a>
         
@@ -87,35 +112,10 @@
         <code> def</code>
       </td>
       <td class="signature">
-        <em><a href="../sbt/Resolver$object.Define.html#apply%28String%29" target="_self">apply</a></em>
-        (<em>name</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>)(<code>implicit </code><em>basePatterns</em> : <a href="../sbt/RepositoryHelpers$object.Patterns.html" target="_self">Patterns</a>) : <a href="../sbt/Resolver$object.Define.html#RepositoryType" target="_self">RepositoryType</a>
-        
-        <div>Constructs this repository type with the given `name`.  `basePatterns` are the initial patterns to use.  A ManagedProject
-	 has an implicit defining these initial patterns based on a setting for either Maven or Ivy style patterns.</div>
-      </td>
-    </tr>
-<tr>
-      <td class="modifiers" valign="top"> 
-        <code> def</code>
-      </td>
-      <td class="signature">
         <em><a href="../sbt/Resolver$object.Define.html#apply%28String%2CString%2CInt%29" target="_self">apply</a></em>
         (<em>name</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <em>hostname</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <em>port</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/Int.html" target="_self">Int</a>)(<code>implicit </code><em>basePatterns</em> : <a href="../sbt/RepositoryHelpers$object.Patterns.html" target="_self">Patterns</a>) : <a href="../sbt/Resolver$object.Define.html#RepositoryType" target="_self">RepositoryType</a>
         
         <div>Constructs this repository type with the given `name`, `hostname`, and `port`.  `basePatterns` are the initial patterns to use.
-	 A ManagedProject has an implicit defining these initial patterns based on a setting for either Maven or Ivy style patterns.</div>
-      </td>
-    </tr>
-<tr>
-      <td class="modifiers" valign="top"> 
-        <code> def</code>
-      </td>
-      <td class="signature">
-        <em><a href="../sbt/Resolver$object.Define.html#apply%28String%2CString%2CInt%2CString%29" target="_self">apply</a></em>
-        (<em>name</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <em>hostname</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <em>port</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/Int.html" target="_self">Int</a>, <em>basePath</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>)(<code>implicit </code><em>basePatterns</em> : <a href="../sbt/RepositoryHelpers$object.Patterns.html" target="_self">Patterns</a>) : <a href="../sbt/Resolver$object.Define.html#RepositoryType" target="_self">RepositoryType</a>
-        
-        <div>Constructs this repository type with the given `name`, `hostname`, `port`, and the `basePath` against which the initial
-	 patterns will be resolved.  `basePatterns` are the initial patterns to use.
 	 A ManagedProject has an implicit defining these initial patterns based on a setting for either Maven or Ivy style patterns.</div>
       </td>
     </tr>
