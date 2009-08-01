@@ -2,7 +2,7 @@
 
 This page describes some features of `sbt` that are useful for developing web applications.
 
-Instead of extending `sbt.DefaultProject` in your project definition, extend `sbt.DefaultWebProject`.  This currently does two things.  First, the `package` action creates a war file instead of a jar file.  Second, if you add [http://jetty.mortbay.com/ Jetty] as a dependency (manually or automatically), you can use `jetty-run` to start your web application from `sbt`.  Use `jetty-stop` to stop it.
+Instead of extending `sbt.DefaultProject` in your project definition, extend `sbt.DefaultWebProject`.  This currently does two things.  First, the `package` action creates a war file instead of a jar file.  Second, if you add [http://jetty.mortbay.com/ Jetty] as a dependency (manually or automatically), you can use `jetty-run` to start your web application from `sbt`.  Use `jetty-stop` to stop it.  If you are running in batch mode, use the `jetty` action, which will wait for a key press before completing.
 
 `sbt` uses the directory structure of Maven by default, so your web application files should go in `src/main/webapp` by default.  You can override `webappPath` to change this.  If you need to include extra files in your web application, override `extraWebappFiles` with a `PathFinder` that selects the extra files that you want (see [Paths] for information on `PathFinder`).  To change the port Jetty starts up on, override `jettyPort`.
 
@@ -29,7 +29,7 @@ A minimal project definition might be:
 class WebappBuild(info: ProjectInfo) extends DefaultWebProject(info)
 {
   override def useMavenConfigurations = true
-  val jetty = "org.mortbay.jetty" % "jetty" % "6.1.14" % "test->default"  // jetty is only need for testing
+  val jetty6 = "org.mortbay.jetty" % "jetty" % "6.1.14" % "test->default"  // jetty is only need for testing
 }
 }}}
 
