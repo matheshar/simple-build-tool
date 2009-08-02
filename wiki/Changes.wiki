@@ -1,3 +1,22 @@
+=== 0.5.2 to trunk ===
+ * Many logging related changes and fixes.  Added `FilterLogger` and cleaned up interaction between `Logger`, scripted testing, and the builder projects.  This included removing the `recordingDepth` hack from Logger.  Logger buffering is now enabled/disabled per thread.
+ * Fix `compileOptions` being fixed after the first compile
+ * Minor fixes to output directory checking
+ * Added `defaultLoggingLevel` method for setting the initial level of a project's `Logger`
+ * Cleaned up internal approach to adding extra default configurations like `plugin`
+ * Added `syncPathsTask` for synchronizing paths to a target directory
+ * Allow multiple instances of Jetty (new `jettyRunTasks` can be defined with different ports)
+ * `jettyRunTask` accepts configuration in a single configuration wrapper object instead of many parameters
+ * Fix web application class loading (issue #35) by using `jettyClasspath=testClasspath---jettyRunClasspath` for loading Jetty.  A better way would be to have a `jetty` configuration and have `jettyClasspath=managedClasspath('jetty')`, but this maintains compatibility.
+ * Copy resources to `target/resources` and `target/test-resources` using `copyResources` and `copyTestResources` tasks.  Properly include all resources in web applications and classpaths (issue #36).  `mainResources` and `testResources` are now the definitive methods for getting resources.
+ * Updated for 2.8 (`sbt` now compiles against August 1, 2009 nightly build of Scala)
+ * Fixed issue with position of `^` in compile errors
+ * Changed order of repositories (local, shared, Maven Central, user, Scala Tools)
+ * Added Maven Central to resolvers used to find Scala library/compiler in launcher
+ * Fixed problem that prevented detecting user-specified subclasses
+ * Fixed exit code returned when exception thrown in main thread for `TrapExit`
+
+
 === 0.5.1 to 0.5.2 ===
  * Fixed problem where dependencies of `sbt` plugins were not on the compile classpath
  * Added `execTask` that runs an `sbt.ProcessBuilder` when invoked
