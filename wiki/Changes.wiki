@@ -9,13 +9,26 @@
  * `jettyRunTask` accepts configuration in a single configuration wrapper object instead of many parameters
  * Fix web application class loading (issue #35) by using `jettyClasspath=testClasspath---jettyRunClasspath` for loading Jetty.  A better way would be to have a `jetty` configuration and have `jettyClasspath=managedClasspath('jetty')`, but this maintains compatibility.
  * Copy resources to `target/resources` and `target/test-resources` using `copyResources` and `copyTestResources` tasks.  Properly include all resources in web applications and classpaths (issue #36).  `mainResources` and `testResources` are now the definitive methods for getting resources.
- * Updated for 2.8 (`sbt` now compiles against August 1, 2009 nightly build of Scala)
+ * Updated for 2.8 (`sbt` now compiles against August 6, 2009 nightly build of Scala)
  * Fixed issue with position of `^` in compile errors
  * Changed order of repositories (local, shared, Maven Central, user, Scala Tools)
  * Added Maven Central to resolvers used to find Scala library/compiler in launcher
  * Fixed problem that prevented detecting user-specified subclasses
  * Fixed exit code returned when exception thrown in main thread for `TrapExit`
-
+ * Added `javap` task.  It has tab completion on compiled project classes and the run classpath is passed to `javap` so Scala classes are available.  Examples:
+{{{
+    javap your.Clazz
+    javap -c scala.List
+}}}
+ * Added `exec` task.  This forks the command following `exec`.
+{{{
+   exec echo Hi
+   exec find src/main/scala -iname *.scala -exec wc -l {} ;
+}}}
+ * Added `sh` task for users with a unix-style shell available (runs `/bin/sh -c <arguments>`)
+{{{
+   sh find src/main/scala -iname *.scala | xargs cat | wc -l
+}}}
 
 === 0.5.1 to 0.5.2 ===
  * Fixed problem where dependencies of `sbt` plugins were not on the compile classpath
