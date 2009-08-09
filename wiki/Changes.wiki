@@ -15,17 +15,17 @@
  * Added Maven Central to resolvers used to find Scala library/compiler in launcher
  * Fixed problem that prevented detecting user-specified subclasses
  * Fixed exit code returned when exception thrown in main thread for `TrapExit`
- * Added `javap` task.  It has tab completion on compiled project classes and the run classpath is passed to `javap` so that library classes are available.  Examples:
+ * Added `javap` task to `DefaultProject`.  It has tab completion on compiled project classes and the run classpath is passed to `javap` so that library classes are available.  Examples:
 {{{
    > javap your.Clazz
    > javap -c scala.List
 }}}
- * Added `exec` task.  This forks the command following `exec`.  Examples:
+ * Added `exec` task.  Mixin `Exec` to project definition to use.  This forks the command following `exec`.  Examples:
 {{{
    > exec echo Hi
    > exec find src/main/scala -iname *.scala -exec wc -l {} ;
 }}}
- * Added `sh` task for users with a unix-style shell available (runs `/bin/sh -c <arguments>`).  Example:
+ * Added `sh` task for users with a unix-style shell available (runs `/bin/sh -c <arguments>`).  Mixin `Exec` to project definition to use.  Example:
 {{{
    > sh find src/main/scala -iname *.scala | xargs cat | wc -l
 }}}
