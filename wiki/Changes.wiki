@@ -29,6 +29,8 @@
 {{{
    > sh find src/main/scala -iname *.scala | xargs cat | wc -l
 }}}
+ * Improved Ivy-related code to not load unnecessary default settings
+ * Moved repository order to be local, user repositories, Maven Central, and then Scala Tools
 
 === 0.5.1 to 0.5.2 ===
  * Fixed problem where dependencies of `sbt` plugins were not on the compile classpath
