@@ -34,5 +34,5 @@ To publish sources and javadocs, add artifact declarations and make the `publish
 {{{
   val sourceArtifact = Artifact(artifactBaseName, "src")
   val docArtifact = Artifact(artifactBaseName, "docs")
-  override def packageToPublishActions = super.packageToPublishActions ++ Seq(`packageDocs`, `packageSrc`)
+  override def packageToPublishActions = super.packageToPublishActions ++ Seq(packageDocs, packageSrc)
 }}}
