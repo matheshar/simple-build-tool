@@ -9,7 +9,7 @@
  * `jettyRunTask` accepts configuration in a single configuration wrapper object instead of many parameters
  * Fix web application class loading (issue #35) by using `jettyClasspath=testClasspath---jettyRunClasspath` for loading Jetty.  A better way would be to have a `jetty` configuration and have `jettyClasspath=managedClasspath('jetty')`, but this maintains compatibility.
  * Copy resources to `target/resources` and `target/test-resources` using `copyResources` and `copyTestResources` tasks.  Properly include all resources in web applications and classpaths (issue #36).  `mainResources` and `testResources` are now the definitive methods for getting resources.
- * Updated for 2.8 (`sbt` now compiles against August 6, 2009 nightly build of Scala)
+ * Updated for 2.8 (`sbt` now compiles against August 21, 2009 nightly build of Scala)
  * Fixed issue with position of `^` in compile errors
  * Changed order of repositories (local, shared, Maven Central, user, Scala Tools)
  * Added Maven Central to resolvers used to find Scala library/compiler in launcher
