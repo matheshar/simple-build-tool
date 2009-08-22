@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ivy-module version="1.0" xmlns:m="m">
-	<info organisation="sbt" module="simple-build-tool" revision="0.5.3-p3" status="release" publication="20090822125921"/>
+	<info organisation="sbt" module="simple-build-tool" revision="0.5.3-p3" status="release" publication="20090822133718"/>
 	<configurations>
 		
 		
+		
+		
+		
+		
 		<conf name="base" visibility="public"/>
-		
-		
-		
-		
 		
 		
 		
