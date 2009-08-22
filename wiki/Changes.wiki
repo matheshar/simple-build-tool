@@ -31,6 +31,9 @@
 }}}
  * Improved Ivy-related code to not load unnecessary default settings
  * Moved repository order to be local, user repositories, Maven Central, and then Scala Tools
+ * Fixed issue #39 (sources were not relative in src package)
+ * Implemented issue #38 (`InstallProject` with 'install' task)
+ * Vesa's patch for configuring the output of forked Scala/Java and processes
 
 === 0.5.1 to 0.5.2 ===
  * Fixed problem where dependencies of `sbt` plugins were not on the compile classpath
