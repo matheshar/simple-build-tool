@@ -1,4 +1,4 @@
-There are two ways to use `sbt` with 2.8.  Both ways involve building `sbt` locally.  The first way is easier and can be used if you want to work with nightly snapshots.  The second way is required if you want to use a custom build of Scala.
+There are two ways to use `sbt` with Scala 2.8 (the trunk version of Scala).  Both ways involve building `sbt` locally.  The first way is easier and can be used if you want to work with nightly snapshots.  The second way is required if you want to use a custom build of Scala.
 
 = Scala Nightly Build =
 
@@ -27,7 +27,7 @@ To update to the latest 2.8 nightly,
  > update
  > cross-publish-local
 }}}
- # Remove the `project/boot` directory from your project (`sbt` is not designed to update Scala jars after they have been copied to a project, so you have to manually delete them to get the latest -SNAPSHOT version.)
+ # Remove the `project/boot` directory from your project (`sbt` is designed to not update Scala jars after they have been copied to a project, so you have to manually delete them to get the latest -SNAPSHOT version.)
  # Run `sbt` on your project as usual.
  
 
