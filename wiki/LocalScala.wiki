@@ -5,7 +5,7 @@
 {{{
  svn checkout http://simple-build-tool.googlecode.com/svn/trunk/ sbt
 }}}
- # Edit `$SBT_HOME/project/build/src/CrossCompileProject.scala`:
+ # Edit `$SBT_HOME/project/build/CrossCompileProject.scala`:
   # Change the 2.8 version string to identify the local Scala version (around line 18)
 {{{
   private val version2_8_0 = "2.8.0-local"
@@ -16,7 +16,7 @@
 }}}
  # For the Scala build you want to use, put the [LocalScala#Project_Definition project definition below] in:
 {{{
- $SCALA_HOME/project/build/src/ScalaJars.scala
+ $SCALA_HOME/project/build/ScalaJars.scala
 }}}
  # This is just a quick definition to locally publish the already built jars `build/pack/lib/scala-compiler.jar` and `build/pack/lib/scala-library.jar`.  In `$SCALA_HOME`, do:
 {{{
