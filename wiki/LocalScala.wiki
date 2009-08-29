@@ -1,6 +1,41 @@
+There are two ways to use `sbt` with 2.8.  Both ways involve building `sbt` locally.  The first way is easier and can be used if you want to work with nightly snapshots.  The second way is required if you want to use a custom build of Scala.
+
+= Scala Nightly Build =
+
 == Setup ==
 
- # Get the `sbt` loader setup on your system according to the [Setup#Launching_Sbt Launching Sbt] section.
+ # Get the `sbt` loader set up on your system according to the [Setup#Launching_Sbt Launching Sbt] section.
+ # Checkout `sbt`
+{{{
+ $ svn checkout http://simple-build-tool.googlecode.com/svn/trunk/ sbt
+}}}
+ # Build `sbt` by running `sbt` in the checked out directory, do:
+{{{
+ $ sbt
+ > update
+ > cross-publish-local
+}}}
+ # Use this local version of `sbt` in your project by setting your `sbt.version` to `0.5.3-SNAPSHOT` and your `scala.version` to `2.8.0-SNAPSHOT` (or one of the 2.7.x versions of Scala).
+
+== New Nightly ==
+
+To update to the latest 2.8 nightly,
+ # Rebuild `sbt` against this nightly.  If the latest nightly breaks `sbt` compilation, send a message to the mailing list to get it fixed.  In the checked out `sbt` directory, do the following:
+{{{
+ $ sbt
+ > clean-lib
+ > update
+ > cross-publish-local
+}}}
+ # Remove the `project/boot` directory from your project (`sbt` is not designed to update Scala jars after they have been copied to a project, so you have to manually delete them to get the latest -SNAPSHOT version.)
+ # Run `sbt` on your project as usual.
+ 
+
+= Custom Scala Build =
+
+== Setup ==
+
+ # Get the `sbt` loader set up on your system according to the [Setup#Launching_Sbt Launching Sbt] section.
  # Checkout `sbt`
 {{{
  svn checkout http://simple-build-tool.googlecode.com/svn/trunk/ sbt
