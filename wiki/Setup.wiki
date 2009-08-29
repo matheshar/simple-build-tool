@@ -17,7 +17,7 @@ The easiest way to launch sbt is to create a one-line script.  Download [http://
 === Unix ===
 Put the jar in your `~/bin` directory, put the line
 {{{
-java -Xmx256M -jar `dirname $0`/sbt-launcher.jar "$@"
+java -Xmx512M -jar `dirname $0`/sbt-launcher.jar "$@"
 }}}
 in a file called `sbt` in your `~/bin` directory and do
 {{{
@@ -31,7 +31,7 @@ This allows you to launch sbt in any directory by typing `sbt` at the command pr
 Create a batch file `sbt.bat`:
 {{{
 set SCRIPT_DIR=%~dp0
-java -Xmx256M -jar "%SCRIPT_DIR%sbt-launcher.jar" %*
+java -Xmx512M -jar "%SCRIPT_DIR%sbt-launcher.jar" %*
 }}}
 and put the jar in the same directory as the batch file.  Put `sbt.bat` on your path so that you can launch `sbt` in any directory by typing `sbt` at the command prompt.
 
