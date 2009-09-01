@@ -34,6 +34,9 @@
  * Fixed issue #39 (sources were not relative in src package)
  * Implemented issue #38 (`InstallProject` with 'install' task)
  * Vesa's patch for configuring the output of forked Scala/Java and processes
+ * Don't buffer logging of forked `run` by default
+ * Check `Project.terminateWatch` to determine if triggered execution should stop for a given keypress.
+ * Terminate triggered execution only on 'enter' by default (previously, any keypress stopped it)
 
 === 0.5.1 to 0.5.2 ===
  * Fixed problem where dependencies of `sbt` plugins were not on the compile classpath
