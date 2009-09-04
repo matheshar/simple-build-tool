@@ -6,101 +6,31 @@ This page describes build configuration for when the default actions or paths ar
 
 = Example =
 
-As of `sbt` 0.4.5, if you only have one main class in your project, `sbt` will detect it automatically.  This class will be run when the `run` action is executed and will be the value of the `Main-Class` attribute for the `package` action.  If you have more than one main class, you need to specify the main class to use explicitly.  This example will show you how to do this.
+`sbt` is configured by creating a project definition in the `project/build` directory.  A project definition is a class (written in Scala) that implements `sbt.Project`.  This is usually done by making a class that extends `sbt.DefaultProject`.  The following is an example of adding a Hello World task to your build.  It assumes you have already initialized your project as described on the [Setup] page.
 
-First, create a new project:
-{{{
-$ sbt
-Project does not exist, create new project? (y/N) : y
-Name: Test Project
-...
-}}}
-
-Make a source file called
-
-{{{
-src/main/scala/Test.scala
-}}}
-
-with the following content:
-
-{{{
-object Test
-{
-  def main(args: Array[String])
-  {
-    println("Hello World! " + args.mkString(" "))
-  }
-}
-}}}
-
-Now, run it:
-{{{
-$sbt
-> run
-...
-Hello World!
-...
-}}}
-
-{{{
-$sbt
-> run (again)
-...
-Hello World! (again)
-...
-}}}
-
-When you execute the `run` action, `sbt` runs `Test` using the scala runner in the same virtual machine as `sbt` (see RunningProjectCode for details).  Now, add another source file
-
-{{{
-src/main/scala/Test2.scala
-}}}
-
-with a main method:
-
-{{{
-object Test2
-{
-  def main(args: Array[String])
-  {
-    println("Hello World 2! " + args.mkString(" "))
-  }
-}
-}}}
-
-If you try `run`, you are prompted for which one to run:
-
-{{{
-Multiple main classes detected, select one to run:
-
- [1] Test2
- [2] Test
-
-Enter number:
-}}}
-
-Explicitly specify the main class by configuring your build.  Do this by creating a new file called
-{{{
-project/build/TestProject.scala
-}}}
-
-with the following content:
-
+`project/build/HelloWorld.scala`
 {{{
 import sbt._
 
-class TestProject(info: ProjectInfo) extends DefaultProject(info)
+class HelloWorldProject(info: ProjectInfo) extends DefaultProject(info)
 {
-  override def mainClass = Some("Test")
+  lazy val hi = task { println("Hello World"); None }
 }
 }}}
 
-This build configuration is referred to as your project definition.  If you have `sbt` running, you need to reload the project with the new project definition:
+If you have `sbt` running, you need to reload the project with the new project definition:
 {{{
 > reload
 }}}
-Otherwise, start up sbt and execute `run`.  `sbt` will run the requested class without prompting.  In addition, `package` will know which main class to use for the `Main-Class` attribute in the manifest (it will not add a `Main-Class` attribute if multiple main classes exist and one is not specified explicitly).
+Otherwise, start up sbt.  Execute `hi`:
+{{{
+> hi
+...
+Hello World
+...
+}}}
+
+The details of writing tasks are described on the [CustomActions Creating/Modifying Actions] page.
 
 = Configuration Details =
 
@@ -110,7 +40,7 @@ The `project/build` directory is a project itself.  Therefore, you can add jars 
 
 = Specifying Options =
 
-Setting the main class was one case of specifying options for tasks (in that case, the `run` task).  The general mechanism for specifying options is with an overridable method that defines the list of options for a task.  For example, the default options for the `compile` task are defined as:
+The general mechanism for specifying options to built-in tasks is with an overridable method that defines the list of options for a task.  For example, the default options for the `compile` task are defined as:
 
 {{{
     def compileOptions: Seq[CompileOption] = Deprecation :: Nil
@@ -119,7 +49,7 @@ Setting the main class was one case of specifying options for tasks (in that cas
 `Deprecation` is a val in `ScalaProject` that is an instance of `CompileOption` and represents the command line `scalac` option `-deprecation`.  To additionally specify the `-unchecked` command line option, override `compileOptions` in your project definition (class `TestProject` above):
 
 {{{
-    override def compileOptions = Unchecked :: super.compileOptions.toList
+    override def compileOptions = super.compileOptions ++ Seq(Unchecked)
 }}}
 
 The currently available options for tasks are listed below.
