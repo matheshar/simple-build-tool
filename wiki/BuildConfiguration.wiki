@@ -6,7 +6,7 @@ This page describes build configuration for when the default actions or paths ar
 
 = Example =
 
-`sbt` is configured by creating a project definition in the `project/build` directory.  A project definition is a class (written in Scala) that implements `sbt.Project`.  This is usually done by making a class that extends `sbt.DefaultProject`.  The following is an example of adding a Hello World task to your build.  It assumes you have already initialized your project as described on the [Setup] page.
+`sbt` is configured by creating a project definition in the `project/build` directory.  A project definition is a class (written in Scala) that implements `sbt.Project`.  This is usually done by extending `sbt.DefaultProject`.  The following is an example of adding a Hello World task to your build.  It assumes you have already initialized your project as described on the [Setup] page.
 
 `project/build/HelloWorld.scala`
 {{{
