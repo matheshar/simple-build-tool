@@ -65,7 +65,11 @@ Method `compileOptions` specifies additional options for task `compile` to pass 
   * `DisableWarnings`
   * `target(t: Target.Value)`   (accepts values of the `Target` enumeration: `Java1_5`, `Java1_4`, `Msil`)
   * `MaxCompileErrors(max: Int)`   Specifies the maximum number of compiler errors to show.  The default value is 100.
-  * `CompileOption(option: String)`   (for arbitrary options)
+  * `CompileOption(option: String)`   (for arbitrary options).  Example:
+{{{
+  override def compileOptions = super.compileOptions ++
+     Seq("-encoding", "utf8").map(x => CompileOption(x))
+}}}
 
 Method `javaCompileOptions` specifies the options passed to the Java compiler by the `compile` task.  There is a similar method `testJavaCompileOptions` for `test-compile`.  Currently, all options are specified by:
   * `JavaCompileOption(option: String)`
