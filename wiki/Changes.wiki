@@ -37,6 +37,17 @@
  * Don't buffer logging of forked `run` by default
  * Check `Project.terminateWatch` to determine if triggered execution should stop for a given keypress.
  * Terminate triggered execution only on 'enter' by default (previously, any keypress stopped it)
+ * Fixed issue #41 (parent project should not declare jar artifact)
+ * Fixed issue #42 (search parent directories for `ivysettings.xml`)
+ * Added support for extra attributes with Ivy.  Use `extra(key -> value)` on `ModuleIDs` and `Artifacts`.  To define for a project's ID:
+{{{
+  override def projectID = super.projectID extra(key -> value)
+}}}
+ To specify in a dependency:
+{{{
+  val dep = normalID extra(key -> value)
+}}}
+
 
 === 0.5.1 to 0.5.2 ===
  * Fixed problem where dependencies of `sbt` plugins were not on the compile classpath
