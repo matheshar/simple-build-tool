@@ -47,6 +47,9 @@
 {{{
   val dep = normalID extra(key -> value)
 }}}
+ * Proper graph actions: `graph-src` and `graph-pkg` for source dependency graph and
+quasi-package dependency graph (based on source directories and source
+dependencies).
 
 
 === 0.5.1 to 0.5.2 ===
