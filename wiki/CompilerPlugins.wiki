@@ -6,14 +6,14 @@ To use a compiler plugin, you either put it in your unmanaged library directory 
 
 `compilerPlugin` is a convenience method for specifying `plugin->default(compile)` as the configuration for a dependency:
 {{{
-   val sxr = compilerPlugin("org.scala-tools.sxr" % "sxr" % "0.2")
+   val sxr = compilerPlugin("org.scala-tools.sxr" %% "sxr" % "0.2.3")
 }}}
 
 Alternatively, you can use inline Ivy XML:
 {{{
    override def ivyXML =
       <dependencies>
-         <dependency org="org.scala-tools.sxr" name="sxr" rev="0.2" conf="plugin->default(compile)"/>
+         <dependency org="org.scala-tools.sxr" name="sxr" rev="0.2.3" conf="plugin->default(compile)"/>
       </dependencies>
 }}}
 
@@ -30,5 +30,5 @@ The `compile` and `test-compile` actions will use any compiler plugins found in 
 You can still specify compiler plugins manually.  For example:
 
 {{{
-  override def compileOptions = CompileOption("-Xplugin:<path-to-sxr>/sxr-0.2.jar") :: super.compileOptions.toList
+  override def compileOptions = CompileOption("-Xplugin:<path-to-sxr>/sxr-0.2.3.jar") :: super.compileOptions.toList
 }}}

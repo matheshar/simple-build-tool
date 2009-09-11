@@ -3,7 +3,6 @@
 This is the roadmap for `sbt`.  Comments and suggestions are welcome!
 
 == Features ==
- * Improved tracking of task sources and products
  * Sandboxed test running/forking
 
 == Documentation ==

@@ -1,4 +1,4 @@
-=== 0.5.2 to trunk ===
+=== 0.5.2 to 0.5.3 ===
  * Many logging related changes and fixes.  Added `FilterLogger` and cleaned up interaction between `Logger`, scripted testing, and the builder projects.  This included removing the `recordingDepth` hack from Logger.  Logger buffering is now enabled/disabled per thread.
  * Fix `compileOptions` being fixed after the first compile
  * Minor fixes to output directory checking
@@ -9,7 +9,7 @@
  * `jettyRunTask` accepts configuration in a single configuration wrapper object instead of many parameters
  * Fix web application class loading (issue #35) by using `jettyClasspath=testClasspath---jettyRunClasspath` for loading Jetty.  A better way would be to have a `jetty` configuration and have `jettyClasspath=managedClasspath('jetty')`, but this maintains compatibility.
  * Copy resources to `target/resources` and `target/test-resources` using `copyResources` and `copyTestResources` tasks.  Properly include all resources in web applications and classpaths (issue #36).  `mainResources` and `testResources` are now the definitive methods for getting resources.
- * Updated for 2.8 (`sbt` now compiles against August 21, 2009 nightly build of Scala)
+ * Updated for 2.8 (`sbt` now compiles against September 11, 2009 nightly build of Scala)
  * Fixed issue with position of `^` in compile errors
  * Changed order of repositories (local, shared, Maven Central, user, Scala Tools)
  * Added Maven Central to resolvers used to find Scala library/compiler in launcher
@@ -29,8 +29,8 @@
 {{{
    > sh find src/main/scala -iname *.scala | xargs cat | wc -l
 }}}
+ * Proper dependency graph actions (previously was an unsupported prototype): `graph-src` and `graph-pkg` for source dependency graph and quasi-package dependency graph (based on source directories and source dependencies)
  * Improved Ivy-related code to not load unnecessary default settings
- * Moved repository order to be local, user repositories, Maven Central, and then Scala Tools
  * Fixed issue #39 (sources were not relative in src package)
  * Implemented issue #38 (`InstallProject` with 'install' task)
  * Vesa's patch for configuring the output of forked Scala/Java and processes
@@ -47,9 +47,6 @@
 {{{
   val dep = normalID extra(key -> value)
 }}}
- * Proper graph actions: `graph-src` and `graph-pkg` for source dependency graph and
-quasi-package dependency graph (based on source directories and source
-dependencies).
 
 
 === 0.5.1 to 0.5.2 ===

@@ -2,9 +2,11 @@
 
 == Introduction ==
 
-Version 0.5 of `sbt` adds the ability to fork the Scala compiler and runner.  Forking is required when you want to use a version of Scala that `sbt` does not support (such as Scala trunk).  When forking the compiler is enabled, not all `sbt` features are available.  In particular, partial recompilation, testing, and main class detection are not available.
+Version 0.5 of `sbt` adds the ability to fork the Scala compiler and runner for the `compile`, `test-compile`, and `run` tasks.  Forking is required when you want to use a version of Scala that `sbt` does not support (such as Scala trunk).  When forking the compiler is enabled, not all `sbt` features are available.  In particular, partial recompilation, testing, and main class detection are not available.  This usage is described in the first section.
 
-== Usage ==
+You might additionally use the forking API for spawning Java processes in general.  This usage is described in the second section.
+
+== Basic Usage ==
 
 You can choose to enable forking the compiler, runner, or both.  You can change the Java and Scala locations used to build the project and the working directory for the runner.
 
@@ -36,3 +38,9 @@ These allow you to change the working directory when using the `run` action and 
 }}}
 
 for providing options to the forked Java process for the Scala compiler.
+
+== Direct Usage ==
+
+To fork a new process, use the [http://simple-build-tool.googlecode.com/svn/artifacts/latest/api/sbt/Fork$object.html Fork API].  The methods of interest are `Fork.java`, `Fork.javac`, `Fork.scala`, and `Fork.scalac`.  See the [http://simple-build-tool.googlecode.com/svn/artifacts/latest/api/sbt/Fork$object.ForkJava.html ForkJava] and [http://simple-build-tool.googlecode.com/svn/artifacts/latest/api/sbt/Fork$object.ForkScala.html ForkScala] classes for the arguments and types.
+
+The last argument in all cases is either the `Logger` to which output should go or the [http://simple-build-tool.googlecode.com/svn/artifacts/latest/api/sbt/OutputStrategy.html OutputStrategy] to use (such as standard output or another `OutputStream`).

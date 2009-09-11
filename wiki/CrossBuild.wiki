@@ -14,23 +14,23 @@ The rest of this page describes how `sbt` handles this for you as part of cross-
 
 To use a library built against multiple versions of Scala, double the first `%` in an inline dependency to be `%%`.  This tells `sbt` that it should append the current version of Scala being used to build the library to the dependency's name.  For example:
 {{{
-  val dispatch = "net.databinder.dispatch" %% "dispatch" % "0.3.2"
+  val dispatch = "net.databinder.dispatch" %% "dispatch" % "0.5.2"
 }}}
 
 A nearly equivalent, manual alternative is:
 {{{
-  val dispatch = "net.databinder.dispatch" % ("dispatch_" + crossScalaVersionString) % "0.3.2"
+  val dispatch = "net.databinder.dispatch" % ("dispatch_" + crossScalaVersionString) % "0.5.2"
 }}}
 Or, for a fixed version of Scala:
 {{{
-  val dispatch = "net.databinder.dispatch" % "dispatch_2.7.5" % "0.3.2"
+  val dispatch = "net.databinder.dispatch" % "dispatch_2.7.5" % "0.5.2"
 }}}
 
 == Cross-Building a Project ==
 
 Define the versions of Scala to build against by overriding the `crossScalaVersions` method.  For example:
 {{{
-  override def crossScalaVersions = Set("2.7.2", "2.7.3", "2.7.4", "2.7.5")
+  override def crossScalaVersions = Set("2.7.2", "2.7.3", "2.7.4", "2.7.5", "2.7.6")
 }}}
 The versions specified must be supported by `sbt`.  When you run an action, `sbt` will still use the version of Scala defined in the `scala.version` property.  To build against all versions listed in `crossScalaVersions`, prefix the action to run with `+`.  For example:
 {{{

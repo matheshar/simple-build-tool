@@ -37,16 +37,34 @@ You can run an action for multiple versions of Scala by prefixing the action wit
   Deletes the managed library directory for this project.
  * `compile`
   Compiles the main sources (in the `src/main/scala` directory).
+ * `console`
+  Starts the Scala interpreter with a classpath including the compiled sources and all jars in the `lib` directory.  To return to sbt, type `:quit`, Ctrl+D (Unix), or Ctrl+Z (Windows).  Runs `test-compile` first.
+ * `console-quick`
+  Starts the Scala interpreter with the project classes on the classpath without running any other action first.
  * `doc`
   Generates API documentation for Scala source files in `src/main/scala` using scaladoc.  Runs `compile` first.
  * `doc-test`
   Generates API documentation for Scala source files in `src/test/scala` using scaladoc.  Runs `test-compile` first.
  * `doc-all`
   Runs `doc` and `doc-test`.
- * `console`
-  Starts the Scala interpreter with a classpath including the compiled sources and all jars in the `lib` directory.  To return to sbt, type `:quit`, Ctrl+D (Unix), or Ctrl+Z (Windows).  Runs `test-compile` first.
- * console-quick
-  Starts the Scala interpreter with the project classes on the classpath without running any other action first.
+ * `exec` (mixin Exec to your project definition to use this action)
+  Forks the provided arguments as a new process.  Examples:
+{{{
+  > exec echo Hi
+  > exec find src/main/scala -iname *.scala -exec wc -l {} ;
+}}}
+ * `graph-src`
+  Produces a graphviz dot file for the dependency graph between main sources in `target/graph/sources`
+ * `graph-pkg`
+  Produces a graphviz dot file for the dependency graph between main source directories in `target/graph/packages`
+ * `javap` <option>* <class-name>
+  Runs `javap` with the given arguments using the `runClasspath` for the project.  Tab completion is provided for main classes generated from the last successful compilation. Examples:
+{{{
+   > javap your.Clazz
+   > javap -c scala.List
+}}}
+ * `test-javap` <option>* <class-name>
+  Runs `javap` with the given arguments using the `testClasspath` for the project.  Tab completion is provided for test classes generated from the last successful compilation.
  * `jetty-run` (Web Projects only)
   Starts the Jetty server and serves this project as a web application on `http://localhost:8080` by default.  This variant of starting Jetty is intended to be run from the interactive prompt.
  * `jetty` (Web Projects only)
@@ -72,6 +90,11 @@ You can run an action for multiple versions of Scala by prefixing the action wit
   Compiles, tests, generates documentation, packages, and increments the version.
  * `run <argument>*`
   Runs the main class for the project in the same virtual machine as `sbt`.  The main class is passed the `argument`s provided.  Please see RunningProjectCode for details on the use of `System.exit` and multithreading (including GUIs) in code run by this action.  Runs `compile` first.
+ * `sh <argument>*` (mixin Exec for this action)
+  Invokes the shell (for unix users) with the command: `/bin/sh -c <arguments>`.  For example:
+{{{
+    > sh find src/main/scala -iname *.scala | xargs cat | wc -l
+}}}
  * `test`
   Runs all tests detected during compilation.  Runs `test-compile` first.
  * `test-failed <test>*`

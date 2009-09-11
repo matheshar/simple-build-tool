@@ -13,7 +13,7 @@ You put a dependency in a configuration by selecting one or more of its configur
   val st = "org.scala-tools.testing" % "scalatest" % "0.9.5" % "test->default"
 }}}
 
-This says that your project's `test` configuration uses `ScalaTest`'s `default` configuration.  Again, see the [http://ant.apache.org/ivy/history/2.0.0/tutorial/conf.html Ivy documentation] for more advanced mappings.  Most projects published to Maven repositories will use the `default` or `compile` configuration.  `sbt` itself, however, publishes different jars to different configurations for each version of Scala that it supports.  The jar compiled against Scala 2.7.4 is published to the `"2.7.5"` configuration.  This is probably atypical, however, and the better solution for this particular case is to use [CrossBuild cross-building].
+This says that your project's `test` configuration uses `ScalaTest`'s `default` configuration.  Again, see the [http://ant.apache.org/ivy/history/2.0.0/tutorial/conf.html Ivy documentation] for more advanced mappings.  Most projects published to Maven repositories will use the `default` or `compile` configuration.  `sbt` itself, however, publishes different jars to different configurations for each version of Scala that it supports.  The jar compiled against Scala 2.7.5 is published to the `"2.7.5"` configuration.  This is probably atypical, however, and the better solution for this particular case is to use [CrossBuild cross-building].
 
 A more useful application of configurations is to group dependencies that are not used on classpaths.  For example, your might use a `"js"` configuration to automatically download jQuery and then include it in your jar by overriding `mainResources`.  This is what Scala X-Ray does, for example:
 {{{
