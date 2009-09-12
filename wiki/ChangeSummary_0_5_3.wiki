@@ -1,0 +1,51 @@
+= Changes from 0.5.2 to 0.5.3 =
+
+== Features ==
+ * Added `javap` task to `DefaultProject`.  It has tab completion on compiled project classes and the run classpath is passed to `javap` so that library classes are available.  Examples:
+{{{
+   > javap your.Clazz
+   > javap -c scala.List
+}}}
+ * Added `exec` task.  Mixin `Exec` to project definition to use.  This forks the command following `exec`.  Examples:
+{{{
+   > exec echo Hi
+   > exec find src/main/scala -iname *.scala -exec wc -l {} ;
+}}}
+ * Added `sh` task for users with a unix-style shell available (runs `/bin/sh -c <arguments>`).  Mixin `Exec` to project definition to use.  Example:
+{{{
+   > sh find src/main/scala -iname *.scala | xargs cat | wc -l
+}}}
+ * Proper dependency graph actions (previously was an unsupported prototype): `graph-src` and `graph-pkg` for source dependency graph and quasi-package dependency graph (based on source directories and source dependencies)
+ * Implemented issue #38 (`InstallProject` with 'install' task)
+
+== Improvements ==
+ * Applied Vesa's patch for configuring the output of forked Scala/Java and processes (see [Forking])
+ * Added `defaultLoggingLevel` method for setting the initial level of a project's `Logger`
+ * Added `syncPathsTask` for synchronizing paths to a target directory
+ * Allow multiple instances of Jetty (new `jettyRunTasks` can be defined with different ports)
+ * `jettyRunTask` accepts configuration in a single configuration wrapper object instead of many parameters
+ * Compiles against September 11, 2009 nightly build of Scala 2.8
+ * Changed order of repositories (local, shared, Maven Central, user, Scala Tools)
+ * Added Maven Central to resolvers used to find Scala library/compiler in launcher
+ * Check `Project.terminateWatch` to determine if triggered execution should stop for a given keypress.
+ * Terminate triggered execution only on 'enter' by default (previously, any keypress stopped it)
+ * Added support for extra attributes with Ivy.  Use `extra(key -> value)` on `ModuleIDs` and `Artifacts`.  To define for a project's ID:
+{{{
+  override def projectID = super.projectID extra(key -> value)
+}}}
+ To specify in a dependency:
+{{{
+  val dep = normalID extra(key -> value)
+}}}
+ 
+== Fixes ==
+ * Fix web application class loading (issue #35).
+ * Fix `compileOptions` being fixed after the first compile
+ * Many logging related changes and fixes.  Added `FilterLogger` and cleaned up interaction between `Logger`, scripted testing, and the builder projects.  This included removing the `recordingDepth` hack from Logger.  Logger buffering is now enabled/disabled per thread.
+ * Copy resources to `target/resources` and `target/test-resources` using `copyResources` and `copyTestResources` tasks.  Properly include all resources in web applications and classpaths (issue #36).  `mainResources` and `testResources` are now the definitive methods for getting resources.
+ * Fixed issue with position of `^` in compile errors
+ * Fixed exit code returned when exception thrown in main thread for `TrapExit`
+ * Fixed issue #39 (sources were not relative in src package)
+ * Don't buffer logging of forked `run` by default
+ * Fixed issue #41 (parent project should not declare jar artifact)
+ * Fixed issue #42 (search parent directories for `ivysettings.xml`)
