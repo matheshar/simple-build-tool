@@ -14,7 +14,7 @@ $ sbt
 ...
 }}}
 
-This will build `sbt` against all versions of Scala that `sbt` supports.  These `sbt` variants are installed to your local Ivy repository.  The packaged loader jar is created at `target/sbt-launcher-0.5.4-SNAPSHOT.jar`.  Specify `sbt.version` as `0.5.4-SNAPSHOT` in your projects to use the trunk version of `sbt` to build them.  If you update trunk, build, and publish to local again, the loader will update the version of sbt used in your projects.  Note that this behavior of updating an existing version of `sbt` in a project only happens for locally built and published `*-SNAPSHOT` versions of `sbt`.
+This will build `sbt` against all versions of Scala that `sbt` supports.  These `sbt` variants are installed to your local Ivy repository.  The packaged loader jar is created at `target/sbt-launcher-0.5.5-SNAPSHOT.jar`.  Specify `sbt.version` as `0.5.5-SNAPSHOT` in your projects to use the trunk version of `sbt` to build them.  If you update trunk, build, and publish to local again, the loader will update the version of sbt used in your projects.  Note that this behavior of updating an existing version of `sbt` in a project only happens for locally built and published `*-SNAPSHOT` versions of `sbt`.
 
 == Basic Details ==
 
@@ -22,4 +22,4 @@ This will build `sbt` against all versions of Scala that `sbt` supports.  These 
 
 == Development ==
 
-If you want to run tests, debug, or otherwise develop on `sbt`, you will want to use the usual actions like `compile` and `package`.  In addition to the usual actions, the `proguard` action builds the final loader jar to `target/sbt-launcher-0.5.4-SNAPSHOT.jar` as mentioned above.
+If you want to run tests, debug, or otherwise develop on `sbt`, you will want to use the usual actions like `compile` and `package`.  In addition to the usual actions, the `proguard` action builds the final loader jar to `target/sbt-launcher-0.5.5-SNAPSHOT.jar` as mentioned above.

@@ -1,4 +1,4 @@
-=== 0.5.2 to 0.5.3 ===
+=== 0.5.2 to 0.5.4 ===
  * Many logging related changes and fixes.  Added `FilterLogger` and cleaned up interaction between `Logger`, scripted testing, and the builder projects.  This included removing the `recordingDepth` hack from Logger.  Logger buffering is now enabled/disabled per thread.
  * Fix `compileOptions` being fixed after the first compile
  * Minor fixes to output directory checking

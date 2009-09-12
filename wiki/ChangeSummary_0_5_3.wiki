@@ -1,4 +1,4 @@
-= Changes from 0.5.2 to 0.5.3 =
+= Changes from 0.5.2 to 0.5.4 =
 
 == Features ==
  * Added `javap` task to `DefaultProject`.  It has tab completion on compiled project classes and the run classpath is passed to `javap` so that library classes are available.  Examples:

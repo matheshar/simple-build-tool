@@ -15,7 +15,7 @@ There are two ways to use `sbt` with Scala 2.8 (the trunk version of Scala).  Bo
  > update
  > cross-publish-local
 }}}
- # Use this local version of `sbt` in your project by setting your `sbt.version` to `0.5.4-SNAPSHOT` and your `scala.version` to `2.8.0-SNAPSHOT` (or one of the 2.7.x versions of Scala).
+ # Use this local version of `sbt` in your project by setting your `sbt.version` to `0.5.5-SNAPSHOT` and your `scala.version` to `2.8.0-SNAPSHOT` (or one of the 2.7.x versions of Scala).
 
 == New Nightly ==
 
@@ -63,7 +63,7 @@ To update to the latest 2.8 nightly,
  > update
  > cross-publish-local
 }}}
- # Run `sbt` in your project directory.  You will be prompted for name, organization and version.  Enter `2.8.0-local` for Scala and `0.5.3-SNAPSHOT` for `sbt`.  You should be all set now.  When you want to update the compiler follow the steps in the next section.
+ # Run `sbt` in your project directory.  You will be prompted for name, organization and version.  Enter `2.8.0-local` for Scala and `0.5.5-SNAPSHOT` for `sbt`.  You should be all set now.  When you want to update the compiler follow the steps in the next section.
 
 == New compiler ==
 For a new compiler:
