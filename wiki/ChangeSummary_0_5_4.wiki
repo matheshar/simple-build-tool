@@ -24,7 +24,7 @@
  * Added `syncPathsTask` for synchronizing paths to a target directory
  * Allow multiple instances of Jetty (new `jettyRunTasks` can be defined with different ports)
  * `jettyRunTask` accepts configuration in a single configuration wrapper object instead of many parameters
- * Compiles against September 11, 2009 nightly build of Scala 2.8
+ * Compiles against September 10, 2009 nightly build of Scala 2.8
  * Changed order of repositories (local, shared, Maven Central, user, Scala Tools)
  * Added Maven Central to resolvers used to find Scala library/compiler in launcher
  * Check `Project.terminateWatch` to determine if triggered execution should stop for a given keypress.
