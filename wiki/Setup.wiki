@@ -132,6 +132,14 @@ directory.  Automatically managed dependencies are downloaded to:
   project/plugins/src_managed/
 }}}
 
+A `.gitignore` for an `sbt` project should contain these entries:
+{{{
+target/
+lib_managed/
+src_managed/
+project/boot/
+}}}
+
 = Next Step =
 
 Read [RunningSbt Basic Usage] for basic `sbt` usage information.
