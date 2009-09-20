@@ -107,4 +107,4 @@ The `scripted` action runs all scripted tests in `src/sbt-test`.  The `scripted-
 > scripted-only web/jsp
 }}}
 
-You can [http://code.google.com/p/simple-build-tool/wiki/jsp-test.zip download the example test project] and use it as a starting point for your tests.
+You can [http://simple-build-tool.googlecode.com/svn/wiki/jsp-test.zip download the example test project] and use it as a starting point for your tests.
