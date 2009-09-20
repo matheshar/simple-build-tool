@@ -93,3 +93,57 @@ to your root project definition to enable this.
 === sbt and Scala Versions ===
 
 All projects in a multi-project build must use the same version of `sbt` and Scala for building.  If a different version of `sbt` or Scala is set on a subproject, it is ignored.  In a future release, this may generate a warning or an error.
+
+=== Dependency Management ===
+
+A `ParentProject` by default does not publish an artifact other than an Ivy file or a pom.
+
+Project dependencies declared using the `project` method are automatically added to a generated `ivy.xml` or `pom` for each project.  That is, for:
+
+{{{
+import sbt._
+class SimulatorProject(info: ProjectInfo) extends ParentProject(info)
+{
+   lazy val core = project("core", "Simulator Core")
+   lazy val ui = project("ui", "Simulator User Interface", core)
+}
+}}}
+
+the generated `ivy.xml` for `Simulator User Interface` will declare a dependency on `Simulator Core` in the `compile` configuration.  To change the default behavior, override `deliverProjectDependencies` in the depending project (here, `Simulator User Interface`).  `deliverProjectDependencies` returns the module IDs (the type of object created by "org.example" % "name" % "1.0") for each immediate project dependency.  You can add or remove projects from this list or modify the configuration mappings.
+
+To remove `core` from `ui`:
+{{{
+  class UIProject(info: ProjectInfo) extends DefaultProject(info) {
+    override def deliverProjectDependencies =
+     super.deliverProjectDependencies - core.projectID
+  }
+}}}
+
+To declare `core` as being a dependency of `ui` in the `test` configuration:
+{{{
+  class UIProject(info: ProjectInfo) extends DefaultProject(info) {
+    override def deliverProjectDependencies =
+      super.deliverProjectDependencies - core.projectID ++ Seq(core.projectID % "test->default")
+  }
+}}}
+
+To declare no dependencies on other subprojects:
+{{{
+  override def deliverProjectDependencies = Nil
+}}}
+
+If you don't want to publish a subproject, you can do the following steps:
+
+ * Override the relevant actions to do nothing:
+{{{
+  def doNothing = task { None }
+  override def publishLocalAction = doNothing
+  override def deliverLocalAction = doNothing
+  override def publishAction = doNothing
+  override def deliverAction = doNothing
+}}}
+ * For each project that depends on that subproject, remove it from `deliverProjectDependencies`.:
+{{{
+    override def deliverProjectDependencies =
+     super.deliverProjectDependencies - subproject.projectID
+}}}
