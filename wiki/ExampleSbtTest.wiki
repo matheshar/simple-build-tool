@@ -1,6 +1,6 @@
 = Example Test =
 
-This page describes writing an example test for `sbt`.  The example is the `webapp/jsp` test in `src/sbt-test` in `sbt` trunk.
+This page describes writing an example test for `sbt`.  The example is the `webapp/jsp` test from `sbt` trunk.
 
 == Define the Build ==
 
@@ -100,11 +100,11 @@ The final file in the test is `src/main/webapp/index.jsp`:
 
 Run `update` first to get Ivy as a dependency.
 
-The `scripted` action runs all scripted tests in `src/sbt-test`.  The `scripted-only` action accepts the tests to run in the form <group>/<name>.  For example:
+The `scripted` action runs all scripted tests in `src/sbt-test`.  The `scripted-only` action accepts the tests to run in the form `<group>/<name>`.  For example:
 {{{
 > update
 > scripted
 > scripted-only web/jsp
 }}}
 
-You can [jsp-test.zip download the example test project] and use it as a starting point for your tests.
+You can [http://code.google.com/p/simple-build-tool/wiki/jsp-test.zip download the example test project] and use it as a starting point for your tests.
