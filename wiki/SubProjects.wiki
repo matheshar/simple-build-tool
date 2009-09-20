@@ -115,7 +115,7 @@ To remove `core` from `ui`:
 {{{
   class UIProject(info: ProjectInfo) extends DefaultProject(info) {
     override def deliverProjectDependencies =
-     super.deliverProjectDependencies - core.projectID
+     super.deliverProjectDependencies.toList - core.projectID
   }
 }}}
 
@@ -145,5 +145,5 @@ If you don't want to publish a subproject, you can do the following steps:
  * For each project that depends on that subproject, remove it from `deliverProjectDependencies`.:
 {{{
     override def deliverProjectDependencies =
-     super.deliverProjectDependencies - subproject.projectID
+     super.deliverProjectDependencies.toList - subproject.projectID
 }}}
