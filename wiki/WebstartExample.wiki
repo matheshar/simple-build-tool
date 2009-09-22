@@ -25,8 +25,6 @@ class WebstartTest(info: ProjectInfo) extends ParentProject(info)
     override def webstartSignConfiguration = Some(new SignConfiguration("mark", storePassword("fakepassword") :: Nil))
     //override def webstartPack200 = false // uncomment to disable pack200 compression, which is enabled by default
     //override def webstartGzip = false// uncomment to disable gzip compression, which is enabled by default
-    
-    override def defaultJarBaseName = normalizedName + "-" + version.toString
       
     def jnlpXML(libraries: Seq[WebstartJarResource]) =
       <jnlp spec="1.0+" codebase="http://localhost:8080/" href={artifactBaseName + ".jnlp"}>
