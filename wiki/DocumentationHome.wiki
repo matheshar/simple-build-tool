@@ -22,6 +22,7 @@
   * Managed Dependencies
    * [LibraryManagement Basics]
    * [ManagedConfigurations Configurations]
+   * [Resolvers Defining Repositories]
    * [Publishing]
  * Writing Actions
   * [CustomActions Creating/Modifying Actions]
