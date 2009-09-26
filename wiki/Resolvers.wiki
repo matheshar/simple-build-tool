@@ -1,0 +1,82 @@
+= Resolvers =
+
+This page describes how to use more advanced repositories than the normal Maven-style repositories defined like:
+{{{
+  val scalaToolsSnapshots = "Scala-Tools Maven2 Snapshots Repository" at "http://scala-tools.org/repo-snapshots"
+}}}
+
+== Predefined ==
+
+There are a few predefined repositories:
+
+ * `DefaultMavenRepository` This is the main Maven repository at [http://scala-tools.org/repo-releases/] and is included by default
+ * `ScalaToolsReleases` This is the releases repository at [http://scala-tools.org/repo-releases/] and is included by default
+ * `ScalaToolsSnapshots`  This is the snapshots repository at [http://scala-tools.org/repo-snapshots/]
+ * `JavaNet1Repository` This is the Maven 1 repository at [http://download.java.net/maven/1/]
+
+For example, to use `java.net`, add the following line to your project definition:
+{{{
+  val javaNet = JavaNet1Repository
+}}}
+
+== Custom ==
+
+`sbt` provides an interface to the repository types available in Ivy: file, URL, SSH, and SFTP.  A key feature of repositories in Ivy is using [http://ant.apache.org/ivy/history/latest-milestone/concept.html#patterns patterns] to configure repositories.
+
+Construct a repository definition using the factory in `sbt.Resolver` for the desired type.  This factory creates a `Repository` object that can be further configured.  The following table contains links to the Ivy documentation for the repository type and the API documentation for the factory and repository class.  The SSH and SFTP repositories are configured identically except for the name of the factory.  Use `Resolver.ssh` for SSH and `Resolver.sftp` for SFTP.
+
+|| Type || Factory || Ivy Docs || Factory API || Repository Class API ||
+|| Filesystem || `Resolver.file` || [http://ant.apache.org/ivy/history/latest-milestone/resolver/filesystem.html Ivy] || [http://simple-build-tool.googlecode.com/svn/artifacts/latest/api/sbt/Resolver$object.file$object.html Builder] || [http://simple-build-tool.googlecode.com/svn/artifacts/latest/api/sbt/FileRepository.html FileRepository API] ||
+|| SFTP || `Resolver.sftp` || [http://ant.apache.org/ivy/history/latest-milestone/resolver/sftp.html] || [http://simple-build-tool.googlecode.com/svn/artifacts/latest/api/sbt/Resolver$object.Define.html Builder] || [http://simple-build-tool.googlecode.com/svn/artifacts/latest/api/sbt/SftpRepository.html SftpRepository API] ||
+|| SSH || `Resolver.ssh` || [http://ant.apache.org/ivy/history/latest-milestone/resolver/ssh.html] || [http://simple-build-tool.googlecode.com/svn/artifacts/latest/api/sbt/Resolver$object.Define.html Builder] || [http://simple-build-tool.googlecode.com/svn/artifacts/latest/api/sbt/SshRepository.html SshRepository API] ||
+||  URL || `Resolver.url` || [http://ant.apache.org/ivy/history/latest-milestone/resolver/url.html Ivy] || [http://simple-build-tool.googlecode.com/svn/artifacts/latest/api/sbt/Resolver$object.url$object.html Builder] || [http://simple-build-tool.googlecode.com/svn/artifacts/latest/api/sbt/URLRepository.html URLRepository API] ||
+
+== Basic Examples ==
+
+These are basic examples that use the default Maven-style repository layout.
+
+=== Filesystem ===
+
+Define a filesystem repository in the `test` directory  of the current working directory and declare that publishing to this repository must be atomic.
+{{{
+  val testRepo = Resolver.file("my-test-repo", new java.io.File("test")) transactional()
+}}}
+
+=== URL ===
+
+Define a URL repository at .`"http://example.org/repo-releases/"`.
+{{{
+  def url = new java.net.URL("http://example.org/repo-releases/")
+  val testRepo = Resolver.url("my-test-repo", url)
+}}}
+
+=== SFTP and SSH Repositories ===
+
+The following defines a repository that is served over SFTP:
+{{{
+  val sftpRepo = Resolver.sftp("my-sftp-repo", "example.org")
+}}}
+To explicitly specify the port:
+{{{
+  val sftpRepo = Resolver.sftp("my-sftp-repo", "example.org", 22)
+}}}
+To specify a base path:
+{{{
+  val sftpRepo = Resolver.sftp("my-sftp-repo", "example.org", "repo-releases")
+}}}
+
+== Custom Layout ==
+
+NOTE: This section describes the Patterns API as it will exist in `sbt` 0.5.5.
+
+These examples specify custom repository layouts using patterns.  The factory methods accept an implicit `Patterns` instance that defines the patterns to use.  The patterns are first resolved against the base file or URL.  The implicit normally supplied gives the default Maven-style layout.  Provide a different Patterns object to use a different layout.  For example:
+{{{
+  val testRepo = Resolver.url("my-test-repo", url)( Patterns("[organisation]/[module]/[revision]/[artifact].[ext]") )
+}}}
+
+You can specify multiple patterns and patterns for the metadata and artifacts separately.  You can also specify whether the repository should be Maven compatible (as defined by Ivy).  See the [http://simple-build-tool.googlecode.com/svn/artifacts/latest/api/sbt/Patterns$object.html patterns] API documentation for the methods to use.
+
+For filesystem and URL repositories, you can specify absolute patterns by omitting the base URL, passing an empty `Patterns` instance, and using `ivys` and `artifacts`:
+{{{
+  val testRepo = Resolver.url("my-test-repo")(Patterns()) artifactPatterns "http://example.org/[organisation]/[module]/[revision]/[artifact].[ext]"
+}}}
