@@ -1,5 +1,6 @@
 === 0.5.4 to 0.5.5 (trunk) ===
  * Fixed problem with classifier support and the corresponding test
+ * No longer need `"->default"` in configurations (automatically mapped).
  * Can specify a specific nightly of Scala 2.8 to use (for example: `2.8.0-20090910.003346-+`)
  * Experimental support for searching for project (`-Dsbt.boot.search=none|only|root-first|nearest`)
 
