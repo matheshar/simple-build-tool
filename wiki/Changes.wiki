@@ -3,6 +3,7 @@
  * No longer need `"->default"` in configurations (automatically mapped).
  * Can specify a specific nightly of Scala 2.8 to use (for example: `2.8.0-20090910.003346-+`)
  * Experimental support for searching for project (`-Dsbt.boot.search=none|only|root-first|nearest`)
+ * Fix issue where last path component of local repository was dropped if it did not exist.
 
 === 0.5.2 to 0.5.4 ===
  * Many logging related changes and fixes.  Added `FilterLogger` and cleaned up interaction between `Logger`, scripted testing, and the builder projects.  This included removing the `recordingDepth` hack from Logger.  Logger buffering is now enabled/disabled per thread.
