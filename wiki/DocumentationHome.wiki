@@ -8,6 +8,7 @@
   * [Loader Scala and Sbt Versions]
   * [ProjectConsole Project Console]
   * [IntegrationSupport Integration] - Using `sbt` with other tools
+  * [LocalScala Custom Scala] - Using `sbt` with Scala 2.8 nightlies or a locally built Scala
  * Configuration
   * [BuildConfiguration Basic Configuration]
   * [ProjectDefinitionExamples Examples]
