@@ -11,9 +11,9 @@ $ sbt
 
 This starts sbt in interactive mode.  You are given a simple prompt at which you type actions (or tasks, targets, phases, or whatever you'd like to call them).  There is tab completion and history available at this prompt.
 
-Alternatively, you can run sbt in batch mode.  You specify a space-separated list of actions as arguments.  For example,
+Alternatively, you can run sbt in batch mode.  You specify a space-separated list of actions as arguments.  For commands that take arguments, pass the command and arguments as one argument to `sbt` by enclosing them in quotes.  For example,
 {{{
-$ sbt clean compile
+$ sbt clean compile "get sbt.version"
 }}}
 
 You can make an action run when one or more source files changes by prefixing the action with `~`.  For example:
@@ -109,9 +109,9 @@ You can run an action for multiple versions of Scala by prefixing the action wit
   Resolves and retrieves external dependencies as described in LibraryManagement.
 
   
-== Interactive Commands ==
+== Build Commands ==
  * `exit` or `quit`
-  End the current interactive session.
+  End the current interactive session or build.
  * `reload`
   Reloads the current interactive session.  The project definition is recompiled and reloaded.  Any change to the Scala or `sbt` version does not take effect (see `reboot`).
  * `reboot`
@@ -144,11 +144,3 @@ You can run an action for multiple versions of Scala by prefixing the action wit
   Change the current project to the project named <project name>.  Further operations will be done on the given project. (See SubProjects for more on multiple projects)
  * `console-project`
   Enters an interactive session with the project instance bound to the 'current' variable.  See ProjectConsole for more information.
-
-== Batch Commands ==
- * `help`
-  Displays a help message and lists these batch commands and their descriptions.
- * `actions`
-  List all available actions.
- * `reboot`
-  Use this to reload the project after changing the version of Scala or `sbt` used for building the project.  This could be used to build a project against several versions of Scala in one command, for example.
