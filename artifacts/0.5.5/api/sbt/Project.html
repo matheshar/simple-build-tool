@@ -1,0 +1,1488 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head><title>trait Project in sbt</title>
+        <meta http-equiv="content-type" content="text/html; charset=UTF8"></meta><meta content="scaladoc (version 2.7.2)" name="generator"></meta><link href="../style.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../script.js"></script>
+        </head>
+        <body onload="init()">
+        <table summary="" class="navigation">
+        <tr>
+          <td class="navigation-links" valign="top">
+            <!-- <table><tr></tr></table> -->
+          </td>
+          <td align="right" valign="top" style="white-space:nowrap;" rowspan="2">
+            <div class="doctitle-larger">Simple Build Tool 0.5.5 API</div>
+          </td>
+        </tr>
+        <tr><td></td></tr>
+      </table>
+        
+      <div class="entity">
+        <a href="../sbt$package.html" target="_self">sbt</a>
+        <br></br>
+        <span class="entity">trait  Project</span>
+      </div><hr></hr>
+      <div class="source">
+        [source: <a href="" class="sbt/Project"><code>sbt/Project.scala</code></a>]
+      </div><hr></hr>
+      <a name="Project"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>trait</code>
+        <em>Project</em>
+      </dt>
+      <dd><code> extends </code><a href="../sbt/TaskManager.html" target="_self">TaskManager</a><code> with </code><a href="../sbt/Dag.html" target="_self">Dag</a>[<a href="../sbt/Project.html" target="_self">Project</a>]<code> with </code><a href="../sbt/BasicEnvironment.html" target="_self">BasicEnvironment</a></dd>
+    </dl><dl>
+      <dt style="margin:10px 0 0 20px;"><b>Direct Known Subclasses:</b></dt>
+      <dd><a href="../sbt/FileTasks.html" target="_self">FileTasks</a>, <a href="../sbt/InternalProject.html" target="_self">InternalProject</a>, <a href="../sbt/ClasspathProject.html" target="_self">ClasspathProject</a>, <a href="../sbt/ReflectiveTasks.html" target="_self">ReflectiveTasks</a>, <a href="../sbt/ReflectiveMethods.html" target="_self">ReflectiveMethods</a>, <a href="../sbt/ReflectiveModules.html" target="_self">ReflectiveModules</a>, <a href="../sbt/ReflectiveConfigurations.html" target="_self">ReflectiveConfigurations</a>, <a href="../sbt/ReflectiveRepositories.html" target="_self">ReflectiveRepositories</a>, <a href="../sbt/BasicScalaPaths.html" target="_self">BasicScalaPaths</a>, <a href="../sbt/MultiTaskProject.html" target="_self">MultiTaskProject</a>, <a href="../sbt/ExecProject.html" target="_self">ExecProject</a></dd>
+      </dl><hr></hr>
+      
+<table summary="" cellpadding="3" class="member">
+      <tr><td class="title" colspan="2">Type Summary</td></tr>
+      <tr>
+      <td class="modifiers" valign="top"> 
+        <code>final type</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/Project.html#ManagedTask" target="_self">ManagedTask</a></em>
+        
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>final type</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/Project.html#ManagerType" target="_self">ManagerType</a></em>
+        
+        
+        
+      </td>
+    </tr>
+      </table>
+<table summary="" cellpadding="3" class="member">
+      <tr><td class="title" colspan="2">Value Summary</td></tr>
+      <tr>
+      <td class="modifiers" valign="top"> 
+        <code>final val</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/Project.html#log" target="_self">log</a></em>
+         : <a href="../sbt/Logger.html" target="_self">Logger</a>
+        
+        <div>The logger for this project definition.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>final val</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/Project.html#projectInitialize" target="_self">projectInitialize</a></em>
+         : <a href="../sbt/Environment.Property.html" target="_self">Property</a>[<a href="http://www.scala-lang.org/docu/files/api/scala/Boolean.html" target="_self">Boolean</a>]
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>final val</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/Project.html#projectName" target="_self">projectName</a></em>
+         : <a href="../sbt/Environment.Property.html" target="_self">Property</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+        
+        <div>The property for the project's name.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>final val</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/Project.html#projectOrganization" target="_self">projectOrganization</a></em>
+         : <a href="../sbt/Environment.Property.html" target="_self">Property</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+        
+        <div>The property for the project's organization.  Defaults to the parent project's organization or the project name if there is no parent.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>final val</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/Project.html#projectScratch" target="_self">projectScratch</a></em>
+         : <a href="../sbt/Environment.Property.html" target="_self">Property</a>[<a href="http://www.scala-lang.org/docu/files/api/scala/Boolean.html" target="_self">Boolean</a>]
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>final val</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/Project.html#projectVersion" target="_self">projectVersion</a></em>
+         : <a href="../sbt/Environment.Property.html" target="_self">Property</a>[<a href="../sbt/Version.html" target="_self">Version</a>]
+        
+        <div>The property for the project's version.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>final val</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/Project.html#sbtVersion" target="_self">sbtVersion</a></em>
+         : <a href="../sbt/Environment.Property.html" target="_self">Property</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>final val</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/Project.html#scalaVersion" target="_self">scalaVersion</a></em>
+         : <a href="../sbt/Environment.Property.html" target="_self">Property</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+        
+        <div>The property that defines the version of Scala to build this project with by default.  This property is only
+ ready by `sbt` on startup and reboot.  When cross-building, this value may be different from the actual
+ version of Scala being used to build the project.  ScalaVersion.current and ScalaVersion.cross should be used
+ to read the version of Scala building the project.  This should only be used to change the version of Scala used
+ for normal development (not cross-building)</div>
+      </td>
+    </tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Values and Variables inherited from <a href="../sbt/BasicEnvironment.html" target="_self">BasicEnvironment</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="../sbt/BasicEnvironment.html#IntFormat" target="_self">IntFormat</a>, <a href="../sbt/BasicEnvironment.html#LongFormat" target="_self">LongFormat</a>, <a href="../sbt/BasicEnvironment.html#DoubleFormat" target="_self">DoubleFormat</a>, <a href="../sbt/BasicEnvironment.html#BooleanFormat" target="_self">BooleanFormat</a>, <a href="../sbt/BasicEnvironment.html#StringFormat" target="_self">StringFormat</a>, <a href="../sbt/BasicEnvironment.html#NonEmptyStringFormat" target="_self">NonEmptyStringFormat</a>, <a href="../sbt/BasicEnvironment.html#VersionFormat" target="_self">VersionFormat</a>, <a href="../sbt/BasicEnvironment.html#FileFormat" target="_self">FileFormat</a>
+        </td></tr>
+      </table>
+<table summary="" cellpadding="3" class="member">
+      <tr><td class="title" colspan="2">Method Summary</td></tr>
+      <tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/Project.html#act%28String%29" target="_self">act</a></em>
+        (<em>name</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+        
+        <div>Executes the task with the given name.  This involves executing the task for all
+ project dependencies (transitive) and then for this project.  Not every dependency
+ must define a task with the given name.  If this project and all dependencies
+ do not define a task with the given name, an error is generated indicating this.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/Project.html#call%28String%2CArray%5BString%5D%29" target="_self">call</a></em>
+        (<em>name</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <em>parameters</em> : <a href="" target="contentFrame" class="scala/Array">scala.Array</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/Project.html#crossPath%28sbt.Path%29" target="_self">crossPath</a></em>
+        (<em>base</em> : <a href="../sbt/Path.html" target="_self">Path</a>) : <a href="../sbt/Path.html" target="_self">Path</a>
+        
+        <div>If this project is cross-building, returns `base` with an additional path component containing the scala version.
+ Otherwise, this returns `base`.
+ By default, cross-building is enabled when a project is loaded by the loader and crossScalaVersions is not empty.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/Project.html#crossScalaVersionString" target="_self">crossScalaVersionString</a></em>
+         : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+        
+        <div>If modifying paths for cross-building is enabled, this returns ScalaVersion.currentString.
+ Otherwise, this returns the empty string.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/Project.html#crossScalaVersions" target="_self">crossScalaVersions</a></em>
+         : <a href="" target="contentFrame" class="scala/collection/immutable/Set">scala.collection.immutable.Set</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+        
+        <div>By default, this is empty and cross-building is disabled.  Overriding this to a Set of Scala versions
+ will enable cross-building against those versions.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/Project.html#defaultExcludes" target="_self">defaultExcludes</a></em>
+         : <a href="../sbt/FileFilter.html" target="_self">FileFilter</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>protected def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/Project.html#defaultLoggingLevel" target="_self">defaultLoggingLevel</a></em>
+         : <a href="" target="contentFrame" class="scala/Enumeration/Value">scala.Enumeration.Value</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/Project.html#descendents%28sbt.PathFinder%2Csbt.FileFilter%29" target="_self">descendents</a></em>
+        (<em>parent</em> : <a href="../sbt/PathFinder.html" target="_self">PathFinder</a>, <em>include</em> : <a href="../sbt/FileFilter.html" target="_self">FileFilter</a>) : <a href="../sbt/PathFinder.html" target="_self">PathFinder</a>
+        
+        <div>Short for parent.descendentsExcept(include, defaultExcludes)</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>protected def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/Project.html#disableCrossPaths" target="_self">disableCrossPaths</a></em>
+         : <a href="http://www.scala-lang.org/docu/files/api/scala/Boolean.html" target="_self">Boolean</a>
+        
+        <div>True if crossPath should be the identity function.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>final def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/Project.html#envBackingPath" target="_self">envBackingPath</a></em>
+         : <a href="../sbt/Path.html" target="_self">Path</a>
+        
+        <div>The path to the file that provides persistence for properties.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>implicit def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/Project.html#filter%28String%29" target="_self">filter</a></em>
+        (<em>simplePattern</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>) : <a href="../sbt/NameFilter.html" target="_self">NameFilter</a>
+        
+        <div>Converts a String to a simple name filter.  has the special meaning: zero or more of any character</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/Project.html#historyPath" target="_self">historyPath</a></em>
+         : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="../sbt/Path.html" target="_self">Path</a>]
+        
+        <div>The path to the file that provides persistence for history.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>abstract def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/Project.html#info" target="_self">info</a></em>
+         : <a href="../sbt/ProjectInfo.html" target="_self">ProjectInfo</a>
+        
+        <div>Basic project information.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/Project.html#initializeDirectories%28%29" target="_self">initializeDirectories</a></em>
+         : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+        
+        <div>Initializes the project directories when a user has requested that sbt create a new project.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>protected def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/Project.html#logImpl" target="_self">logImpl</a></em>
+         : <a href="../sbt/Logger.html" target="_self">Logger</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/Project.html#methodList" target="_self">methodList</a></em>
+         : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+        
+        <div>A description of all available method tasks in this project, but not of dependencies.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/Project.html#methodNames" target="_self">methodNames</a></em>
+         : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+        
+        <div>The names of all available method tasks that may be called through `call`.  These
+ only include the names of the MethodTasks in `methods` and not those of dependencies.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>abstract def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/Project.html#methods" target="_self">methods</a></em>
+         : <a href="" target="contentFrame" class="scala/collection/Map">scala.collection.Map</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="../sbt/TaskManager.MethodTask.html" target="_self">MethodTask</a>]
+        
+        <div>The task methods declared on this project</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>final def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/Project.html#name" target="_self">name</a></em>
+         : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+        
+        <div>The project name.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/Project.html#normalizedName" target="_self">normalizedName</a></em>
+         : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>final def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/Project.html#organization" target="_self">organization</a></em>
+         : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+        
+        <div>The project organization.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/Project.html#outputDirectories" target="_self">outputDirectories</a></em>
+         : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="../sbt/Path.html" target="_self">Path</a>]
+        
+        <div>The list of directories to which this project writes.  This is used to verify that multiple
+ projects have not been defined with the same output directories.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/Project.html#outputDirectoryName" target="_self">outputDirectoryName</a></em>
+         : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/Project.html#outputPath" target="_self">outputPath</a></em>
+         : <a href="../sbt/Path.html" target="_self">Path</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/Project.html#outputRootPath" target="_self">outputRootPath</a></em>
+         : <a href="../sbt/Path.html" target="_self">Path</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/Project.html#parallelExecution" target="_self">parallelExecution</a></em>
+         : <a href="http://www.scala-lang.org/docu/files/api/scala/Boolean.html" target="_self">Boolean</a>
+        
+        <div>True if projects should be run in parallel, false if they should run sequentially.
+  This only has an effect for multi-projects.  If this project has a parent, this value is
+ inherited from that parent project.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>protected override final def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/Project.html#parentEnvironment" target="_self">parentEnvironment</a></em>
+         : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="../sbt/Project.html" target="_self">Project</a>]
+        
+        <div>The environment from which user-defined properties inherit (if enabled).</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>implicit def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/Project.html#path%28String%29" target="_self">path</a></em>
+        (<em>component</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>) : <a href="../sbt/Path.html" target="_self">Path</a>
+        
+        <div>Converts a String to a path relative to the project directory of this project.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/Project.html#project%28sbt.Path%2CString%2C%28sbt.ProjectInfo%29%3D%3EP%2Csbt.Project*%29" target="_self">project</a></em>
+        [<em>P</em> &lt;: <a href="../sbt/Project.html" target="_self">Project</a>](<em>path</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>name</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <em>construct</em> : (<a href="../sbt/ProjectInfo.html" target="_self">ProjectInfo</a>) =&gt; <a href="../sbt/Project.html#project%28sbt.Path%2CString%2C%28sbt.ProjectInfo%29%3D%3EP%2Csbt.Project*%29#P" target="_self">P</a>, <em>deps</em> : <a href="../sbt/Project.html" target="_self">Project</a>*) : <a href="../sbt/Project.html#project%28sbt.Path%2CString%2C%28sbt.ProjectInfo%29%3D%3EP%2Csbt.Project*%29#P" target="_self">P</a>
+        
+        <div>Loads the project at the given path using the given name and inheriting it's version from this project.
+ The construct function is used to obtain the Project instance. Any project/build/ directory for the project
+ is ignored.  The project is declared to have the dependencies given by deps.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/Project.html#project%28sbt.Path%2CString%2CClass%5BP%5D%2Csbt.Project*%29" target="_self">project</a></em>
+        [<em>P</em> &lt;: <a href="../sbt/Project.html" target="_self">Project</a>](<em>path</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>name</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <em>builderClass</em> : <a href="" target="contentFrame" class="java/lang/Class">java.lang.Class</a>[<a href="../sbt/Project.html#project%28sbt.Path%2CString%2CClass%5BP%5D%2Csbt.Project*%29#P" target="_self">P</a>], <em>deps</em> : <a href="../sbt/Project.html" target="_self">Project</a>*) : <a href="../sbt/Project.html#project%28sbt.Path%2CString%2CClass%5BP%5D%2Csbt.Project*%29#P" target="_self">P</a>
+        
+        <div>Loads the project at the given path using the given name and inheriting it's version from this project.
+ The Project implementation used is given by builderClass.  The dependencies are declared to be
+ deps. Any project/build/ directory for the project is ignored.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/Project.html#project%28sbt.Path%2Csbt.Project*%29" target="_self">project</a></em>
+        (<em>path</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>deps</em> : <a href="../sbt/Project.html" target="_self">Project</a>*) : <a href="../sbt/Project.html" target="_self">Project</a>
+        
+        <div>Loads the project at the given path and declares the project to have the given
+ dependencies.  This method will configure the project according to the
+ project/ directory in the directory denoted by path.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/Project.html#project%28sbt.Path%2CString%2Csbt.Project*%29" target="_self">project</a></em>
+        (<em>path</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>name</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <em>deps</em> : <a href="../sbt/Project.html" target="_self">Project</a>*) : <a href="../sbt/Project.html" target="_self">Project</a>
+        
+        <div>Loads the project at the given path using the given name and inheriting this project's version.
+ The builder class is the default builder class, sbt.DefaultProject. The loaded project is declared
+ to have the given dependencies. Any project/build/ directory for the project is ignored.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/Project.html#projectClosure" target="_self">projectClosure</a></em>
+         : <a href="" target="contentFrame" class="scala/List">scala.List</a>[<a href="../sbt/Project.html" target="_self">Project</a>]
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/Project.html#rootProject" target="_self">rootProject</a></em>
+         : <a href="../sbt/Project.html" target="_self">Project</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/Project.html#scratch" target="_self">scratch</a></em>
+         : <a href="http://www.scala-lang.org/docu/files/api/scala/Boolean.html" target="_self">Boolean</a>
+        
+        <div>True if the project should cater to a quick throwaway project setup.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/Project.html#shouldCheckOutputDirectories" target="_self">shouldCheckOutputDirectories</a></em>
+         : <a href="http://www.scala-lang.org/docu/files/api/scala/Boolean.html" target="_self">Boolean</a>
+        
+        <div>True if a project and its dependencies should be checked to ensure that their
+ output directories are not the same, false if they should not be checked.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/Project.html#subProjects" target="_self">subProjects</a></em>
+         : <a href="" target="contentFrame" class="scala/collection/Map">scala.collection.Map</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="../sbt/Project.html" target="_self">Project</a>]
+        
+        <div>A map of names to projects for all subprojects of this project.  These are typically explicitly
+ specified for the project and are different from those specified in the project constructor. The
+ main use within sbt is in ParentProject.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/Project.html#taskAndMethodList" target="_self">taskAndMethodList</a></em>
+         : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+        
+        <div>A description of all available tasks in this project and all dependencies and all
+ available method tasks in this project, but not of dependencies.  If there
+ are different tasks or methods with the same name, only one will be included.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/Project.html#taskList" target="_self">taskList</a></em>
+         : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+        
+        <div>A description of all available tasks in this project and all dependencies.  If there
+ are different tasks with the same name, only one will be included.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>final def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/Project.html#taskName%28Project.this.Task%29" target="_self">taskName</a></em>
+        (<em>task</em> : <a href="../sbt/TaskManager.Task.html" target="_self">Task</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/Project.html#taskNames" target="_self">taskNames</a></em>
+         : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+        
+        <div>The names of all available tasks that may be called through `act`.  These include
+ the names of the Tasks in `tasks` and those of all dependencies.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>abstract def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/Project.html#tasks" target="_self">tasks</a></em>
+         : <a href="" target="contentFrame" class="scala/collection/Map">scala.collection.Map</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="../sbt/TaskManager.Task.html" target="_self">Task</a>]
+        
+        <div>The tasks declared on this project.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>final def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/Project.html#tasksAndMethods" target="_self">tasksAndMethods</a></em>
+         : <a href="" target="contentFrame" class="scala/collection/Map">scala.collection.Map</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="../sbt/Described.html" target="_self">Described</a>]
+        
+        <div>The actions and methods declared on this project.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/Project.html#terminateWatch%28Int%29" target="_self">terminateWatch</a></em>
+        (<em>key</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/Int.html" target="_self">Int</a>) : <a href="http://www.scala-lang.org/docu/files/api/scala/Boolean.html" target="_self">Boolean</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>override def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/Project.html#toString%28%29" target="_self">toString</a></em>
+         : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+        
+        <div>Returns a string representation of the object.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>final def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/Project.html#version" target="_self">version</a></em>
+         : <a href="../sbt/Version.html" target="_self">Version</a>
+        
+        <div>The project version.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/Project.html#watchPaths" target="_self">watchPaths</a></em>
+         : <a href="../sbt/PathFinder.html" target="_self">PathFinder</a>
+        
+        <div>A `PathFinder` that determines the files watched when an action is run with a preceeding ~ when this is the current
+ project.  This project does not need to include the watched paths for projects that this project depends on.</div>
+      </td>
+    </tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="../sbt/BasicEnvironment.html" target="_self">BasicEnvironment</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="../sbt/BasicEnvironment.html#environmentLabel" target="_self">environmentLabel</a>, <a href="../sbt/BasicEnvironment.html#system%28String%29" target="_self">system</a>, <a href="../sbt/BasicEnvironment.html#systemOptional%28String%2C%3D%3ET%29" target="_self">systemOptional</a>, <a href="../sbt/BasicEnvironment.html#property%28scala.reflect.Manifest%5BT%5D%2Csbt.Format%5BT%5D%29" target="_self">property</a>, <a href="../sbt/BasicEnvironment.html#propertyLocal%28scala.reflect.Manifest%5BT%5D%2Csbt.Format%5BT%5D%29" target="_self">propertyLocal</a>, <a href="../sbt/BasicEnvironment.html#propertyOptional%28%3D%3ET%29" target="_self">propertyOptional</a>, <a href="../sbt/BasicEnvironment.html#propertyOptional%28%3D%3ET%2CBoolean%29" target="_self">propertyOptional</a>, <a href="../sbt/BasicEnvironment.html#propertyNames" target="_self">propertyNames</a>, <a href="../sbt/BasicEnvironment.html#getPropertyNamed%28String%29" target="_self">getPropertyNamed</a>, <a href="../sbt/BasicEnvironment.html#propertyNamed%28String%29" target="_self">propertyNamed</a>, <a href="../sbt/BasicEnvironment.html#saveEnvironment%28%29" target="_self">saveEnvironment</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="../sbt/Environment.html" target="_self">Environment</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="../sbt/Environment.html#propertyF%28sbt.Format%5BT%5D%29" target="_self">propertyF</a>, <a href="../sbt/Environment.html#propertyLocalF%28sbt.Format%5BT%5D%29" target="_self">propertyLocalF</a>, <a href="../sbt/Environment.html#propertyOptionalF%28%3D%3ET%2Csbt.Format%5BT%5D%29" target="_self">propertyOptionalF</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="../sbt/Dag.html" target="_self">Dag</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="../sbt/Dag.html#dependencies" target="_self">dependencies</a> (abstract), <a href="../sbt/Dag.html#topologicalSort" target="_self">topologicalSort</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="../sbt/TaskManager.html" target="_self">TaskManager</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="../sbt/TaskManager.html#task%28%3D%3EOption%5BString%5D%29" target="_self">task</a>, <a href="../sbt/TaskManager.html#interactiveTask%28%3D%3EOption%5BString%5D%29" target="_self">interactiveTask</a>, <a href="../sbt/TaskManager.html#task%28%28Array%5BString%5D%29%3D%3ETaskManager.this.ManagedTask%29" target="_self">task</a>, <a href="../sbt/TaskManager.html#taskNameString%28TaskManager.this.Task%29" target="_self">taskNameString</a>, <a href="../sbt/TaskManager.html#dynamic%28%3D%3Esbt.Project%23Task%29" target="_self">dynamic</a>, <a href="../sbt/TaskManager.html#compoundTask%28%3D%3Esbt.Project%23Task%29" target="_self">compoundTask</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#getClass%28%29" target="_self">getClass</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#hashCode%28%29" target="_self">hashCode</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#equals%28Any%29" target="_self">equals</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#clone%28%29" target="_self">clone</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#notify%28%29" target="_self">notify</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#notifyAll%28%29" target="_self">notifyAll</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#wait%28Long%29" target="_self">wait</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#wait%28Long%2CInt%29" target="_self">wait</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#wait%28%29" target="_self">wait</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#finalize%28%29" target="_self">finalize</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#%3D%3D%28AnyRef%29" target="_self">==</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#%21%3D%28AnyRef%29" target="_self">!=</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#eq%28AnyRef%29" target="_self">eq</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#ne%28AnyRef%29" target="_self">ne</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#synchronized%28T0%29" target="_self">synchronized</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html" target="_self">Any</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html#%3D%3D%28Any%29" target="_self">==</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html#%21%3D%28Any%29" target="_self">!=</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html#isInstanceOf" target="_self">isInstanceOf</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html#asInstanceOf" target="_self">asInstanceOf</a>
+        </td></tr>
+      </table>
+<table summary="" cellpadding="3" class="member">
+      <tr><td class="title" colspan="2">Class Summary</td></tr>
+      <tr>
+      <td class="modifiers" valign="top"> 
+        <code> trait</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/Project.ActionOption.html" target="_self">ActionOption</a></em>
+        <code> extends </code><a href="" target="contentFrame" class="scala/NotNull">scala.NotNull</a>
+        
+        
+      </td>
+    </tr>
+      </table>
+
+      
+<table summary="" cellpadding="3" class="member-detail">
+          <tr><td class="title">Type Details</td></tr>
+        </table><div><a name="ManagerType"></a><dl>
+      <dt>
+        
+        <code>final</code>
+        <code>type</code>
+        <em>ManagerType</em>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="ManagedTask"></a><dl>
+      <dt>
+        
+        <code>final</code>
+        <code>type</code>
+        <em>ManagedTask</em>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr></div>
+<table summary="" cellpadding="3" class="member-detail">
+          <tr><td class="title">Value Details</td></tr>
+        </table><div><a name="log"></a><dl>
+      <dt>
+        
+        <code>final</code>
+        <code>val</code>
+        <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>The logger for this project definition.</dd></dl>
+      <dl></dl>
+    <dl>
+        <dt style="margin:10px 0 0 20px;">
+          <b>Overrides</b>
+        </dt>
+        <dd>
+        <a href="../sbt/BasicEnvironment.html" target="_self">BasicEnvironment</a>.<a href="../sbt/BasicEnvironment.html#log" target="_self">log</a>
+        </dd>
+      </dl><hr></hr>
+<a name="projectVersion"></a><dl>
+      <dt>
+        
+        <code>final</code>
+        <code>val</code>
+        <em>projectVersion</em> : <a href="../sbt/Environment.Property.html" target="_self">Property</a>[<a href="../sbt/Version.html" target="_self">Version</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>The property for the project's version.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="projectName"></a><dl>
+      <dt>
+        
+        <code>final</code>
+        <code>val</code>
+        <em>projectName</em> : <a href="../sbt/Environment.Property.html" target="_self">Property</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>The property for the project's name.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="projectOrganization"></a><dl>
+      <dt>
+        
+        <code>final</code>
+        <code>val</code>
+        <em>projectOrganization</em> : <a href="../sbt/Environment.Property.html" target="_self">Property</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>The property for the project's organization.  Defaults to the parent project's organization or the project name if there is no parent.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="scalaVersion"></a><dl>
+      <dt>
+        
+        <code>final</code>
+        <code>val</code>
+        <em>scalaVersion</em> : <a href="../sbt/Environment.Property.html" target="_self">Property</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>The property that defines the version of Scala to build this project with by default.  This property is only
+ ready by `sbt` on startup and reboot.  When cross-building, this value may be different from the actual
+ version of Scala being used to build the project.  ScalaVersion.current and ScalaVersion.cross should be used
+ to read the version of Scala building the project.  This should only be used to change the version of Scala used
+ for normal development (not cross-building)</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="sbtVersion"></a><dl>
+      <dt>
+        
+        <code>final</code>
+        <code>val</code>
+        <em>sbtVersion</em> : <a href="../sbt/Environment.Property.html" target="_self">Property</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="projectInitialize"></a><dl>
+      <dt>
+        
+        <code>final</code>
+        <code>val</code>
+        <em>projectInitialize</em> : <a href="../sbt/Environment.Property.html" target="_self">Property</a>[<a href="http://www.scala-lang.org/docu/files/api/scala/Boolean.html" target="_self">Boolean</a>]
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="projectScratch"></a><dl>
+      <dt>
+        
+        <code>final</code>
+        <code>val</code>
+        <em>projectScratch</em> : <a href="../sbt/Environment.Property.html" target="_self">Property</a>[<a href="http://www.scala-lang.org/docu/files/api/scala/Boolean.html" target="_self">Boolean</a>]
+      </dt>
+      <dd></dd>
+    </dl><hr></hr></div>
+<table summary="" cellpadding="3" class="member-detail">
+          <tr><td class="title">Method Details</td></tr>
+        </table><div><a name="logImpl"></a><dl>
+      <dt>
+        
+        <code>protected</code>
+        <code>def</code>
+        <em>logImpl</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="defaultLoggingLevel"></a><dl>
+      <dt>
+        
+        <code>protected</code>
+        <code>def</code>
+        <em>defaultLoggingLevel</em> : <a href="" target="contentFrame" class="scala/Enumeration/Value">scala.Enumeration.Value</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="info"></a><dl>
+      <dt>
+        
+        <code>abstract</code>
+        <code>def</code>
+        <em>info</em> : <a href="../sbt/ProjectInfo.html" target="_self">ProjectInfo</a>
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Basic project information.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="name"></a><dl>
+      <dt>
+        
+        <code>final</code>
+        <code>def</code>
+        <em>name</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>The project name.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="version"></a><dl>
+      <dt>
+        
+        <code>final</code>
+        <code>def</code>
+        <em>version</em> : <a href="../sbt/Version.html" target="_self">Version</a>
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>The project version.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="organization"></a><dl>
+      <dt>
+        
+        <code>final</code>
+        <code>def</code>
+        <em>organization</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>The project organization.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="scratch"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>scratch</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/Boolean.html" target="_self">Boolean</a>
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>True if the project should cater to a quick throwaway project setup.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="tasks"></a><dl>
+      <dt>
+        
+        <code>abstract</code>
+        <code>def</code>
+        <em>tasks</em> : <a href="" target="contentFrame" class="scala/collection/Map">scala.collection.Map</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="../sbt/TaskManager.Task.html" target="_self">Task</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>The tasks declared on this project.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="methods"></a><dl>
+      <dt>
+        
+        <code>abstract</code>
+        <code>def</code>
+        <em>methods</em> : <a href="" target="contentFrame" class="scala/collection/Map">scala.collection.Map</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="../sbt/TaskManager.MethodTask.html" target="_self">MethodTask</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>The task methods declared on this project</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="taskNames"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>taskNames</em> : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>The names of all available tasks that may be called through `act`.  These include
+ the names of the Tasks in `tasks` and those of all dependencies.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="methodNames"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>methodNames</em> : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>The names of all available method tasks that may be called through `call`.  These
+ only include the names of the MethodTasks in `methods` and not those of dependencies.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="methodList"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>methodList</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>A description of all available method tasks in this project, but not of dependencies.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="taskList"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>taskList</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>A description of all available tasks in this project and all dependencies.  If there
+ are different tasks with the same name, only one will be included.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="taskName%28Project.this.Task%29"></a><dl>
+      <dt>
+        
+        <code>final</code>
+        <code>def</code>
+        <em>taskName</em>(<em>task</em> : <a href="../sbt/TaskManager.Task.html" target="_self">Task</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+      </dt>
+      <dd></dd>
+    </dl><dl>
+        <dt style="margin:10px 0 0 20px;">
+          <b>Overrides</b>
+        </dt>
+        <dd>
+        <a href="../sbt/TaskManager.html" target="_self">TaskManager</a>.<a href="../sbt/TaskManager.html#taskName%28TaskManager.this.Task%29" target="_self">taskName</a>
+        </dd>
+      </dl><hr></hr>
+<a name="taskAndMethodList"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>taskAndMethodList</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>A description of all available tasks in this project and all dependencies and all
+ available method tasks in this project, but not of dependencies.  If there
+ are different tasks or methods with the same name, only one will be included.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="tasksAndMethods"></a><dl>
+      <dt>
+        
+        <code>final</code>
+        <code>def</code>
+        <em>tasksAndMethods</em> : <a href="" target="contentFrame" class="scala/collection/Map">scala.collection.Map</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="../sbt/Described.html" target="_self">Described</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>The actions and methods declared on this project.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="subProjects"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>subProjects</em> : <a href="" target="contentFrame" class="scala/collection/Map">scala.collection.Map</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="../sbt/Project.html" target="_self">Project</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>A map of names to projects for all subprojects of this project.  These are typically explicitly
+ specified for the project and are different from those specified in the project constructor. The
+ main use within sbt is in ParentProject.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="projectClosure"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>projectClosure</em> : <a href="" target="contentFrame" class="scala/List">scala.List</a>[<a href="../sbt/Project.html" target="_self">Project</a>]
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="call%28String%2CArray%5BString%5D%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>call</em>(<em>name</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <em>parameters</em> : <a href="" target="contentFrame" class="scala/Array">scala.Array</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="act%28String%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>act</em>(<em>name</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Executes the task with the given name.  This involves executing the task for all
+ project dependencies (transitive) and then for this project.  Not every dependency
+ must define a task with the given name.  If this project and all dependencies
+ do not define a task with the given name, an error is generated indicating this.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="path%28String%29"></a><dl>
+      <dt>
+        
+        <code>implicit</code>
+        <code>def</code>
+        <em>path</em>(<em>component</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>) : <a href="../sbt/Path.html" target="_self">Path</a>
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Converts a String to a path relative to the project directory of this project.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="filter%28String%29"></a><dl>
+      <dt>
+        
+        <code>implicit</code>
+        <code>def</code>
+        <em>filter</em>(<em>simplePattern</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>) : <a href="../sbt/NameFilter.html" target="_self">NameFilter</a>
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Converts a String to a simple name filter.  has the special meaning: zero or more of any character</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="project%28sbt.Path%2Csbt.Project*%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>project</em>(<em>path</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>deps</em> : <a href="../sbt/Project.html" target="_self">Project</a>*) : <a href="../sbt/Project.html" target="_self">Project</a>
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Loads the project at the given path and declares the project to have the given
+ dependencies.  This method will configure the project according to the
+ project/ directory in the directory denoted by path.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="project%28sbt.Path%2CString%2Csbt.Project*%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>project</em>(<em>path</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>name</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <em>deps</em> : <a href="../sbt/Project.html" target="_self">Project</a>*) : <a href="../sbt/Project.html" target="_self">Project</a>
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Loads the project at the given path using the given name and inheriting this project's version.
+ The builder class is the default builder class, sbt.DefaultProject. The loaded project is declared
+ to have the given dependencies. Any project/build/ directory for the project is ignored.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="project%28sbt.Path%2CString%2CClass%5BP%5D%2Csbt.Project*%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>project</em>[<em>P</em> &lt;: <a href="../sbt/Project.html" target="_self">Project</a>](<em>path</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>name</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <em>builderClass</em> : <a href="" target="contentFrame" class="java/lang/Class">java.lang.Class</a>[<a href="../sbt/Project.html#project%28sbt.Path%2CString%2CClass%5BP%5D%2Csbt.Project*%29#P" target="_self">P</a>], <em>deps</em> : <a href="../sbt/Project.html" target="_self">Project</a>*) : <a href="../sbt/Project.html#project%28sbt.Path%2CString%2CClass%5BP%5D%2Csbt.Project*%29#P" target="_self">P</a>
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Loads the project at the given path using the given name and inheriting it's version from this project.
+ The Project implementation used is given by builderClass.  The dependencies are declared to be
+ deps. Any project/build/ directory for the project is ignored.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="project%28sbt.Path%2CString%2C%28sbt.ProjectInfo%29%3D%3EP%2Csbt.Project*%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>project</em>[<em>P</em> &lt;: <a href="../sbt/Project.html" target="_self">Project</a>](<em>path</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>name</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <em>construct</em> : (<a href="../sbt/ProjectInfo.html" target="_self">ProjectInfo</a>) =&gt; <a href="../sbt/Project.html#project%28sbt.Path%2CString%2C%28sbt.ProjectInfo%29%3D%3EP%2Csbt.Project*%29#P" target="_self">P</a>, <em>deps</em> : <a href="../sbt/Project.html" target="_self">Project</a>*) : <a href="../sbt/Project.html#project%28sbt.Path%2CString%2C%28sbt.ProjectInfo%29%3D%3EP%2Csbt.Project*%29#P" target="_self">P</a>
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Loads the project at the given path using the given name and inheriting it's version from this project.
+ The construct function is used to obtain the Project instance. Any project/build/ directory for the project
+ is ignored.  The project is declared to have the dependencies given by deps.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="initializeDirectories%28%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>initializeDirectories</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Initializes the project directories when a user has requested that sbt create a new project.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="parallelExecution"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>parallelExecution</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/Boolean.html" target="_self">Boolean</a>
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>True if projects should be run in parallel, false if they should run sequentially.
+  This only has an effect for multi-projects.  If this project has a parent, this value is
+ inherited from that parent project.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="shouldCheckOutputDirectories"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>shouldCheckOutputDirectories</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/Boolean.html" target="_self">Boolean</a>
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>True if a project and its dependencies should be checked to ensure that their
+ output directories are not the same, false if they should not be checked.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="outputDirectories"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>outputDirectories</em> : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="../sbt/Path.html" target="_self">Path</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>The list of directories to which this project writes.  This is used to verify that multiple
+ projects have not been defined with the same output directories.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="rootProject"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>rootProject</em> : <a href="../sbt/Project.html" target="_self">Project</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="envBackingPath"></a><dl>
+      <dt>
+        
+        <code>final</code>
+        <code>def</code>
+        <em>envBackingPath</em> : <a href="../sbt/Path.html" target="_self">Path</a>
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>The path to the file that provides persistence for properties.</dd></dl>
+      <dl></dl>
+    <dl>
+        <dt style="margin:10px 0 0 20px;">
+          <b>Overrides</b>
+        </dt>
+        <dd>
+        <a href="../sbt/BasicEnvironment.html" target="_self">BasicEnvironment</a>.<a href="../sbt/BasicEnvironment.html#envBackingPath" target="_self">envBackingPath</a>
+        </dd>
+      </dl><hr></hr>
+<a name="historyPath"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>historyPath</em> : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="../sbt/Path.html" target="_self">Path</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>The path to the file that provides persistence for history.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="outputPath"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>outputPath</em> : <a href="../sbt/Path.html" target="_self">Path</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="outputRootPath"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>outputRootPath</em> : <a href="../sbt/Path.html" target="_self">Path</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="outputDirectoryName"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>outputDirectoryName</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="crossPath%28sbt.Path%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>crossPath</em>(<em>base</em> : <a href="../sbt/Path.html" target="_self">Path</a>) : <a href="../sbt/Path.html" target="_self">Path</a>
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>If this project is cross-building, returns `base` with an additional path component containing the scala version.
+ Otherwise, this returns `base`.
+ By default, cross-building is enabled when a project is loaded by the loader and crossScalaVersions is not empty.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="crossScalaVersionString"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>crossScalaVersionString</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>If modifying paths for cross-building is enabled, this returns ScalaVersion.currentString.
+ Otherwise, this returns the empty string.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="disableCrossPaths"></a><dl>
+      <dt>
+        
+        <code>protected</code>
+        <code>def</code>
+        <em>disableCrossPaths</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/Boolean.html" target="_self">Boolean</a>
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>True if crossPath should be the identity function.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="crossScalaVersions"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>crossScalaVersions</em> : <a href="" target="contentFrame" class="scala/collection/immutable/Set">scala.collection.immutable.Set</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>By default, this is empty and cross-building is disabled.  Overriding this to a Set of Scala versions
+ will enable cross-building against those versions.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="watchPaths"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>watchPaths</em> : <a href="../sbt/PathFinder.html" target="_self">PathFinder</a>
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>A `PathFinder` that determines the files watched when an action is run with a preceeding ~ when this is the current
+ project.  This project does not need to include the watched paths for projects that this project depends on.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="terminateWatch%28Int%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>terminateWatch</em>(<em>key</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/Int.html" target="_self">Int</a>) : <a href="http://www.scala-lang.org/docu/files/api/scala/Boolean.html" target="_self">Boolean</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="parentEnvironment"></a><dl>
+      <dt>
+        
+        <code>protected override final</code>
+        <code>def</code>
+        <em>parentEnvironment</em> : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="../sbt/Project.html" target="_self">Project</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>The environment from which user-defined properties inherit (if enabled).</dd></dl>
+      <dl></dl>
+    <dl>
+        <dt style="margin:10px 0 0 20px;">
+          <b>Overrides</b>
+        </dt>
+        <dd>
+        <a href="../sbt/BasicEnvironment.html" target="_self">BasicEnvironment</a>.<a href="../sbt/BasicEnvironment.html#parentEnvironment" target="_self">parentEnvironment</a>
+        </dd>
+      </dl><hr></hr>
+<a name="defaultExcludes"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>defaultExcludes</em> : <a href="../sbt/FileFilter.html" target="_self">FileFilter</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="descendents%28sbt.PathFinder%2Csbt.FileFilter%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>descendents</em>(<em>parent</em> : <a href="../sbt/PathFinder.html" target="_self">PathFinder</a>, <em>include</em> : <a href="../sbt/FileFilter.html" target="_self">FileFilter</a>) : <a href="../sbt/PathFinder.html" target="_self">PathFinder</a>
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Short for parent.descendentsExcept(include, defaultExcludes)</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="toString%28%29"></a><dl>
+      <dt>
+        
+        <code>override</code>
+        <code>def</code>
+        <em>toString</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Returns a string representation of the object.  
+    <p>
+    The default representation is platform dependent.</dd></dl>
+      <dl><dt style="margin:10px 0 0 20px;">
+        <b>Returns</b></dt><dd>a string representation of the object.     </p></dd></dl>
+    <hr></hr>
+<a name="normalizedName"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>normalizedName</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr></div>
+
+
+    <hr></hr>
+        <table summary="" class="navigation">
+        <tr>
+          <td class="navigation-links" valign="top">
+            <!-- <table><tr></tr></table> -->
+          </td>
+          <td align="right" valign="top" style="white-space:nowrap;" rowspan="2">
+            <div class="doctitle-larger">Simple Build Tool 0.5.5 API</div>
+          </td>
+        </tr>
+        <tr><td></td></tr>
+      </table>
+      </body>
+      </html>
