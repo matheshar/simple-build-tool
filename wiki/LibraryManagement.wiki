@@ -79,6 +79,18 @@ By default, these declarations fetch all project dependencies. In some instances
   val felix = "org.apache.felix" % "org.apache.felix.framework" % "1.8.0" intransitive()
 }}}
 
+You can specify the classifer for a dependency using the `classifier` method.  There are some methods for the typical cases of getting sources or API documentation as well.  These are `withSources`, `withJavadoc`, `sources`, and `javadoc`.  The `withXXX` style includes the usual binary jar.  Examples:
+
+Get the !ScalaCheck binary jar and sources.
+{{{
+  val sc = "org.scalacheck" % "scalacheck" % "1.5" withSources()
+}}}
+
+Get the jdk15 version of TestNG:
+{{{
+  val testng = "org.testng" % "testng" % "5.7" classifier "jdk15"
+}}}
+
 `sbt` additionally supports directly specifying the configurations or dependencies sections of an Ivy configuration file inline.  You can mix this with inline Scala dependency and repository declarations.
 
 For example:
