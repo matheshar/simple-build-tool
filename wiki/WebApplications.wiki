@@ -36,7 +36,7 @@ A minimal project definition might be:
 {{{
 class WebappBuild(info: ProjectInfo) extends DefaultWebProject(info)
 {
-  val jetty6 = "org.mortbay.jetty" % "jetty" % "6.1.14" % "test->default"  // jetty is only need for testing
+  val jetty6 = "org.mortbay.jetty" % "jetty" % "6.1.14" % "test"  // jetty is only need for testing
 }
 }}}
 
@@ -47,5 +47,5 @@ For a runnable example, see the [WebApplicationExample] page, which describes ru
 To use `JavaRebel`, override `scanDirectories` as described above so that `sbt` does not reload Jetty on changes to your classes.  Pass the following options to `java` in your `sbt` startup script:
 
 {{{
--noverify -javaagent:/path/to/javarebel/javarebel.jar 
+-noverify -javaagent:/path/to/javarebel/javarebel.jar
 }}}

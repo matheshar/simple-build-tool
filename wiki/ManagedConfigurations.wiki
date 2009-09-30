@@ -24,3 +24,8 @@ A more useful application of configurations is to group dependencies that are no
 }}}
 
 The `config` method defines a new configuration with name `"js"` and makes it private to the project so that it is not used for publishing.
+
+As of `sbt` 0.5.5, a configuration without a mapping (no `"->"`) is mapped to `default` or `compile`.  The `->` is only needed when mapping to a different configuration than those.  The ScalaTest dependency above can then be shortened to:
+{{{
+  val st = "org.scala-tools.testing" % "scalatest" % "0.9.5" % "test"
+}}}

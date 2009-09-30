@@ -1,0 +1,15 @@
+= Changes from 0.5.4 to 0.5.5 =
+
+== Features ==
+ * Experimental support for searching for project (`-Dsbt.boot.search=none|only|root-first|nearest`)
+ * Added support for configuring repositories on a per-module basis.
+ * Can specify a specific nightly of Scala 2.8 to use when building sbt (for example: `2.8.0-20090910.003346-+`)
+
+== Improvements ==
+ * No longer need `"->default"` in configurations (automatically mapped).
+ * Unified batch-style and interactive-style commands.  All commands that were previously interactive-only should be available batch-style.  'reboot' does not pick up changes to 'scala.version' properly, however.
+ * Can include javadocs and sources using `withJavadocs()` and `withSources()` methods on dependencies.  To get only javadocs and/or sources, use `javadocs() `or `sources()`.
+
+== Fixes ==
+ * Fixed problem with classifier support and the corresponding test
+ * Fix issue where last path component of local repository was dropped if it did not exist.

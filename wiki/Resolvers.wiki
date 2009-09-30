@@ -73,8 +73,6 @@ To specify a base path:
 
 == Custom Layout ==
 
-*NOTE*: This section describes the Patterns API as it will exist in `sbt` 0.5.5.
-
 These examples specify custom repository layouts using patterns.  The factory methods accept an implicit `Patterns` instance that defines the patterns to use.  The patterns are first resolved against the base file or URL.  The implicit normally supplied gives the default Maven-style layout.  Provide a different Patterns object to use a different layout.  For example:
 {{{
   val testRepo = Resolver.url("my-test-repo", url)( Patterns("[organisation]/[module]/[revision]/[artifact].[ext]") )

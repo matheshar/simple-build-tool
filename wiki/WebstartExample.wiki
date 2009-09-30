@@ -7,13 +7,13 @@ class WebstartTest(info: ProjectInfo) extends ParentProject(info)
 {
   val app = project("app", "Webstart Test Application", new ApplicationProject(_))
   val web = project("web", "Webstart Test Server", new ServerProject(_), app)
-  
+
   // The web project.  Running 'jetty-run' on this project will serve the
   // webstart application from http://localhost:8080 using jetty.
   class ServerProject(info: ProjectInfo) extends DefaultWebProject(info)
   {
     // Jetty is only need for the 'test' classpath
-    val jetty6 = "org.mortbay.jetty" % "jetty" % "6.1.14" % "test->default"
+    val jetty6 = "org.mortbay.jetty" % "jetty" % "6.1.14" % "test"
     // We need the packaged jar from the application project
     override def prepareWebappAction = super.prepareWebappAction dependsOn app.`package`
     // Include the webstart files directly in the web app root directory.
@@ -25,7 +25,7 @@ class WebstartTest(info: ProjectInfo) extends ParentProject(info)
     override def webstartSignConfiguration = Some(new SignConfiguration("mark", storePassword("fakepassword") :: Nil))
     //override def webstartPack200 = false // uncomment to disable pack200 compression, which is enabled by default
     //override def webstartGzip = false// uncomment to disable gzip compression, which is enabled by default
-      
+
     def jnlpXML(libraries: Seq[WebstartJarResource]) =
       <jnlp spec="1.0+" codebase="http://localhost:8080/" href={artifactBaseName + ".jnlp"}>
         <information>

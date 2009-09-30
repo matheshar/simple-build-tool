@@ -24,12 +24,12 @@ To disable this check, set:
 If you need to explicitly reference the Scala jars used by `sbt`, you should use one of the following solutions:
  * The `scalaJars` method returns two `File`s, one for the location of `scala-compiler.jar` and one for `scala-library.jar`.
  * `mainCompileConditional.analysis.allExternals` provides `File`s for all jars that your main classes depend on.  This includes `rt.jar` (or `classes.jar` on a Mac).
- 
+
 `sbt` can be configured to skip these checks in certain cases, but this should be considered atypical.  `sbt`'s build does it in order to build `sbt` across several versions of Scala, but that is a bootstrapping issue.  If you want to do this anyway, you should define a non-standard configuration and exclude it from the configurations on which `sbt` performs checks and filtering:
 {{{
   val other = config("scalac-2.7.3")
   override def checkScalaInConfigurations = super.checkScalaInConfigurations - other
-  val scalac2_7_3 = "org.scala-lang" % "scala-compiler" % "2.7.3" % "scalac-2.7.3->default"
+  val scalac2_7_3 = "org.scala-lang" % "scala-compiler" % "2.7.3" % "scalac-2.7.3"
 }}}
 You might use this to call `java` using the classpath given by `managedClasspath("scalac-2.7.3")`, for example.
 

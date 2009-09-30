@@ -28,7 +28,7 @@ Name: Hello Lift
 Organization [empty]: net.liftweb.hello
 Version [1.0]: 1.0
 Scala version [2.7.5]: 2.7.3
-sbt version [0.5.4]:
+sbt version [0.5.5]:
 ...
 [success] Successfully initialized directory structure.
 [info] Building project Hello Lift 1.0 using sbt.DefaultProject
@@ -45,11 +45,11 @@ import sbt._
 
 class HelloLiftProject(info: ProjectInfo) extends DefaultWebProject(info)
 {
-  val lift = "net.liftweb" % "lift-core" % "1.0" % "compile->default"
-  val jetty6 = "org.mortbay.jetty" % "jetty" % "6.1.14" % "test->default"
-  val servlet = "javax.servlet" % "servlet-api" % "2.5" % "provided->default"
-  val derby = "org.apache.derby" % "derby" % "10.2.2.0" % "runtime->default"
-  val junit = "junit" % "junit" % "3.8.1" % "test->default"
+  val lift = "net.liftweb" % "lift-core" % "1.0" % "compile"
+  val jetty6 = "org.mortbay.jetty" % "jetty" % "6.1.14" % "test"
+  val servlet = "javax.servlet" % "servlet-api" % "2.5" % "provided"
+  val derby = "org.apache.derby" % "derby" % "10.2.2.0" % "runtime"
+  val junit = "junit" % "junit" % "3.8.1" % "test"
 
   // required because Ivy doesn't pull repositories from poms
   val smackRepo = "m2-repository-smack" at "http://maven.reucon.com/public"
