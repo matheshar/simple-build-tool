@@ -9,7 +9,6 @@ The `publish` action is used to publish your project to a remote repository.  To
   override def managedStyle = ManagedStyle.Maven
   val publishTo = "Scala Tools Nexus" at "http://nexus.scala-tools.org/content/repositories/releases/"
 }}}
-Note that the `file` protocol is allowed in the URL here.
 
 There are two ways to specify credentials.  The first is to specify them inline:
 {{{
