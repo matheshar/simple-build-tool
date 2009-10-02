@@ -31,8 +31,10 @@ Once this is set up, you can run `publish`.  Even better, enable [CrossBuild cro
 
 To publish sources and javadocs, add artifact declarations and make the `publish-local` and `publish` actions depend on `package-src` and `package-docs`:
 {{{
+  override def packageDocsJar = defaultJarPath("-javadoc.jar")
+  override def packageSrcJar= defaultJarPath("-sources.jar")
   val sourceArtifact = Artifact(artifactID, "src", "jar", Some("sources"), Nil, None)
-  val docsArtifact = Artifact(artifactID, "docs", "jar", Some("javadocs"), Nil, None)
+  val docsArtifact = Artifact(artifactID, "docs", "jar", Some("javadoc"), Nil, None)
   override def packageToPublishActions = super.packageToPublishActions ++ Seq(packageDocs, packageSrc)
 }}}
 
