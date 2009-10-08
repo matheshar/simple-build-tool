@@ -2,10 +2,11 @@
 
 This page describes more advanced repositories than the usual Maven-style repositories.
 
-The Maven-style repositories are the ones defined as:
+The Maven-style repositories are defined like:
 {{{
   val scalaToolsSnapshots = "Scala-Tools Maven2 Snapshots Repository" at "http://scala-tools.org/repo-snapshots"
 }}}
+and use the Maven2 layout.
 
 == Predefined ==
 
