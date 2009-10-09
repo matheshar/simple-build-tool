@@ -101,7 +101,7 @@ class ScalaJars(info: ProjectInfo) extends ParentProject(info)
 { top =>
   override def outputPath: Path = "build"
   val library = project(".", "Scala Library", new SubProject(_))
-  val compiler = project(".", "Scala Compiler", new SubProject(_))
+  val compiler = project(".", "Scala Compiler", new SubProject(_), library)
 
   override def shouldCheckOutputDirectories = false
 
