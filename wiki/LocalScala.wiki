@@ -58,6 +58,7 @@ There are two ways to use `sbt` with Scala 2.8 (the trunk version of Scala).  Bo
 {{{
  $SCALA_HOME/project/build/ScalaJars.scala
 }}}
+ Set project.name=scala, project.organization=org.scala-lang, and project.version=2.8.0-local.
  # This is just a quick definition to locally publish the already built jars `build/pack/lib/scala-compiler.jar` and `build/pack/lib/scala-library.jar`.  In `$SCALA_HOME`, do:
 {{{
  $ sbt publish-local
@@ -94,14 +95,13 @@ import sbt._
 class ScalaJars(info: ProjectInfo) extends ParentProject(info)
 { top =>
   override def outputPath: Path = "build"
-  val library = project(".", "Scala Library", info => new SubProject(info))
-  val compiler = project(".", "Scala Compiler", info => new SubProject(info))
+  val library = project(".", "Scala Library", new SubProject(_))
+  val compiler = project(".", "Scala Compiler", new SubProject(_))
 
   override def shouldCheckOutputDirectories = false
 
-  class SubProject(info: ProjectInfo) extends ParentProject(info)
+  class SubProject(info: ProjectInfo) extends DefaultProject(info)
   {
-    val default = config("default")
     override def outputPath = top.outputPath / "pack" / "lib"
     override def shouldCheckOutputDirectories = false
     override def publishLocalConfiguration = new DefaultPublishConfiguration("local", "release", true) {
