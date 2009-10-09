@@ -58,7 +58,12 @@ There are two ways to use `sbt` with Scala 2.8 (the trunk version of Scala).  Bo
 {{{
  $SCALA_HOME/project/build/ScalaJars.scala
 }}}
- Set project.name=scala, project.organization=org.scala-lang, and project.version=2.8.0-local.
+ $SCALA_HOME/project/build/`build.properties` should contain:
+{{{
+ project.name=scala
+ project.organization=org.scala-lang
+ project.version=2.8.0-local.
+}}}
  # This is just a quick definition to locally publish the already built jars `build/pack/lib/scala-compiler.jar` and `build/pack/lib/scala-library.jar`.  In `$SCALA_HOME`, do:
 {{{
  $ sbt publish-local
