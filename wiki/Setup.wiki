@@ -25,7 +25,7 @@ $ chmod u+x ~/bin/sbt
 }}}
 This allows you to launch sbt in any directory by typing `sbt` at the command prompt.
 
-`sbt` will pick up any HTTP proxy settings from the `http.proxy` environment variable. If you are behind a proxy requiring authentication, you must in addition pass flags to set the http.proxyUser and http.proxyPassword properties:
+`sbt` will pick up any HTTP proxy settings from the `http.proxy` environment variable. If you are behind a proxy requiring authentication, you must in addition pass flags to set the `http.proxyUser` and `http.proxyPassword` properties:
 
 {{{
 java -Dhttp.proxyUser=username -Dhttp.proxyPassword=mypassword -Xmx512M -jar `dirname $0`/sbt-launcher.jar "$@"
