@@ -1,3 +1,10 @@
+=== 0.5.6 to trunk ===
+ * Support specs specifications defined as classes
+ * Fix specs support for 1.6
+ * Support !ScalaTest 1.0
+ * Support !ScalaCheck 1.6
+ * Remove remaining uses of structural types
+
 === 0.5.4 to 0.5.5 ===
  * Fixed problem with classifier support and the corresponding test
  * No longer need `"->default"` in configurations (automatically mapped).
