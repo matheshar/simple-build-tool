@@ -90,7 +90,6 @@ The default configuration file for sbt looks like:
 [repositories]
   local
   maven-local
-  sbt: file:///home/mark/.ivy2/test/, [organization]/[module]/[revision]/[type]s/[artifact](-[classifier]).[ext]
   maven-central
   scala-tools-releases
   scala-tools-snapshots
@@ -204,11 +203,18 @@ Then, `publish-local` or `+publish-local` the application to make it available.
 
 == Running an Application ==
 
-As mentioned above, there are a few options to actually run the application.  The first involves providing a modified jar for download.  The second two require providing a configuration file for download.
-1) Replace the /sbt/sbt.boot.properties file in the launcher jar and distribute the modified jar.  The user would need a script to run 'java -jar your-launcher.jar arg1 arg2 ...'.
-2) The user downloads the launcher jar and you provide the configuration file.
-  i) The user needs to run 'java -Dsbt.boot.properties=your.boot.properties -jar launcher.jar'.
-  ii) The user already has a script to run the launcher (call it 'launch').  The user needs to run
+As mentioned above, there are a couple of options to actually run the application.  The first involves providing a modified jar for download.  The second requires providing a configuration file for download.
+
+ # Replace the /sbt/sbt.boot.properties file in the launcher jar and distribute the modified jar.  The user would need a script to run 
+{{{
+  java -jar your-launcher.jar arg1 arg2 ...
+}}}
+ # The user downloads the launcher jar and you provide the configuration file.
+  # The user needs to run
+{{{
+  java -Dsbt.boot.properties=your.boot.properties -jar launcher.jar
+}}}
+  # The user already has a script to run the launcher (call it 'launch').  The user needs to run
 {{{
   launch @your.boot.properties your-arg-1 your-arg-2
 }}}
