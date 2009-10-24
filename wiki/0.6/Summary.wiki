@@ -1,0 +1,114 @@
+= Introduction =
+
+The sbt 0.6.x series attempts to merge ideas from `xsbt` (experimental `sbt` components) into main `sbt`.  Consider it experimental because of extensive internal changes.
+
+This documentation introduces sbt 0.6.0, the first version in the series.  Please point out gaps in the documentation, areas that need clarification, or anything you'd like more details on.  Your time experimenting is appreciated!
+
+0.6.0 attempts to start the series off with three major features:
+ # Generalize the launcher to be able to launch applications other than sbt.  Additionally, the launcher configuration for `sbt` can be customized.
+ # Separate the version of Scala used to build a project from the version used to run `sbt` and the project definition.  The benefit of this is that `sbt` no longer has to be built against the version of Scala you are using for your project.
+ # Support test frameworks through the uniform test interface.  The benefit of this is that you should not have to wait for `sbt` to update support for test frameworks when new ones are released.  Also, the version of Scala used by a test framework should not matter to `sbt`.  In particular, this should let you use test frameworks compiled against 2.8.
+
+The aim for the rest of the series is to further modularize sbt, try out a new task engine, and of course address issues that will come up due to these changes.  To reiterate, 0.6.x is experimental.
+
+= 0.6.0 =
+
+== New Launcher ==
+
+The launcher has been substantially rewritten so that it is not specific to `sbt`.  For complete details on it, see [http://github.com/harrah/xsbt/blob/master/launch.specification].  That page describes the new launcher, including how to make an application launchable.  Basically, you provide a configuration file to the launcher and have your application entry point implement an interface.
+
+The following can now be done by modifying the default `sbt` configuration file for the launcher:
+ * Specify the default values for properties for new projects, such as the project name and version, the sbt version, and the Scala version
+ * Control which repositories are used for downloading Scala versions and sbt
+ * Fix the Scala version for project definitions and the sbt version for all projects on your machine, regardless of the settings for project/build.properties.
+ * Configure project searching (previously configurable by system property)
+ * Configure the location of the boot directory, including making is shared across a machine.
+
+You can also set up separate scripts to use different configuration files.  For example, you might have a 'sbt-quick' script.  The configuration file used could specify that new projects are set up without prompting, but instead use your specified defaults for properties.
+
+=== Compatibility ===
+ The new launcher can only launch the new 0.6.x series of `sbt` and the new series of `sbt` requires the new launcher.
+
+=== Size/Speed ===
+I've managed to keep the launcher jar the same size and start up in the same time.  However, the corresponding version of `sbt` is about 30% slower on startup and is bigger in size.  This is due to a temporary duplication of some functionality between `sbt` and the new `xsbt` components during the transition.
+
+=== Usability ===
+Now is a good time for users to point out usability issues and possible improvements related to launching- startup, reload, and retrieving sbt and Scala.  The Ivy "errors" about unknown resolvers that are especially apparent in the launcher (including the previous version of the launcher) is a known issue to the Ivy developers.  See issue IVY-758 as reported by the Gradle developers.
+
+== Scala Version Handling ==
+The new launcher provides essential support for implementing the separation of Scala versions.  It also provided an opportunity to clean up cross-building and project reloading.  Please note the changes in the following section on compatibility.
+
+=== Compatibility ===
+ * The compiler can no longer be forked.  It should not be necessary anymore.
+ * The `reboot` action is gone.  `reload` now implies a `reboot`.
+ * The `scala.version` property has been split into `build.scala.version` and `def.scala.version`.  This is explained in more detail in the next section.
+ * The `ScalaVersion` object is gone.  Use the `buildScalaVersion` method to obtain the version of Scala currently being used to build the project.
+ * `build.scala.version` has to be read in `sbt.Project`, which means that all properties are read in `sbt.Project`.  Therefore, properties need to be declared with `lazy val` and not just `val` (or else they will not be initialized and an error will be generated).  If you do not declare custom properties, this does not apply to you.
+
+=== Configuring Versions ===
+
+The version used to run sbt and used for compiling the project definition is set by the build property `def.scala.version`.  The only valid value for this property is 2.7.5.  This means that sbt runs in 2.7.5 and your project definition is compiled against 2.7.5.  As described below, the version of Scala used to build your project is independent.
+
+The 'build.scala.versions' property is a whitespace separated list of versions to use when cross building (that is, when doing '+compile' or similar).  The first version in the list is used for single-version actions (actions not prefixed with '+').  Allowed versions should (in theory) be any Scala version 2.7.2 or later, including `2.8.0-SNAPSHOT` and `2.8.0-20091013.004057-+`.
+
+To change the version of Scala used for building at the interactive prompt or as part of a sequence of commands from the command line, use '++version'.  'version' does not need to be listed in 'build.scala.versions'.  To set the version and run an action, use '++version action' (space between version and action).  In both cases, the new version is used until the next '++' or on 'reload' or a restart.  '+action' is now expanded to '++v1 action', '++v2 action', ...  for versions in 'build.scala.versions' v1,v2,...
+
+It should be easy to use locally built Scala versions now.  Declare local versions by overriding the 'localScala' method in your project definition.  This method should return a `Seq[ScalaInstance]`, where the 'defineScala' method is used to create `ScalaInstance`s.  The two variants are:
+ * `defineScala(label: String, scalaHome: File)`
+ * `defineScala(scalaHome: File)`
+`label` is the string to use to refer to the Scala instance in `build.scala.versions` or with the `++version`command.  The label cannot contain spaces. For example, you might use `2.8.0-quick` or `2.8.0-local` as labels for a locally built Scala.  The single argument variant uses the version in the Scala jars for the label.  To see the version to use in this case, you can do:
+{{{
+ > console-project
+...
+ > localScala
+}}}
+
+As an example, assume `scalaHome` is appropriately set.  The following registers the result of 'ant quick' with `sbt`:
+{{{
+  override def localScala =
+    defineScala("2.8.0-quick", (scalaHome / "build" / "pack" ).asFile) :: Nil
+}}}
+
+You could then include '2.8.0-quick' in `build.scala.versions` or as a valid version to switch to as in
+{{{
+++2.8.0-quick console
+}}}
+
+== Uniform Test Interface ==
+
+`sbt` now supports test frameworks through the [http://github.com/harrah/test-interface uniform test interface], which itself is a work in progress.  This should make `sbt` more independent of test frameworks that can implement the test interface.  `sbt` only needs to know the name of the class implementing the interface.  `sbt` no longer needs to be recompiled in order to support new frameworks, new versions of frameworks, or frameworks compiled against different Scala.
+
+Josh Cough has implemented this interface for !ScalaTest in a branch and sbt 0.6.0 knows about it.  Checkout https://scalatest.dev.java.net/source/browse/scalatest/branches/josh-sbt-interfaces/ , build it with `ant dist`, and use the resulting jar as usual in your project.
+
+Other test frameworks that implement the interface will be added to `sbt`, but until then, it is easy enough to add a new framework.  For example, if a new !ScalaCheck snapshot implements the interface and `sbt` has not been updated to know about it yet, use that snapshot as a normal library and add the following to your project definition:
+{{{
+override def testFrameworks = super.testFrameworks ++
+ new TestFramework("org.scalacheck.ScalaCheckFramework")
+}}}
+
+where `org.scalacheck.ScalaCheckFramework` is replaced with the name of the !ScalaCheck class that implements the test interface.
+
+= Using 0.6.x =
+
+To use the 0.6.x series, you need to get the new launcher and set up a script to run it as before.  I call my script `xsbt` to avoid confusion with the stable 0.5.x series.  Something like:
+{{{
+  java -jar xsbt-launch-0.6.0.jar "$@"
+}}}
+
+On an existing project, you need to set `sbt.version` to 0.6.0.  You will be prompted for the version(s) of Scala to use for your project, since this is a new property (`build.scala.versions`, as mentioned in the Scala Version Handling section).  Check the Compatibility section above when using 0.6.0 on an existing project.  Again, there are some unavoidable, but hopefully minor, incompatibilies, so try it out on a test project or a branch.
+
+= Building Locally =
+
+The procedure for building `sbt` locally has changed.  It still uses the last stable `sbt` release (0.5.5) to build.  `sbt` is currently split across two projects for this experiment, so there are two `'publish'`es that need to be run.  There is no need to cross-build, so it is mostly like a normal `sbt` project.  From scratch, setting up `sbt` 0.6.0 locally would look like:
+{{{
+$ git clone git://github.com/harrah/xsbt.git
+$ cd xsbt
+$ sbt update proguard "project Compile" publish-local
+
+$ cd ..
+$ git clone git://github.com/harrah/sbt.git
+$ cd sbt
+$ git checkout using-xsbt
+$ sbt update publish-local
+}}}
+The launcher jar created by the `proguard` action is located at `xsbt/target/xsbt-launch-0.6.0.jar`.
