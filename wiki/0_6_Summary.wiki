@@ -1,6 +1,6 @@
 = Introduction =
 
-The sbt 0.6.x series attempts to merge ideas from `xsbt` (experimental `sbt` components) into main `sbt`.  Consider it experimental because of extensive internal changes.
+The sbt 0.6.x series attempts to merge ideas from `xsbt` (experimental `sbt` components) into the main `sbt`.  Consider it experimental because of extensive internal changes.
 
 This documentation introduces sbt 0.6.0, the first version in the series.  Please point out gaps in the documentation, areas that need clarification, or anything you'd like more details on.  Your time experimenting is appreciated!
 
@@ -9,7 +9,9 @@ This documentation introduces sbt 0.6.0, the first version in the series.  Pleas
  # Separate the version of Scala used to build a project from the version used to run `sbt` and the project definition.  The benefit of this is that `sbt` no longer has to be built against the version of Scala you are using for your project.
  # Support test frameworks through the uniform test interface.  The benefit of this is that you should not have to wait for `sbt` to update support for test frameworks when new ones are released.  Also, the version of Scala used by a test framework should not matter to `sbt`.  In particular, this should let you use test frameworks compiled against 2.8.
 
-The aim for the rest of the series is to further modularize sbt, try out a new task engine, and of course address issues that will come up due to these changes.  To reiterate, *0.6.x is experimental*.
+The aim for the rest of the series is to further modularize `sbt`, try out a new task engine, and of course address issues that will come up due to these changes.
+
+To reiterate, *0.6.x is experimental*.
 
 = 0.6.0 =
 
@@ -99,7 +101,7 @@ On an existing project, you need to set `sbt.version` to 0.6.0.  You will be pro
 
 = Building Locally =
 
-The procedure for building `sbt` locally has changed.  It still uses the last stable `sbt` release (0.5.5) to build.  `sbt` is currently split across two projects for this experiment, so there are two `'publish'`es that need to be run.  There is no need to cross-build, so it is mostly like a normal `sbt` project.  From scratch, setting up `sbt` 0.6.0 locally would look like:
+The procedure for building `sbt` locally has changed, but it still uses the last stable `sbt` release (0.5.5) to build.  `sbt` is currently split across two projects for this experiment, so there are two `'publish-local'`s that need to be run.  From scratch, setting up `sbt` 0.6.0 locally would look like:
 {{{
 $ git clone git://github.com/harrah/xsbt.git
 $ cd xsbt
