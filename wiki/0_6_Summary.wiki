@@ -9,28 +9,28 @@ This documentation introduces sbt 0.6.0, the first version in the series.  Pleas
  # Separate the version of Scala used to build a project from the version used to run `sbt` and the project definition.  The benefit of this is that `sbt` no longer has to be built against the version of Scala you are using for your project.
  # Support test frameworks through the uniform test interface.  The benefit of this is that you should not have to wait for `sbt` to update support for test frameworks when new ones are released.  Also, the version of Scala used by a test framework should not matter to `sbt`.  In particular, this should let you use test frameworks compiled against 2.8.
 
-The aim for the rest of the series is to further modularize sbt, try out a new task engine, and of course address issues that will come up due to these changes.  To reiterate, 0.6.x is experimental.
+The aim for the rest of the series is to further modularize sbt, try out a new task engine, and of course address issues that will come up due to these changes.  To reiterate, *0.6.x is experimental*.
 
 = 0.6.0 =
 
 == New Launcher ==
 
-The launcher has been substantially rewritten so that it is not specific to `sbt`.  For complete details on it, see [http://github.com/harrah/xsbt/blob/master/launch.specification].  That page describes the new launcher, including how to make an application launchable.  Basically, you provide a configuration file to the launcher and have your application entry point implement an interface.
+The launcher has been substantially rewritten so that it is not specific to `sbt`.  For complete details on it, see [0_6_Launcher].  That page describes the new launcher, including how to make an application launchable.  Basically, you provide a configuration file to the launcher and have your application entry point implement an interface.
 
 The following can now be done by modifying the default `sbt` configuration file for the launcher:
- * Specify the default values for properties for new projects, such as the project name and version, the sbt version, and the Scala version
- * Control which repositories are used for downloading Scala versions and sbt
- * Fix the Scala version for project definitions and the sbt version for all projects on your machine, regardless of the settings for project/build.properties.
+ * Specify the default values for properties for new projects, such as the project name and version, the `sbt` version, and the Scala version
+ * Control which repositories are used for downloading Scala versions and `sbt`
+ * Fix the Scala version for project definitions and the `sbt` version for all projects on your machine, regardless of the settings for project/build.properties.
  * Configure project searching (previously configurable by system property)
  * Configure the location of the boot directory, including making is shared across a machine.
 
 You can also set up separate scripts to use different configuration files.  For example, you might have a 'sbt-quick' script.  The configuration file used could specify that new projects are set up without prompting, but instead use your specified defaults for properties.
 
 === Compatibility ===
- The new launcher can only launch the new 0.6.x series of `sbt` and the new series of `sbt` requires the new launcher.
+The new launcher can only launch the new 0.6.x series of `sbt` and the new series of `sbt` requires the new launcher.
 
 === Size/Speed ===
-I've managed to keep the launcher jar the same size and start up in the same time.  However, the corresponding version of `sbt` is about 30% slower on startup and is bigger in size.  This is due to a temporary duplication of some functionality between `sbt` and the new `xsbt` components during the transition.
+I've managed to keep the launcher jar the same size and start up in the same time.  However, the corresponding version of `sbt` is about 30% slower on startup and is bigger in size.  This is partly due to a temporary duplication of some functionality between `sbt` and the new `xsbt` components during the transition.
 
 === Usability ===
 Now is a good time for users to point out usability issues and possible improvements related to launching- startup, reload, and retrieving sbt and Scala.  The Ivy "errors" about unknown resolvers that are especially apparent in the launcher (including the previous version of the launcher) is a known issue to the Ivy developers.  See issue IVY-758 as reported by the Gradle developers.
@@ -78,9 +78,9 @@ You could then include '2.8.0-quick' in `build.scala.versions` or as a valid ver
 
 `sbt` now supports test frameworks through the [http://github.com/harrah/test-interface uniform test interface], which itself is a work in progress.  This should make `sbt` more independent of test frameworks that can implement the test interface.  `sbt` only needs to know the name of the class implementing the interface.  `sbt` no longer needs to be recompiled in order to support new frameworks, new versions of frameworks, or frameworks compiled against different Scala.
 
-Josh Cough has implemented this interface for !ScalaTest in a branch and sbt 0.6.0 knows about it.  Checkout https://scalatest.dev.java.net/source/browse/scalatest/branches/josh-sbt-interfaces/ , build it with `ant dist`, and use the resulting jar as usual in your project.
+Josh Cough has implemented this interface for !ScalaTest in a branch and sbt 0.6.0 knows about it.  Checkout https://scalatest.dev.java.net/source/browse/scalatest/branches/josh-sbt-interfaces/, build it with `ant dist`, and use the resulting jar as usual in your project (put it in the `lib` directory).
 
-Other test frameworks that implement the interface will be added to `sbt`, but until then, it is easy enough to add a new framework.  For example, if a new !ScalaCheck snapshot implements the interface and `sbt` has not been updated to know about it yet, use that snapshot as a normal library and add the following to your project definition:
+Other test frameworks that implement the interface will be added to `sbt`'s list of known frameworks.  It is easy enough to use a framework not yet known to `sbt`, however.  For example, if a new !ScalaCheck snapshot implements the interface and `sbt` has not been updated to know about it yet, use that snapshot as a normal library in your project and add the following to your project definition:
 {{{
 override def testFrameworks = super.testFrameworks ++
  new TestFramework("org.scalacheck.ScalaCheckFramework")
