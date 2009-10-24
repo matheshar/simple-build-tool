@@ -1,15 +1,15 @@
 = Introduction =
 
-The sbt 0.6.x series attempts to merge ideas from `xsbt` (experimental `sbt` components) into the main `sbt`.  Consider it experimental because of extensive internal changes.
+The sbt 0.6.x series attempts to merge ideas from `xsbt` (experimental `sbt` components) into the main `sbt`.  It should be considered experimental because of extensive internal changes to `sbt`.
 
-This documentation introduces sbt 0.6.0, the first version in the series.  Please point out gaps in the documentation, areas that need clarification, or anything you'd like more details on.  Your time experimenting is appreciated!
+This documentation introduces sbt 0.6.0, which is the first version in the series.  Please point out gaps in the documentation, areas that need clarification, or anything you'd like more details about.  Your time experimenting is appreciated!
 
 0.6.0 attempts to start the series off with three major features:
- # Generalize the launcher to be able to launch applications other than sbt.  Additionally, the launcher configuration for `sbt` can be customized.
+ # Generalize the launcher to be able to launch applications other than `sbt`.  Additionally, the launcher configuration for `sbt` can be customized.
  # Separate the version of Scala used to build a project from the version used to run `sbt` and the project definition.  The benefit of this is that `sbt` no longer has to be built against the version of Scala you are using for your project.
- # Support test frameworks through the uniform test interface.  The benefit of this is that you should not have to wait for `sbt` to update support for test frameworks when new ones are released.  Also, the version of Scala used by a test framework should not matter to `sbt`.  In particular, this should let you use test frameworks compiled against 2.8.
+ # Support test frameworks through the uniform test interface.  The benefit of this is that you should not have to wait for `sbt` to be updated to support new versions of test frameworks.  Also, the version of Scala used by a test framework should not matter to `sbt`.  In particular, this should let you use test frameworks compiled against 2.8.
 
-The aim for the rest of the series is to further modularize `sbt`, try out a new task engine, and of course address issues that will come up due to these changes.
+The aim for the rest of the series is to further modularize `sbt`, try out a new task engine, and address issues that will come up due to these changes.
 
 To reiterate, *0.6.x is experimental*.
 
