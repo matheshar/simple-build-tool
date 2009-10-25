@@ -24,7 +24,7 @@ The following can now be done by modifying the default `sbt` configuration file 
  * Control which repositories are used for downloading Scala versions and `sbt`
  * Fix the Scala version for project definitions and the `sbt` version for all projects on your machine, regardless of the settings for project/build.properties.
  * Configure project searching (previously configurable by system property)
- * Configure the location of the boot directory, including making is shared across a machine.
+ * Configure the location of the boot directory, including making it shared across a machine.
 
 You can also set up separate scripts to use different configuration files.  For example, you might have a 'sbt-quick' script.  The configuration file used could specify that new projects are set up without prompting, but instead use your specified defaults for properties.
 
@@ -43,13 +43,13 @@ The new launcher provides essential support for implementing the separation of S
 === Compatibility ===
  * The compiler can no longer be forked.  It should not be necessary anymore.
  * The `reboot` action is gone.  `reload` now implies a `reboot`.
- * The `scala.version` property has been split into `build.scala.version` and `def.scala.version`.  This is explained in more detail in the next section.
+ * The `scala.version` property has been split into `build.scala.versions` and `def.scala.version`.  This is explained in more detail in the next section.
  * The `ScalaVersion` object is gone.  Use the `buildScalaVersion` method to obtain the version of Scala currently being used to build the project.
- * `build.scala.version` has to be read in `sbt.Project`, which means that all properties are read in `sbt.Project`.  Therefore, properties need to be declared with `lazy val` and not just `val` (or else they will not be initialized and an error will be generated).  If you do not declare custom properties, this does not apply to you.
+ * `build.scala.versions` has to be read in `sbt.Project`, which means that all properties are read in `sbt.Project`.  Therefore, properties need to be declared with `lazy val` and not just `val` (or else they will not be initialized and an error will be generated).  If you do not declare custom properties, this does not affect you.
 
 === Configuring Versions ===
 
-The version used to run sbt and used for compiling the project definition is set by the build property `def.scala.version`.  The only valid value for this property is 2.7.5.  This means that sbt runs in 2.7.5 and your project definition is compiled against 2.7.5.  As described below, the version of Scala used to build your project is independent.
+The version used to run `sbt` and used for compiling the project definition is set by the build property `def.scala.version`.  The only valid value for this property is 2.7.5.  This means that `sbt` runs in 2.7.5 and your project definition is compiled against 2.7.5.  As described below, the version of Scala used to build your project is independent.
 
 The 'build.scala.versions' property is a whitespace separated list of versions to use when cross building (that is, when doing '+compile' or similar).  The first version in the list is used for single-version actions (actions not prefixed with '+').  Allowed versions should (in theory) be any Scala version 2.7.2 or later, including `2.8.0-SNAPSHOT` and `2.8.0-20091013.004057-+`.
 
