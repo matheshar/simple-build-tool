@@ -6,6 +6,19 @@ This page describes approaches to using `sbt` with third-party tools.  It is a w
 
 There is a [http://github.com/RayRacine/scallap/tree/master/tools/emacs script] to run `sbt` as an inferior-mode process from within emacs.  It uses `compile.el`, allowing one to migrate through the compiler errors.
 
+= Vim =
+
+In Vim, you can add the following to your `.vimrc` file to support building via `:make` and navigating to errors and warnings:
+
+{{{
+set makeprg=sbt\ compile
+set efm=%E\ %#[error]\ %f:%l:\ %m,%-C%.%#,%C\ %#[error]\ %p^,%Z,
+       \%W\ %#[warn]\ %f:%l:\ %m,%-C%.%#,%C\ %#[warn]\ %p^,%Z,
+       \%-G%.%#
+}}}
+
+You'll need to `cd` into your project root to issue the `:make` command. 
+
 = Eclipse =
 
 There are currently two options for Eclipse integration.  There is an [http://github.com/frank06/sbt-eclipse-plugin/ Eclipse plugin] to pick up dependencies from your `lib_managed` directory.  Another approach using IvyDE is described below.
