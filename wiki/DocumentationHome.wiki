@@ -25,6 +25,7 @@
    * [ManagedConfigurations Configurations]
    * [Resolvers Defining Repositories]
    * [Publishing]
+  * [CustomCompileConfiguration Custom Compile Configuration]
  * Writing Actions
   * [CustomActions Creating/Modifying Actions]
   * [ActionContent Implementing Actions]
