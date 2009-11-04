@@ -1,0 +1,308 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head><title>trait Environment in sbt</title>
+        <meta http-equiv="content-type" content="text/html; charset=UTF8"></meta><meta content="scaladoc (version 2.7.2)" name="generator"></meta><link href="../style.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../script.js"></script>
+        </head>
+        <body onload="init()">
+        <table summary="" class="navigation">
+        <tr>
+          <td class="navigation-links" valign="top">
+            <!-- <table><tr></tr></table> -->
+          </td>
+          <td align="right" valign="top" style="white-space:nowrap;" rowspan="2">
+            <div class="doctitle-larger">Simple Build Tool 0.5.6 API</div>
+          </td>
+        </tr>
+        <tr><td></td></tr>
+      </table>
+        
+      <div class="entity">
+        <a href="../sbt$package.html" target="_self">sbt</a>
+        <br></br>
+        <span class="entity">trait  Environment</span>
+      </div><hr></hr>
+      <div class="source">
+        [source: <a href="" class="sbt/Environment"><code>sbt/Environment.scala</code></a>]
+      </div><hr></hr>
+      <a name="Environment"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>trait</code>
+        <em>Environment</em>
+      </dt>
+      <dd><code> extends </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a></dd>
+    </dl><dl>
+      <dt style="margin:10px 0 0 20px;"><b>Direct Known Subclasses:</b></dt>
+      <dd><a href="../sbt/BasicEnvironment.html" target="_self">BasicEnvironment</a></dd>
+      </dl><hr></hr>
+      
+
+
+<table summary="" cellpadding="3" class="member">
+      <tr><td class="title" colspan="2">Method Summary</td></tr>
+      <tr>
+      <td class="modifiers" valign="top"> 
+        <code>abstract def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/Environment.html#property%28scala.reflect.Manifest%5BT%5D%2Csbt.Format%5BT%5D%29" target="_self">property</a></em>
+        [<em>T</em>](<code>implicit </code><em>manifest</em> : <a href="" target="contentFrame" class="scala/reflect/Manifest">scala.reflect.Manifest</a>[<a href="../sbt/Environment.html#property%28scala.reflect.Manifest%5BT%5D%2Csbt.Format%5BT%5D%29#T" target="_self">T</a>], <code>implicit </code><em>format</em> : <a href="../sbt/Format.html" target="_self">Format</a>[<a href="../sbt/Environment.html#property%28scala.reflect.Manifest%5BT%5D%2Csbt.Format%5BT%5D%29#T" target="_self">T</a>]) : <a href="../sbt/Environment.Property.html" target="_self">Property</a>[<a href="../sbt/Environment.html#property%28scala.reflect.Manifest%5BT%5D%2Csbt.Format%5BT%5D%29#T" target="_self">T</a>]
+        
+        <div>Creates a user-defined property that has no default value.  The property will try to inherit its value
+ from a parent environment (if one exists) if its value is not explicitly specified.  An explicitly specified
+ value will persist between builds if the object returned by this method is assigned to a 'val' in this
+ 'Environment'.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/Environment.html#propertyF%28sbt.Format%5BT%5D%29" target="_self">propertyF</a></em>
+        [<em>T</em>](<em>format</em> : <a href="../sbt/Format.html" target="_self">Format</a>[<a href="../sbt/Environment.html#propertyF%28sbt.Format%5BT%5D%29#T" target="_self">T</a>])(<code>implicit </code><em>manifest</em> : <a href="" target="contentFrame" class="scala/reflect/Manifest">scala.reflect.Manifest</a>[<a href="../sbt/Environment.html#propertyF%28sbt.Format%5BT%5D%29#T" target="_self">T</a>]) : <a href="../sbt/Environment.Property.html" target="_self">Property</a>[<a href="../sbt/Environment.html#propertyF%28sbt.Format%5BT%5D%29#T" target="_self">T</a>]
+        
+        <div>Creates a user-defined property that has no default value.  The property will try to inherit its value
+ from a parent environment (if one exists) if its value is not explicitly specified.  An explicitly specified
+ value will persist between builds if the object returned by this method is assigned to a 'val' in this
+ 'Environment'.  The given 'format' is used to convert an instance of 'T' to and from the 'String' representation
+ used for persistence.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>abstract def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/Environment.html#propertyLocal%28scala.reflect.Manifest%5BT%5D%2Csbt.Format%5BT%5D%29" target="_self">propertyLocal</a></em>
+        [<em>T</em>](<code>implicit </code><em>manifest</em> : <a href="" target="contentFrame" class="scala/reflect/Manifest">scala.reflect.Manifest</a>[<a href="../sbt/Environment.html#propertyLocal%28scala.reflect.Manifest%5BT%5D%2Csbt.Format%5BT%5D%29#T" target="_self">T</a>], <code>implicit </code><em>format</em> : <a href="../sbt/Format.html" target="_self">Format</a>[<a href="../sbt/Environment.html#propertyLocal%28scala.reflect.Manifest%5BT%5D%2Csbt.Format%5BT%5D%29#T" target="_self">T</a>]) : <a href="../sbt/Environment.Property.html" target="_self">Property</a>[<a href="../sbt/Environment.html#propertyLocal%28scala.reflect.Manifest%5BT%5D%2Csbt.Format%5BT%5D%29#T" target="_self">T</a>]
+        
+        <div>Creates a user-defined property with no default value and no value inheritance from a parent environment.
+ Its value will persist between builds if the returned object is assigned to a 'val' in this 'Environment'.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/Environment.html#propertyLocalF%28sbt.Format%5BT%5D%29" target="_self">propertyLocalF</a></em>
+        [<em>T</em>](<em>format</em> : <a href="../sbt/Format.html" target="_self">Format</a>[<a href="../sbt/Environment.html#propertyLocalF%28sbt.Format%5BT%5D%29#T" target="_self">T</a>])(<code>implicit </code><em>manifest</em> : <a href="" target="contentFrame" class="scala/reflect/Manifest">scala.reflect.Manifest</a>[<a href="../sbt/Environment.html#propertyLocalF%28sbt.Format%5BT%5D%29#T" target="_self">T</a>]) : <a href="../sbt/Environment.Property.html" target="_self">Property</a>[<a href="../sbt/Environment.html#propertyLocalF%28sbt.Format%5BT%5D%29#T" target="_self">T</a>]
+        
+        <div>Creates a user-defined property with no default value and no value inheritance from a parent environment.
+ The property's value will persist between builds if the object returned by this method is assigned to a
+ 'val' in this 'Environment'.  The given 'format' is used to convert an instance of 'T' to and from the
+ 'String' representation used for persistence.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>abstract def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/Environment.html#propertyOptional%28%3D%3ET%29" target="_self">propertyOptional</a></em>
+        [<em>T</em>](<em>defaultValue</em> : =&gt; <a href="../sbt/Environment.html#propertyOptional%28%3D%3ET%29#T" target="_self">T</a>)(<code>implicit </code><em>manifest</em> : <a href="" target="contentFrame" class="scala/reflect/Manifest">scala.reflect.Manifest</a>[<a href="../sbt/Environment.html#propertyOptional%28%3D%3ET%29#T" target="_self">T</a>], <code>implicit </code><em>format</em> : <a href="../sbt/Format.html" target="_self">Format</a>[<a href="../sbt/Environment.html#propertyOptional%28%3D%3ET%29#T" target="_self">T</a>]) : <a href="../sbt/Environment.Property.html" target="_self">Property</a>[<a href="../sbt/Environment.html#propertyOptional%28%3D%3ET%29#T" target="_self">T</a>]
+        
+        <div>Creates a user-defined property that uses the given default value if no value is explicitly specified for this property.  The property's value will persist between builds
+ if the object returned by this method is assigned to a 'val' in this 'Environment'.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/Environment.html#propertyOptionalF%28%3D%3ET%2Csbt.Format%5BT%5D%29" target="_self">propertyOptionalF</a></em>
+        [<em>T</em>](<em>defaultValue</em> : =&gt; <a href="../sbt/Environment.html#propertyOptionalF%28%3D%3ET%2Csbt.Format%5BT%5D%29#T" target="_self">T</a>, <em>format</em> : <a href="../sbt/Format.html" target="_self">Format</a>[<a href="../sbt/Environment.html#propertyOptionalF%28%3D%3ET%2Csbt.Format%5BT%5D%29#T" target="_self">T</a>])(<code>implicit </code><em>manifest</em> : <a href="" target="contentFrame" class="scala/reflect/Manifest">scala.reflect.Manifest</a>[<a href="../sbt/Environment.html#propertyOptionalF%28%3D%3ET%2Csbt.Format%5BT%5D%29#T" target="_self">T</a>]) : <a href="../sbt/Environment.Property.html" target="_self">Property</a>[<a href="../sbt/Environment.html#propertyOptionalF%28%3D%3ET%2Csbt.Format%5BT%5D%29#T" target="_self">T</a>]
+        
+        <div>Creates a user-defined property with no value inheritance from a parent environment but with the given default
+ value if no value is explicitly specified for this property.  The property's value will persist between builds
+ if the object returned by this method is assigned to a 'val' in this 'Environment'.  The given 'format' is used
+ to convert an instance of 'T' to and from the 'String' representation used for persistence.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>abstract def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/Environment.html#system%28String%29" target="_self">system</a></em>
+        [<em>T</em>](<em>propName</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>)(<code>implicit </code><em>format</em> : <a href="../sbt/Format.html" target="_self">Format</a>[<a href="../sbt/Environment.html#system%28String%29#T" target="_self">T</a>]) : <a href="../sbt/Environment.Property.html" target="_self">Property</a>[<a href="../sbt/Environment.html#system%28String%29#T" target="_self">T</a>]
+        
+        <div>Creates a system property with the given name and no default value.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>abstract def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/Environment.html#systemOptional%28String%2C%3D%3ET%29" target="_self">systemOptional</a></em>
+        [<em>T</em>](<em>propName</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <em>defaultValue</em> : =&gt; <a href="../sbt/Environment.html#systemOptional%28String%2C%3D%3ET%29#T" target="_self">T</a>)(<code>implicit </code><em>format</em> : <a href="../sbt/Format.html" target="_self">Format</a>[<a href="../sbt/Environment.html#systemOptional%28String%2C%3D%3ET%29#T" target="_self">T</a>]) : <a href="../sbt/Environment.Property.html" target="_self">Property</a>[<a href="../sbt/Environment.html#systemOptional%28String%2C%3D%3ET%29#T" target="_self">T</a>]
+        
+        <div>Creates a system property with the given name and the given default value to use if no value is explicitly specified.</div>
+      </td>
+    </tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#getClass%28%29" target="_self">getClass</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#hashCode%28%29" target="_self">hashCode</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#equals%28Any%29" target="_self">equals</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#clone%28%29" target="_self">clone</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#toString%28%29" target="_self">toString</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#notify%28%29" target="_self">notify</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#notifyAll%28%29" target="_self">notifyAll</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#wait%28Long%29" target="_self">wait</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#wait%28Long%2CInt%29" target="_self">wait</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#wait%28%29" target="_self">wait</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#finalize%28%29" target="_self">finalize</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#%3D%3D%28AnyRef%29" target="_self">==</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#%21%3D%28AnyRef%29" target="_self">!=</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#eq%28AnyRef%29" target="_self">eq</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#ne%28AnyRef%29" target="_self">ne</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#synchronized%28T0%29" target="_self">synchronized</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html" target="_self">Any</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html#%3D%3D%28Any%29" target="_self">==</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html#%21%3D%28Any%29" target="_self">!=</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html#isInstanceOf" target="_self">isInstanceOf</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html#asInstanceOf" target="_self">asInstanceOf</a>
+        </td></tr>
+      </table>
+<table summary="" cellpadding="3" class="member">
+      <tr><td class="title" colspan="2">Class Summary</td></tr>
+      <tr>
+      <td class="modifiers" valign="top"> 
+        <code>abstract class</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/Environment.Property.html" target="_self">Property</a></em>
+        [<em>T</em>]<code> extends </code><a href="" target="contentFrame" class="scala/NotNull">scala.NotNull</a><code> with </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+      </table>
+
+      
+
+
+<table summary="" cellpadding="3" class="member-detail">
+          <tr><td class="title">Method Details</td></tr>
+        </table><div><a name="system%28String%29"></a><dl>
+      <dt>
+        
+        <code>abstract</code>
+        <code>def</code>
+        <em>system</em>[<em>T</em>](<em>propName</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>)(<code>implicit </code><em>format</em> : <a href="../sbt/Format.html" target="_self">Format</a>[<a href="../sbt/Environment.html#system%28String%29#T" target="_self">T</a>]) : <a href="../sbt/Environment.Property.html" target="_self">Property</a>[<a href="../sbt/Environment.html#system%28String%29#T" target="_self">T</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Creates a system property with the given name and no default value.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="systemOptional%28String%2C%3D%3ET%29"></a><dl>
+      <dt>
+        
+        <code>abstract</code>
+        <code>def</code>
+        <em>systemOptional</em>[<em>T</em>](<em>propName</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <em>defaultValue</em> : =&gt; <a href="../sbt/Environment.html#systemOptional%28String%2C%3D%3ET%29#T" target="_self">T</a>)(<code>implicit </code><em>format</em> : <a href="../sbt/Format.html" target="_self">Format</a>[<a href="../sbt/Environment.html#systemOptional%28String%2C%3D%3ET%29#T" target="_self">T</a>]) : <a href="../sbt/Environment.Property.html" target="_self">Property</a>[<a href="../sbt/Environment.html#systemOptional%28String%2C%3D%3ET%29#T" target="_self">T</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Creates a system property with the given name and the given default value to use if no value is explicitly specified.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="property%28scala.reflect.Manifest%5BT%5D%2Csbt.Format%5BT%5D%29"></a><dl>
+      <dt>
+        
+        <code>abstract</code>
+        <code>def</code>
+        <em>property</em>[<em>T</em>](<code>implicit </code><em>manifest</em> : <a href="" target="contentFrame" class="scala/reflect/Manifest">scala.reflect.Manifest</a>[<a href="../sbt/Environment.html#property%28scala.reflect.Manifest%5BT%5D%2Csbt.Format%5BT%5D%29#T" target="_self">T</a>], <code>implicit </code><em>format</em> : <a href="../sbt/Format.html" target="_self">Format</a>[<a href="../sbt/Environment.html#property%28scala.reflect.Manifest%5BT%5D%2Csbt.Format%5BT%5D%29#T" target="_self">T</a>]) : <a href="../sbt/Environment.Property.html" target="_self">Property</a>[<a href="../sbt/Environment.html#property%28scala.reflect.Manifest%5BT%5D%2Csbt.Format%5BT%5D%29#T" target="_self">T</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Creates a user-defined property that has no default value.  The property will try to inherit its value
+ from a parent environment (if one exists) if its value is not explicitly specified.  An explicitly specified
+ value will persist between builds if the object returned by this method is assigned to a 'val' in this
+ 'Environment'.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="propertyF%28sbt.Format%5BT%5D%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>propertyF</em>[<em>T</em>](<em>format</em> : <a href="../sbt/Format.html" target="_self">Format</a>[<a href="../sbt/Environment.html#propertyF%28sbt.Format%5BT%5D%29#T" target="_self">T</a>])(<code>implicit </code><em>manifest</em> : <a href="" target="contentFrame" class="scala/reflect/Manifest">scala.reflect.Manifest</a>[<a href="../sbt/Environment.html#propertyF%28sbt.Format%5BT%5D%29#T" target="_self">T</a>]) : <a href="../sbt/Environment.Property.html" target="_self">Property</a>[<a href="../sbt/Environment.html#propertyF%28sbt.Format%5BT%5D%29#T" target="_self">T</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Creates a user-defined property that has no default value.  The property will try to inherit its value
+ from a parent environment (if one exists) if its value is not explicitly specified.  An explicitly specified
+ value will persist between builds if the object returned by this method is assigned to a 'val' in this
+ 'Environment'.  The given 'format' is used to convert an instance of 'T' to and from the 'String' representation
+ used for persistence.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="propertyLocal%28scala.reflect.Manifest%5BT%5D%2Csbt.Format%5BT%5D%29"></a><dl>
+      <dt>
+        
+        <code>abstract</code>
+        <code>def</code>
+        <em>propertyLocal</em>[<em>T</em>](<code>implicit </code><em>manifest</em> : <a href="" target="contentFrame" class="scala/reflect/Manifest">scala.reflect.Manifest</a>[<a href="../sbt/Environment.html#propertyLocal%28scala.reflect.Manifest%5BT%5D%2Csbt.Format%5BT%5D%29#T" target="_self">T</a>], <code>implicit </code><em>format</em> : <a href="../sbt/Format.html" target="_self">Format</a>[<a href="../sbt/Environment.html#propertyLocal%28scala.reflect.Manifest%5BT%5D%2Csbt.Format%5BT%5D%29#T" target="_self">T</a>]) : <a href="../sbt/Environment.Property.html" target="_self">Property</a>[<a href="../sbt/Environment.html#propertyLocal%28scala.reflect.Manifest%5BT%5D%2Csbt.Format%5BT%5D%29#T" target="_self">T</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Creates a user-defined property with no default value and no value inheritance from a parent environment.
+ Its value will persist between builds if the returned object is assigned to a 'val' in this 'Environment'.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="propertyLocalF%28sbt.Format%5BT%5D%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>propertyLocalF</em>[<em>T</em>](<em>format</em> : <a href="../sbt/Format.html" target="_self">Format</a>[<a href="../sbt/Environment.html#propertyLocalF%28sbt.Format%5BT%5D%29#T" target="_self">T</a>])(<code>implicit </code><em>manifest</em> : <a href="" target="contentFrame" class="scala/reflect/Manifest">scala.reflect.Manifest</a>[<a href="../sbt/Environment.html#propertyLocalF%28sbt.Format%5BT%5D%29#T" target="_self">T</a>]) : <a href="../sbt/Environment.Property.html" target="_self">Property</a>[<a href="../sbt/Environment.html#propertyLocalF%28sbt.Format%5BT%5D%29#T" target="_self">T</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Creates a user-defined property with no default value and no value inheritance from a parent environment.
+ The property's value will persist between builds if the object returned by this method is assigned to a
+ 'val' in this 'Environment'.  The given 'format' is used to convert an instance of 'T' to and from the
+ 'String' representation used for persistence.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="propertyOptional%28%3D%3ET%29"></a><dl>
+      <dt>
+        
+        <code>abstract</code>
+        <code>def</code>
+        <em>propertyOptional</em>[<em>T</em>](<em>defaultValue</em> : =&gt; <a href="../sbt/Environment.html#propertyOptional%28%3D%3ET%29#T" target="_self">T</a>)(<code>implicit </code><em>manifest</em> : <a href="" target="contentFrame" class="scala/reflect/Manifest">scala.reflect.Manifest</a>[<a href="../sbt/Environment.html#propertyOptional%28%3D%3ET%29#T" target="_self">T</a>], <code>implicit </code><em>format</em> : <a href="../sbt/Format.html" target="_self">Format</a>[<a href="../sbt/Environment.html#propertyOptional%28%3D%3ET%29#T" target="_self">T</a>]) : <a href="../sbt/Environment.Property.html" target="_self">Property</a>[<a href="../sbt/Environment.html#propertyOptional%28%3D%3ET%29#T" target="_self">T</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Creates a user-defined property that uses the given default value if no value is explicitly specified for this property.  The property's value will persist between builds
+ if the object returned by this method is assigned to a 'val' in this 'Environment'.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="propertyOptionalF%28%3D%3ET%2Csbt.Format%5BT%5D%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>propertyOptionalF</em>[<em>T</em>](<em>defaultValue</em> : =&gt; <a href="../sbt/Environment.html#propertyOptionalF%28%3D%3ET%2Csbt.Format%5BT%5D%29#T" target="_self">T</a>, <em>format</em> : <a href="../sbt/Format.html" target="_self">Format</a>[<a href="../sbt/Environment.html#propertyOptionalF%28%3D%3ET%2Csbt.Format%5BT%5D%29#T" target="_self">T</a>])(<code>implicit </code><em>manifest</em> : <a href="" target="contentFrame" class="scala/reflect/Manifest">scala.reflect.Manifest</a>[<a href="../sbt/Environment.html#propertyOptionalF%28%3D%3ET%2Csbt.Format%5BT%5D%29#T" target="_self">T</a>]) : <a href="../sbt/Environment.Property.html" target="_self">Property</a>[<a href="../sbt/Environment.html#propertyOptionalF%28%3D%3ET%2Csbt.Format%5BT%5D%29#T" target="_self">T</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Creates a user-defined property with no value inheritance from a parent environment but with the given default
+ value if no value is explicitly specified for this property.  The property's value will persist between builds
+ if the object returned by this method is assigned to a 'val' in this 'Environment'.  The given 'format' is used
+ to convert an instance of 'T' to and from the 'String' representation used for persistence.</dd></dl>
+      <dl></dl>
+    <hr></hr></div>
+
+
+    <hr></hr>
+        <table summary="" class="navigation">
+        <tr>
+          <td class="navigation-links" valign="top">
+            <!-- <table><tr></tr></table> -->
+          </td>
+          <td align="right" valign="top" style="white-space:nowrap;" rowspan="2">
+            <div class="doctitle-larger">Simple Build Tool 0.5.6 API</div>
+          </td>
+        </tr>
+        <tr><td></td></tr>
+      </table>
+      </body>
+      </html>
