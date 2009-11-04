@@ -27,8 +27,8 @@ Project does not exist, create new project? (y/N) : y
 Name: Hello Lift
 Organization [empty]: net.liftweb.hello
 Version [1.0]: 1.0
-Scala version [2.7.5]: 2.7.3
-sbt version [0.5.5]:
+Scala version [2.7.7]: 2.7.3
+sbt version [0.5.6]:
 ...
 [success] Successfully initialized directory structure.
 [info] Building project Hello Lift 1.0 using sbt.DefaultProject

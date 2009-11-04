@@ -1,4 +1,4 @@
-=== 0.5.6 to trunk ===
+=== 0.5.5 to 0.5.6 ===
  * Support specs specifications defined as classes
  * Fix specs support for 1.6
  * Support !ScalaTest 1.0
