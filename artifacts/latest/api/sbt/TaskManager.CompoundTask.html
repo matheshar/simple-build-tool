@@ -1,0 +1,169 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head><title>class CompoundTask in sbt.TaskManager</title>
+        <meta http-equiv="content-type" content="text/html; charset=UTF8"></meta><meta content="scaladoc (version 2.7.2)" name="generator"></meta><link href="../style.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../script.js"></script>
+        </head>
+        <body onload="init()">
+        <table summary="" class="navigation">
+        <tr>
+          <td class="navigation-links" valign="top">
+            <!-- <table><tr></tr></table> -->
+          </td>
+          <td align="right" valign="top" style="white-space:nowrap;" rowspan="2">
+            <div class="doctitle-larger">Simple Build Tool 0.5.6 API</div>
+          </td>
+        </tr>
+        <tr><td></td></tr>
+      </table>
+        
+      <div class="entity">
+        <a href="../sbt/TaskManager.html" target="_self">sbt.TaskManager</a>
+        <br></br>
+        <span class="entity">class  CompoundTask</span>
+      </div><hr></hr>
+      <div class="source">
+        [source: <a href="" class="sbt/TaskManager"><code>sbt/TaskManager.scala</code></a>]
+      </div><hr></hr>
+      <a name="CompoundTask"></a><dl>
+      <dt>
+        
+        <code>final</code>
+        <code>class</code>
+        <em>CompoundTask</em>(<em>explicitName</em> : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>], <em>description</em> : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>], <em>dependencies</em> : <a href="" target="contentFrame" class="scala/List">scala.List</a>[<a href="../sbt/TaskManager.html#ManagedTask" target="_self">ManagedTask</a>], <em>interactive</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/Boolean.html" target="_self">Boolean</a>, <em>action</em> : =&gt; <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>], <em>createWork</em> : =&gt; <a href="../sbt/SubWork.html" target="_self">SubWork</a>[<a href="../sbt/TaskManager.Task.html" target="_self">Task</a>])
+      </dt>
+      <dd><code> extends </code><a href="../sbt/TaskManager.Task.html" target="_self">Task</a><code> with </code><a href="../sbt/CompoundWork.html" target="_self">CompoundWork</a>[<a href="../sbt/TaskManager.Task.html" target="_self">Task</a>]</dd>
+    </dl>
+      <table summary="" cellpadding="3" class="member">
+      <tr><td class="title" colspan="2">Additional Constructor Summary</td></tr>
+      <tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/TaskManager.CompoundTask.html#this%28%3D%3Esbt.SubWork%5Bsbt.Project%23Task%5D%29" target="_self">this</a></em>
+        (<em>createWork</em> : =&gt; <a href="../sbt/SubWork.html" target="_self">SubWork</a>[<a href="../sbt/TaskManager.Task.html" target="_self">Task</a>]) : <a href="../sbt/TaskManager.CompoundTask.html" target="_self">CompoundTask</a>
+        
+        
+      </td>
+    </tr>
+      </table>
+
+
+<table summary="" cellpadding="3" class="member">
+      <tr><td class="title" colspan="2">Method Summary</td></tr>
+      <tr>
+      <td class="modifiers" valign="top"> 
+        <code>protected override def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/TaskManager.CompoundTask.html#construct%28Option%5BString%5D%2COption%5BString%5D%2CList%5BTaskManager.this.ManagedTask%5D%2CBoolean%2C%3D%3EOption%5BString%5D%29" target="_self">construct</a></em>
+        (<em>explicitName</em> : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>], <em>description</em> : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>], <em>dependencies</em> : <a href="" target="contentFrame" class="scala/List">scala.List</a>[<a href="../sbt/TaskManager.html#ManagedTask" target="_self">ManagedTask</a>], <em>interactive</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/Boolean.html" target="_self">Boolean</a>, <em>action</em> : =&gt; <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]) : <a href="../sbt/TaskManager.CompoundTask.html" target="_self">CompoundTask</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/TaskManager.CompoundTask.html#work" target="_self">work</a></em>
+         : <a href="../sbt/SubWork.html" target="_self">SubWork</a>[<a href="../sbt/TaskManager.Task.html" target="_self">Task</a>]
+        
+        
+      </td>
+    </tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="../sbt/TaskManager.Task.html" target="_self">Task</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="../sbt/TaskManager.Task.html#manager" target="_self">manager</a>, <a href="../sbt/TaskManager.Task.html#name" target="_self">name</a>, <a href="../sbt/TaskManager.Task.html#named%28String%29" target="_self">named</a>, <a href="../sbt/TaskManager.Task.html#toString%28%29" target="_self">toString</a>, <a href="../sbt/TaskManager.Task.html#dependsOn%28TaskManager.this.ManagedTask*%29" target="_self">dependsOn</a>, <a href="../sbt/TaskManager.Task.html#describedAs%28String%29" target="_self">describedAs</a>, <a href="../sbt/TaskManager.Task.html#setInteractive" target="_self">setInteractive</a>, <a href="../sbt/TaskManager.Task.html#run" target="_self">run</a>, <a href="../sbt/TaskManager.Task.html#runDependenciesOnly" target="_self">runDependenciesOnly</a>, <a href="../sbt/TaskManager.Task.html#%26%26%28TaskManager.this.Task%29" target="_self">&amp;&amp;</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="../sbt/Dag.html" target="_self">Dag</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="../sbt/Dag.html#topologicalSort" target="_self">topologicalSort</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#getClass%28%29" target="_self">getClass</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#hashCode%28%29" target="_self">hashCode</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#equals%28Any%29" target="_self">equals</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#clone%28%29" target="_self">clone</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#notify%28%29" target="_self">notify</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#notifyAll%28%29" target="_self">notifyAll</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#wait%28Long%29" target="_self">wait</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#wait%28Long%2CInt%29" target="_self">wait</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#wait%28%29" target="_self">wait</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#finalize%28%29" target="_self">finalize</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#%3D%3D%28AnyRef%29" target="_self">==</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#%21%3D%28AnyRef%29" target="_self">!=</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#eq%28AnyRef%29" target="_self">eq</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#ne%28AnyRef%29" target="_self">ne</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#synchronized%28T0%29" target="_self">synchronized</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html" target="_self">Any</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html#%3D%3D%28Any%29" target="_self">==</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html#%21%3D%28Any%29" target="_self">!=</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html#isInstanceOf" target="_self">isInstanceOf</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html#asInstanceOf" target="_self">asInstanceOf</a>
+        </td></tr>
+      </table>
+
+
+      <table summary="" cellpadding="3" class="member-detail">
+          <tr><td class="title">Additional Constructor Details</td></tr>
+        </table><div><a name="this%28%3D%3Esbt.SubWork%5Bsbt.Project%23Task%5D%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>this</em>(<em>createWork</em> : =&gt; <a href="../sbt/SubWork.html" target="_self">SubWork</a>[<a href="../sbt/TaskManager.Task.html" target="_self">Task</a>]) : <a href="../sbt/TaskManager.CompoundTask.html" target="_self">CompoundTask</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr></div>
+
+
+<table summary="" cellpadding="3" class="member-detail">
+          <tr><td class="title">Method Details</td></tr>
+        </table><div><a name="construct%28Option%5BString%5D%2COption%5BString%5D%2CList%5BTaskManager.this.ManagedTask%5D%2CBoolean%2C%3D%3EOption%5BString%5D%29"></a><dl>
+      <dt>
+        
+        <code>protected override</code>
+        <code>def</code>
+        <em>construct</em>(<em>explicitName</em> : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>], <em>description</em> : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>], <em>dependencies</em> : <a href="" target="contentFrame" class="scala/List">scala.List</a>[<a href="../sbt/TaskManager.html#ManagedTask" target="_self">ManagedTask</a>], <em>interactive</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/Boolean.html" target="_self">Boolean</a>, <em>action</em> : =&gt; <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]) : <a href="../sbt/TaskManager.CompoundTask.html" target="_self">CompoundTask</a>
+      </dt>
+      <dd></dd>
+    </dl><dl>
+        <dt style="margin:10px 0 0 20px;">
+          <b>Overrides</b>
+        </dt>
+        <dd>
+        <a href="../sbt/TaskManager.Task.html" target="_self">Task</a>.<a href="../sbt/TaskManager.Task.html#construct%28Option%5BString%5D%2COption%5BString%5D%2CList%5BTaskManager.this.ManagedTask%5D%2CBoolean%2C%3D%3EOption%5BString%5D%29" target="_self">construct</a>
+        </dd>
+      </dl><hr></hr>
+<a name="work"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>work</em> : <a href="../sbt/SubWork.html" target="_self">SubWork</a>[<a href="../sbt/TaskManager.Task.html" target="_self">Task</a>]
+      </dt>
+      <dd></dd>
+    </dl><dl>
+        <dt style="margin:10px 0 0 20px;">
+          <b>Overrides</b>
+        </dt>
+        <dd>
+        <a href="../sbt/CompoundWork.html" target="_self">CompoundWork</a>.<a href="../sbt/CompoundWork.html#work" target="_self">work</a>
+        </dd>
+      </dl><hr></hr></div>
+
+
+    <hr></hr>
+        <table summary="" class="navigation">
+        <tr>
+          <td class="navigation-links" valign="top">
+            <!-- <table><tr></tr></table> -->
+          </td>
+          <td align="right" valign="top" style="white-space:nowrap;" rowspan="2">
+            <div class="doctitle-larger">Simple Build Tool 0.5.6 API</div>
+          </td>
+        </tr>
+        <tr><td></td></tr>
+      </table>
+      </body>
+      </html>
