@@ -11,7 +11,7 @@ and use the Maven2 layout.  This page describes how to define other types of rep
 A few predefined repositories are available and are listed below
 
  * `DefaultMavenRepository`
- This is the main Maven repository at [http://scala-tools.org/repo-releases/] and is included by default
+ This is the main Maven repository at [http://repo1.maven.org/maven2/] and is included by default
  * `ScalaToolsReleases`
  This is the releases repository at [http://scala-tools.org/repo-releases/] and is included by default
  * `ScalaToolsSnapshots`
