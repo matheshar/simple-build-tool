@@ -4,7 +4,7 @@
  * [http://technically.us/spde/About spde]
  * [http://github.com/hoffrocket/sbt-yui yuicompressor]
  * [http://github.com/rubbish/cuke4duke-sbt-plugin/ cuke4duke]
- * [http://github.com/harrah/android-plugin Android]
+ * [http://github.com/jberkel/android-plugin Android]
  * [http://github.com/harrah/sbt/tree/master/install/ Installer]
  * [http://code.google.com/p/simple-build-tool/wiki/ExampleSbtTest sbt test framework]
 
