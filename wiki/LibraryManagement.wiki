@@ -8,6 +8,11 @@ There are two ways for you to manage libraries with `sbt`, manually or automatic
 
 Manually managing dependencies involves copying any jars that you want to use to the `lib` directory.  `sbt` will put these jars on the classpath during compilation, testing, running, and when using the interpreter.  You are responsible for adding, removing, updating, and otherwise managing the jars in this directory.  No modifications to your [BuildConfiguration project definition] are required to use this method unless you would like to change the location of the directory you store the jars in.
 
+To change the directory jars are stored in, override `dependencyPath` in your [BuildConfiguration project definition].  For example, to use `src/main/webapp/WEB-INF/lib`:
+{{{
+override def dependencyPath = webappPath / "WEB-INF" / "lib"
+}}}
+
 = Automatic Dependency Management =
 
 This method of dependency management involves specifying the direct dependencies of your project and letting `sbt` handle retrieving and updating your dependencies.
