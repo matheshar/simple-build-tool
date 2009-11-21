@@ -21,7 +21,7 @@ You can also continuously recompile and reload the web application when using Je
 {{{
   override def scanDirectories = ( temporaryWarPath / "WEB-INF" / ("classes" | "lib") ).get.toSeq
 }}}
-You might use one of these options if your web application picks up changes to resource files and therefore does not need to be redeployed or if you are using [www.zeroturnaround.com/javarebel/ JavaRebel].
+You might use one of these options if your web application picks up changes to resource files and therefore does not need to be redeployed or if you are using [http://www.zeroturnaround.com/jrebel/ JRebel].
 
 Another possibility is to directly run the web application out of the the source web application path:
 {{{
@@ -42,10 +42,10 @@ class WebappBuild(info: ProjectInfo) extends DefaultWebProject(info)
 
 For a runnable example, see the [WebApplicationExample] page, which describes running the Hello Lift example with `sbt`.
 
-== `JavaRebel` ==
+== `JRebel` ==
 
-To use `JavaRebel`, override `scanDirectories` as described above so that `sbt` does not reload Jetty on changes to your classes.  Pass the following options to `java` in your `sbt` startup script:
+To use JRebel, override `scanDirectories` as described above so that `sbt` does not reload Jetty on changes to your classes.  Pass the following options to `java` in your `sbt` startup script:
 
 {{{
--noverify -javaagent:/path/to/javarebel/javarebel.jar
+-noverify -javaagent:/path/to/jrebel/jrebel.jar
 }}}
