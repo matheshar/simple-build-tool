@@ -17,7 +17,7 @@ You can also continuously recompile and reload the web application when using Je
 > jetty-run
 > ~ prepare-webapp
 }}}
-`jetty-run` starts Jetty and the `~ prepare-webapp` recompiles and recreates the web application whenever sources files change (see TriggeredExecution for details on `~`).  The `jetty-run` action monitors the directories given by `scanDirectories` and redeploys on changes.  By default, the entire temporary web application directory is monitored.  You might want to change `scanDirectories` in some cases.  For example, set `scanDirectories` to `Nil` if you do not want to redeploy on changes.  Or, set `scanDirectories` to only monitor the library and classes directories:
+`jetty-run` starts Jetty and the `~ prepare-webapp` recompiles and recreates the web application whenever sources files change (see TriggeredExecution for details on `~`).  The `jetty-run` action monitors the directories given by `scanDirectories` and redeploys on changes.  By default, the entire temporary web application directory is monitored.  You might want to change `scanDirectories` in some cases.  For example, set `scanDirectories` to `Nil` if you do not want to redeploy on any changes.  Or, set `scanDirectories` to only monitor the library and classes directories:
 {{{
   override def scanDirectories = ( temporaryWarPath / "WEB-INF" / ("classes" | "lib") ).get.toSeq
 }}}
@@ -44,8 +44,12 @@ For a runnable example, see the [WebApplicationExample] page, which describes ru
 
 == `JRebel` ==
 
-To use JRebel, override `scanDirectories` as described above so that `sbt` does not reload Jetty on changes to your classes.  Pass the following options to `java` in your `sbt` startup script:
+To use JRebel, override `scanDirectories` as described above so that `sbt` does not reload Jetty on changes to your classes:
+{{{
+  override def scanDirectories = Nil
+}}}
 
+Pass the following options to `java` in your `sbt` startup script:
 {{{
 -noverify -javaagent:/path/to/jrebel/jrebel.jar
 }}}
