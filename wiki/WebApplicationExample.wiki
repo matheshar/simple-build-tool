@@ -1,10 +1,10 @@
-= Hello Lift Example =
+= Lift Example =
 
 This page provides an example of building a [http://liftweb.net Lift] web application.
 
 == Get the example ==
 
-Download the [http://liftweb.net/index.php/HowTo_start_a_new_liftwebapp Hello Lift example] using maven and change to the new directory.
+Get the [http://liftweb.net/docs/getting_started/mod_master.html Lift example] using maven and change to the new directory.
 
 {{{
 $ mvn archetype:create -U \
