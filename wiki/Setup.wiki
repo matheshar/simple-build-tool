@@ -12,7 +12,7 @@ The basic steps are:
 
 = Launching Sbt =
 
-The easiest way to launch sbt is to create a one-line script.  Download [http://simple-build-tool.googlecode.com/files/sbt-launcher-0.5.6.jar sbt-launcher.jar] if you have not already.  (Note: do _not_ put `sbt-launcher.jar` in your `$SCALA_HOME\lib` directory.)
+The easiest way to launch sbt is to create a one-line script.  Download [http://simple-build-tool.googlecode.com/files/sbt-launcher-0.5.6.jar sbt-launcher.jar] if you have not already.  (*Note*: do _not_ put `sbt-launcher.jar` in your `$SCALA_HOME/lib` directory, your project's `lib` directory, or anywhere it will be put on a classpath.)
 
 === Unix ===
 Put the jar in your `~/bin` directory, put the line
