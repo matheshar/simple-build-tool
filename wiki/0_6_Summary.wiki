@@ -97,7 +97,7 @@ To use the 0.6.x series, you need to get the new launcher and set up a script to
   java -jar xsbt-launch-0.6.0.jar "$@"
 }}}
 
-On an existing project, you need to set `sbt.version` to 0.6.4.  You will be prompted for the version(s) of Scala to use for your project, since this is a new property (`build.scala.versions`, as mentioned in the Scala Version Handling section).  Check the Compatibility section above when using 0.6.x on an existing project.  Again, there are some unavoidable, but hopefully minor, incompatibilies, so try it out on a test project or a branch.
+On an existing project, you need to set `sbt.version` to 0.6.5.  You will be prompted for the version(s) of Scala to use for your project, since this is a new property (`build.scala.versions`, as mentioned in the Scala Version Handling section).  Check the Compatibility section above when using 0.6.x on an existing project.  Again, there are some unavoidable, but hopefully minor, incompatibilies, so try it out on a test project or a branch.
 
 = Building Locally =
 
