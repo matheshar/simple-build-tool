@@ -2,14 +2,14 @@
 
 The sbt 0.6.x series attempts to merge ideas from `xsbt` (experimental `sbt` components) into the main `sbt`.  It should be considered experimental because of extensive internal changes to `sbt`.
 
-This documentation introduces sbt 0.6.0, which is the first version in the series.  Please point out gaps in the documentation, areas that need clarification, or anything you'd like more details about.  Your time experimenting is appreciated!
+Please point out gaps in the documentation, areas that need clarification, or anything you'd like more details about.  Your time experimenting is appreciated!
 
-0.6.0 attempts to start the series off with three major features:
+There are currently three major improvements in 0.6.x over previous versions:
  # Generalize the launcher to be able to launch applications other than `sbt`.  Additionally, the launcher configuration for `sbt` can be customized.
  # Separate the version of Scala used to build a project from the version used to run `sbt` and the project definition.  The benefit of this is that `sbt` no longer has to be built against the version of Scala you are using for your project.
  # Support test frameworks through the uniform test interface.  The benefit of this is that you should not have to wait for `sbt` to be updated to support new versions of test frameworks.  Also, the version of Scala used by a test framework should not matter to `sbt`.  In particular, this should let you use test frameworks compiled against 2.8.
 
-The aim for the rest of the series is to further modularize `sbt`, try out a new task engine, and address issues that will come up due to these changes.
+The ongoing aim for the rest of the series is to further modularize `sbt` and address issues that will come up due to these changes.
 
 To reiterate, *0.6.x is experimental*.
 
@@ -49,9 +49,9 @@ The new launcher provides essential support for implementing the separation of S
 
 === Configuring Versions ===
 
-The version used to run `sbt` and used for compiling the project definition is set by the build property `def.scala.version`.  The only valid value for this property is 2.7.5.  This means that `sbt` runs in 2.7.5 and your project definition is compiled against 2.7.5.  As described below, the version of Scala used to build your project is independent.
+The version used to run `sbt` and used for compiling the project definition is set by the build property `def.scala.version`.  The only valid value for this property is 2.7.7.  This means that `sbt` runs in 2.7.7 and your project definition is compiled against 2.7.7.  As described below, the version of Scala used to build your project is independent.
 
-The 'build.scala.versions' property is a whitespace separated list of versions to use when cross building (that is, when doing '+compile' or similar).  The first version in the list is used for single-version actions (actions not prefixed with '+').  Allowed versions should (in theory) be any Scala version 2.7.2 or later, including `2.8.0-SNAPSHOT` and `2.8.0-20091013.004057-+`.
+The 'build.scala.versions' property is a whitespace separated list of versions to use when cross building (that is, when doing '+compile' or similar).  The first version in the list is used for single-version actions (actions not prefixed with '+').  Allowed versions should (in theory) be any Scala version 2.7.2 or later, including `2.8.0.Beta1-RC2`, `2.8.0-SNAPSHOT`, and `2.8.0-20091212.032835-+`.
 
 To change the version of Scala used for building at the interactive prompt or as part of a sequence of commands from the command line, use '++version'.  'version' does not need to be listed in 'build.scala.versions'.  To set the version and run an action, use '++version action' (space between version and action).  In both cases, the new version is used until the next '++' or on 'reload' or a restart.  '+action' is now expanded to '++v1 action', '++v2 action', ...  for versions in 'build.scala.versions' v1,v2,...
 
@@ -94,10 +94,10 @@ where `org.example.ExampleFramework` is replaced with the name of the class that
 
 To use the 0.6.x series, you need to get the new launcher and set up a script to run it as before.  I call my script `xsbt` to avoid confusion with the stable 0.5.x series.  Something like:
 {{{
-  java -jar xsbt-launch-0.6.0.jar "$@"
+  java -jar xsbt-launch-0.6.7.jar "$@"
 }}}
 
-On an existing project, you need to set `sbt.version` to 0.6.5.  You will be prompted for the version(s) of Scala to use for your project, since this is a new property (`build.scala.versions`, as mentioned in the Scala Version Handling section).  Check the Compatibility section above when using 0.6.x on an existing project.  Again, there are some unavoidable, but hopefully minor, incompatibilies, so try it out on a test project or a branch.
+On an existing project, you need to set `sbt.version` to 0.6.7.  You will be prompted for the version(s) of Scala to use for your project, since this is a new property (`build.scala.versions`, as mentioned in the Scala Version Handling section).  Check the Compatibility section above when using 0.6.x on an existing project.  Again, there are some unavoidable, but hopefully minor, incompatibilies, so try it out on a test project or a branch.
 
 = Building Locally =
 
