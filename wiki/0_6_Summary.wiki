@@ -42,6 +42,7 @@ The new launcher provides essential support for implementing the separation of S
 
 === Compatibility ===
  * The compiler can no longer be forked.  It should not be necessary anymore.
+ * Forking the `run` action requires a new approach.  See the section below (after Configuring Versions)
  * The `reboot` action is gone.  `reload` now implies a `reboot`.
  * The `scala.version` property has been split into `build.scala.versions` and `def.scala.version`.  This is explained in more detail in the next section.
  * The `ScalaVersion` object is gone.  Use the `buildScalaVersion` method to obtain the version of Scala currently being used to build the project.
@@ -74,6 +75,23 @@ As an example, assume `scalaHome` is appropriately set.  The following registers
 You could then include '2.8.0-quick' in `build.scala.versions` or as a valid version to switch to as in
 {{{
 ++2.8.0-quick console
+}}}
+
+=== Forking `run` ===
+
+Because the build and definition Scala versions are now separated, the way to declare the options for forking the `run` action has changed.  The following examples demonstrate the new way:
+
+{{{
+  override def fork = forkRun
+  override def fork =
+    forkRun(new File("different-working-directory"))
+  override def fork =
+    forkRun("-Xmx8G" :: Nil)
+  override def fork =
+    forkRun(
+      Some(new File("different-working-directory")),
+      forkRun("-Xmx8G" :: Nil)
+    )
 }}}
 
 == Uniform Test Interface ==
