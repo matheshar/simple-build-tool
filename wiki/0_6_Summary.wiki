@@ -1,6 +1,6 @@
 = Introduction =
 
-The sbt 0.6.x series attempts to merge ideas from `xsbt` (experimental `sbt` components) into the main `sbt`.  It should be considered experimental because of extensive internal changes to `sbt`.
+The sbt 0.6.x series attempts to merge ideas from `xsbt` (experimental `sbt` components) into the main `sbt`.  It should be considered less stable currently than 0.5.x because of extensive internal changes to `sbt`.
 
 Please point out gaps in the documentation, areas that need clarification, or anything you'd like more details about.  Your time experimenting is appreciated!
 
@@ -11,9 +11,7 @@ There are currently three major improvements in 0.6.x over previous versions:
 
 The ongoing aim for the rest of the series is to further modularize `sbt` and address issues that will come up due to these changes.
 
-To reiterate, *0.6.x is experimental*.
-
-= 0.6.0 =
+= 0.6 =
 
 == New Launcher ==
 
@@ -50,11 +48,11 @@ The new launcher provides essential support for implementing the separation of S
 
 === Configuring Versions ===
 
-The version used to run `sbt` and used for compiling the project definition is set by the build property `def.scala.version`.  The only valid value for this property is 2.7.7.  This means that `sbt` runs in 2.7.7 and your project definition is compiled against 2.7.7.  As described below, the version of Scala used to build your project is independent.
+The version used to run `sbt` and used for compiling the project definition is set by the build property `def.scala.version`.  The only valid value for this property is 2.7.7.  This means that `sbt` runs in 2.7.7 and your project definition is compiled against 2.7.7.  As described below, the version of Scala used to build your project is independent of this version.
 
-The 'build.scala.versions' property is a whitespace separated list of versions to use when cross building (that is, when doing '+compile' or similar).  The first version in the list is used for single-version actions (actions not prefixed with '+').  Allowed versions should (in theory) be any Scala version 2.7.2 or later, including `2.8.0.Beta1-RC2`, `2.8.0-SNAPSHOT`, and `2.8.0-20091212.032835-+`.
+The 'build.scala.versions' property is a whitespace separated list of versions to use when cross building (that is, when doing '+compile' or similar).  The first version in the list is used for single-version actions (actions not prefixed with '+').  Allowed versions should (in theory) be any Scala version 2.7.2 or later, including `2.8.0.Beta1-RC6`, `2.8.0-SNAPSHOT`, and `2.8.0-20091230.025722-+`.
 
-To change the version of Scala used for building at the interactive prompt or as part of a sequence of commands from the command line, use '++version'.  'version' does not need to be listed in 'build.scala.versions'.  To set the version and run an action, use '++version action' (space between version and action).  In both cases, the new version is used until the next '++' or on 'reload' or a restart.  '+action' is now expanded to '++v1 action', '++v2 action', ...  for versions in 'build.scala.versions' v1,v2,...
+To change the version of Scala used for building at the interactive prompt or as part of a sequence of commands from the command line, use '++version'.  'version' does not need to be listed in 'build.scala.versions'.  To set the version and run an action, use '++version action' (space between version and action).  In both cases, the new version is used until the next '++' or on 'reload' or a restart.  '+action' is now expanded to '++v1 action', '++v2 action', ...  for versions `v1,v2,...` in 'build.scala.versions'.
 
 It should be easy to use locally built Scala versions now.  Declare local versions by overriding the 'localScala' method in your project definition.  This method should return a `Seq[ScalaInstance]`, where the 'defineScala' method is used to create `ScalaInstance`s.  The two variants are:
  * `defineScala(label: String, scalaHome: File)`
@@ -72,7 +70,7 @@ As an example, assume `scalaHome` is appropriately set.  The following registers
     defineScala("2.8.0-quick", (scalaHome / "build" / "pack" ).asFile) :: Nil
 }}}
 
-You could then include '2.8.0-quick' in `build.scala.versions` or as a valid version to switch to as in
+You could then include '2.8.0-quick' in `build.scala.versions` or as a valid version to switch to as in:
 {{{
 ++2.8.0-quick console
 }}}
@@ -112,10 +110,10 @@ where `org.example.ExampleFramework` is replaced with the name of the class that
 
 To use the 0.6.x series, you need to get the new launcher and set up a script to run it as before.  I call my script `xsbt` to avoid confusion with the stable 0.5.x series.  Something like:
 {{{
-  java -jar xsbt-launch-0.6.7.jar "$@"
+  java -jar xsbt-launch-0.6.9.jar "$@"
 }}}
 
-On an existing project, you need to set `sbt.version` to 0.6.7.  You will be prompted for the version(s) of Scala to use for your project, since this is a new property (`build.scala.versions`, as mentioned in the Scala Version Handling section).  Check the Compatibility section above when using 0.6.x on an existing project.  Again, there are some unavoidable, but hopefully minor, incompatibilies, so try it out on a test project or a branch.
+On an existing project, you need to set `sbt.version` to 0.6.9.  You will be prompted for the version(s) of Scala to use for your project, since this is a new property (`build.scala.versions`, as mentioned in the Scala Version Handling section).  Check the Compatibility section above when using 0.6.x on an existing project.  Again, there are some unavoidable, but hopefully minor, incompatibilies so try it out on a test project or a branch.
 
 = Building Locally =
 
@@ -123,12 +121,15 @@ The procedure for building `sbt` locally has changed, but it still uses the last
 {{{
 $ git clone git://github.com/harrah/xsbt.git
 $ cd xsbt
-$ sbt update proguard "project Compile" publish-local
+$ sbt update proguard "project Compile" publish-local "project Test" publish-local
 
 $ cd ..
 $ git clone git://github.com/harrah/sbt.git
 $ cd sbt
 $ git checkout --track -b using-xsbt origin/using-xsbt
+$ cd scripted
+$ sbt update publish-local
+$ cd ..
 $ sbt update publish-local
 }}}
 The launcher jar created by the `proguard` action is located at `xsbt/target/xsbt-launch-0.6.x.jar`.
