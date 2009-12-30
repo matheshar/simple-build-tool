@@ -1,3 +1,5 @@
+*NOTE*: The 0.6.x series of `sbt`, currently under development, is straightforward to use with Scala 2.8.  See [0_6_Summary].
+
 There are two ways to use `sbt` with Scala 2.8 (the trunk version of Scala).  Both ways involve building `sbt` locally.  The first way is easier and can be used if you want to work with nightly snapshots.  The second way is required if you want to use a custom build of Scala.
 
 = Scala Nightly Build =
