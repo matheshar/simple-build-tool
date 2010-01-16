@@ -1,6 +1,4 @@
-#summary Explains dependencies between SBT projects.
-
-=== Depending on another SBT Project ===
+#summary Depending on another SBT Project
 
 It is possible to declare a declare a dependency on another SBT project, similar to jar dependencies, by defining a val in your project configuration file. You must specify the path at which the project can be found.
 
