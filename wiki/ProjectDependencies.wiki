@@ -1,6 +1,6 @@
 #summary Depending on another SBT Project
 
-It is possible to declare a declare a dependency on another SBT project, similar to jar dependencies, by defining a val in your project configuration file. You must specify the path at which the project can be found.
+It is possible to declare a declare a dependency on another SBT project, similar to jar dependencies, by defining a val in your project configuration file. You must specify the path at which the project can be found. (Currently, the path is limited to a subdirectory of the current project directory, which limits the usefulness of this technique.)
 
 {{{
 val util = project("util")
