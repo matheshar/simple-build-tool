@@ -17,8 +17,6 @@ override def dependencyPath = webappPath / "WEB-INF" / "lib"
 
 This method of dependency management involves specifying the direct dependencies of your project and letting `sbt` handle retrieving and updating your dependencies.
 
-== Usage ==
-
 `sbt` performs this dependency handling when the `update` action is executed.  By default, `sbt` does *not* update your dependencies before every compilation, but only does so when you execute `update`.  `sbt` supports three ways of specifying these dependencies:
  * Declarations in your project definition
  * Maven POM files
@@ -33,25 +31,29 @@ The default repositories when `ivysettings.xml` is not present are the standard 
 
 The following sections describe how to use each method of automatic dependency management.
 
-=== Inline Declarations ===
+== Inline Declarations ==
 
 Inline declarations are a very basic way of specifying the dependencies to be automatically retrieved.  They are intended as a lightweight alternative to a full configuration using Ivy or Maven.  To use inline declarations, do the following:
 
- * Declare each dependency in your [BuildConfiguration project definition] as a `val` with the form:
- {{{
+=== Basic Dependencies ===
+
+Declare each dependency in your [BuildConfiguration project definition] as a `val` with the form:
+{{{
   val dep = groupID % artifactID % revision
- }}}
- or
- {{{
+}}}
+or
+{{{
   val dep = groupID % artifactID % revision % configuration
- }}}
- The actual identifier for the `val` is currently unimportant.  See [Configurations] for details on configuration mappings.  If you are using a dependency that was built using `sbt`'s [CrossBuild cross-building], double the first `%` to be `%%`:
- {{{
+}}}
+The actual identifier for the `val` is currently unimportant.  See [Configurations] for details on configuration mappings.  If you are using a dependency that was built using `sbt`'s [CrossBuild cross-building], double the first `%` to be `%%`:
+{{{
   val dep = groupID %% artifactID % revision
- }}}
- This will download the right jar for the dependency built with the version of Scala that you are currently using.  See [CrossBuild cross-building] for details.
+}}}
+This will download the right jar for the dependency built with the version of Scala that you are currently using.  See [CrossBuild cross-building] for details.
+
+=== Additional Repositories ===
  
- * Declare additional repositories besides the default Maven2 and Scala Tools Releases repositories that you want to use with the form:
+Declare additional repositories besides the default Maven2 and Scala Tools Releases repositories that you want to use with the form:
  {{{
   val rep = name at location
  }}}
@@ -72,17 +74,23 @@ For example:
 See [Resolvers] for details on defining other types of repositories.
 
 
+=== Explicit URL ===
+
 If your project requires a dependency that is not present in a Maven repository, a direct URL to its jar can be specified as follows:
 
 {{{
   val slinky = "slinky" % "slinky" % "2.1" from "http://slinky2.googlecode.com/svn/artifacts/2.1/slinky.jar"
 }}}
 
+=== Disable Transitivity ===
+
 By default, these declarations fetch all project dependencies. In some instances, you may find that the dependencies listed for a project aren't necessary for it to build. Projects using the Felix OSGI framework, for instance, only explicitly require its main jar to compile and run. Avoid fetching artifact dependencies with either `intransitive()` or `notTransitive()`, as in this example:
 
 {{{
   val felix = "org.apache.felix" % "org.apache.felix.framework" % "1.8.0" intransitive()
 }}}
+
+=== Classifiers ===
 
 You can specify the classifer for a dependency using the `classifier` method.  There are some methods for the typical cases of getting sources or API documentation as well.  These are `withSources`, `withJavadoc`, `sources`, and `javadoc`.  The `withXXX` style includes the usual binary jar.  Examples:
 
@@ -96,6 +104,15 @@ Get the jdk15 version of TestNG:
   val testng = "org.testng" % "testng" % "5.7" classifier "jdk15"
 }}}
 
+=== Extra Attributes ===
+
+[http://ant.apache.org/ivy/history/2.1.0/concept.html#extra Extra attributes] can be specified with the `extra` method:
+{{{
+  val dep = "org" % "name" % "rev" extra("color" -> "blue")
+}}}
+
+=== Inline Ivy XML ===
+
 `sbt` additionally supports directly specifying the configurations or dependencies sections of an Ivy configuration file inline.  You can mix this with inline Scala dependency and repository declarations.
 
 For example:
@@ -107,6 +124,8 @@ For example:
       </dependency>
     </dependencies>
 }}}
+
+=== Direct Override ===
 
 Yet another alternative is to declare the `Set` of all dependencies with the `libraryDependencies` method:
 
@@ -127,9 +146,11 @@ If you want to use the `val`-style definitions as well, use:
 
 A similar method exists for repositories and is called `repositories`.
 
+=== Publishing ===
+
 Finally, see [Publishing] for how to publish your project.
 
-=== Maven/Ivy ===
+== Maven/Ivy ==
 
 For this method, create the configuration files as you would for Maven (`pom.xml`) or Ivy (`ivy.xml` and optionally `ivysettings.xml`).  `sbt` will use these configurations to resolve and retrieve dependencies when you execute `update`.  No modifications to your project definition are necessary.
 
