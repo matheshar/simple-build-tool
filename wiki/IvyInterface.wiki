@@ -1,4 +1,4 @@
-This page describes how to use sbt's Ivy interface directly.
+This page describes how to use sbt's Ivy interface directly.  This interface is new in 0.6.11 (unreleased).  The source code can be found in the [http://github.com/harrah/xsbt/tree/master/ivy/Ivy project of xsbt].
 
 <wiki:toc max_depth="3"/>
 
