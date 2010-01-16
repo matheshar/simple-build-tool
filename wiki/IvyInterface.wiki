@@ -1,19 +1,21 @@
 This page describes how to use sbt's Ivy interface directly.
 
+<wiki:toc max_depth="3"/>
+
 = Ivy Background =
 
-Ivy is normally configured with two separate XML configuration files: a settings file and a module descriptor file, which is usually just called an "Ivy file".  The settings file configures resolvers, such as repositories, and paths used by Ivy.  Other aspects of Ivy are configurable in the settings file as well (See [http://ant.apache.org/ivy/history/2.1.0/settings.html Settings Files] for details).  The Ivy file describes a module and its dependencies (See [http://ant.apache.org/ivy/history/2.1.0/ivyfile.html Ivy File] for details).
+Ivy is normally configured with two separate XML configuration files: a settings file and a module descriptor file, which is usually just called an "Ivy file".  The settings file configures resolvers, such as repositories, and paths used by Ivy.  Other aspects of Ivy are configurable in the settings file as well.  See [http://ant.apache.org/ivy/history/2.1.0/settings.html Settings Files] for details.  The Ivy file describes a module and its dependencies.  See [http://ant.apache.org/ivy/history/2.1.0/ivyfile.html Ivy File] for details.
 
 A user interacts with Ivy either through Ant tasks or by using Ivy as a library.  A third category of configuration occurs here.  To do work with Ivy, you need to run tasks, such as `resolve`, `retrieve`, or `publish`.  Each of these tasks generally requires additional configuration.
 
 = sbt Interface to Ivy =
 
-sbt's interface to Ivy follows this separation and using the interface follows the same process:
- # General Ivy configuration (Settings File)
- # Ivy module configuration (Ivy File)
- # Task specific configuration and execution (Ant task or internal Ivy configuration)
+sbt's interface to Ivy follows this separation.  Configuration involves:
+ # General Ivy configuration, which corresponds to an Ivy settings file or the repositories part of a POM
+ # Ivy module configuration, which corresponds to an Ivy file or the module descriptor part of a POM
+ # Task specific configuration and execution, which corresponds to Ant task or internal Ivy configuration
 
-Each of the first two configurations may be done either by specifying an external XML File to use for configuration or by using a direct, or inline, Scala configuration data structure.
+Each of the first two configurations may be done either by specifying an external XML file to use for configuration or by using a direct (inline) Scala data structure.
 
 == General Ivy Configuration ==
 
@@ -23,38 +25,49 @@ For general Ivy configuration, create an instance of `sbt.IvyConfiguration`, eit
 
 The constructor signature for inline configuration is:
 {{{
-  InlineIvyConfiguration(val paths: IvyPaths, val resolvers: Seq[Resolver], val moduleConfigurations: Seq[ModuleConfiguration], val log: IvyLogger)
+  InlineIvyConfiguration(
+    paths: IvyPaths,
+    resolvers: Seq[Resolver],
+    moduleConfigurations: Seq[ModuleConfiguration],
+    log: IvyLogger )
 }}}
 
-Resolvers are described on the [Resolvers] page.  [ModuleConfiguration]s are not currently documented, but are used to configure resolvers on a per-module basis.  `Nil` is a common argument for this parameter.  `log` is as described at the beginning of the section.
+Resolvers are described on the [Resolvers] page.  [ModuleConfiguration]s are not currently documented, but are used to configure resolvers on a per-module basis.  `Nil` is an acceptable argument for this parameter.  `log` is as described at the beginning of the section.
 
 An instance of `IvyPaths` configures two common, important paths for Ivy: the base directory and the cache directory.  The base directory is the directory against which all relative paths are resolved.  The cache directory is where all cached information, such as downloaded module descriptors and artifacts for dependencies, is placed.
 
 The constructor signature for `IvyPaths` is:
 {{{
-  IvyPaths(val baseDirectory: File, val cacheDirectory: Option[File])
+  IvyPaths(
+    baseDirectory: File,
+    cacheDirectory: Option[File] )
 }}}
 
-The base directory used for `sbt` projects is the project's path, `info.projectPath`.  To use the default cache directory, which is usually `<user.home>/.ivy2/cache`, specify `None`.  `InlineIvyConfiguration` is intended to provide easy configuration of the most common parameters.  To access all of Ivy's configuration parameters, use `ExternalIvyConfiguration`.
+The base directory used for `sbt` projects is the project's path, `info.projectPath`.  To use the default cache directory, which is usually `<user.home>/.ivy2/cache`, specify `None`.  `InlineIvyConfiguration` is intended to provide easy configuration of the most common parameters.  To access all of Ivy's configuration parameters, use `ExternalIvyConfiguration`, described next.
 
 === External ===
 
 For configuration with an external XML settings file, use ExternalIvyConfiguration.  The constructor signature is:
 {{{
-  ExternalIvyConfiguration(val baseDirectory: File, val file: File, val log: IvyLogger)
+  ExternalIvyConfiguration(
+    baseDirectory: File,
+    file: File,
+    log: IvyLogger)
 }}}
 
 The base directory is the directory against which all relative paths are resolved.  The `file` parameter specifies the location of the settings file.  `log` is as described at the beginning of the section.
 
-=== Examples ===
+=== General Configuration Examples ===
 
 These examples assume they are written in the context of an sbt project definition.
 
 A very basic inline configuration that reuses information from the project:
 {{{
   val paths = new IvyPaths(info.projectPath.asFile, None)
+
    // use the repositories defined in the project
   val resolvers = repositories
+
   val inline = new InlineIvyConfiguration(paths, resolvers, Nil, log)
 }}}
 
@@ -62,8 +75,10 @@ A more advanced inline configuration:
 {{{
   // make all paths relative to the `ivy/` subdirectory and put the cache there as well.
   val paths = new IvyPaths("ivy".asFile, Some("ivy" / "cache" asFile))
+
   // define a repository and use the usual repositories (the local Ivy, central Maven, and Scala Tools repositories)
   val resolvers = Resolver.withDefaultResolvers( Seq("technically.us" at "http://technically.us/repo/") )
+
   val inline = new InlineIvyConfiguration(paths, resolvers, Nil, log)
 }}}
 
@@ -80,24 +95,33 @@ To define a module, create an instance of `sbt.ModuleSettings`: either `sbt.IvyF
 
 The constructor signature is:
 {{{
-  IvyFileConfiguration(file: File, ivyScala: Option[IvyScala], validate: Boolean)
+  IvyFileConfiguration(
+    file: File,
+    ivyScala: Option[IvyScala],
+    validate: Boolean)
 }}}
 
 === POM ===
 
 The constructor signature is:
 {{{
-  PomConfiguration(file: File, ivyScala: Option[IvyScala], validate: Boolean)
+  PomConfiguration(file: File,
+    ivyScala: Option[IvyScala],
+    validate: Boolean)
 }}}
 
 === Inline ===
 
 The constructor signature is:
 {{{
-  InlineConfiguration(val module: ModuleID, val dependencies: Iterable[ModuleID],
-    val ivyXML: NodeSeq, val configurations: Iterable[Configuration],
-    val defaultConfiguration: Option[Configuration], val ivyScala: Option[IvyScala],
-	val validate: Boolean)
+  InlineConfiguration(
+    module: ModuleID,
+    dependencies: Iterable[ModuleID],
+    ivyXML: NodeSeq,
+    configurations: Iterable[Configuration],
+    defaultConfiguration: Option[Configuration],
+    ivyScala: Option[IvyScala],
+    validate: Boolean)
 }}}
 
 A ModuleID is what is constructed by the `%` operators in `sbt`.  For example:
@@ -105,9 +129,7 @@ A ModuleID is what is constructed by the `%` operators in `sbt`.  For example:
   val scalacheck = "org.scalacheck" %% "scalacheck" % "1.6" % "test"
   val testng = "org.testng" % "testng" % "5.7" classifier "jdk15"
 }}}
-More details are on the [http://code.google.com/p/simple-build-tool/wiki/LibraryManagement Dependency Management Basics page].
-
-Configurations are described on [http://code.google.com/p/simple-build-tool/wiki/ManagedConfigurations their page].
+More details on `ModuleID`s are on the [http://code.google.com/p/simple-build-tool/wiki/LibraryManagement Dependency Management Basics page].  The page on [http://code.google.com/p/simple-build-tool/wiki/ManagedConfigurations configurations] has more details on `Configuration`s.
 
  * `module` is the ID of the module being defined.
  * `dependencies` are the module's dependencies.
@@ -115,18 +137,22 @@ Configurations are described on [http://code.google.com/p/simple-build-tool/wiki
  * `configurations` are the defined configurations for the module.
  * `defaultConfiguration` is the default configuration when none is defined for a dependency.
 
-=== Examples ===
+=== Module Configuration Examples ===
 
 An inline example similar to the default `sbt` configuration, but with Scala version checking disabled:
 {{{
   val projectID: ModuleID = organization % moduleID % version.toString artifacts(artifacts.toSeq : _*)
+
   // dependencies are those defined in the project definition as:
   //   val x = "org" % "name" % "rev"
   val libraryDependencies = reflectiveLibraryDependencies
+
   // Use the default Maven scopes
   val configurations = Configuration.defaultMavenConfigurations
+
   // Make 'compile' the default configuration
   val defaultConf = Configurations.Compile
+
   val inline = new InlineConfiguration(projectID, libraryDependencies, NodeSeq.Empty, configurations, defaultConf, None, true)
 }}}
 
@@ -134,7 +160,11 @@ An inline example similar to the default `sbt` configuration, but with Scala ver
 
 This section currently only describes `update`, which is a combination of the Ivy tasks `resolve` and `retrieve`.  `update` is configured by an instance of `sbt.UpdateConfiguration`.  Its constructor signature is:
 {{{
-  UpdateConfiguration(retrieveDirectory: File, outputPattern: String, synchronize: Boolean, quiet: Boolean)
+  UpdateConfiguration(
+    retrieveDirectory: File,
+    outputPattern: String,
+    synchronize: Boolean,
+    quiet: Boolean)
 }}}
 
 The `retrieveDirectory` path is prepended to `outputPattern` to form the pattern that determines where Ivy retrieves artifacts to.  Some examples are shown in the Ivy [http://ant.apache.org/ivy/history/2.1.0/use/retrieve.html retrieve task documentation].  The default `sbt` retrieve pattern is:
@@ -145,7 +175,7 @@ See the Ivy documentation on [http://ant.apache.org/ivy/history/2.1.0/concept.ht
 
 When `synchronize` is true, Ivy will remove old artifacts from the destination directory and not just copy the new ones there.  If true, `quiet` surpresses Ivy logging during update.  If it is false, Ivy usually displays progress by a series of dots (`.`) as artifacts are downloaded.
 
-=== Example ===
+=== Update Configuration Example ===
 
 {{{
   val upConf = new UpdateConfiguration("lib_managed".asFile, "[conf]/[artifact](-[revision])(-[classifier]).[ext]", true, true)
@@ -165,6 +195,7 @@ Finally, call the appropriate method(s) in `IvyActions`.
   val ivyModule = new ivySbt.Module(moduleSettings)
 
   val upConf: UpdateConfiguration = ... // as above
+
   // resolve dependencies defined in `moduleSettings`
   //   and retrieve them according to the configuration in `updateConf`
   IvyActions.update(ivyModule, updateConf)
