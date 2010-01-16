@@ -26,6 +26,7 @@
    * [Resolvers Defining Repositories]
    * [Publishing]
    * [Artifacts]
+   * [ProjectDependencies Project Dependencies]
   * [CustomCompileConfiguration Custom Compile Configuration]
  * Writing Actions
   * [CustomActions Creating/Modifying Actions]
