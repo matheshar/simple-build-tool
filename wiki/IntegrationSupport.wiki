@@ -21,7 +21,12 @@ You'll need to `cd` into your project root to issue the `:make` command.
 
 = Eclipse =
 
-There are currently two options for Eclipse integration.  There is an [http://github.com/frank06/sbt-eclipse-plugin/ Eclipse plugin] to pick up dependencies from your `lib_managed` directory.  Another approach using IvyDE is described below.
+There are currently three options for Eclipse integration.
+ # There is an [http://github.com/frank06/sbt-eclipse-plugin/ Eclipse plugin] to pick up dependencies from your `lib_managed` directory.
+ # There is another [http://github.com/musk/SbtEclipsify Eclipse plugin] to create an Eclipse project from an `sbt` project.  See the [http://groups.google.com/group/simple-build-tool/msg/89b5b0c422cc1d58 mailing list post] for details.
+ # Use IvyDE as described below.
+
+== IvyDE approach ==
 
 === Initial Setup ===
 
