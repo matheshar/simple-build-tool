@@ -1,11 +1,14 @@
 The following people have contributed ideas, documentation, or code to `sbt`:
 
  * Steven Blundy
+ * Josh Cough
  * Nolan Darilek
  * Nathan Hamblen
  * Mark Harrah
  * David R. !MacIver
  * Mikko Peltonen
  * Harshad RJ
+ * Tony Sloane
+ * Seth Tisue
  * Francisco Treacy
  * Vesa Vilhonen
