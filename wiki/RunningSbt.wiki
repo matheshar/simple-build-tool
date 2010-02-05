@@ -73,7 +73,7 @@ You can run an action for multiple versions of Scala by prefixing the action wit
   Stops the Jetty server that was started with the `jetty-run` action.
  * `package`
   For a normal project, creates a jar file containing classes compiled from `src/main/scala` and the files in `src/main/resources` after running `compile` first.
-  For a web application project, creates a war file after running `compile` and `prepareWebapp` first.
+  For a web application project, creates a war file after running `compile` and `prepare-webapp` first.
  * `package-test`
   Creates a jar file containing classes compiled from `src/test/scala` and the files in `src/test/resources`.  Runs `test-compile` first.
  * `package-docs`
