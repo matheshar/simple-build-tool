@@ -13,7 +13,7 @@ To change the directory jars are stored in, override `dependencyPath` in your [B
 override def dependencyPath = webappPath / "WEB-INF" / "lib"
 }}}
 
-If you want more control and flexibility, override the `unmanagedClasspath` method, which ultimately provides the unmanaged dependencies to `sbt`.  The default implementation is roughly:
+If you want more control and flexibility, override the `unmanagedClasspath` method, which ultimately provides the manual dependencies to `sbt`.  The default implementation is roughly:
 {{{
 def unmanagedClasspath = descendents(dependencyPath, "*.jar")
 }}}
