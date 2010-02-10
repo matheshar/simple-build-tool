@@ -92,7 +92,7 @@ For more details on web application support in `sbt`, see [WebApplications Web A
 
 == Using Lift 2.0 snapshots ==
 
-Lift 2.0 snapshots seem to be the preferred version for any new Lift development. Three modifications in the above are needed to do so.
+Lift 2.0 snapshots seem to be the recommended version for any new Lift development. Three modifications in the above procedure are needed to do so.
 
 === Create a 2.0 snapshot project ===
 
