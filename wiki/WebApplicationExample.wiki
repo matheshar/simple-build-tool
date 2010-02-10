@@ -89,3 +89,44 @@ To create a war file, run the `package` action.  `DefaultWebProject` redefines `
 }}}
 
 For more details on web application support in `sbt`, see [WebApplications Web Applications].
+
+== Using Lift 2.0 snapshots ==
+
+Lift 2.0 snapshots seem to be the preferred version for any new Lift development. Three modifications in the above are needed to do so.
+
+=== Create a 2.0 snapshot project ===
+
+To create a 2.0 snapshot, run the following:
+
+{{{
+$ mvn archetype:create -U \
+ -DarchetypeGroupId=net.liftweb \
+ -DarchetypeArtifactId=lift-archetype-basic \
+ -DarchetypeVersion=2.0-SNAPSHOT \
+ -DremoteRepositories=http://scala-tools.org/repo-snapshots \
+ -DgroupId=net.liftweb.hello -DartifactId=hello-lift
+}}}
+
+=== Define the project ===
+
+Three modifications must be made to the above project definition. First add the following line before the definition of the "lift" val:
+
+{{{
+  val snapshots = ScalaToolsSnapshots
+}}}
+
+Then change:
+
+{{{
+  val lift = "net.liftweb" % "lift-core" % "1.0" % "compile->default"
+}}}
+
+to:
+
+{{{
+  val lift = "net.liftweb" % "lift-core" % "2.0-SNAPSHOT" % "compile->default"
+}}}
+
+Finally, add the following to ensure that all new dependencies are fetched:
+
+  val nexusRepo = "nexus" at "https://nexus.griddynamics.net/nexus/content/groups/public"
