@@ -4,7 +4,7 @@ This page describes some features of `sbt` that are useful for developing web ap
 
 == Basic Usage ==
 
-Instead of extending `sbt.DefaultProject` in your project definition, extend `sbt.DefaultWebProject`.  This currently does two things.  First, the `package` action creates a war file instead of a jar file.  Second, if you add [http://jetty.mortbay.com/ Jetty] as a [LibraryManagement dependency] (manually or automatically), you can use `jetty-run` to start your web application from `sbt`.  Use `jetty-stop` to stop it.  If you are running in batch mode, use the `jetty` action, which will wait for a key press before completing.
+Instead of extending `sbt.DefaultProject` in your project definition, extend `sbt.DefaultWebProject`.  This currently does two things.  First, the `package` action creates a war file instead of a jar file.  Second, if you add [http://jetty.mortbay.com/ Jetty] as a [LibraryManagement dependency] (manually or automatically), you can use `jetty-run` to start your web application from `sbt`.  Use `jetty-stop` to stop it.  If you are running in batch mode, use the `jetty` action, which will wait for a key press before completing.  As of `sbt` 0.7.0, Jetty 7 is supported in addition to Jetty 6.
 
 == Configuration ==
 

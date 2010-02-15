@@ -9,14 +9,14 @@ Run sbt in your project directory.  If you have created a script to start sbt, t
 $ sbt
 }}}
 
-This starts sbt in interactive mode.  You are given a simple prompt at which you type actions (or tasks, targets, phases, or whatever you'd like to call them).  There is tab completion and history available at this prompt.
+This starts sbt in interactive mode.  You are given a prompt at which you type actions (or tasks, targets, phases, or whatever you'd like to call them).  There is tab completion and history available at this prompt.
 
 Alternatively, you can run sbt in batch mode.  You specify a space-separated list of actions as arguments.  For commands that take arguments, pass the command and arguments as one argument to `sbt` by enclosing them in quotes.  For example,
 {{{
 $ sbt clean compile "get sbt.version"
 }}}
 
-You can make an action run when one or more source files changes by prefixing the action with `~`.  For example:
+You can make an action run when one or more source files change by prefixing the action with `~`.  For example:
   
 {{{
 > ~ compile
@@ -24,7 +24,25 @@ You can make an action run when one or more source files changes by prefixing th
 
 See TriggeredExecution for details.
 
-You can run an action for multiple versions of Scala by prefixing the action with `+`.  See [CrossBuild] for details.
+You can run an action for multiple versions of Scala by prefixing the action with `+`.  See [CrossBuild] for details.  You can temporarily switch to another version of Scala using `++<version>`.  This version does not have to be listed in your `build.scala.versions` property, but it does have to be in a repository or be a local Scala version you have defined.  You can also include the initial command to run.  For example:
+
+{{{
+> ++2.7.7 console-quick
+[info] Building project test 1.0 against Scala 2.7.7
+[info]    using TestProject with sbt 0.7.0 and Scala 2.7.7
+...
+Welcome to Scala version 2.7.7.final (Java HotSpot(TM) Server VM, Java 1.6.0).
+...
+scala>
+...
+> ++2.8.0.Beta1 console-quick
+[info] Building project test 1.0 against Scala 2.8.0.Beta1
+[info]    using TestProject with sbt 0.7.0 and Scala 2.7.7
+...
+Welcome to Scala version 2.8.0.Beta1-prerelease (Java HotSpot(TM) Server VM, Java 1.6.0).
+...
+scala>
+}}}
 
 = Actions =
 
@@ -34,13 +52,13 @@ You can run an action for multiple versions of Scala by prefixing the action wit
  * `clean-cache`
   Deletes the cache of downloaded artifacts and metadata for automatically managed dependencies for this user.
  * `clean-lib`
-  Deletes the managed library directory for this project.
+  Deletes the managed library directory for this project (`lib_managed`).
  * `compile`
   Compiles the main sources (in the `src/main/scala` directory).
  * `console`
-  Starts the Scala interpreter with a classpath including the compiled sources and all jars in the `lib` directory.  To return to sbt, type `:quit`, Ctrl+D (Unix), or Ctrl+Z (Windows).  Runs `test-compile` first.
+  Starts the Scala interpreter with a classpath including the compiled sources, all jars in the `lib` directory, and managed libraries.  To return to sbt, type `:quit`, Ctrl+D (Unix), or Ctrl+Z (Windows).  Runs `test-compile` first.
  * `console-quick`
-  Starts the Scala interpreter with the project classes on the classpath without running any other action first.
+  Starts the Scala interpreter with the project classes, the `lib` directory, and managed libraries on the classpath without running any other action first.
  * `doc`
   Generates API documentation for Scala source files in `src/main/scala` using scaladoc.  Runs `compile` first.
  * `doc-test`
@@ -86,8 +104,6 @@ You can run an action for multiple versions of Scala by prefixing the action wit
   Creates a jar file containing all main source files and resources.  The packaged paths are relative to `src/main/scala` and `src/main/resources`.
  * `package-test-src`:
   Creates a jar file containing all test source files and resources.  The packaged paths are relative to `src/test/scala` and `src/test/resources`.
- * `release`
-  Compiles, tests, generates documentation, packages, and increments the version.
  * `run <argument>*`
   Runs the main class for the project in the same virtual machine as `sbt`.  The main class is passed the `argument`s provided.  Please see RunningProjectCode for details on the use of `System.exit` and multithreading (including GUIs) in code run by this action.  Runs `compile` first.
  * `sh <argument>*` (mixin Exec for this action)
@@ -105,6 +121,10 @@ You can run an action for multiple versions of Scala by prefixing the action wit
   Runs the tests provided as arguments.  `*` is interpreted as a wildcard in the test name.
  * `test-compile`
   Compiles the test sources (in the `src/test/scala` directory).  Runs `compile` first.
+ * `test-javap`
+  Like `javap`, but for test classes.
+ * `test-run <argument>*`
+  Like `run`, but for test classes.  Runs `test-compile` first.
  * `update`
   Resolves and retrieves external dependencies as described in LibraryManagement.
 
@@ -113,23 +133,19 @@ You can run an action for multiple versions of Scala by prefixing the action wit
  * `exit` or `quit`
   End the current interactive session or build.
  * `reload`
-  Reloads the current interactive session.  The project definition is recompiled and reloaded.  Any change to the Scala or `sbt` version does not take effect (see `reboot`).
- * `reboot`
-  Use this to reload the project after changing the version of Scala or `sbt` used for building the project.
+  Reloads the current interactive session.  If the Scala or `sbt` version has changed, the requested versions are retrieved and used.  The project definition is recompiled and reloaded if it needed.
  * `help`
   Displays a help message and lists these interactive actions and their descriptions.
  * `actions`
   List all available actions.
- * `cc`
-  Monitors sources in Scala projects for changes and runs `test-compile` when changes are detected.  Equivalent to `~ test-compile`.
  * `current`
   Print the current project and logging level.
  * `info`
   Set the logging level to `info`.  This is the default logging level.
  * `debug`
   Set the logging level to `debug`.  This logging level is more verbose than `info`, but does not log stack traces for errors.
- * `trace`
-  Toggles whether stack traces for errors are displayed.  They are disabled by default.
+ * `trace on | nosbt | off | <integer>`
+  Configures stack trace logging, which is `'on'` by default.  `'nosbt'` prints stack traces up to the first sbt frame.  An integer gives the number of frames to show per exception.
  * `warn`
   Set the logging level to `warn`.  This logging level only logs warnings and errors.
  * `error`
@@ -144,3 +160,11 @@ You can run an action for multiple versions of Scala by prefixing the action wit
   Change the current project to the project named <project name>.  Further operations will be done on the given project. (See SubProjects for more on multiple projects)
  * `console-project`
   Enters an interactive session with the project instance bound to the 'current' variable.  See ProjectConsole for more information.
+ * `~ <command>`
+  Executes the project specified action or method whenever source files change.  See TriggeredExecution for details.
+ * `< filename`
+  Executes the commands in the given file.  Each command should be on its own line.  Empty lines and lines beginning with '#' are ignored
+ * `+ <command>`
+  Executes the project specified action or method for all versions of Scala defined in the `build.scala.versions` property.
+  * `++<version> <command>`
+  Temporarily changes the version of Scala building the project and executes the provided command.  <command> is optional.  The specified version of Scala is used until sbt exits or `++` is run again.  `<version>` does not need to be listed in the `build.scala.versions` property, but it must be defined in `localScala` or be available in a repository.

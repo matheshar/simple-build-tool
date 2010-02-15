@@ -21,11 +21,9 @@ To disable this check, set:
    * If your test sources depend on `scala-compiler.jar`, `scala-compiler.jar` is added to testClasspath so that the compiler classes are available for tests.
    * You have access to these jars as described in the next section
 
-If you need to explicitly reference the Scala jars used by `sbt`, you should use one of the following solutions:
- * The `scalaJars` method returns two `File`s, one for the location of `scala-compiler.jar` and one for `scala-library.jar`.
- * `mainCompileConditional.analysis.allExternals` provides `File`s for all jars that your main classes depend on.  This includes `rt.jar` (or `classes.jar` on a Mac).
+If you need to explicitly reference the Scala jars used by `sbt`, see the Access to Scala Jars and Dependencies section below.
 
-`sbt` can be configured to skip these checks in certain cases, but this should be considered atypical.  `sbt`'s build does it in order to build `sbt` across several versions of Scala, but that is a bootstrapping issue.  If you want to do this anyway, you should define a non-standard configuration and exclude it from the configurations on which `sbt` performs checks and filtering:
+`sbt` can be configured to skip these checks in certain cases, but this should be considered atypical.  If you want to do this anyway, you should define a non-standard [ManagedConfigurations configuration] and exclude it from the configurations on which `sbt` performs checks and filtering:
 {{{
   val other = config("scalac-2.7.3")
   override def checkScalaInConfigurations = super.checkScalaInConfigurations - other
@@ -39,5 +37,5 @@ To completely disable all filtering of dependencies, set
 }}}
 
 == Access to Scala Jars and Dependencies ==
- * Two methods in `FileUtilities`, `scalaLibraryJar` and `scalaCompilerJar`, provide the location of `scala-library.jar` and `scala-compiler.jar` used to build the project.
+ * The `ScalaInstance` corresponding to the version of Scala currently building your project is obtained by the `buildScalaInstance` method.  The `libraryJar` and `compilerJar` methods of a `ScalaInstance` provide the locations of the jars for the Scala version it represents.
  * Two methods on a project definition, `mainDependencies` and `testDependencies`, provide an analysis of the external dependencies (jars) of your code as determined during compilation.  Because it relies on information determined during compilation, the information is only valid when compilation is up to date.  These methods return an instance of `LibraryDependencies`.  Read the [http://simple-build-tool.googlecode.com/svn/artifacts/latest/api/sbt/LibraryDependencies.html API Documentation] for more information.

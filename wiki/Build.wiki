@@ -1,25 +1,28 @@
 = Building `sbt` =
 
-[http://code.google.com/p/simple-build-tool/source/checkout Checkout] `sbt` from the subversion repository.
+== Background ==
 
-Use the latest release of `sbt` to build trunk.
+`sbt` now uses git for version control.  You can find the source on github.  With 0.7, `sbt` is split across two projects: `xsbt` and `sbt`.  `xsbt` started out as an experimental set of components to decouple the version of Scala used to run `sbt` from the version used to build the project.    Importantly, it has become a project that provides components for building a Scala build tool.  That is, going forward, self-contained components like the Ivy interface, compilation, tasks, and the launcher are subprojects in `xsbt`.  The `sbt` project then builds on those components to provide a final product.
 
-== Basic ==
+Test support was separated out to work across a [http://github.com/harrah/test-interface uniform test interface].  Because of this, `sbt` no longer needs to be compiled against test frameworks.  New test frameworks that implement the uniform test interface can be used by `sbt` without needing to recompile `sbt`, as was the case previously.  In order to provide compatibility with `sbt` 0.5.6, there is [http://github.com/harrah/test-interface an implementation] of the test interface for Scala test frameworks released before the interface existed.
 
+== Instructions ==
+
+With this in mind, we need to build:
+ # The launcher in `xsbt`
+ # The other components in `xsbt`
+ # The finished build tool `sbt`
+
+The latest `sbt` release (0.7.0) is used to build.  From scratch, building `sbt` locally looks like:
 {{{
-$ sbt
-> update
-...
-> full-build
-...
+$ git clone git://github.com/harrah/xsbt.git
+$ cd xsbt
+$ sbt update proguard "project Compile" publish-local "project Test" publish-local
+
+$ cd ..
+$ git clone git://github.com/harrah/sbt.git
+$ cd sbt
+$ git checkout --track -b using-xsbt origin/using-xsbt
+$ sbt update publish-local
 }}}
-
-This will build `sbt` against all versions of Scala that `sbt` supports.  These `sbt` variants are installed to your local Ivy repository.  The packaged loader jar is created at `target/sbt-launcher-0.5.7-SNAPSHOT.jar`.  Specify `sbt.version` as `0.5.7-SNAPSHOT` in your projects to use the trunk version of `sbt` to build them.  If you update trunk, build, and publish to local again, the loader will update the version of sbt used in your projects.  Note that this behavior of updating an existing version of `sbt` in a project only happens for locally built and published `*-SNAPSHOT` versions of `sbt`.
-
-== Basic Details ==
-
-`full-build` consists of two main tasks.  The first is `proguard`, which compiles, packages, and minifies the loader.  The other is `cross-publish-local`, which builds the main `sbt` project against all supported versions of Scala and publishes to the local repository.
-
-== Development ==
-
-If you want to run tests, debug, or otherwise develop on `sbt`, you will want to use the usual actions like `compile` and `package`.  In addition to the usual actions, the `proguard` action builds the final loader jar to `target/sbt-launcher-0.5.7-SNAPSHOT.jar` as mentioned above.
+The launcher jar created by the `proguard` action is located at `xsbt/target/sbt-launch-0.7.x.jar`.

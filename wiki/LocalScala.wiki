@@ -1,119 +1,33 @@
-*NOTE*: The 0.6.x series of `sbt`, currently under development, is straightforward to use with Scala 2.8.  See [0_6_Summary].
+sbt 0.7.0 makes using a locally built version of Scala easier than previous versions.  `sbt` just needs to know where the library and compiler jars are for this version. 
 
-There are two ways to use `sbt` with Scala 2.8 (the trunk version of Scala).  Both ways involve building `sbt` locally.  The first way is easier and can be used if you want to work with nightly snapshots.  The second way is required if you want to use a custom build of Scala.
+A `ScalaInstance` object represents a version of Scala, backed by compiler and library jar locations.  To get a `ScalaInstance` for a local Scala, call one of the variants of `defineScala`:
+{{{
+/** Get a `ScalaInstance` for the Scala version with base directory `home`.  The library and compiler jars are
+* assumed to be at `new File(home, "lib/scala-library.jar")` and `new File(home, "lib/scala-compiler.jar")`.
+* The label for this instance is determined by the version String in the `compiler.properties` file in `scala-compiler.jar`.*/
+def defineScala(home: File): ScalaInstance
 
-= Scala Nightly Build =
+/** Get a `ScalaInstance` for the Scala version with base directory `home`.  The library and compiler jars are
+* assumed to be at `new File(home, "lib/scala-library.jar")` and `new File(home, "lib/scala-compiler.jar")`.
+* `version` is used as the label for this instance.*/
+def defineScala(version: String, home: File): ScalaInstance
+}}}
+The label referred to in the comments is how you refer to this version in your `build.scala.versions` property and in the `++<version>` version switching command.
 
-== Setup ==
+Override the `localScala` method to declare these local instances to `sbt`:
+{{{
+override def localScala: Seq[ScalaInstance] = defineScala("2.8.0-local", new File(scalaRoot + "/build/pack/"))
+}}}
 
- # Get the `sbt` loader set up on your system according to the [Setup#Launching_Sbt Launching Sbt] section.  You need the 0.5.5 launcher (or newer) to use a specific nightly snapshot.
- # Checkout `sbt`
+Include it in `build.scala.versions`:
 {{{
- $ svn checkout http://simple-build-tool.googlecode.com/svn/trunk/ sbt
+$ cat project/build.properties
+...
+build.scala.versions=2.8.0.Beta1 2.8.0-local 2.7.7
+...
 }}}
- # Select the nightly snapshot you want from [http://scala-tools.org/repo-snapshots/org/scala-lang/scala-compiler/2.8.0-SNAPSHOT/ Scala Tools Snapshots].  The files there look like:
-{{{
-  scala-compiler-2.8.0-20090910.003346-219.jar
-}}}
- Take the version and replace the last number (the build number) with a '+'.  For example:
-{{{
-  2.8.0-20090910.003346-+
-}}}
- This is the version to specify below. (The '+' is like a wildcard at the end of the version in Ivy.  It is required because the build numbers for `scala-library` and `scala-compiler` do not match.  You will notice that Ivy is slower to resolve when using '+'.)
- # Edit `$SBT_HOME/project/build/CrossCompileProject.scala`:
-  # Change the 2.8 version string to the Scala version determined above (around line 16)
-{{{
-  private val version2_8_0 = "2.8.0-20090910.003346-+"
-}}}
-  # Optional: to save time by building only the latest versions, make this change to line 31:
-{{{
-  private val buildConfigurations = conf_2_7_5 :: conf_2_8_0 :: Nil
-}}}
- # Build `sbt` by running `sbt` in the checked out directory, do:
-{{{
- $ sbt
- > update
- > full-build
-}}}
- # Use this local version of `sbt` in your project by setting your `sbt.version` to `0.5.7-SNAPSHOT` and your `scala.version` to the version above (for example: `2.8.0-20090910.003346-+`).
- # You will need to use the version of the launcher in `target/`.
 
-= Custom Scala Build =
-
-== Setup ==
-
- # Get the `sbt` loader set up on your system according to the [Setup#Launching_Sbt Launching Sbt] section.
- # Checkout `sbt`
+or use it temporarily with `++<version>`:
 {{{
- svn checkout http://simple-build-tool.googlecode.com/svn/trunk/ sbt
-}}}
- # Edit `$SBT_HOME/project/build/CrossCompileProject.scala`:
-  # Change the 2.8 version string to identify the local Scala version (around line 16)
-{{{
-  private val version2_8_0 = "2.8.0-local"
-}}}
-  # Optional: to save time by building only the latest versions, make this change to line 31:
-{{{
-  private val buildConfigurations = conf_2_7_5 :: conf_2_8_0 :: Nil
-}}}
- # For the Scala build you want to use, put the [LocalScala#Project_Definition project definition below] in:
-{{{
- $SCALA_HOME/project/build/ScalaJars.scala
-}}}
- $SCALA_HOME/project/build/`build.properties` should contain:
-{{{
- project.name=scala
- project.organization=org.scala-lang
- project.version=2.8.0-local.
-}}}
- # This is just a quick definition to locally publish the already built jars `build/pack/lib/scala-compiler.jar` and `build/pack/lib/scala-library.jar`.  In `$SCALA_HOME`, do:
-{{{
- $ sbt publish-local
-}}}
- # Then, run the following in `$SBT_HOME`
-{{{
- $ sbt
- > update
- > cross-publish-local
-}}}
- # Run `sbt` in your project directory.  You will be prompted for name, organization and version.  Enter `2.8.0-local` for Scala and `0.5.7-SNAPSHOT` for `sbt`.  You should be all set now.  When you want to update the compiler follow the steps in the next section.
-
-== New compiler ==
-For a new compiler:
- # In `$SCALA_HOME`, after building the new Scala version,
-{{{
-   $ sbt publish-local
-}}}
- # In `$SBT_HOME`
-{{{
-   $ sbt
-   > clean-lib
-   > update
-   > cross-publish-local
-}}}
- # Remove the `project/boot` directory from your project (`sbt` is not designed to update Scala jars after they have been copied to a project, so you have to manually delete them.  If using a local Scala version is popular, maybe this could change.)
- # Then, run `sbt` on your project as normal.
-
-== Project Definition ==
-
-{{{
-import sbt._
-
-class ScalaJars(info: ProjectInfo) extends ParentProject(info)
-{ top =>
-  override def outputPath: Path = "build"
-  val library = project(".", "Scala Library", new SubProject(_))
-  val compiler = project(".", "Scala Compiler", new SubProject(_), library)
-
-  override def shouldCheckOutputDirectories = false
-
-  class SubProject(info: ProjectInfo) extends DefaultProject(info)
-  {
-    override def outputPath = top.outputPath / "pack" / "lib"
-    override def shouldCheckOutputDirectories = false
-    override def publishLocalConfiguration = new DefaultPublishConfiguration("local", "release", true) {
-      override def srcArtifactPatterns: Iterable[String] = List(outputPath / "[artifact].[ext]").map(_.relativePath)
-    }
-  }
-}
+> sbt "++2.8.0-local compile" "++2.7.7 compile"
 }}}

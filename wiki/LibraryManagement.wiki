@@ -52,7 +52,7 @@ The following sections describe how to use each method of automatic dependency m
 
 == Inline Declarations ==
 
-Inline declarations are a very basic way of specifying the dependencies to be automatically retrieved.  They are intended as a lightweight alternative to a full configuration using Ivy or Maven.  To use inline declarations, do the following:
+Inline declarations are a very basic way of specifying the dependencies to be automatically retrieved.  They are intended as a lightweight alternative to a full configuration using Ivy.  To use inline declarations, do the following:
 
 === Basic Dependencies ===
 
@@ -64,11 +64,11 @@ or
 {{{
   val dep = groupID % artifactID % revision % configuration
 }}}
-The actual identifier for the `val` is currently unimportant.  See [Configurations] for details on configuration mappings.  If you are using a dependency that was built using `sbt`'s [CrossBuild cross-building], double the first `%` to be `%%`:
+The actual identifier for the `val` is currently unimportant.  See [Configurations] for details on configuration mappings.  If you are using a dependency that was built with `sbt`, double the first `%` to be `%%`:
 {{{
   val dep = groupID %% artifactID % revision
 }}}
-This will download the right jar for the dependency built with the version of Scala that you are currently using.  See [CrossBuild cross-building] for details.
+This will download the right jar for the dependency built with the version of Scala that you are currently using.  If you get an error while resolving this kind of dependency, that dependency probably wasn't published for the version of Scala you are using.  See [CrossBuild cross-building] for details.
 
 === Additional Repositories ===
  
@@ -81,7 +81,7 @@ Declare additional repositories besides the default Maven2 and Scala Tools Relea
 For example:
 {{{
   val derby = "org.apache.derby" % "derby" % "10.4.1.3"
-  val specs = "org.specs" % "specs" % "1.4.1"
+  val specs = "org.specs" % "specs" % "1.6.1"
 
   val scalaToolsSnapshots = "Scala-Tools Maven2 Snapshots Repository" at "http://scala-tools.org/repo-snapshots"
 }}}
@@ -95,7 +95,7 @@ See [Resolvers] for details on defining other types of repositories.
 
 === Explicit URL ===
 
-If your project requires a dependency that is not present in a Maven repository, a direct URL to its jar can be specified as follows:
+If your project requires a dependency that is not present in a repository, a direct URL to its jar can be specified as follows:
 
 {{{
   val slinky = "slinky" % "slinky" % "2.1" from "http://slinky2.googlecode.com/svn/artifacts/2.1/slinky.jar"
@@ -103,7 +103,7 @@ If your project requires a dependency that is not present in a Maven repository,
 
 === Disable Transitivity ===
 
-By default, these declarations fetch all project dependencies. In some instances, you may find that the dependencies listed for a project aren't necessary for it to build. Projects using the Felix OSGI framework, for instance, only explicitly require its main jar to compile and run. Avoid fetching artifact dependencies with either `intransitive()` or `notTransitive()`, as in this example:
+By default, these declarations fetch all project dependencies, transitively. In some instances, you may find that the dependencies listed for a project aren't necessary for it to build. Projects using the Felix OSGI framework, for instance, only explicitly require its main jar to compile and run. Avoid fetching artifact dependencies with either `intransitive()` or `notTransitive()`, as in this example:
 
 {{{
   val felix = "org.apache.felix" % "org.apache.felix.framework" % "1.8.0" intransitive()
@@ -163,7 +163,29 @@ If you want to use the `val`-style definitions as well, use:
     super.libraryDependencies
 }}}
 
-A similar method exists for repositories and is called `repositories`.
+`sbt` calls `ivyRepositories` to get the inline repositories to use.  By default, `ivyRepositories` adds the default repositories (Maven Central and Scala Tools) to the repositories returned by `repositories`.  So, to have complete control over repositories, override `ivyRepositories`.  To specify repositories in addition to the usual defaults, override `repositories`.
+
+For example, to use the Scala Tools snapshots repository in addition to the default repositories,
+{{{
+  override def repositories = ScalaToolsSnapshots
+}}}
+
+There are methods defined on `sbt.Resolver` to assist with default repositories:
+{{{
+	/** Add the local, Maven Central, and Scala Tools releases repositories to the user repositories.  */
+	def withDefaultResolvers(userResolvers: Seq[Resolver]): Seq[Resolver]
+	/** Add the local Ivy and Maven Central repositories to the user repositories.  If `scalaTools` is true, add the Scala Tools releases repository as well.  */
+	def withDefaultResolvers(userResolvers: Seq[Resolver], scalaTools: Boolean): Seq[Resolver]
+	/** Add the local Ivy repository to the user repositories.
+	* If `scalaTools` is true, add the Scala Tools releases repository.
+	* If `mavenCentral` is true, add the Maven Central repository.  */
+	def withDefaultResolvers(userResolvers: Seq[Resolver], mavenCentral: Boolean, scalaTools: Boolean): Seq[Resolver]
+}}}
+
+To exclude the default Scala Tools releases repository, but use the local and Maven Central repositories and the ones defined in `repositories`:
+{{{
+  override def ivyRepositories = Resolver.withDefaultResolvers(repositories, false)
+}}}
 
 === Publishing ===
 

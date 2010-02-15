@@ -1,4 +1,4 @@
-This page lists some examples of project definitions, mostly drawn from the project definitions of `sbt` and [http://technically.us/code/x/sling-shot/ Sling].  Contributions are welcome!
+This page lists some examples of project definitions, mostly drawn from the project definitions of `sbt` and [http://technically.us/code/x/sling-shot/ Sling].
 
 <wiki:toc max_depth="3" />
 

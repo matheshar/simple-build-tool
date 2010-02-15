@@ -50,14 +50,20 @@ val p = "src" \ "main" \ "scala" \ "sbt" \ "Analyzer.scala"
 }}}
 
 Typical usage in `sbt` is to build up paths:
-
 {{{
     def sourcePath = path(sourceDirectoryName)
     def mainSourcePath = sourcePath / mainDirectoryName
     def mainScalaSourcePath = mainSourcePath / scalaDirectoryName
 }}}
 
-To convert a `java.io.File` to a `Path`, use `Path.fromFile`.
+To convert a `java.io.File` to a `Path`, use `Path.fromFile`.  To convert a Path to a File, use `asFile`.  For example:
+{{{
+    def aPath: Path = "some" / "path"
+    def aFile: File = aPath.asFile
+
+    def tmpFile: File = new File(System.getProperty(java.io.tmpdir))
+	def pathFromFile: Path = Path.fromFile(tmpFile)
+}}}
 
 === Path Finders ===
 
@@ -140,8 +146,8 @@ def sources = "src".descendentsExcept("*.scala", ".svn")
 
 Two methods are available for use in a project definition to consistently exclude paths.  They are `descendents` and `defaultExcludes`.  `defaultExcludes` provides a filter that `descendents` uses to exclude paths from its results.  The definitions of `descendents` and `defaultExcludes` are:
 {{{
-  def descendents(parent: PathFinder, include: FileFilter) = parent.descendentsExcept(include, defaultExcludes)
-  def defaultExcludes: FileFilter = (".*"  - ".") || HiddenFileFilter
+def descendents(parent: PathFinder, include: FileFilter) = parent.descendentsExcept(include, defaultExcludes)
+def defaultExcludes: FileFilter = (".*"  - ".") || HiddenFileFilter
 }}}
 
 You could use this for the above examples like:
@@ -159,14 +165,24 @@ override def defaultExcludes = super.defaultExcludes || "*~"
 There are some useful operations on `NameFilter`s.  The `|` operator declares alternative `NameFilter`s:
 
 {{{
-val sources = "src" ** ("*.scala" | "*.java")
+def sources = "src" ** ("*.scala" | "*.java")
 }}}
 
 The `-` operator excludes a set of names:
 {{{
-val imageResources = "src"/"main"/"resources" * ("*.png" - "logo.png")
+def imageResources = "src"/"main"/"resources" * ("*.png" - "logo.png")
 }}}
 
 This will get `right.png` and `left.png`.  `-` is also available as a prefix operator.
 
 `NameFilter` can be used for filtering Strings in general using its `accept` method directly.  Additionally `NameFilter` is a subclass of `java.io.FileFilter` by way of `sbt.FileFilter`, which is a thin wrapper around `java.io.FileFilter` that provides operators for combining filters.  Infix operators for `sbt.FileFilter` are doubled to distinguish them from the operators for `NameFilter`.
+
+For example:
+{{{
+def filterA: sbt.FileFilter = ...
+def filterB: sbt.FileFilter = ...
+
+def filterC = filterA -- filterB
+def filterD = filterA || filterB
+def filterE = filterA && filterB
+}}}

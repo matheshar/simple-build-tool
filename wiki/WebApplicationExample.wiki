@@ -4,7 +4,7 @@ This page provides an example of building a [http://liftweb.net Lift] web applic
 
 == Get the example ==
 
-Get the [http://liftweb.net/docs/getting_started/mod_master.html Lift example] using maven and change to the new directory.
+Get the [http://liftweb.net/docs/getting_started/mod_master.html Lift example] using Maven and change to the new directory.
 
 {{{
 $ mvn archetype:create -U \
@@ -25,10 +25,10 @@ Run `sbt` and provide the project name and version:
 $ sbt
 Project does not exist, create new project? (y/N) : y
 Name: Hello Lift
-Organization [empty]: net.liftweb.hello
+Organization: net.liftweb.hello
 Version [1.0]: 1.0
 Scala version [2.7.7]: 2.7.3
-sbt version [0.5.6]:
+sbt version [0.7.0]:
 ...
 [success] Successfully initialized directory structure.
 [info] Building project Hello Lift 1.0 using sbt.DefaultProject
@@ -118,13 +118,13 @@ Three modifications must be made to the above project definition. First add the 
 Then change:
 
 {{{
-  val lift = "net.liftweb" % "lift-core" % "1.0" % "compile->default"
+  val lift = "net.liftweb" % "lift-core" % "1.0" % "compile"
 }}}
 
 to:
 
 {{{
-  val lift = "net.liftweb" % "lift-core" % "2.0-SNAPSHOT" % "compile->default"
+  val lift = "net.liftweb" % "lift-core" % "2.0-SNAPSHOT" % "compile"
 }}}
 
 Finally, add the following to ensure that all new dependencies are fetched:

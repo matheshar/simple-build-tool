@@ -48,4 +48,4 @@ There are methods to read from, write to, and append to files, streams, and read
 
 == Access to Jars ==
 
-There are methods to get the jar file or directory containing a given class.  There are convenience methods for getting the location of `scala-library.jar`, `scala-compiler.jar`, and `sbt.jar` used to build the project.
+There are methods to get the jar file or directory containing a given class.

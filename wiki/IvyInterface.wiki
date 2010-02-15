@@ -1,4 +1,4 @@
-This page describes how to use sbt's Ivy interface directly.  This interface is new in 0.6.11 (unreleased).  The source code can be found in the [http://github.com/harrah/xsbt/tree/master/ivy/ Ivy project of xsbt].
+This page describes how to use sbt's Ivy interface directly.  This interface is new in 0.7.  The source code can be found in the [http://github.com/harrah/xsbt/tree/master/ivy/ Ivy project of xsbt].
 
 <wiki:toc max_depth="3"/>
 
@@ -6,7 +6,7 @@ This page describes how to use sbt's Ivy interface directly.  This interface is 
 
 Ivy is normally configured with two separate XML configuration files: a settings file and a module descriptor file, which is usually just called an "Ivy file".  The settings file configures resolvers, such as repositories, and paths used by Ivy.  Other aspects of Ivy are configurable in the settings file as well.  See [http://ant.apache.org/ivy/history/2.1.0/settings.html Settings Files] for details.  The Ivy file describes a module and its dependencies.  See [http://ant.apache.org/ivy/history/2.1.0/ivyfile.html Ivy File] for details.
 
-A user interacts with Ivy either through Ant tasks or by using Ivy as a library.  A third category of configuration occurs here.  To do work with Ivy, you need to run tasks, such as `resolve`, `retrieve`, or `publish`.  Each of these tasks generally requires additional configuration.
+A user interacts with Ivy either through Ant tasks or by using Ivy as a library.  To do work with Ivy, you need to run tasks, such as `resolve`, `retrieve`, or `publish`.  Each of these tasks generally requires additional configuration.
 
 = sbt Interface to Ivy =
 
@@ -19,7 +19,7 @@ Each of the first two configurations may be done either by specifying an externa
 
 == General Ivy Configuration ==
 
-For general Ivy configuration, create an instance of `sbt.IvyConfiguration`, either `sbt.InlineIvyConfiguration` or `sbt.ExternalIvyConfiguration`.  Each requires an `IvyLogger`, which is a basic interface to provide logging.  In `sbt`, the `log` member of a project definition implements this interface.  Specifics to each configuration are described in the next sections.
+For general Ivy configuration, create an instance of `sbt.IvyConfiguration`, either `sbt.InlineIvyConfiguration` or `sbt.ExternalIvyConfiguration`.  Each requires an `IvyLogger`, which is a basic interface to provide logging.  In `sbt`, the `log` member of a project definition implements this interface.  Additionally, each requires a `GlobalLock`, which is a means of synchronizing across processes.  It is used to ensure the Ivy cache is only be accessed by one running instance of the Ivy interface on a machine.  Specifics to each configuration are described in the next sections.
 
 === Inline ===
 
@@ -29,10 +29,11 @@ The constructor signature for inline configuration is:
     paths: IvyPaths,
     resolvers: Seq[Resolver],
     moduleConfigurations: Seq[ModuleConfiguration],
+    lock: Option[xsbti.GlobalLock],
     log: IvyLogger )
 }}}
 
-Resolvers are described on the [Resolvers] page.  [ModuleConfiguration]s are not currently documented, but are used to configure resolvers on a per-module basis.  `Nil` is an acceptable argument for this parameter.  `log` is as described at the beginning of the section.
+Resolvers are described on the [Resolvers] page.  [ModuleConfiguration]s are not currently documented, but are used to configure resolvers on a per-module basis.  `Nil` is an acceptable argument for this parameter.  `lock` and `log` are as described at the beginning of the section.
 
 An instance of `IvyPaths` configures two common, important paths for Ivy: the base directory and the cache directory.  The base directory is the directory against which all relative paths are resolved.  The cache directory is where all cached information, such as downloaded module descriptors and artifacts for dependencies, is placed.
 
@@ -52,10 +53,11 @@ For configuration with an external XML settings file, use ExternalIvyConfigurati
   ExternalIvyConfiguration(
     baseDirectory: File,
     file: File,
+    lock: Option[xsbti.GlobalLock],
     log: IvyLogger)
 }}}
 
-The base directory is the directory against which all relative paths are resolved.  The `file` parameter specifies the location of the settings file.  `log` is as described at the beginning of the section.
+The base directory is the directory against which all relative paths are resolved.  The `file` parameter specifies the location of the settings file.  `lock` and `log` are as described at the beginning of the section.
 
 === General Configuration Examples ===
 
@@ -68,7 +70,7 @@ A very basic inline configuration that reuses information from the project:
    // use the repositories defined in the project
   val resolvers = repositories
 
-  val inline = new InlineIvyConfiguration(paths, resolvers, Nil, log)
+  val inline = new InlineIvyConfiguration(paths, resolvers, Nil, Some(info.launcher.globalLock), log)
 }}}
 
 A more advanced inline configuration:
@@ -84,7 +86,7 @@ A more advanced inline configuration:
 
 An external configuration:
 {{{
-  val external = new ExternalIvyConfiguration(info.projectPath.asFile, "ivysettings.xml".asFile, log)
+  val external = new ExternalIvyConfiguration(info.projectPath.asFile, "ivysettings.xml".asFile, Some(info.launcher.globalLock), log)
 }}}
 
 == Module Configuration ==
@@ -183,7 +185,7 @@ When `synchronize` is true, Ivy will remove old artifacts from the destination d
 
 == Execution ==
 
-With all of the configuration above, we can now run Ivy.  This is a two step process.  First, create instances of IvySbt and IvySbt.Module.  Think of these loosely as a connection to Ivy and a configured module.  There is some overhead saved by reusing these instances, especially when using external XML configuration files.
+With all of the configuration above, we can now run Ivy.  This is a two step process.  First, create instances of IvySbt and IvySbt.Module.  Think of these loosely as a connection to Ivy and a configured module, respectively.  There is some overhead saved by reusing these instances when the configuration is unchanged, especially when using external XML configuration files.
 
 Finally, call the appropriate method(s) in `IvyActions`.
 
@@ -205,6 +207,7 @@ Finally, call the appropriate method(s) in `IvyActions`.
 
   // not currently in this documentation- see the source for IvyActions
   IvyActions.install(ivyModule, "Scala Tools Releases", "local")
+  IvyActions.makePom(ivyModule, ...)
   IvyActions.deliver(ivyModule, ...)
   IvyActions.publish(ivyModule, ...)
 }}}

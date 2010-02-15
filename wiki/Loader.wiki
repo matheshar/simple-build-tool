@@ -1,6 +1,6 @@
 = Scala and Sbt Versions =
 
-This page describes how the `sbt` loader helps you use different versions of Scala and `sbt` to build your projects.
+This page describes how the `sbt` loader helps you use different versions of Scala and `sbt` to build your projects.  For details on how it can be used to launch other applications besides `sbt` in a similar manner, see [GeneralizedLauncher].
 
 == Previously ==
 
@@ -10,27 +10,23 @@ This page describes how the `sbt` loader helps you use different versions of Sca
 
 This has changed with `sbt` 0.3.8.  The distributed jar is no longer the main `sbt` jar.  It is instead a loader that has the classes it needs from Ivy and Scala included in the same jar (after shrinking with [http://proguard.sourceforge.net/ Proguard]).  This loader reads the versions of Scala and `sbt` to use to build the project from the `project/build.properties` file.  If this is the first time the project has been built with those versions, the loader downloads the appropriate versions to your `project/boot` directory.  The `sbt` loader will then load the right version of the main `sbt` builder using the right version of Scala.
 
-Implementation details: `sbt` still has to be compiled with the version of Scala used to build the project.  Additionally, it has to be compiled and used with test libraries compiled with that version of Scala because of binary incompatibility between Scala versions.  So, there are multiple jars for each version of `sbt` corresponding to the different versions of Scala it can be used with.  For example, if you specify `sbt` 0.5 and Scala 2.7.3, the actual jar downloaded to `project/boot` is `sbt_2.7.3-0.5.jar`.  For Scala 2.7.2, it is `sbt_2.7.2_0.5.jar`.
-
 == Motivation ==
 
 When a new version of `sbt` is released, you only have to do:
 
 {{{
-> set sbt.version 0.5.7
-> reboot
+> set sbt.version 0.7.1
+> reload
 }}}
 
-and the `sbt` loader will download the new version of `sbt` to build your project.  Note that there is a delay between when a new version of Scala is posted to `scala-tools.org` and when this is possible because `sbt` has to be recompiled and republished for the new version.  There will generally be a message on the mailing list when this is available.  Also, new features occasionally require updating the loader.  However, new loaders should still be able to build projects with earlier versions of `sbt`.
+and the `sbt` loader will download the new version of `sbt` to build your project.  Note that new features occasionally require updating the loader.
 
-The loader enables building against multiple versions of Scala.  To use this feature, override `crossScalaVersions` with the `Set` of Scala versions to build against.  Then, prefix the action to run with `+`.
-
-{{{
-override def crossScalaVersions = Set("2.7.2", "2.7.3", "2.7.4", "2.7.5", "2.7.6")
-}}}
+The loader enables building against multiple versions of Scala.  To use this feature, list multiple Scala versions in your `build.scala.versions` property.  Then, prefix the action to run with `+`.
 
 {{{
 $ sbt
+> set build.scala.versions 2.7.7 2.8.0.Beta1 2.7.2
+> reload
 > +compile
 }}}
 or
@@ -40,8 +36,8 @@ $ sbt "+compile"
 
 `outputPath` and `managedDependencyPath` have the version of Scala being used for the build appended to their path.  By default, this means:
 {{{
- target -> target/scala2.7.2
- lib_managed -> lib_managed/scala2.7.2
+ target -> target/scala_2.7.2
+ lib_managed -> lib_managed/scala_2.7.2
 }}}
 
 If you use custom output directories or you redefine paths, you will want to wrap them in `crossPath`, which will append this component.  For example, `outputPath` is defined as:
@@ -58,9 +54,9 @@ If you use custom output directories or you redefine paths, you will want to wra
   java -Xmx512M -jar sbt-launcher.jar "$@"
 }}}
  This means Scala doesn't have to be installed already.
- # Run `sbt` in an existing project and you will be prompted for the versions of Scala and `sbt` to use.  Currently, Scala 2.7.2, 2.7.3, 2.7.4, 2.7.5, and 2.7.6 and sbt 0.4, 0.4.3, 0.4.5, 0.4.6, 0.5, 0.5.1, 0.5.2, 0.5.4, and 0.5.5 are available options.  The `sbt` launcher will download the proper version of Scala and the right version of the `sbt` builder compiled with that version of Scala and put them in project/boot.
+ # Run `sbt` in an existing project and you will be prompted for the versions of Scala and `sbt` to use.  Currently, Scala versions 2.7.2 and later and sbt 0.7.0 are available options.  The `sbt` launcher will download the proper version of Scala and the requested version of the `sbt` builder and put them in project/boot.
  # The launcher will use these downloaded jars to build your project.
- # Proceed using `sbt` as usual.
+ # Proceed using `sbt`.
 
 == Offline Usage ==
 

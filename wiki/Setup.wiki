@@ -12,7 +12,7 @@ The basic steps are:
 
 = Launching Sbt =
 
-The easiest way to launch sbt is to create a one-line script.  Download [http://simple-build-tool.googlecode.com/files/sbt-launcher-0.5.6.jar sbt-launcher.jar] if you have not already.  (*Note*: do _not_ put `sbt-launcher.jar` in your `$SCALA_HOME/lib` directory, your project's `lib` directory, or anywhere it will be put on a classpath.)
+The easiest way to launch sbt is to create a one-line script.  Download [http://simple-build-tool.googlecode.com/files/sbt-launcher-0.7.0.jar sbt-launcher.jar] if you have not already.  (*Note*: do _not_ put `sbt-launcher.jar` in your `$SCALA_HOME/lib` directory, your project's `lib` directory, or anywhere it will be put on a classpath.)
 
 === Unix ===
 Put the jar in your `~/bin` directory, put the line
@@ -51,15 +51,15 @@ java -Dhttp.proxyHost=myproxy -Dhttp.proxyPort=8080 -Dhttp.proxyUser=username -D
 When you run `sbt` and it does not find a project in the current directory, it asks if you want to create a new project.  If you say yes, `sbt` will prompt for some basic information:
  * Project name: This name will be used in scaladocs and as part of the default name for generated packages.
  * Project organization: This is used for dependency management and is optional.
- * Project version: This is used in scaladocs and as part of the default name for generated packages.
- * Scala version: This is version of scala to build the project with.  Current options are 2.7.2, 2.7.3, 2.7.4, 2.7.5, 2.7.6, and 2.7.7.
- * Sbt version: This is the version of sbt to build the project with.  Current options are 0.4, 0.4.3, 0.4.5, 0.4.6, 0.5, 0.5.1, 0.5.2, 0.5.4, 0.5.5, and 0.5.6.
+ * Project version: This is used in scaladocs, as part of the default name for generated packages, and for dependency management.
+ * Scala version: This is version(s) of scala to build the project with.  Multiple versions may be separated by spaces (see [CrossBuild]).  Allowed values are (in theory) any version of Scala 2.7.2 or later available in the Scala Tools repository.
+ * Sbt version: This is the version of sbt to build the project with.  Currently, this should be 0.7.0.
 
 See [Loader] for more information on setting the versions of Scala and `sbt` to use to build your project.  With the above information, `sbt` creates the project properties file and directory structure.  These are described in the following section.
 
 == Quick Setup ==
 
-A new option in `sbt` 0.5 is to choose `s` (for `scratch`) when prompted to create a new project.  This can be used to quickly get `sbt` compiling and running code without needing to do a full project setup.  This option skips all of the prompts in a full setup and configures `sbt` to look in the current directory for sources and jars in addition to the usual places in a full project.  Using `sbt` for a hello world might look like:
+In addition to 'yes' or 'no', you can type `s` (for `scratch`) when prompted to create a new project.  This can be used to quickly get `sbt` compiling and running code without needing to do a full project setup.  This option skips all of the prompts in a full setup and configures `sbt` to look in the current directory for sources and jars in addition to the usual places in a full project.  Using `sbt` for a hello world might look like:
 
 {{{
   $ echo 'object Hi { def main(args: Array[String]) { println("Hi!") } }' > hw.scala

@@ -7,21 +7,21 @@
 === User-Defined Property Examples ===
 
 {{{
-  val documentBottomText = property[String]
-  val timestamp = propertyOptional[Long](-1L) // This variant provides a default value.
+  lazy val documentBottomText = property[String]
+  lazy val timestamp = propertyOptional[Long](-1L) // This variant provides a default value.
 
   // Using a property
   override def documentOptions = super.documentOptions ++ documentBottomText.get.map(documentBottom).toList
 
   // Custom format for java.net.URL
-  implicit val urlFormat =
+  implicit lazy val urlFormat =
     new Format[URL]
     {
       def fromString(s: String) = new URL(s)
       def toString(u: URL) = u.toExternalForm
     }
 
-  val location = property[URL]  // urlFormat is implicitly passed to the property method
+  lazy val location = property[URL]  // urlFormat is implicitly passed to the property method
 }}}
 
 The properties are backed by a standard properties file `project/build.properties` that looks like:
@@ -37,9 +37,9 @@ document.bottom.text=Some Bottom Text
 === System Property Examples ===
 
 {{{
-  val operatingSystem = system[String]("os.name")
-  val userHome = system[File]("user.home")
-  val custom = systemOptional[Int]("custom.property", 0)
+  lazy val operatingSystem = system[String]("os.name")
+  lazy val userHome = system[File]("user.home")
+  lazy val custom = systemOptional[Int]("custom.property", 0)
 }}}
 
 == Usage Details ==
@@ -101,15 +101,18 @@ The first variant accepts the name of the system property and a formatter to con
 Every project has the following properties defined.
 
 {{{
-  val projectName = propertyLocalF[String](NonEmptyStringFormat)
-  val projectVersion = property[Version]
-  val projectOrganization = propertyOptional[String](name, true)
-  val scalaVersion = propertyOptional[String]("")
-  val sbtVersion = propertyOptional[String]("")
+  lazy val projectName = propertyLocalF[String](NonEmptyStringFormat)
+  lazy val projectVersion = property[Version]
+  lazy val projectOrganization = propertyOptional[String](name, true)
+  lazy val defScalaVersion = property[String]
+  lazy val buildScalaVersions = propertyOptional[String](defScalaVersion.value, true)
+  lazy val sbtVersion = property[String]
 }}}
 
 The definition of `projectName` explictly specifies the format so that a project name cannot be empty.  Additionally, the `Local` in `propertyLocalF` specifies that the value for `propertyName` is not inherited from a parent project if is not explicitly set.  `projectVersion` can be inherited, however.
 
 The project organization was introduced after a default behavior of using the name for the organization already existed.  Therefore, it is optional and the name is used by default.  The `true` argument specifies that the value in a parent environment should be used before the default.  This is so that the organization is inherited from a parent project before the project's name is used as the organization.  This means that the organization only needs to be specified on the root project.
 
-The `scalaVersion` and `sbtVersion` properties are used to determine which versions of Scala and `sbt` should be used to build the project.  Note that project definitions should use `ScalaVersion.current` or `ScalaVersion.currentString` instead of directly using `scalaVersion`.
+The `sbtVersion` property is used to determine the version of `sbt` that is used to build the project.
+
+The `defScalaVersion` property determines the Scala version used to run `sbt`.  This currently cannot have a value other than `'2.7.7'`.  The `buildScalaVersions` property defines the space-delimited versions of Scala used to build the project.  The first version listed is used initially.  All versions listed are used for [CrossBuild cross-building].  Inside a project definition, use `buildScalaVersion` to get the version of Scala currently building the project.

@@ -36,11 +36,11 @@ The details of writing tasks are described on the [CustomActions Creating/Modify
 
 `sbt` only recompiles a project definition on startup or when invoking the interactive command `reload`.  Therefore, if you are running in interactive mode, invoke `reload` after making changes to your project definition for the changes to take effect.
 
-The `project/build` directory is a project itself.  Therefore, you can add jars to the `project/build/lib` directory to use from your project definition.  You can also have multiple sources for your project definition.  The only requirement is there must be exactly one public, concrete subclass of `Project` with a constructor that accepts a `ProjectInfo` instance.  `sbt` finds this subclass when it compiles the project definition, so the names of source files and classes are not important.
+The `project/build` directory is a project itself.  Therefore, you can add jars to the `project/build/lib` directory to use from your project definition.  You can also use multiple sources for your project definition.  The only requirement is there must be exactly one public, concrete subclass of `Project` with a constructor that accepts a `ProjectInfo` instance.  `sbt` finds this subclass when it compiles the project definition, so the names of source files and classes are not important.
 
 = Specifying Options =
 
-The general mechanism for specifying options to built-in tasks is with an overridable method that defines the list of options for a task.  For example, the default options for the `compile` task are defined as:
+The general way to configure your build is to override one or more methods in your project definition.  For example, the default options for the `compile` task are defined in the `compileOptions` method:
 
 {{{
     def compileOptions: Seq[CompileOption] = Deprecation :: Nil
@@ -82,7 +82,7 @@ Method `mainClass` is of type `Option[String]` and specifies an optional main cl
 
 If defined, the `mainClass` method specifies the value of the `Main-Class` attribute in the manifest.  The `manifestClassPath`method, if defined, specifies the value of `Class-Path` attribute.  Method `packageOptions` specifies general options for task `package` and is of type `Seq[PackageOption]`.  Provided options are:
   * `MainClass(mainClassName: String)`   Specifies the `Main-Class` attribute in the manifest.  By default, this option is included with the value of the `mainClass` method if it is defined.  When `mainClass` is not specified explicitly, the `package` task will try to determine which class to use automatically.  If exactly one main class is detected, it is used.  If multiple main classes are detected, a warning is printed and no `Main-Class` attribute is added to the manifest.
-  * `ManifestAttributes(attributes: (java.util.Attributes.Name, String)*)` or `ManifestAttributes(attributes: (java.util.Attributes.Name, String)*)`   Defines main attributes to add to the manifest.
+  * `ManifestAttributes(attributes: (java.util.Attributes.Name, String)*)` or `ManifestAttributes(attributes: (String, String)*)`   Defines main attributes to add to the manifest.
   * `JarManifest(m: Manifest)`   Specifies the manifest to use for the jar.  The default manifest includes the `Main-Class` attribute if `mainClass` (as described above) is not empty and the `Class-Path` attribute if `manifestClassPath` is not empty.
 
 == Document Options ==
@@ -100,24 +100,14 @@ Method `documentOptions` specifies the options for the API documentation tasks `
   * `documentTop(topText: String)`
   * `windowTitle(title: String)`
 
+By default, a window and document title are specified in 2.7 and a document title is specified in 2.8 (window title does not exist at this time).
+
 == Test Options ==
 
 Method `testOptions` specifies the options for the `test` action.
   * `ExcludeTests(tests: Iterable[String])`   Specifies the class names of tests that should not be run.
   * `TestFilter(filter: String => Boolean)`  Specifies a function that returns `true` if the test should be run.
   * `TestListeners(listeners: Iterable[TestReportListener])`  Specifies the reporters used when running tests.  `testOptions` by default includes a reporter that sends output to the project logger.
-
-== Dependency Management (Update) Options ==
-
-Method `updateOptions` specifies the options for the dependency management task `update`.  Available options are:
- * `Validate`   Specifying this validates the configuration files (Maven or Ivy).  This is used by default.
- * `Synchronize`   Specifying this removes libraries that are not currently used from the managed library directory.  This is used by default.
- * `QuietUpdate`   Specifying this puts Ivy in quiet mode during execution.  This is used by default.
- * `ErrorIfNoConfiguration`   Specifying this causes the `update` task to fail if no configuration is provided inline or as a file.  Otherwise, it performs no action.  This is not used by default.
- * `AddScalaToolsReleases`   Specifying this adds the `http://scala-tools.org/repo-releases` repository to the configured repositories if `ivysettings.xml` is not present.  This is used by default.
- * `LibraryManager(manager: Manager)`   Explicitly specifies the method to use for handling dependencies.
- * `CacheDirectory(directory: Path)`   Explicitly specifies the directory to use for the download and metadata cache for Ivy.
- * `CheckScalaVersion(configs, checkExplicit, filterImplicit)`   Configures checking and filtering of Scala dependencies.  See [ScalaJars Scala Jars and Dependency Management] for details.
 
 = Changing Paths =
 
@@ -178,12 +168,12 @@ The paths directly used by the default actions are listed below.  Other paths ar
  * `testJavaSourcePath`: The path to the test Java sources for the project.
  * `testResourcesPath` - The path to resources to include in the test jar.
  * `outputPath` - The path containing all `sbt`-generated files (besides the managed artifacts that go in `managedDependencyPath`).  All files generated by tasks should go in this directory.  When executed, the `clean` action removes this directory.  The following are subpaths of `outputPath`:
-  * `mainDocPath` - The path where API documentation for main sources goes.
-  * `testDocPath` - The path where API documentation for test sources goes.
-  * `mainCompilePath` - The path where compiled main classes go.
-  * `testCompilePath` - The path where compiled test classes go.
-  * `mainAnalysisPath` - The path where the analysis done at compile time goes.  This includes files that record dependencies from the Scala sources.
-  * `testAnalysisPath` - The path where the analysis done at test compile time goes.  This includes files that record dependencies from the Scala sources and the class names of tests.
+  * `mainDocPath` - The directory where API documentation for main sources is generated.
+  * `testDocPath` - The directory where API documentation for test sources is generated.
+  * `mainCompilePath` - The directory containing compiled main classes.
+  * `testCompilePath` - The directory containing compiled test classes.
+  * `mainAnalysisPath` - The directory used to store the analysis done at compile time.  This includes files that record dependencies between source files.
+  * `testAnalysisPath` - The directory used to store the analysis done at test compile time.  This includes files that record dependencies between source files and the class names of tests.
 
 Additionally, web applications use these paths defined in `sbt.WebProjectPaths`:
  * `webappPath` - The location of web application resources.

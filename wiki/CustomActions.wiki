@@ -6,7 +6,7 @@ This page describes how to define your own actions and how to modify the builtin
 
 = Creating Actions =
 
-Create a new action by constructing a `Task` instance and assigning it to a `val`.  The name of the `val` is used as the name of the action after transforming camel-case style to be dash separated (for example, `testCompile` becomes `test-compile`).  A `Task` is constructed with the `task` method and represents a unit of work.  You provide the code to execute when the task is invoked as the argument to `task`.  Return `None` if the task executes successfully or return an error message wrapped in `Some` if it does not.  The `log` method (of type `sbt.Logger`) can be used for logging information.
+Create a new action by constructing a `Task` instance and assigning it to a `lazy val`.  The name of the `val` is used as the name of the action after transforming camel-case style to be dash separated (for example, `testCompile` becomes `test-compile`).  A `Task` is constructed with the `task` method and represents a unit of work.  You provide the code to execute when the task is invoked as the argument to `task`.  Return `None` if the task executes successfully or return an error message wrapped in `Some` if it does not.  The `log` method (of type `sbt.Logger`) can be used for logging information.
 
 Example:
 {{{
@@ -47,12 +47,12 @@ Most of the builtin actions (such as `clean`, `test`, `run`, `doc`, and `package
   def runTask(mainClass: Option[String], classpath: PathFinder, options: => Seq[String]): Task = task { ... }
 }}}
 
-This approach is intended to provide flexibility for when you need to change the default behavior.  The first statement binds a new action called `run` to the task returned by `runAction`.  It is not possible to override a `lazy val` (which is required for reasons described in the Creating Actions section above), so a separate, overridable method is used (in this case, `runAction`).  This second method is the method to override to change an action's behavior.  A third method provides the actual behavior for the task.
+This approach is intended to provide flexibility for when you need to change the default behavior.  The first statement binds a new action called `run` to the task returned by `runAction`.  It is not possible to use `super` when overriding a `lazy val`, so a separate method is used (in this case, `runAction`).  This second method is the method to override in order to change an action's behavior.  A third method provides the actual behavior for the task that can be used to create new tasks.
 
-There are two main scenarios that require modifying the default actions.  The first is changing the behavior of a default action.  For example, you might want to create a war file instead of a jar file.  The second is changing the dependencies of the default tasks.  For example, you might want to write a task that preprocesses your sources before compilation.  You'd want to make the `compile` task depend on the preprocessor task.  In the first case, you would completely redefine `packageAction` to be:
+There are two main scenarios that require modifying the default actions.  The first is changing the behavior of a default action.  For example, you might want to create a different file than a jar file.  The second is changing the dependencies of the default tasks.  For example, you might want to write a task that preprocesses your sources before compilation.  You'd want to make the `compile` task depend on the preprocessor task.  In the first case, you would completely redefine `packageAction` to be:
 
 {{{
-  override def packageAction = task { createWar() } dependsOn(compile) describedAs("Creates a war file.")
+  override def packageAction = task { createCustomFile() } dependsOn(compile) describedAs("Creates a war file.")
 }}}
 
 Again, note that the compile dependency is referenced by the `lazy val` it is assigned to.  That is, do `dependsOn(compile)` and not `dependsOn(compileAction)`.
@@ -80,7 +80,7 @@ The first argument is a list of output files and the second argument is the acti
 
 == Known Products from Sources ==
 
-The next case is a task that takes sources and generates a known group of products (that is, which files will be produced are known before the task does its work).  The task's work should be done if any of the products do not exist or if any of the products are older than any of the sources.  Create a task of this kind in the following manner:
+The next case is a task that takes sources and generates a known group of products (that is, the files that will be produced are known before the task does its work).  The task's work should be done if any of the products do not exist or if any of the products are older than any of the sources.  Create a task of this kind in the following manner:
 
 {{{
   fileTask(products from sources) { doWork }
@@ -95,5 +95,5 @@ where:
 
 There are some methods for constructing certain types of tasks:
   * You can use [MethodTasks Method Tasks] to create the task to be run from arguments given by the user.
- * `execTask(ProcessBuilder)`  Creates a task that, when invoked, runs the provided process and checks its exit value.
+ * `execTask(ProcessBuilder)`  Creates a task that, when invoked, runs the provided process and checks its exit value.  See [Process] for details on using the process API.
  * `dynamic(=> Task)`  This creates a special task that, when invoked, evaluates its argument (which is call-by-name) and returns it as the root of a new subgraph of tasks to run.  The subgraph must be entirely self-contained.  That is, nodes in the subgraph cannot depend on statically defined tasks.

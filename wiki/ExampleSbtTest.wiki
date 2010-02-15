@@ -1,3 +1,5 @@
+NOTE!! This page has yet to be updated for the 0.7.0 release.
+
 = Example Test =
 
 This page describes writing an example test for `sbt`.  The example is the `webapp/jsp` test from `sbt` trunk.

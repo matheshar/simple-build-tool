@@ -8,7 +8,7 @@
   * [Loader Scala and Sbt Versions]
   * [ProjectConsole Project Console]
   * [IntegrationSupport Integration] - Using `sbt` with other tools
-  * [LocalScala Custom Scala] - Using `sbt` with Scala 2.8 nightlies or a locally built Scala
+  * [LocalScala Custom Scala] - Using `sbt` with a local Scala build
  * Configuration
   * [BuildConfiguration Basic Configuration]
   * [ProjectDefinitionExamples Examples]
@@ -26,7 +26,6 @@
    * [Resolvers Defining Repositories]
    * [Publishing]
    * [Artifacts]
-   * [ProjectDependencies Project Dependencies]
   * [CustomCompileConfiguration Custom Compile Configuration]
  * Writing Actions
   * [CustomActions Creating/Modifying Actions]
@@ -43,8 +42,9 @@
   * [JavaSources Java Sources]
  * Project Information
   * [Credits]
-  * [Roadmap]
   * [Changes]
   * [Build] from source
+<wiki:comment>
   * [http://simple-build-tool.googlecode.com/svn/artifacts/latest/api/index.html API Documentation]
+</wiki:comment>
   * [ChangeDetectionAndTesting Change Detection and Testing]

@@ -1,3 +1,37 @@
+=== 0.5.6 to 0.7.0 ===
+ * Unifed batch and interactive commands.  All commands that can be executed at interactive prompt can be run from the command line.  To run commands and then enter interactive prompt, make the last command 'shell'.
+ * Properly track certain types of synthetic classes, such as for comprehension with >30 clauses, during compilation.
+ * Jetty 7 support
+ * Allow launcher in the project root directory or the `lib` directory.  The jar name must have the form`'*sbt-launch*.jar'` in order to be excluded from the classpath.
+ * Stack trace detail can be controlled with `'on'`, `'off'`, `'nosbt'`, or an integer level.  `'nosbt'` means to show stack frames up to the first `sbt` method.  An integer level denotes the number of frames to show for each cause.  This feature is courtesty of Tony Sloane.
+ * New action 'test-run' method that is analogous to 'run', but for test classes.
+ * New action 'clean-plugins' task that clears built plugins (useful for plugin development).
+ * Can provide commands from a file with new command: `<filename`
+ * Can provide commands over loopback interface with new command: `<port`
+ * Scala version handling has been completely redone.
+  * The version of Scala used to run sbt (currently 2.7.7) is decoupled from the version used to build the project.
+  * Changing between Scala versions on the fly is done with the command: `++<version>`
+  * Cross-building is quicker.  The project definition does not need to be recompiled against each version in the cross-build anymore.
+  * Scala versions are specified in a space-delimited list in the `build.scala.versions` property.
+ * Dependency management:
+  * `make-pom` task now uses custom pom generation code instead of Ivy's pom writer.
+   * Basic support for writing out Maven-style repositories to the pom
+   * Override the 'pomExtra' method to provide XML (`scala.xml.NodeSeq`) to insert directly into the generated pom.
+   * Complete control over repositories is now possible by overriding `ivyRepositories`.
+  * The [IvyInterface interface to Ivy] can be used directly.
+ * Test framework support is now done through a uniform test interface.  Implications:
+  * New versions of specs, ScalaCheck, and ScalaTest are supported as soon as they are released.
+  * Support is better, since the test framework authors provide the implementation.
+  * Arguments can be passed to the test framework.  For example: {{{ > test-only your.test -- -a -b -c }}}
+ * Can provide custom task start and end delimiters by defining the system properties `sbt.start.delimiter` and `sbt.end.delimiter`.
+ * Revamped launcher that can launch Scala applications, not just `sbt`
+  * Provide a configuration file to the launcher and it can download the application and its dependencies from a repository and run it.
+  * sbt's configuration can be customized.  For example,
+   *  The `sbt` version to use in projects can be fixed, instead of read from `project/build.properties`.
+   * The default values used to create a new project can be changed.
+   * The repositories used to fetch `sbt` and its dependencies, including Scala, can be configured.
+   * The location `sbt` is retrieved to is configurable.  For example, `/home/user/.ivy2/sbt/` could be used instead of `project/boot/`.
+
 === 0.5.5 to 0.5.6 ===
  * Support specs specifications defined as classes
  * Fix specs support for 1.6

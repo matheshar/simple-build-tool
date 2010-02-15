@@ -1,10 +1,8 @@
 = Compiler Plugin Support =
 
-As of `sbt` 0.4.5, there is special support for using compiler plugins.  You can mixin the `AutoCompilerPlugins` trait to your project definition to enable this functionality.
+There is some special support for using compiler plugins.  You can mixin the `AutoCompilerPlugins` trait to your project definition to enable this functionality.
 
-To use a compiler plugin, you either put it in your unmanaged library directory (`lib`) or add it as managed dependency in the `plugin` configuration.
-
-`compilerPlugin` is a convenience method for specifying `plugin->default(compile)` as the configuration for a dependency:
+To use a compiler plugin, you either put it in your unmanaged library directory (`lib`) or add it as managed dependency in the `plugin` configuration.  `compilerPlugin` is a convenience method for specifying `plugin` as the configuration for a dependency:
 {{{
    val sxr = compilerPlugin("org.scala-tools.sxr" %% "sxr" % "0.2.3")
 }}}
@@ -19,7 +17,7 @@ Alternatively, you can use inline Ivy XML:
 
 A managed dependency is resolved and retrieved like usual by running `update`.
 
-The `compile` and `test-compile` actions will use any compiler plugins found in the `lib` directory or in the `plugin` configuration.  You are responsible for configuring the plugins as necessary.  For example:
+The `compile` and `test-compile` actions will use any compiler plugins found in the `lib` directory or in the `plugin` configuration.  You are responsible for configuring the plugins as necessary.  For example, Scala X-Ray requires the extra option:
 
 {{{
   override def compileOptions =
