@@ -20,7 +20,7 @@
    * Complete control over repositories is now possible by overriding `ivyRepositories`.
   * The [IvyInterface interface to Ivy] can be used directly.
  * Test framework support is now done through a uniform test interface.  Implications:
-  * New versions of specs, ScalaCheck, and ScalaTest are supported as soon as they are released.
+  * New versions of specs, !ScalaCheck, and !ScalaTest are supported as soon as they are released.
   * Support is better, since the test framework authors provide the implementation.
   * Arguments can be passed to the test framework.  For example: {{{ > test-only your.test -- -a -b -c }}}
  * Can provide custom task start and end delimiters by defining the system properties `sbt.start.delimiter` and `sbt.end.delimiter`.
