@@ -1,0 +1,98 @@
+= sbt Processors =
+
+A processor is complementary to a plugin.  The table below compares the two.
+
+|| || Processors || Plugins ||
+|| contribute || new commands || new Project types and actions ||
+|| operate at level of || command handling || task execution ||
+|| associated with || user || project ||
+|| declared at/in || command line || plugin/project definitions ||
+|| distribution || binary || source ||
+
+== Processor Setup/Management Commands ==
+
+To use a processor, you first tell sbt about it.  There are two pieces of required information: the processor's ID and the repository it is published to.  By default, sbt knows about the local Ivy repository, Scala Tools Releases, and Maven Central.  These do not need to be declared.
+
+Commands that manage processors are prefixed with `'*'`.
+
+To add a repository:
+{{{
+ *<id> at <url>
+}}}
+
+For example, at the interactive prompt, this would look like:
+{{{
+> *db at http://databinder.net/repo/
+}}}
+
+To define a processor, select an alphanumeric name for it and declare it like:
+{{{
+ *<name> is <group> <module> <version>
+}}}
+
+For example:
+{{{
+> *generate is org.scala-tools.sbt generate 1.0
+or
+> *gen is org.scala-tools.sbt generate 1.0
+}}}
+
+sbt will try to retrieve the defined processor at this point.  If it is unsuccessful, check that the ID is correct and you have added any necessary repositories for the processor and its dependencies.  sbt uses Ivy for this, so a downloaded processor is cached in Ivy's cache.
+
+You can see currently defined processors and repositories with the `show` command:
+{{{
+ *show
+}}}
+
+To undefine a processor or repository, use:
+{{{
+ *remove <label>
+}}}
+
+For example:
+{{{
+> *remove generate
+}}}
+
+The `*help` command lists the above commands with a short description.
+
+The processor definitions managed with these commands are associated with a user and not a project, unlike plugins.  Although you manage processors while running sbt on a project, the actual configuration is stored globally for the current user.  If you add a processor while working on one project on a machine, you do not need to define it again to use it in another project.  If you use the same project on a different machine, you need to define the processor again.
+
+== Processor Usage ==
+
+Run a processor like a normal sbt command or action.  You call a processor using whatever name you gave it and pass the arguments it expects.  In the example above, we bound a processor to `generate`.  It would be run like:
+
+{{{
+ generate arg1 arg2
+}}}
+
+== Creating a Processor ==
+
+A processor is a public, concrete implementation of the `sbt.processor.Processor` trait with a no-argument constructor.  `Processor` is:
+{{{
+trait Processor {
+   def apply(project: Project, args: String): ProcessorResult
+}
+class ProcessorResult(insertCommands: String*)
+}}}
+
+Basically, a processor accepts a `Project` and the arguments passed to it on the command line.  It performs some action and optionally returns new commands to insert into the execution.
+
+As an example, consider a processor that accepts an integer argument and calls `test` that many times.  It might look like:
+{{{
+class TestN extends Processor {
+   def apply(project: Project, args: String): ProcessorResult =
+      new ProcessorResult( List.make(args.toInt, "test") : _* )
+}
+}}}
+
+For the project definition, extend `ProcessorProject`.  This will put `sbt` classes on the classpath and fix the Scala version to the version currently running `sbt`.  Then, publish the project using `publish-local` or `publish`.  You can then use the processor from another project as described in the sections above.
+
+=== Notes ===
+
+ * A processor project can define dependencies like a normal project.
+ * A processor is built against the version of `sbt` building the processor project`.
+ * The project passed to the processor is the user's current project, not necessarily the root project.  Use `project.rootProject` to get the root.
+ * The example processor is very naive.  It assumes a 'test' action exists.  A real processor would want to check whether the provided Project has such an action.
+ * One intended use of processors is for project or file generation.  If the project definition is modified, be sure to insert a 'reload' command.
+ * The arguments are passed unparsed for more flexibility.  If handling multiple arguments, you will need to parse the arguments string.
