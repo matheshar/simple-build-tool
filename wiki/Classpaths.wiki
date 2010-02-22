@@ -1,6 +1,6 @@
 = Classpaths =
 
-This page discusses how sbt builds up classpaths for different actions, like `compile`, `run`, and `test` and how to override or augment these classpaths.  Classpaths do not include the Scala library, since Scala classes are handled by `sbt`.  All `*Classpath` methods provide `PathFinder`s and so they are evaluated on demand.
+This page discusses how sbt builds up classpaths for different actions, like `compile`, `run`, and `test` and how to override or augment these classpaths.  Classpaths do not include the Scala library, since Scala classes are handled by `sbt`.  All `*Classpath` methods return `PathFinder`s, which are evaluated on demand.
 
 == Top Level Methods ==
 
@@ -18,7 +18,7 @@ For web applications, there are a few additional classpaths:
  * jettyClasspath provides Jetty and its dependencies to the `jetty-run` and `jetty` tasks
  * jettyRunClasspath determines the classpath for the web application run by `jetty-run` and `jetty`
 
-These methods provide a classpath that includes the appropriate classpath from all dependent projects and both managed and unmanaged dependencies.  They use lower level methods to construct these classpaths, described in the next section.
+These methods provide a classpath that includes the appropriate classpath from all dependent projects and both managed and unmanaged dependencies.  They use lower level methods to construct these classpaths.  These are described in the next section.
 
 == Lower-Level Methods ==
 
@@ -29,7 +29,7 @@ The top level methods use several lower-level methods to construct classpaths.  
 
 This provides the classpath for the given [Configurations configuration].  By default, this method is itself implemented by combining the `projectClasspath`s from the project and all dependent projects.
 
-`projectClasspath` has the same signature as `fullClasspath`, but represents only the classpath for a single project and doesn't include dependencies.  `projectClasspath` by default combines the dependencies provided by `managedClasspath` and `unmanagedClasspath`:
+`projectClasspath` has the same signature as `fullClasspath`, but represents only the classpath for a single project.  `projectClasspath` by default combines the dependencies provided by `managedClasspath` and `unmanagedClasspath`:
 {{{
     def projectClasspath(config: Configuration): PathFinder =
       unmanagedClasspath +++ managedClasspath(config)
