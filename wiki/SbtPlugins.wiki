@@ -34,7 +34,7 @@ This dependency was independent of `sbt`.  You can also create and use plugins t
 
  * Download the [http://simple-build-tool.googlecode.com/svn/artifacts/latest/examples/hello-lift-1.0-setup.jar jar]
  * Run `java -jar hello-lift-1.0-setup.jar` .  The Hello Lift project and an embedded `sbt` launcher will be extracted.  The project will be loaded and predefined actions run.  In this case, the project will be set up, dependencies will be downloaded, and the project will be compiled and Jetty started.  Browse to [http://localhost:8080].
- * You have a ready example Lift project.  For example, you can enter the extracted project directory and start sbt with `java -jar sbt-launcher-0.7.0.jar`.
+ * You have a ready example Lift project.  For example, you can enter the extracted project directory and start sbt with `java -jar sbt-launcher-0.7.1.jar`.
  * The project uses [http://github.com/harrah/browse/ Scala X-Ray] to generate browsable sources.  You can view these in the `project/target/classes.sxr` directory.
  * You can run `installer` to regenerate the self-extracting jar from the project.  Note: there is currently the issue of including the sbt-launcher in the project zip, making the jar substantially larger than necessary.
  * See the `project/plugins/Plugins.scala` directory for how the plugin is defined.  The actual project for the plugin is at [http://code.google.com/p/simple-build-tool/source/browse/#svn/trunk/install].

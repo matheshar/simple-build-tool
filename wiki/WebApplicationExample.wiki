@@ -28,7 +28,7 @@ Name: Hello Lift
 Organization: net.liftweb.hello
 Version [1.0]: 1.0
 Scala version [2.7.7]: 2.7.3
-sbt version [0.7.0]:
+sbt version [0.7.1]:
 ...
 [success] Successfully initialized directory structure.
 [info] Building project Hello Lift 1.0 using sbt.DefaultProject

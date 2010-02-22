@@ -16,6 +16,7 @@
   * [Properties]
   * [SubProjects Sub Projects]
   * [Paths]
+  * [Classpaths]
   * [CompilerPlugins Using Compiler Plugins]
   * [ScalaJars Scala Jars and Dependency Management]
   * [TestFrameworkExtensions Extending the Test Framework]

@@ -1,4 +1,4 @@
-NOTE!! This page has yet to be updated for the 0.7.0 release.
+NOTE!! This page has yet to be updated for the 0.7 release.
 
 = Example Test =
 
