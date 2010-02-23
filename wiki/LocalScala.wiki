@@ -16,7 +16,9 @@ The label referred to in the comments is how you refer to this version in your `
 
 Override the `localScala` method to declare these local instances to `sbt`:
 {{{
-override def localScala: Seq[ScalaInstance] = defineScala("2.8.0-local", new File(scalaRoot + "/build/pack/"))
+override def localScala =
+  defineScala("2.8.0-local", new File(scalaRoot + "/build/pack/")) ::
+  Nil
 }}}
 
 Include it in `build.scala.versions`:
