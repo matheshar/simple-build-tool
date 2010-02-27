@@ -27,7 +27,7 @@ The top level methods use several lower-level methods to construct classpaths.  
  fullClasspath(config: Configuration): PathFinder
 }}}
 
-This provides the classpath for the given [Configurations configuration].  By default, this method is itself implemented by combining the `projectClasspath`s from the project and all dependent projects.
+This provides the classpath for the given [ManagedConfigurations configuration].  By default, this method is itself implemented by combining the `projectClasspath`s from the project and all dependent projects.
 
 `projectClasspath` has the same signature as `fullClasspath`, but represents only the classpath for a single project.  `projectClasspath` by default combines the dependencies provided by `managedClasspath` and `unmanagedClasspath`:
 {{{
