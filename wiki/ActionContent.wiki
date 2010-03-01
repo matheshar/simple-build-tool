@@ -2,7 +2,7 @@
 
 = Introduction =
 
-This page provides assistance writing the code that defines the work of an action.
+This page provides assistance writing the code that defines the work of an action.  To use external libraries or reuse code between projects, see [SbtPlugins].  You can also directly put libraries in `project/build/lib` and they can be used from your project definition.
 
 = Error Handling =
 
