@@ -22,7 +22,6 @@ $ sbt update proguard "project Compile" publish-local "project Test" publish-loc
 $ cd ..
 $ git clone git://github.com/harrah/sbt.git
 $ cd sbt
-$ git checkout --track -b using-xsbt origin/using-xsbt
 $ sbt update publish-local
 }}}
 The launcher jar created by the `proguard` action is located at `xsbt/target/sbt-launch-0.7.x.jar`.
