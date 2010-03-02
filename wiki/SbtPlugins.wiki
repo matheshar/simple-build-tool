@@ -83,3 +83,11 @@ class TestProject(info: ProjectInfo) extends DefaultProject(info) with hw.HelloW
 }}}
 
 Try it out by running the `hello` action at the prompt.
+
+== Details ==
+
+sbt plugins are a way to reuse code between project definitions.  They can consist of any Scala code you want.  Specifically, they are not restricted to providing a single trait extending `Project`, as in the example.
+
+You can provide a trait that extends `Project`, `DefaultProject`, or `DefaultWebProject` that the user then mixes in to use.  You can provide multiple project types or you can just provide code that can be used to implement tasks.
+
+See the Existing Plugins section at the top of the page for examples of plugins.
