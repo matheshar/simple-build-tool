@@ -24,7 +24,9 @@ You can make an action run when one or more source files change by prefixing the
 
 See TriggeredExecution for details.
 
-You can run an action for multiple versions of Scala by prefixing the action with `+`.  See [CrossBuild] for details.  You can temporarily switch to another version of Scala using `++<version>`.  This version does not have to be listed in your `build.scala.versions` property, but it does have to be in a repository or be a local Scala version you have defined.  You can also include the initial command to run.  For example:
+Change the logging level and configure how stack traces are displayed using the `debug`, `info`, `warn`, `error`, and `trace` commands described in the Build Commands section below.
+
+You can run an action for multiple versions of Scala by prefixing the action with `+`.  See [CrossBuild] for details.  You can temporarily switch to another version of Scala using `++<version>`.  This version does not have to be listed in your `build.scala.versions` property, but it does have to be in a repository or be a [LocalScala local Scala version] you have defined.  You can also include the initial command to run.  For example:
 
 {{{
 > ++2.7.7 console-quick
@@ -166,5 +168,5 @@ scala>
   Executes the commands in the given file.  Each command should be on its own line.  Empty lines and lines beginning with '#' are ignored
  * `+ <command>`
   Executes the project specified action or method for all versions of Scala defined in the `build.scala.versions` property.
-  * `++<version> <command>`
-  Temporarily changes the version of Scala building the project and executes the provided command.  <command> is optional.  The specified version of Scala is used until sbt exits or `++` is run again.  `<version>` does not need to be listed in the `build.scala.versions` property, but it must be defined in `localScala` or be available in a repository.
+ * `++<version> <command>`
+  Temporarily changes the version of Scala building the project and executes the provided command.  `<command>` is optional.  The specified version of Scala is used until sbt exits or `++` is run again.  `<version>` does not need to be listed in the `build.scala.versions` property, but it must be defined in `localScala` or be available in a repository.
