@@ -96,3 +96,24 @@ For the project definition, extend `ProcessorProject`.  This will put `sbt` clas
  * The example processor is very naive.  It assumes a 'test' action exists.  A real processor would want to check whether the provided Project has such an action.
  * One intended use of processors is for project or file generation.  If the project definition is modified, be sure to insert a 'reload' command.
  * The arguments are passed unparsed for more flexibility.  If handling multiple arguments, you will need to parse the arguments string.
+
+== Minimal Example ==
+
+Project definition:
+{{{
+ import sbt._
+ class MyProcessorProject(info: ProjectInfo) extends ProcessorProject(info)
+}}}
+
+Processor source:
+{{{
+ import sbt._
+ import processor.{Processor, ProcessorResult}
+
+ class TestProcessor extends Processor {
+   def apply(project: Project, args: String): ProcessorResult = {
+      project.log.info("Processor test.  args: '" + args + "'")
+      new ProcessorResult()
+   }
+ }
+}}}
