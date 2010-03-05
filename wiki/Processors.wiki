@@ -68,7 +68,7 @@ Run a processor like a normal sbt command or action.  You call a processor using
 
 == Creating a Processor ==
 
-A processor is a public, concrete implementation of the `sbt.processor.Processor` trait with a no-argument constructor.  `Processor` is:
+A processor is a public, concrete implementation of the `sbt.processor.Processor` trait with a no-argument constructor.  The `Processor` interface is:
 {{{
 trait Processor {
    def apply(project: Project, args: String): ProcessorResult
@@ -84,6 +84,12 @@ class TestN extends Processor {
    def apply(project: Project, args: String): ProcessorResult =
       new ProcessorResult( List.make(args.toInt, "test") : _* )
 }
+}}}
+
+In addition, a Processor includes a descriptor file called `sbt.processor` that contains the name of the class implementing Processor.  For example, if TestN is in the `example` package, `sbt.processor` would contain the single line:
+
+{{{
+example.TestN
 }}}
 
 For the project definition, extend `ProcessorProject`.  This will put `sbt` classes on the classpath and fix the Scala version to the version currently running `sbt`.  Then, publish the project using `publish-local` or `publish`.  You can then use the processor from another project as described in the sections above.
@@ -107,6 +113,8 @@ Project definition:
 
 Processor source:
 {{{
+ package example
+
  import sbt._
  import processor.{Processor, ProcessorResult}
 
@@ -116,4 +124,9 @@ Processor source:
       new ProcessorResult()
    }
  }
+}}}
+
+Processor descriptor resource `sbt.processor` (goes in `src/main/resources/`):
+{{{
+ example.TestProcessor
 }}}
