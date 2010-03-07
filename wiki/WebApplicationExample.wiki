@@ -99,12 +99,13 @@ Lift 2.0 snapshots seem to be the recommended version for any new Lift developme
 To create a 2.0 snapshot, run the following:
 
 {{{
-$ mvn archetype:create -U \
- -DarchetypeGroupId=net.liftweb \
- -DarchetypeArtifactId=lift-archetype-basic \
- -DarchetypeVersion=2.0-SNAPSHOT \
- -DremoteRepositories=http://scala-tools.org/repo-snapshots \
- -DgroupId=net.liftweb.hello -DartifactId=hello-lift
+$ mvn archetype:generate -U \
+   -DarchetypeGroupId=net.liftweb \
+   -DarchetypeArtifactId=lift-archetype-basic \
+   -DarchetypeVersion=2.0-SNAPSHOT \
+   -DarchetypeRepository=http://scala-tools.org/repo-snapshots \
+   -DremoteRepositories=http://scala-tools.org/repo-snapshots \
+   -DgroupId=net.liftweb.hello -DartifactId=hello-lift
 }}}
 
 === Define the project ===
