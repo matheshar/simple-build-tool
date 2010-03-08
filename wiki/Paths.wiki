@@ -107,6 +107,12 @@ val jars = ("lib" +++ "target") * "*.jar"
 
 selects `ivy.jar` and `sbt.jar`.
 
+There is a `filter` method that is non-strict:
+{{{
+val srcDirs = ("src" ** "*") filter { _.isDirectory }
+val archivesOnly = somePathFinder filter ClasspathUtilities.isArchive
+}}}
+
 `Path.emptyPathFinder` is a `PathFinder` that returns the empty set when `get` is called.  To construct a `PathFinder` from `Iterable[Path]`, use `Path.lazyPathFinder`.  This method is call-by-name, so its argument will be re-evaluated on each call to `get`.
 
 === Base Paths ===
