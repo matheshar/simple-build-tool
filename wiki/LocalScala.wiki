@@ -31,5 +31,11 @@ build.scala.versions=2.8.0.Beta1 2.8.0-local 2.7.7
 
 or use it temporarily with `++<version>`:
 {{{
-> sbt "++2.8.0-local compile" "++2.7.7 compile"
+$ sbt "++2.8.0-local compile" "++2.7.7 compile"
 }}}
+
+sbt reuses the class loader for the local Scala version.  If you recompile your local Scala version and you are using sbt interactively, run
+{{{
+> reload
+}}}
+to use the new compilation results.
