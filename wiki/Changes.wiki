@@ -1,3 +1,15 @@
+=== 0.7.1 to 0.7.2 ===
+ * `Process.apply` no longer uses CommandParser.  This should fix issues with the android-plugin.
+ * Added `sbt.impl.Arguments` for parsing a command like a normal action (for `Processor`s)
+ * Arguments are passed to `javac` using an argument file (`@`)
+ * Added `webappUnmanaged: PathFinder` method to `DefaultWebProject`.  Paths selected by this `PathFinder` will not be pruned by `prepare-webapp` and will not be packaged by `package`.  For example, to exclude the GAE datastore directory:
+{{{
+  override def webappUnmanaged =
+    (temporaryWarPath / "WEB-INF" / "appengine-generated" ***)
+}}}
+ * Added some String generation methods to `PathFinder`: `toString` for debugging and `absString` and `relativeString` for joining the absolute (relative) paths by the platform separator.
+ * Made tab completors lazier to reduce startup time.
+
 === 0.7.0 to 0.7.1 ===
  * Fixed Jetty 7 support to work with JRebel
  * Fixed make-pom to generate valid dependencies section
