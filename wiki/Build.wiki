@@ -25,3 +25,7 @@ $ cd sbt
 $ sbt update publish-local
 }}}
 The launcher jar created by the `proguard` action is located at `xsbt/target/sbt-launch-0.7.x.jar`.
+
+== Usage ==
+
+Set the `sbt.version` in the project you want to use this in to be `0.7.2-SNAPSHOT`.  If you rebuild sbt, you'll need to remove `project/boot` for that project because `sbt` does not recheck a version once it is retrieved to a project.
