@@ -1,5 +1,5 @@
 === 0.7.1 to 0.7.2 ===
- * `Process.apply` no longer uses CommandParser.  This should fix issues with the android-plugin.
+ * `Process.apply` no longer uses `CommandParser`.  This should fix issues with the android-plugin.
  * Added `sbt.impl.Arguments` for parsing a command like a normal action (for `Processor`s)
  * Arguments are passed to `javac` using an argument file (`@`)
  * Added `webappUnmanaged: PathFinder` method to `DefaultWebProject`.  Paths selected by this `PathFinder` will not be pruned by `prepare-webapp` and will not be packaged by `package`.  For example, to exclude the GAE datastore directory:
@@ -9,6 +9,9 @@
 }}}
  * Added some String generation methods to `PathFinder`: `toString` for debugging and `absString` and `relativeString` for joining the absolute (relative) paths by the platform separator.
  * Made tab completors lazier to reduce startup time.
+ * Fixed `console-project` for custom subprojects
+ * `Processor` split into `Processor`/`BasicProcessor`.  `Processor` provides high level of integration with command processing.  `BasicProcessor` operates on a `Project` but does not affect command processing.
+ * Can now use `Launcher` externally, including launching `sbt` outside of the official jar.  This means a `Project` can now be created from tests.
 
 === 0.7.0 to 0.7.1 ===
  * Fixed Jetty 7 support to work with JRebel
