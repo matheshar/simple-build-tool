@@ -4,7 +4,7 @@
 
 `sbt` now uses git for version control.  You can find the source on github.  As of 0.7.2, `sbt` is at [http://github.com/harrah/xsbt].
 
-Test support was separated out to work across a [http://github.com/harrah/test-interface uniform test interface].  Because of this, `sbt` no longer needs to be compiled against test frameworks.  New test frameworks that implement the uniform test interface can be used by `sbt` without needing to recompile `sbt`, as was the case previously.  In order to provide compatibility with `sbt` 0.5.6, there is [http://github.com/harrah/test-interface an implementation] of the test interface for Scala test frameworks released before the interface existed.
+Test support was separated out to work across a [http://github.com/harrah/test-interface uniform test interface].  Because of this, `sbt` no longer needs to be compiled against test frameworks.  New test frameworks that implement the uniform test interface can be used by `sbt` without needing to recompile `sbt`, as was the case previously.  In order to provide compatibility with `sbt` 0.5.6, there is [http://github.com/harrah/test-compat an implementation] of the test interface for Scala test frameworks released before the interface existed.
 
 == Instructions ==
 
