@@ -1,0 +1,426 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head><title>All classes and objects in sbt.processor</title>
+        <meta http-equiv="content-type" content="text/html; charset=UTF8"></meta><meta content="scaladoc (version 2.7.7.final)" name="generator"></meta><link href="../style.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../script.js"></script>
+        </head>
+        <body onload="init()"><div class="page-title"><div>Simple Build Tool 0.7.2 API</div></div><p><div>This document is the API specification for Simple Build Tool 0.7.2 API</div></p><table summary="" cellpadding="3" class="member">
+        <tr><td class="title" colspan="2">Class Summary</td></tr>
+        <tr>
+      <td class="modifiers" valign="top"> 
+        <code>abstract class</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/processor/BasicProcessor.html" target="_self">BasicProcessor</a></em>
+        <code> extends </code><a href="../sbt/processor/Processor.html" target="_self">Processor</a><code> with </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        <div>An interface for code that operates on an sbt `Project` but doesn't need to modify command processing.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>sealed trait</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/processor/Command.html" target="_self">Command</a></em>
+        <code> extends </code><a href="" target="contentFrame" class="scala/NotNull">scala.NotNull</a>
+        
+        <div>Data type representing a runnable command related to processor management.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> class</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/processor/CommandParser.html" target="_self">CommandParser</a></em>
+        (<em>errorMessage</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <em>defParser</em> : <a href="../sbt/processor/DefinitionParsing.html" target="_self">DefinitionParsing</a>)<code> extends </code><a href="../sbt/processor/CommandParsing.html" target="_self">CommandParsing</a><code> with </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        <div>Parses commands.  `errorMessage` is the String used when a command is invalid.
+ There is no detailed error reporting.
+ Input Strings are assumed to be trimmed.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> trait</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/processor/CommandParsing.html" target="_self">CommandParsing</a></em>
+        <code> extends </code><a href="" target="contentFrame" class="scala/NotNull">scala.NotNull</a>
+        
+        <div>Parses a command String</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> class</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/processor/CommandRunner.html" target="_self">CommandRunner</a></em>
+        (<em>parser</em> : <a href="../sbt/processor/CommandParsing.html" target="_self">CommandParsing</a>, <em>execute</em> : <a href="../sbt/processor/Executing.html" target="_self">Executing</a>)<code> extends </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        <div>Parses and executes a command (connects a parser to a runner).</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>final class</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/processor/DefineProcessor.html" target="_self">DefineProcessor</a></em>
+        (<code>val </code><em>pdef</em> : <a href="../sbt/processor/ProcessorDefinition.html" target="_self">ProcessorDefinition</a>)<code> extends </code><a href="../sbt/processor/Command.html" target="_self">Command</a><code> with </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        <div>A command to add the given processor definition.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>final class</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/processor/DefineRepository.html" target="_self">DefineRepository</a></em>
+        (<code>val </code><em>repo</em> : <a href="../sbt/processor/RepositoryDefinition.html" target="_self">RepositoryDefinition</a>)<code> extends </code><a href="../sbt/processor/Command.html" target="_self">Command</a><code> with </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        <div>A command to register the given repository to be used for obtaining `Processor`s.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>sealed trait</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/processor/Definition.html" target="_self">Definition</a></em>
+        <code> extends </code><a href="" target="contentFrame" class="scala/NotNull">scala.NotNull</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> class</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/processor/DefinitionParser.html" target="_self">DefinitionParser</a></em>
+        <code> extends </code><a href="../sbt/processor/DefinitionParsing.html" target="_self">DefinitionParsing</a><code> with </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        <div>Parses the String representation of definitions.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> trait</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/processor/DefinitionParsing.html" target="_self">DefinitionParsing</a></em>
+        <code> extends </code><a href="" target="contentFrame" class="scala/NotNull">scala.NotNull</a>
+        
+        <div>Parses a definition `String`.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> class</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/processor/Execute.html" target="_self">Execute</a></em>
+        (<em>manager</em> : <a href="../sbt/processor/Manager.html" target="_self">Manager</a>, <em>info</em> : <a href="../sbt/processor/Info.html" target="_self">Info</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>)<code> extends </code><a href="../sbt/processor/Executing.html" target="_self">Executing</a><code> with </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        <div>Executes a parsed command.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> trait</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/processor/Executing.html" target="_self">Executing</a></em>
+        <code> extends </code><a href="" target="contentFrame" class="scala/NotNull">scala.NotNull</a>
+        
+        <div>Executes a parsed command.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>final class</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/processor/Exit.html" target="_self">Exit</a></em>
+        (<code>val </code><em>code</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/Int.html" target="_self">Int</a>)<code> extends </code><a href="../sbt/processor/ProcessorResult.html" target="_self">ProcessorResult</a><code> with </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> class</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/processor/Handler.html" target="_self">Handler</a></em>
+        (<em>baseProject</em> : <a href="../sbt/Project.html" target="_self">Project</a>)<code> extends </code><a href="" target="contentFrame" class="scala/NotNull">scala.NotNull</a><code> with </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> trait</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/processor/Info.html" target="_self">Info</a></em>
+        <code> extends </code><a href="" target="contentFrame" class="scala/NotNull">scala.NotNull</a>
+        
+        <div>Prints information about processors.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> class</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/processor/InfoImpl.html" target="_self">InfoImpl</a></em>
+        (<em>manager</em> : <a href="../sbt/processor/Manager.html" target="_self">Manager</a>, <em>prefix</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <em>parser</em> : <a href="../sbt/processor/CommandParser.html" target="_self">CommandParser</a>, <em>print</em> : (<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>) =&gt; <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>)<code> extends </code><a href="../sbt/processor/Info.html" target="_self">Info</a><code> with </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> class</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/processor/Loader.html" target="_self">Loader</a></em>
+        <code> extends </code><a href="" target="contentFrame" class="scala/NotNull">scala.NotNull</a><code> with </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> trait</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/processor/Manager.html" target="_self">Manager</a></em>
+        <code> extends </code><a href="" target="contentFrame" class="scala/NotNull">scala.NotNull</a>
+        
+        <div>Manages the processor and repository definitions.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> class</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/processor/ManagerFiles.html" target="_self">ManagerFiles</a></em>
+        (<code>val </code><em>retrieveBaseDirectory</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <code>val </code><em>retrieveLockFile</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <code>val </code><em>definitionsFile</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>)<code> extends </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        <div>Files needed by ManagerImpl.
+ `retrieveBaseDirectory` is the directory that processors are retrieved under.
+ `retrieveLockFile` is used to synchronize access to that directory.
+ `definitionsFile` is the file to save repository and processor definitions to.  It is usually per-user instead of per-project.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> class</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/processor/ManagerImpl.html" target="_self">ManagerImpl</a></em>
+        (<em>files</em> : <a href="../sbt/processor/ManagerFiles.html" target="_self">ManagerFiles</a>, <em>scalaVersion</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <em>persist</em> : <a href="../sbt/processor/Persist.html" target="_self">Persist</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>)<code> extends </code><a href="../sbt/processor/Manager.html" target="_self">Manager</a><code> with </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> class</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/processor/ParsedProcessor.html" target="_self">ParsedProcessor</a></em>
+        (<code>val </code><em>label</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <code>val </code><em>processor</em> : <a href="../sbt/processor/Processor.html" target="_self">Processor</a>, <code>val </code><em>arguments</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>)<code> extends </code><a href="" target="contentFrame" class="scala/NotNull">scala.NotNull</a><code> with </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> class</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/processor/Persist.html" target="_self">Persist</a></em>
+        (<code>val </code><em>lock</em> : <a href="../xsbti/GlobalLock.html" target="_self">GlobalLock</a>, <em>lockFile</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>defParser</em> : <a href="../sbt/processor/DefinitionParser.html" target="_self">DefinitionParser</a>)<code> extends </code><a href="../sbt/processor/Persisting.html" target="_self">Persisting</a><code> with </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> trait</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/processor/Persisting.html" target="_self">Persisting</a></em>
+        <code> extends </code><a href="" target="contentFrame" class="scala/NotNull">scala.NotNull</a>
+        
+        <div>Handles serializing `Definition`s.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> trait</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/processor/Processor.html" target="_self">Processor</a></em>
+        <code> extends </code><a href="" target="contentFrame" class="scala/NotNull">scala.NotNull</a>
+        
+        <div>An interface for code that operates on an sbt `Project`.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>final class</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/processor/ProcessorDefinition.html" target="_self">ProcessorDefinition</a></em>
+        (<code>val </code><em>label</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <code>val </code><em>group</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <code>val </code><em>module</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <code>val </code><em>rev</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>)<code> extends </code><a href="../sbt/processor/Definition.html" target="_self">Definition</a><code> with </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>final class</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/processor/ProcessorException.html" target="_self">ProcessorException</a></em>
+        (<code>val </code><em>message</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <em>cause</em> : <a href="" target="contentFrame" class="java/lang/Throwable">java.lang.Throwable</a>)<code> extends </code><a href="" target="contentFrame" class="java/lang/RuntimeException">java.lang.RuntimeException</a><code> with </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        <div>An exception used when a `Processor` wants to terminate with an error message, but the stack trace is not important.
+ If a `cause` is provided, its stack trace is assumed to be important.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>sealed trait</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/processor/ProcessorResult.html" target="_self">ProcessorResult</a></em>
+        <code> extends </code><a href="" target="contentFrame" class="scala/NotNull">scala.NotNull</a>
+        
+        <div>The result of a Processor run.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>final class</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/processor/Reload.html" target="_self">Reload</a></em>
+        (<em>insertArgs</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>*)<code> extends </code><a href="../sbt/processor/ProcessorResult.html" target="_self">ProcessorResult</a><code> with </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>final class</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/processor/RemoveDefinition.html" target="_self">RemoveDefinition</a></em>
+        (<code>val </code><em>label</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>)<code> extends </code><a href="../sbt/processor/Command.html" target="_self">Command</a><code> with </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        <div>A command to remove the processor or repository definition currently associated with the given `label`.
+ If the definition is associated with other labels, those are not affected.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>final class</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/processor/RepositoryDefinition.html" target="_self">RepositoryDefinition</a></em>
+        (<code>val </code><em>label</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <code>val </code><em>url</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>)<code> extends </code><a href="../sbt/processor/Definition.html" target="_self">Definition</a><code> with </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> class</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/processor/Retrieve.html" target="_self">Retrieve</a></em>
+        (<em>retrieveDirectory</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>module</em> : <a href="../sbt/ModuleID.html" target="_self">ModuleID</a>, <em>lock</em> : <a href="../xsbti/GlobalLock.html" target="_self">GlobalLock</a>, <em>lockFile</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>repositories</em> : <a href="" target="contentFrame" class="scala/Seq">scala.Seq</a>[<a href="../sbt/Resolver.html" target="_self">Resolver</a>], <em>log</em> : <a href="../sbt/IvyLogger.html" target="_self">IvyLogger</a>)<code> extends </code><a href="" target="contentFrame" class="scala/NotNull">scala.NotNull</a><code> with </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>final class</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/processor/Success.html" target="_self">Success</a></em>
+        (<code>val </code><em>project</em> : <a href="../sbt/Project.html" target="_self">Project</a>, <code>val </code><em>onFailure</em> : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>], <em>insertArgs</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>*)<code> extends </code><a href="../sbt/processor/ProcessorResult.html" target="_self">ProcessorResult</a><code> with </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>        
+        </table>
+<table summary="" cellpadding="3" class="member">
+        <tr><td class="title" colspan="2">Object Summary</td></tr>
+        <tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/processor/Callable$object.html" target="_self">Callable</a></em>
+        <code> extends </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/processor/CommandRunner$object.html" target="_self">CommandRunner</a></em>
+        <code> extends </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/processor/Help$object.html" target="_self">Help</a></em>
+        <code> extends </code><a href="../sbt/processor/Command.html" target="_self">Command</a><code> with </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        <div>A command to show help for processor management command usage.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/processor/ProcessorException$object.html" target="_self">ProcessorException</a></em>
+        <code> extends </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/processor/Show$object.html" target="_self">Show</a></em>
+        <code> extends </code><a href="../sbt/processor/Command.html" target="_self">Command</a><code> with </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        <div>A command to show available processors and repositories.</div>
+      </td>
+    </tr>        
+        </table></body>
+      </html>
