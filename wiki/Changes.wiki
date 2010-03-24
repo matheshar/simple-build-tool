@@ -1,4 +1,4 @@
-=== 0.7.1 to 0.7.2 (unreleased) ===
+=== 0.7.1 to 0.7.2 ===
  * `Process.apply` no longer uses `CommandParser`.  This should fix issues with the android-plugin.
  * Added `sbt.impl.Arguments` for parsing a command like a normal action (for `Processor`s)
  * Arguments are passed to `javac` using an argument file (`@`)
@@ -13,6 +13,8 @@
  * `Processor` split into `Processor`/`BasicProcessor`.  `Processor` provides high level of integration with command processing.  `BasicProcessor` operates on a `Project` but does not affect command processing.
  * Can now use `Launcher` externally, including launching `sbt` outside of the official jar.  This means a `Project` can now be created from tests.
  * Works with Scala 2.8 trunk
+ * Fixed logging level behavior on subprojects.
+* All sbt code is now at http://github.com/harrah/xsbt in one project.
 
 === 0.7.0 to 0.7.1 ===
  * Fixed Jetty 7 support to work with JRebel

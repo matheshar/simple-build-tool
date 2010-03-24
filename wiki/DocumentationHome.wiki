@@ -46,6 +46,4 @@
   * [Changes]
   * [Build] from source
   * [ChangeDetectionAndTesting Change Detection and Testing]
-<wiki:comment>
   * [http://simple-build-tool.googlecode.com/svn/artifacts/latest/api/index.html API Documentation]
-</wiki:comment>

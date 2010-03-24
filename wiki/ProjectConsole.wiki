@@ -33,9 +33,9 @@ Show additionally configured repositories.  Then, show all repositories, includi
 
 Show the compile, test, and optional classpaths:
 {{{
-> compileClasspath.get.foreach(println)
-> testClasspath.get.foreach(println)
-> optionalClasspath.get.foreach(println)
+> compileClasspath
+> testClasspath
+> optionalClasspath
 }}}
 
 Run the `console` task to drop to another interactive prompt with your project (not the build) on the classpath:
@@ -55,8 +55,8 @@ Run external processes:
 Show the dependencies on external jars computed during compilation:
 {{{
 > compile.run
-> mainDependencies.external.get foreach println
-> mainDependencies.libraries.get foreach println
-> mainDependencies.scalaJars.get foreach println
+> mainDependencies.external
+> mainDependencies.libraries
+> mainDependencies.scalaJars
 }}}
 `external` consists of dependencies outside of the project, like the Java standard library.  `libraries` are managed or unmanaged dependencies other than Scala libraries.  `scalaJars` includes `scala-library.jar` and `scala-compiler.jar` if your project uses them.

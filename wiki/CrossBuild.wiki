@@ -14,16 +14,16 @@ The rest of this page describes how `sbt` handles this for you as part of cross-
 
 To use a library built against multiple versions of Scala, double the first `%` in an inline dependency to be `%%`.  This tells `sbt` that it should append the current version of Scala being used to build the library to the dependency's name.  For example:
 {{{
-  val dispatch = "net.databinder.dispatch" %% "dispatch" % "0.7.0"
+  val dispatch = "net.databinder.dispatch" %% "dispatch" % "0.7.2"
 }}}
 
 A nearly equivalent, manual alternative is:
 {{{
-  val dispatch = "net.databinder.dispatch" % ("dispatch_" + crossScalaVersionString) % "0.7.0"
+  val dispatch = "net.databinder.dispatch" % ("dispatch_" + crossScalaVersionString) % "0.7.2"
 }}}
 Or, for a fixed version of Scala:
 {{{
-  val dispatch = "net.databinder.dispatch" % "dispatch_2.7.7" % "0.7.0"
+  val dispatch = "net.databinder.dispatch" % "dispatch_2.7.7" % "0.7.2"
 }}}
 
 == Cross-Building a Project ==

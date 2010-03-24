@@ -108,6 +108,8 @@ Method `testOptions` specifies the options for the `test` action.
   * `ExcludeTests(tests: Iterable[String])`   Specifies the class names of tests that should not be run.
   * `TestFilter(filter: String => Boolean)`  Specifies a function that returns `true` if the test should be run.
   * `TestListeners(listeners: Iterable[TestReportListener])`  Specifies the reporters used when running tests.  `testOptions` by default includes a reporter that sends output to the project logger.
+  * `TestArgument(args: String*)`  Specifies arguments to pass to the test framework when running tests.
+  * `TestArgument(tf: TestFramework, args: String*)`  Specifies arguments to pass to a specific test framework when running tests.
 
 = Changing Paths =
 

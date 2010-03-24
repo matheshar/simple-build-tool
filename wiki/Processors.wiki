@@ -68,21 +68,28 @@ Run a processor like a normal sbt command or action.  You call a processor using
 
 == Creating a Processor ==
 
-A processor is a public, concrete implementation of the `sbt.processor.Processor` trait with a no-argument constructor.  The `Processor` interface is:
+A processor is a public, concrete implementation of the `sbt.processor.Processor` trait with a no-argument constructor.  Processors that do not need to modify command processing can implement the simpler `sbt.processor.BasicProcessor` class.  These classes are:
 {{{
 trait Processor {
-   def apply(project: Project, args: String): ProcessorResult
+   def apply(label: String, project: Project, onFailure: Option[String], args: String): ProcessorResult
 }
-class ProcessorResult(insertCommands: String*)
+abstract class BasicProcessor extends Processor {
+   def apply(project: Project, args: String): Unit
+}
+
+sealed trait ProcessorResult extends NotNull
+final class Success(project: Project, onFailure: Option[String], insertArgs: String*) extends ProcessorResult
+final class Exit(val code: Int) extends ProcessorResult
+final class Reload(insertArgs: String*) extends ProcessorResult
 }}}
 
-Basically, a processor accepts a `Project` and the arguments passed to it on the command line.  It performs some action and optionally returns new commands to insert into the execution.
+A `BasicProcessor` accepts a `Project` and the arguments passed to it on the command line and performs some action.  A full `Processor` gets access to the label that the user invoked it by and the action that will run if a command fails (usually `shell` or `exit`).  It can also return new commands to insert into the execution, change the current Project, or request that sbt exit or reload the project definition.
 
 As an example, consider a processor that accepts an integer argument and calls `test` that many times.  It might look like:
 {{{
 class TestN extends Processor {
-   def apply(project: Project, args: String): ProcessorResult =
-      new ProcessorResult( List.make(args.toInt, "test") : _* )
+   def apply(label: String, project: Project, onFailure: Option[String], args: String): ProcessorResult =
+      new Success(project, onFailure, List.make(args.toInt, "test") : _* )
 }
 }}}
 
@@ -101,7 +108,7 @@ For the project definition, extend `ProcessorProject`.  This will put `sbt` clas
  * The project passed to the processor is the user's current project, not necessarily the root project.  Use `project.rootProject` to get the root.
  * The example processor is very naive.  It assumes a 'test' action exists.  A real processor would want to check whether the provided Project has such an action.
  * One intended use of processors is for project or file generation.  If the project definition is modified, be sure to insert a 'reload' command.
- * The arguments are passed unparsed for more flexibility.  If handling multiple arguments, you will need to parse the arguments string.
+ * The arguments are passed unparsed for more flexibility.  If handling multiple arguments, you will need to parse the arguments string.  The `sbt.impl.Arguments` class exists for this purpose.
 
 == Minimal Example ==
 
@@ -116,12 +123,11 @@ Processor source:
  package example
 
  import sbt._
- import processor.{Processor, ProcessorResult}
+ import processor.BasicProcessor
 
- class TestProcessor extends Processor {
-   def apply(project: Project, args: String): ProcessorResult = {
+ class TestProcessor extends BasicProcessor {
+   def apply(project: Project, args: String) {
       project.log.info("Processor test.  args: '" + args + "'")
-      new ProcessorResult()
    }
  }
 }}}

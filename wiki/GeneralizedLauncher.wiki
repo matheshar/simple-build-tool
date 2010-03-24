@@ -116,7 +116,7 @@ The default configuration file for sbt looks like:
  project.version: quick=set(1.0), new=prompt(Version)[1.0], fill=prompt(Version)[1.0]
  def.scala.version: quick=set(2.7.7), new=set(2.7.7), fill=set(2.7.7)
  build.scala.versions: quick=set(2.7.7), new=prompt(Scala version)[2.7.7], fill=prompt(Scala version)[2.7.7]
- sbt.version: quick=set(0.7.1), new=prompt(sbt version)[0.7.1], fill=prompt(sbt version)[0.7.1]
+ sbt.version: quick=set(0.7.2), new=prompt(sbt version)[0.7.2], fill=prompt(sbt version)[0.7.2]
  project.scratch: quick=set(true)
  project.initialize: quick=set(true), new=set(true)
 }}}
@@ -154,7 +154,7 @@ The main class for the application is then instantiated.  It must be a public cl
 
 This section shows how to make an application that is launched by this launcher.  First, declare a dependency on the launcher-interface.  Do not declare a dependency on the launcher itself.  The launcher interface consists strictly of Java interfaces in order to avoid binary incompatibility between the version of Scala used to compile the launcher and the version used to compile your application.  The launcher interface class will be provided by the launcher, so it is only a compile-time dependency.  If you are building with sbt, your dependency definition would be:
 {{{
-  val launchInterface = "org.scala-tools.sbt" % "launcher-interface" % "0.7.1" % "provided"
+  val launchInterface = "org.scala-tools.sbt" % "launcher-interface" % "0.7.2" % "provided"
 }}}
 Make the entry point to your class implement 'xsbti.AppMain'.  An example that uses some of the information:
 {{{
@@ -193,7 +193,7 @@ Next, define a configuration file for the launcher.  For the above class, it mig
 [app]
   org: org.scala-tools.sbt
   name: xsbt-test
-  version: 0.7.1
+  version: 0.7.2
   class: xsbt.test.Main
   cross-versioned: true
 [repositories]

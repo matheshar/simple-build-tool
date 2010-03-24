@@ -157,11 +157,9 @@ All paths are relative to the project directory.
 
 == Further Examples ==
 
-See the existing tests for more examples.  They are in the [http://code.google.com/p/simple-build-tool/source/browse/#svn/trunk/src/sbt-test src/sbt-test/] directory.
+See the existing tests for more examples.  They are in the [http://github.com/harrah/xsbt/tree/master/sbt/src/sbt-test src/sbt-test/] directory.
 
 = Running Tests =
 
- # Download the latest release of the `sbt` launcher.
- # Run this latest version on a checked out version of trunk.
- # Run the `scripted` action.  You can change the `filter` in `project/build/SbtProject.scala` to select which tests are run (don't forget to `reload` after changing the project definition).
+ # Run the `scripted` action on the sbt project.  You can run selected tasks by using the `scripted-only` task like the `test-only` task.
  # [http://groups.google.com/group/simple-build-tool Contribute] your tests! 

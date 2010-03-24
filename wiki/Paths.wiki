@@ -115,6 +115,11 @@ val archivesOnly = somePathFinder filter ClasspathUtilities.isArchive
 
 `Path.emptyPathFinder` is a `PathFinder` that returns the empty set when `get` is called.  To construct a `PathFinder` from `Iterable[Path]`, use `Path.lazyPathFinder`.  This method is call-by-name, so its argument will be re-evaluated on each call to `get`.
 
+Convert a `PathFinder` to a String using one of the following methods:
+ * `toString` is for debugging.  It puts the absolute path of each component on its own line.
+ * `relativeString` gets the relative paths of each component and separates them by the platform's path separator.
+ * `absString` gets the absolute paths of each component and separates them by the platform's path separator.
+
 === Base Paths ===
 
 In some situations, it is useful to define the directory a path is relative to.  For example, the `package` action in `sbt` packages compiled classes and all files under `resources`.  The full path name should not be used in the jar, however.  This is where the `##` operator comes in.  The paths for this situation would look like:

@@ -110,7 +110,7 @@ import sbt._
 class SampleProject(info: ProjectInfo) extends DefaultProject(info)
 {
     val snapshots = "Databinder Snapshots" at "http://databinder.net/repo/"
-    val dispatch = "net.databinder" % "dispatch" % "0.3.3"
+    val dispatch = "net.databinder" %% "dispatch" % "0.7.2"
 }
 }}}
 
