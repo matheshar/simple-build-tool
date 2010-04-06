@@ -2,6 +2,7 @@
  * Getting Started
   * [Setup] - Getting `sbt` running on your machine.
   * [RunningSbt Basic Usage] - Actions and Commands
+  * [Troubleshooting]
  * Usage
   * [TriggeredExecution Triggered Actions]
   * [CrossBuild Cross-building]
