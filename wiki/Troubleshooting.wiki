@@ -1,0 +1,9 @@
+<dl>
+<dt>Problem<dd>Corrupted download of sbt or Scala.
+<dt>Solution<dd>Restart sbt after deleting:
+ * `~/.m2`
+ * `~/.ivy2/cache`
+ * `project/boot`
+<dt>Discussion<dd>
+While this should not normally be necessary assuming Ivy is doing its job properly, removing these directories will reset things to a clean state so you can be sure whatever problem isn't being caused by corrupt or stale cached files.  If you find yourself doing this repeatedly, please report the issue.
+<dl>
