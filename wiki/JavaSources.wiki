@@ -3,8 +3,7 @@
 == Description ==
 
 `sbt` has support for compiling Java sources in `sbt` with the following limitations:
- * The compiler used is the `javac` on your path.
- * There is no support for running tests written in Java
+ * The compiler used is the `javac` used to run sbt or the javac on your path.
  * Dependency tracking is limited to the dependencies present in compiled class files.
 
 == Usage ==

@@ -12,3 +12,4 @@ The following people have contributed ideas, documentation, or code to `sbt`:
  * Seth Tisue
  * Francisco Treacy
  * Vesa Vilhonen
+ * Jason Zaugg

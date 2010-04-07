@@ -48,3 +48,4 @@
   * [Build] from source
   * [ChangeDetectionAndTesting Change Detection and Testing]
   * [http://simple-build-tool.googlecode.com/svn/artifacts/latest/api/index.html API Documentation]
+  * [http://simple-build-tool.googlecode.com/svn/artifacts/latest/sxr/index.html Annotated Sources]
