@@ -29,9 +29,9 @@ Another possibility is to directly run the web application out of the the source
   override def scanDirectories = mainCompilePath :: testCompilePath :: Nil
 }}}
 
-== Example ==
+== Jetty 6 Example ==
 
-A minimal project definition might be:
+A minimal project definition for Jetty 6:
 
 {{{
 class WebappBuild(info: ProjectInfo) extends DefaultWebProject(info)
@@ -41,6 +41,18 @@ class WebappBuild(info: ProjectInfo) extends DefaultWebProject(info)
 }}}
 
 For a runnable example, see the [WebApplicationExample] page, which describes running the Hello Lift example with `sbt`.
+
+== Jetty 7 Example ==
+
+A minimal project definition for Jetty 7:
+
+{{{
+class WebappBuild(info: ProjectInfo) extends DefaultWebProject(info)
+{
+  val jetty7server = "org.eclipse.jetty" % "jetty-server" % "7.0.1.v20091125" % "test"
+  val jetty7webapp = "org.eclipse.jetty" % "jetty-webapp" % "7.0.1.v20091125" % "test"
+}
+}}}
 
 == `JRebel` ==
 
