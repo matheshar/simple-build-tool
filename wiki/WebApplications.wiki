@@ -49,12 +49,23 @@ A minimal project definition for Jetty 7:
 {{{
 class WebappBuild(info: ProjectInfo) extends DefaultWebProject(info)
 {
-  val jetty7server = "org.eclipse.jetty" % "jetty-server" % "7.0.1.v20091125" % "test"
-  val jetty7webapp = "org.eclipse.jetty" % "jetty-webapp" % "7.0.1.v20091125" % "test"
+  val jetty7 = "org.eclipse.jetty" % "jetty-webapp" % "7.0.2.RC0" % "test"
 }
 }}}
 
-== `JRebel` ==
+== Manually Managed Example ==
+
+Download Jetty and its dependencies and put them in a directory, say `'jetty-libs/'`.  Add them to `jettyClasspath`.  For example:
+
+{{{
+class WebappBuild(info: ProjectInfo) extends DefaultWebProject(info)
+{
+  override def jettyClasspath = "jetty-libs" * "*.jar"
+}
+}}}
+
+
+== JRebel ==
 
 To use JRebel, override `scanDirectories` as described above so that `sbt` does not reload Jetty on changes to your classes:
 {{{
