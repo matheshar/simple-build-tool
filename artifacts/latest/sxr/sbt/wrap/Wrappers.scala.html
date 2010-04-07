@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+			<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" ></meta>
+        <title>sbt/wrap/Wrappers.scala</title>
+        <script type="text/javascript" src="../../jquery-all.js"></script>
+        <script type="text/javascript" src="../../linked.js"></script>
+        <link rel="stylesheet" type="text/css" href="../../style.css" title="Style"></link>
+    </head>
+    <body>
+        <pre>
+<span class="comment">/* sbt -- Simple Build Tool
+ * Copyright 2009  Mark Harrah
+ */</span>
+<span class="keyword">package</span> sbt.wrap
+
+<span class="comment">// This file exists for compatibility between Scala 2.7.x and 2.8.0</span>
+
+<span class="keyword">import</span> java.util.{Map =&gt; JMap, Set =&gt; JSet}
+
+<span class="keyword">private</span>[sbt] <span class="keyword">object</span> <a title="object sbt.wrap.Wrappers" id="14084">Wrappers</a>
+{
+	<span class="keyword">def</span> <a title="[K, V]((K, V)*)java.util.Map[K,V]" id="18012">javaMap</a>[<a title="&gt;: Nothing &lt;: Any" id="18015">K</a>,<a title="&gt;: Nothing &lt;: Any" id="18016">V</a>](<a title="(K, V)*" id="83993">pairs</a>: <a title="(K, V)*" id="2689">(</a>K,V)*) =
+	{
+		<span class="keyword">val</span> <a title="sbt.wrap.MutableMapWrapper[K,V]" id="83995">basic</a> = <a href="#18017" title="sbt.wrap.MutableMapWrapper[K,V]">basicMap</a>[<a href="#18015" title="K">K</a>,<a href="#18016" title="V">V</a>]
+		<span class="keyword">for</span>( <a href="#84006" title="(((K, V)) =&gt; Unit)Unit" id="16542">(</a><a title="K" id="84011">k</a>,<a title="V" id="84012">v</a>) &lt;- <a href="#83993" title="(K, V)*">pairs</a>)
+			<a href="#83995" title="sbt.wrap.MutableMapWrapper[K,V]">basic</a>(<a href="#84011" title="K">k</a>) = <a href="#84012" title="V">v</a>
+		<a href="#83995" title="sbt.wrap.MutableMapWrapper[K,V]">basic</a>.<a href="#84127" title="=&gt; java.util.Map[K,V]">underlying</a>
+	}
+	<span class="keyword">def</span> <a title="[K, V]sbt.wrap.MutableMapWrapper[K,V]" id="18017">basicMap</a>[<a title="&gt;: Nothing &lt;: Any" id="18020">K</a>,<a title="&gt;: Nothing &lt;: Any" id="18021">V</a>] = <span title="sbt.wrap.MutableMapWrapper[K,V]" class="keyword">new</span> <a href="#14104" title="sbt.wrap.MutableMapWrapper[K,V]">MutableMapWrapper</a>(<a title="()java.util.HashMap[K,V]" id="77929" class="keyword">new</a> java.util.<a title="java.util.HashMap[K,V]" id="5445">HashMap</a>[K,V])
+	<span class="keyword">def</span> <a title="[K, V]sbt.wrap.MutableMapWrapper[K,V]" id="18022">identityMap</a>[<a title="&gt;: Nothing &lt;: Any" id="18025">K</a>,<a title="&gt;: Nothing &lt;: Any" id="18026">V</a>] = <span title="sbt.wrap.MutableMapWrapper[K,V]" class="keyword">new</span> <a href="#14104" title="sbt.wrap.MutableMapWrapper[K,V]">MutableMapWrapper</a>(<span title="java.util.IdentityHashMap[K,V]" class="keyword">new</span> java.util.<a title="java.util.IdentityHashMap[K,V]" id="5589">IdentityHashMap</a>[K,V])
+	<span class="keyword">def</span> <a title="[K, V]sbt.wrap.MutableMapWrapper[K,V]" id="18027">weakMap</a>[<a title="&gt;: Nothing &lt;: Any" id="18030">K</a>,<a title="&gt;: Nothing &lt;: Any" id="18031">V</a>] = <span title="sbt.wrap.MutableMapWrapper[K,V]" class="keyword">new</span> <a href="#14104" title="sbt.wrap.MutableMapWrapper[K,V]">MutableMapWrapper</a>(<a title="()java.util.WeakHashMap[K,V]" id="68667" class="keyword">new</a> java.util.<a title="java.util.WeakHashMap[K,V]" id="5151">WeakHashMap</a>[K,V])
+	<span class="keyword">def</span> <a title="[K, V](java.util.Map[K,V])List[(K, V)]" id="18032">toList</a>[<a title="&gt;: Nothing &lt;: Any" id="18035">K</a>,<a title="&gt;: Nothing &lt;: Any" id="18036">V</a>](<a title="java.util.Map[K,V]" id="18071">s</a>: java.util.<span title="java.util.Map[K,V]">Map</span>[K,V]): <span title="List[(K, V)]">List</span>[(K,V)] = <a href="#18037" title="(java.util.Collection[java.util.Map.Entry[K,V]])List[java.util.Map.Entry[K,V]]">toList</a>(<a href="#18071" title="java.util.Map[K,V]">s</a>.<a title="()java.util.Set[java.util.Map.Entry[K,V]]" id="18095">entrySet</a>).<span title="((java.util.Map.Entry[K,V]) =&gt; (K, V))List[(K, V)]">map</span>(<a title="java.util.Map.Entry[K,V]" id="84035">e</a> =&gt; <a title="(K,V)(K, V)" id="1327">(</a><a href="#84035" title="java.util.Map.Entry[K,V]">e</a>.<a title="()K" id="84021">getKey</a>, <a href="#84035" title="java.util.Map.Entry[K,V]">e</a>.<a title="()V" id="84022">getValue</a>))
+	<span class="keyword">def</span> <a title="[T](java.util.Collection[T])List[T]" id="18037">toList</a>[<a title="&gt;: Nothing &lt;: Any" id="18039">T</a>](<a title="java.util.Collection[T]" id="18069">s</a>: java.util.<a title="java.util.Collection[T]" id="5436">Collection</a>[T]): <span title="List[T]">List</span>[T] = <a href="#18040" title="(java.util.Iterator[T])List[T]">toList</a>(<a href="#18069" title="java.util.Collection[T]">s</a>.<a title="()java.util.Iterator[T]" id="16170">iterator</a>)
+	<span class="keyword">def</span> <a title="[T](java.util.Iterator[T])List[T]" id="18040">toList</a>[<a title="&gt;: Nothing &lt;: Any" id="18042">T</a>](<a title="java.util.Iterator[T]" id="18063">s</a>: java.util.<a title="java.util.Iterator[T]" id="5379">Iterator</a>[T]): <span title="List[T]">List</span>[T] =
+	{
+		<span class="keyword">def</span> <a title="(List[T])List[T]" id="84082">add</a>(<a title="List[T]" id="84083">l</a>: <span title="List[T]">List</span>[T]): <span title="List[T]">List</span>[T] =
+			<span title="List[T]" class="keyword">if</span>(<a href="#18063" title="java.util.Iterator[T]">s</a>.<a title="()Boolean" id="18065">hasNext</a>)
+				<a href="#84082" title="(List[T])List[T]">add</a>(<a href="#18063" title="java.util.Iterator[T]">s</a>.<a title="()T" id="18066">next</a>() <a href="#84084" title="(T)List[T]">::</a> <a href="#84083" title="List[T]">l</a>)
+			<span class="keyword">else</span>
+				<a href="#84083" title="List[T]">l</a>
+		<a href="#84082" title="(List[T])List[T]">add</a>(<span title="object Nil">Nil</span>).<span title="=&gt; List[T]">reverse</span>
+	}
+	<span class="keyword">def</span> <a title="[T](java.util.Enumeration[T])List[T]" id="18043">toList</a>[<a title="&gt;: Nothing &lt;: Any" id="18045">T</a>](<a title="java.util.Enumeration[T]" id="18058">s</a>: java.util.<a title="java.util.Enumeration[T]" id="5259">Enumeration</a>[T]): <span title="List[T]">List</span>[T] =
+	{
+		<span class="keyword">def</span> <a title="(List[T])List[T]" id="84088">add</a>(<a title="List[T]" id="84089">l</a>: <span title="List[T]">List</span>[T]): <span title="List[T]">List</span>[T] =
+			<span title="List[T]" class="keyword">if</span>(<a href="#18058" title="java.util.Enumeration[T]">s</a>.<a title="()Boolean" id="18060">hasMoreElements</a>)
+				<a href="#84088" title="(List[T])List[T]">add</a>(<a href="#18058" title="java.util.Enumeration[T]">s</a>.<a title="()T" id="18061">nextElement</a>() <a href="#84090" title="(T)List[T]">::</a> <a href="#84089" title="List[T]">l</a>)
+			<span class="keyword">else</span>
+				<a href="#84089" title="List[T]">l</a>
+		<a href="#84088" title="(List[T])List[T]">add</a>(<span title="object Nil">Nil</span>).<span title="=&gt; List[T]">reverse</span>
+	}
+	<span class="keyword">def</span> <a title="[K, V](scala.collection.mutable.Map[K,V])scala.collection.Map[K,V]" id="18046">readOnly</a>[<a title="&gt;: Nothing &lt;: Any" id="18049">K</a>,<a title="&gt;: Nothing &lt;: Any" id="18050">V</a>](<a title="scala.collection.mutable.Map[K,V]" id="30222">map</a>: scala.collection.mutable.<a title="scala.collection.mutable.Map[K,V]" id="15518">Map</a>[K,V]): scala.collection.<a title="scala.collection.Map[K,V]" id="15413">Map</a>[K,V] = <a href="#30222" title="scala.collection.mutable.Map[K,V]">map</a><span class="comment">//.readOnly</span>
+	<span class="keyword">def</span> <a title="[T](scala.collection.mutable.Set[T])scala.collection.Set[T]" id="18051">readOnly</a>[<a title="&gt;: Nothing &lt;: Any" id="18053">T</a>](<a title="scala.collection.mutable.Set[T]" id="30220">set</a>: scala.collection.mutable.<a title="scala.collection.mutable.Set[T]" id="15782">Set</a>[T]): scala.collection.<a title="scala.collection.Set[T]" id="15437">Set</a>[T] = <a href="#30220" title="scala.collection.mutable.Set[T]">set</a><span class="comment">//.readOnly</span>
+	<span class="keyword">def</span> <a title="[T](scala.collection.mutable.Buffer[T])Seq[T]" id="18054">readOnly</a>[<a title="&gt;: Nothing &lt;: Any" id="18056">T</a>](<a title="scala.collection.mutable.Buffer[T]" id="30218">buffer</a>: scala.collection.mutable.<a title="scala.collection.mutable.Buffer[T]" id="15599">Buffer</a>[T]): <a title="Seq[T]" id="729">Seq</a>[T] = <a href="#30218" title="scala.collection.mutable.Buffer[T]">buffer</a><span class="comment">//.readOnly</span>
+}
+
+<span class="keyword">private</span>[sbt] <span class="keyword">sealed</span> <span class="keyword">abstract</span> <span class="keyword">class</span> <a title="class Iterable[T] extends java.lang.Object with NotNull with ScalaObject" id="14122">Iterable</a>[<a title="&gt;: Nothing &lt;: Any" id="14138">T</a>] <span class="keyword">extends</span> <span title="NotNull">NotNull</span>
+{
+	<span class="keyword">def</span> <a title="((T) =&gt; Unit)Unit" id="16128">foreach</a>(<a title="(T) =&gt; Unit" id="84095">f</a>: T =&gt; Unit) = <a href="#16129" title="=&gt; List[T]">toList</a>.<a title="((T) =&gt; Unit)Unit" id="17756">foreach</a>(<a href="#84095" title="(T) =&gt; Unit">f</a>)
+	<span class="keyword">def</span> <a title="=&gt; List[T]" id="16129">toList</a>: <span title="List[T]">List</span>[T]
+}
+<span class="keyword">private</span>[sbt] <span class="keyword">sealed</span> <span class="keyword">trait</span> <a title="trait Removable[T] extends java.lang.Object with NotNull with ScalaObject" id="14089">Removable</a>[<a title="&gt;: Nothing &lt;: Any" id="14139">T</a>] <span class="keyword">extends</span> <span title="NotNull">NotNull</span>
+{
+	<span class="keyword">def</span> <a title="(T)Unit" id="16150">-=</a>(<a title="T" id="68864">t</a>: <a href="#14139" title="T">T</a>) : <span title="Unit">Unit</span>
+	<span class="keyword">def</span> <a title="(sbt.wrap.Iterable[T])Unit" id="16151">--=</a>(<a title="sbt.wrap.Iterable[T]" id="84100">all</a>: <a href="#14122" title="sbt.wrap.Iterable[T]">Iterable</a>[T]) { <a href="#84100" title="sbt.wrap.Iterable[T]">all</a>.<a href="#16128" title="((T) =&gt; Unit)Unit">foreach</a>(<a href="#16150" title="(T)Unit">-=</a>) }
+	<span class="keyword">def</span> <a title="(Iterable[T])Unit" id="16152">--=</a>(<a title="Iterable[T]" id="84103">all</a>: scala.<span title="Iterable[T]">Iterable</span>[T]) { <a href="#84103" title="Iterable[T]">all</a>.<span title="((T) =&gt; Unit)Unit">foreach</span>(<a href="#16150" title="(T)Unit">-=</a>) }
+}
+<span class="keyword">private</span>[sbt] <span class="keyword">sealed</span> <span class="keyword">trait</span> <a title="trait Addable[T] extends java.lang.Object with NotNull with ScalaObject" id="14107">Addable</a>[<a title="&gt;: Nothing &lt;: Any" id="14140">T</a>] <span class="keyword">extends</span> <span title="NotNull">NotNull</span>
+{
+	<span class="keyword">def</span> <a title="(T)Unit" id="16146">+=</a>(<a title="T" id="18007">t</a>: <a href="#14140" title="T">T</a>) : <span title="Unit">Unit</span>
+	<span class="keyword">def</span> <a title="(sbt.wrap.Iterable[T])Unit" id="16147">++=</a>(<a title="sbt.wrap.Iterable[T]" id="18148">all</a>: <a href="#14122" title="sbt.wrap.Iterable[T]">Iterable</a>[T]) { <a href="#18148" title="sbt.wrap.Iterable[T]">all</a>.<a href="#16128" title="((T) =&gt; Unit)Unit">foreach</a>(<a href="#16146" title="(T)Unit">+=</a>) }
+	<span class="keyword">def</span> <a title="(Iterable[T])Unit" id="16148">++=</a>(<a title="Iterable[T]" id="18147">all</a>: scala.<span title="Iterable[T]">Iterable</span>[T]) { <a href="#18147" title="Iterable[T]">all</a>.<span title="((T) =&gt; Unit)Unit">foreach</span>(<a href="#16146" title="(T)Unit">+=</a>) }
+}
+<span class="keyword">private</span>[sbt] <span class="keyword">sealed</span> <span class="keyword">abstract</span> <span class="keyword">class</span> <a title="class Set[T] extends sbt.wrap.Iterable[T] with ScalaObject" id="14131">Set</a>[<a title="&gt;: Nothing &lt;: Any" id="14141">T</a>] <span class="keyword">extends</span> <a href="#14122" title="sbt.wrap.Iterable[T]">Iterable</a>[T]
+{
+	<span class="keyword">def</span> <a title="(T)Boolean" id="16131">contains</a>(<a title="T" id="39859">t</a>: <a href="#14141" title="T">T</a>): <span title="Boolean">Boolean</span>
+}
+<span class="keyword">private</span>[sbt] <span class="keyword">sealed</span> <span class="keyword">class</span> <a title="class SetWrapper[T] extends sbt.wrap.Set[T] with ScalaObject" id="14101">SetWrapper</a>[<a title="&gt;: Nothing &lt;: Any" id="14142">T</a>](<span class="keyword">val</span> <a title="java.util.Set[T]" id="84115">underlying</a>: <span title="java.util.Set[T]">JSet</span>[T]) <span class="keyword">extends</span> <a href="#14131" title="sbt.wrap.Set[T]">Set</a>[T]
+{
+	<span class="keyword">def</span> <a title="(T)Boolean" id="16136">contains</a>(<a title="T" id="84116">t</a>: <a href="#14142" title="T">T</a>) = <a href="#84115" title="=&gt; java.util.Set[T]">underlying</a>.<a title="(Any)Boolean" id="16157">contains</a>(<a href="#84116" title="T">t</a>)
+	<span class="keyword">def</span> <a title="=&gt; List[T]" id="16137">toList</a> =<a href="#14084" title="object sbt.wrap.Wrappers">Wrappers</a>.<a href="#18040" title="(java.util.Iterator[T])List[T]">toList</a>(<a href="#84115" title="=&gt; java.util.Set[T]">underlying</a>.<a title="()java.util.Iterator[T]" id="16158">iterator</a>)
+}
+<span class="keyword">private</span>[sbt] <span class="keyword">final</span> <span class="keyword">class</span> <a title="class MutableSetWrapper[T] extends sbt.wrap.SetWrapper[T] with sbt.wrap.Addable[T] with sbt.wrap.Removable[T] with ScalaObject" id="14092">MutableSetWrapper</a>[<a title="&gt;: Nothing &lt;: Any" id="14143">T</a>](<a title="java.util.Set[T]" id="16153">wrapped</a>: <span title="java.util.Set[T]">JSet</span>[T]) <span class="keyword">extends</span> <a href="#14101" title="sbt.wrap.SetWrapper[T]">SetWrapper</a>[T](<a href="#16153" title="java.util.Set[T]">wrapped</a>) <span class="keyword">with</span> <a href="#14107" title="sbt.wrap.Addable[T]">Addable</a>[T] <span class="keyword">with</span> <a href="#14089" title="sbt.wrap.Removable[T]">Removable</a>[T]
+{
+	<span class="keyword">def</span> <a title="(T)Unit" id="16141">+=</a>(<a title="T" id="18006">t</a>: <a href="#14143" title="T">T</a>) { <a href="#84115" title="=&gt; java.util.Set[T]">underlying</a>.<a title="(T)Boolean" id="16162">add</a>(<a href="#18006" title="T">t</a>) }
+	<span class="keyword">def</span> <a title="(T)Unit" id="16142">-=</a>(<a title="T" id="84120">t</a>: <a href="#14143" title="T">T</a>) { <a href="#84115" title="=&gt; java.util.Set[T]">underlying</a>.<a title="(Any)Boolean" id="16163">remove</a>(<a href="#84120" title="T">t</a>) }
+	<span class="keyword">def</span> <a title="=&gt; sbt.wrap.Set[T]" id="16143">readOnly</a>: <a href="#14131" title="sbt.wrap.Set[T]">Set</a>[T] = <a href="#14092" title="sbt.wrap.MutableSetWrapper[T]" class="keyword">this</a>
+}
+<span class="keyword">private</span>[sbt] <span class="keyword">sealed</span> <span class="keyword">abstract</span> <span class="keyword">class</span> <a title="class Map[K, V] extends sbt.wrap.Iterable[(K, V)] with ScalaObject" id="14113">Map</a>[<a title="&gt;: Nothing &lt;: Any" id="14144">K</a>,<a title="&gt;: Nothing &lt;: Any" id="14145">V</a>] <span class="keyword">extends</span> <a href="#14122" title="sbt.wrap.Iterable[(K, V)]">Iterable</a>[(K,V)]
+{
+	<span class="keyword">def</span> <a title="(K)V" id="29607">apply</a>(<a title="K" id="84122">key</a>: <a href="#14144" title="K">K</a>): <a href="#14145" title="V">V</a>
+	<span class="keyword">def</span> <a title="(K)Option[V]" id="29608">get</a>(<a title="K" id="29660">key</a>: <a href="#14144" title="K">K</a>): <a title="Option[V]" id="897">Option</a>[V]
+	<span class="keyword">def</span> <a title="(K)Boolean" id="29609">containsKey</a>(<a title="K" id="84123">key</a>: <a href="#14144" title="K">K</a>): <span title="Boolean">Boolean</span>
+	<span class="keyword">final</span> <span class="keyword">def</span> <a title="[V2 &gt;: V](K,=&gt; V2)V2" id="29610">getOrElse</a>[<a title="&gt;: V &lt;: Any" id="29612">V2</a> &gt;: V](<a title="K" id="73429">key</a>: <a href="#14144" title="K">K</a>, <a title="=&gt; V2" id="73430">default</a>: =&gt; V2): <a href="#29612" title="V2">V2</a> =
+		<a href="#29608" title="(K)Option[V]">get</a>(<a href="#73429" title="K">key</a>) <span title="V2" class="keyword">match</span>
+		{
+			<span title="V" class="keyword">case</span> Some(<a title="V" id="84124">value</a>) =&gt; <a href="#84124" title="V">value</a>
+			<span title="V2" class="keyword">case</span> <span title="object None">None</span> =&gt; <a href="#73430" title="=&gt; V2">default</a>
+		}
+}
+<span class="keyword">private</span>[sbt] <span class="keyword">sealed</span> <span class="keyword">abstract</span> <span class="keyword">class</span> <a title="class MapWrapper[K, V] extends sbt.wrap.Map[K,V] with ScalaObject" id="14110">MapWrapper</a>[<a title="&gt;: Nothing &lt;: Any" id="14146">K</a>,<a title="&gt;: Nothing &lt;: Any" id="14147">V</a>](<span class="keyword">val</span> <a title="java.util.Map[K,V]" id="84127">underlying</a>: <span title="java.util.Map[K,V]">JMap</span>[K,V]) <span class="keyword">extends</span> <a href="#14113" title="sbt.wrap.Map[K,V]">Map</a>[K,V]
+{
+	<span class="keyword">final</span> <span class="keyword">def</span> <a title="(K)V" id="29617">apply</a>(<a title="K" id="84128">key</a>: <a href="#14146" title="K">K</a>) = <a href="#84127" title="=&gt; java.util.Map[K,V]">underlying</a>.<span title="(Any)V">get</span>(<a href="#84128" title="K">key</a>)
+	<span class="keyword">final</span> <span class="keyword">def</span> <a title="(K)Option[V]" id="29618">get</a>(<a title="K" id="29658">key</a>: <a href="#14146" title="K">K</a>) =
+	{
+		<span class="keyword">val</span> <a title="V" id="29661">value</a> = <a href="#84127" title="=&gt; java.util.Map[K,V]">underlying</a>.<span title="(Any)V">get</span>(<a href="#29658" title="K">key</a>)
+		<span title="Option[V]" class="keyword">if</span>(<a href="#29661" title="V">value</a> <a title="(Any)Boolean" id="3444">==</a> <span title="Null(null)" class="keyword">null</span>)
+			<span title="object None">None</span>
+		<span class="keyword">else</span>
+			<a title="(V)Some[V]" id="286">Some</a>(<a href="#29661" title="V">value</a>)
+	}
+	<span class="keyword">final</span> <span class="keyword">def</span> <a title="(K)Boolean" id="29619">containsKey</a>(<a title="K" id="84130">key</a>: <a href="#14146" title="K">K</a>) = <a href="#84127" title="=&gt; java.util.Map[K,V]">underlying</a>.<a title="(Any)Boolean" id="18079">containsKey</a>(<a href="#84130" title="K">key</a>)
+	<span class="keyword">final</span> <span class="keyword">def</span> <a title="=&gt; List[(K, V)]" id="29620">toList</a> = <a href="#14084" title="object sbt.wrap.Wrappers">Wrappers</a>.<a href="#18032" title="(java.util.Map[K,V])List[(K, V)]">toList</a>(<a href="#84127" title="=&gt; java.util.Map[K,V]">underlying</a>)
+	<span class="keyword">final</span> <span class="keyword">def</span> <a title="=&gt; List[V]" id="29621">values</a> = <a href="#29620" title="=&gt; List[(K, V)]">toList</a>.<span title="(((K, V)) =&gt; V)List[V]">map</span>(<a href="#68824" title="(K, V)">_</a>.<span title="=&gt; V">_2</span>)
+}
+<span class="keyword">private</span>[sbt] <span class="keyword">sealed</span> <span class="keyword">class</span> <a title="class MutableMapWrapper[K, V] extends sbt.wrap.MapWrapper[K,V] with sbt.wrap.Removable[K] with sbt.wrap.Addable[(K, V)] with ScalaObject" id="14104">MutableMapWrapper</a>[<a title="&gt;: Nothing &lt;: Any" id="14148">K</a>,<a title="&gt;: Nothing &lt;: Any" id="14149">V</a>](<a title="java.util.Map[K,V]" id="29634">wrapped</a>: <span title="java.util.Map[K,V]">JMap</span>[K,V]) <span class="keyword">extends</span> <a href="#14110" title="sbt.wrap.MapWrapper[K,V]">MapWrapper</a>[K,V](<a href="#29634" title="java.util.Map[K,V]">wrapped</a>) <span class="keyword">with</span> <a href="#14089" title="sbt.wrap.Removable[K]">Removable</a>[K] <span class="keyword">with</span> <a href="#14107" title="sbt.wrap.Addable[(K, V)]">Addable</a>[(K,V)]
+{
+	<span class="keyword">final</span> <span class="keyword">def</span> <a title="(K,=&gt; V)V" id="29625">getOrElseUpdate</a>(<a title="K" id="68745">key</a>: <a href="#14148" title="K">K</a>, <a title="=&gt; V" id="68746">default</a>: =&gt; V): <a href="#14149" title="V">V</a> =
+		<a href="#29618" title="(K)Option[V]">get</a>(<a href="#68745" title="K">key</a>) <span title="V" class="keyword">match</span>
+		{
+			<span title="V" class="keyword">case</span> Some(<a title="V" id="84134">value</a>) =&gt; <a href="#84134" title="V">value</a>
+			<span title="V" class="keyword">case</span> <span title="object None">None</span> =&gt;
+				<span class="keyword">val</span> <a title="V" id="84135">newValue</a> = <a href="#68746" title="=&gt; V">default</a>
+				<a href="#84127" title="=&gt; java.util.Map[K,V]">underlying</a>.<span title="(K,V)V">put</span>(<a href="#68745" title="K">key</a>, <a href="#84135" title="V">newValue</a>)
+				<a href="#84135" title="V">newValue</a>
+		}
+	<span class="keyword">final</span> <span class="keyword">def</span> <a title="()Unit" id="29626">clear</a>() = <a href="#84127" title="=&gt; java.util.Map[K,V]">underlying</a>.<a title="()Unit" id="18089">clear</a>()
+	<span class="keyword">final</span> <span class="keyword">def</span> <a title="(K,V)Unit" id="29627">update</a>(<a title="K" id="68757">key</a>: <a href="#14148" title="K">K</a>, <a title="V" id="68758">value</a>: <a href="#14149" title="V">V</a>) { <a href="#84127" title="=&gt; java.util.Map[K,V]">underlying</a>.<span title="(K,V)V">put</span>(<a href="#68757" title="K">key</a>, <a href="#68758" title="V">value</a>) }
+	<span class="keyword">final</span> <span class="keyword">def</span> <a title="((K, V))Unit" id="29628">+=</a>(<a title="(K, V)" id="29664">pair</a>: <a title="(K, V)" id="1326">(</a>K, V) ) { <a href="#29627" title="(K,V)Unit">update</a>(<a href="#29664" title="(K, V)">pair</a>.<a title="=&gt; K" id="17583">_1</a>, <a href="#29664" title="(K, V)">pair</a>.<span title="=&gt; V">_2</span>) }
+	<span class="keyword">final</span> <span class="keyword">def</span> <a title="(K)Unit" id="29629">-=</a>(<a title="K" id="68863">key</a>: <a href="#14148" title="K">K</a>) { <a href="#84127" title="=&gt; java.util.Map[K,V]">underlying</a>.<span title="(Any)V">remove</span>(<a href="#68863" title="K">key</a>) }
+	<span class="keyword">final</span> <span class="keyword">def</span> <a title="(K)V" id="29630">remove</a>(<a title="K" id="84136">key</a>: <a href="#14148" title="K">K</a>) = <a href="#84127" title="=&gt; java.util.Map[K,V]">underlying</a>.<span title="(Any)V">remove</span>(<a href="#84136" title="K">key</a>)
+	<span class="keyword">final</span> <span class="keyword">def</span> <a title="=&gt; sbt.wrap.Map[K,V]" id="29631">readOnly</a>: <a href="#14113" title="sbt.wrap.Map[K,V]">Map</a>[K,V] = <a href="#14104" title="sbt.wrap.MutableMapWrapper[K,V]" class="keyword">this</a>
+}
+        </pre>
+    </body>
+</html>

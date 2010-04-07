@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+			<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" ></meta>
+        <title>sbt/Dag.scala</title>
+        <script type="text/javascript" src="../jquery-all.js"></script>
+        <script type="text/javascript" src="../linked.js"></script>
+        <link rel="stylesheet" type="text/css" href="../style.css" title="Style"></link>
+    </head>
+    <body>
+        <pre>
+<span class="comment">/* sbt -- Simple Build Tool
+ * Copyright 2008, 2009 David MacIver, Mark Harrah
+ */</span>
+<span class="keyword">package</span> sbt;
+
+<span class="keyword">trait</span> <a title="trait Dag[Node &lt;: sbt.Dag[Node]] extends java.lang.Object with ScalaObject" id="7095">Dag</a>[<a title="&gt;: Nothing &lt;: sbt.Dag[Node]" id="13407">Node</a> &lt;: Dag[Node]]{
+	self : Node =&gt;
+
+	<span class="keyword">def</span> <a title="=&gt; Iterable[Node]" id="14718">dependencies</a> : <a title="Iterable[Node]" id="372">Iterable</a>[Node]
+	<span class="keyword">def</span> <a title="=&gt; List[Node]" id="14719">topologicalSort</a> = <a href="#7096" title="object sbt.Dag">Dag</a>.<a href="#17884" title="(Node)((Node) =&gt; Iterable[Node])List[Node]">topologicalSort</a>(<a href="#7095" title="Node">self</a>)(<a href="#18140" title="Node">_</a>.<a href="#14718" title="=&gt; Iterable[Node]">dependencies</a>)
+}
+<span class="keyword">object</span> <a title="object sbt.Dag" id="7096">Dag</a>
+{
+	<span class="keyword">import</span> scala.collection.mutable;
+
+	<span class="keyword">def</span> <a title="[T](T)((T) =&gt; Iterable[T])List[T]" id="17884">topologicalSort</a>[<a title="&gt;: Nothing &lt;: Any" id="17886">T</a>](<a title="T" id="17887">root</a>: <a href="#17886" title="T">T</a>)(<a title="(T) =&gt; Iterable[T]" id="17888">dependencies</a>: T =&gt; Iterable[T]) = {
+		<span class="keyword">val</span> <a title="scala.collection.mutable.HashSet[T]" id="17890">discovered</a> = <span title="scala.collection.mutable.HashSet[T]" class="keyword">new</span> mutable.<a title="scala.collection.mutable.HashSet[T]" id="15533">HashSet</a>[T];
+		<span class="keyword">val</span> <a title="sbt.wrap.MutableSetWrapper[T]" id="17891">finished</a> = <span title="sbt.wrap.MutableSetWrapper[T]" class="keyword">new</span> wrap.<a href="wrap/Wrappers.scala.html#14092" title="sbt.wrap.MutableSetWrapper[T]">MutableSetWrapper</a>(<a title="()java.util.LinkedHashSet[T]" id="16206" class="keyword">new</a> java.util.<a title="java.util.LinkedHashSet[T]" id="5547">LinkedHashSet</a>[T])
+
+		<span class="keyword">def</span> <a title="(T)Unit" id="17892">visit</a>(<a title="T" id="17993">dag</a> : <a href="#17886" title="T">T</a>){
+			<span title="Unit" class="keyword">if</span> (<a title="=&gt; Boolean" id="2695">!</a><a href="#17890" title="(T)Boolean" id="17942">discovered</a>(<a href="#17993" title="T">dag</a>)) {
+				<a href="#17890" title="scala.collection.mutable.HashSet[T]">discovered</a>(<a href="#17993" title="T">dag</a>) = <span title="Boolean(true)" class="keyword">true</span>; 
+				<a href="#17888" title="(T)Iterable[T]" id="16333">dependencies</a>(<a href="#17993" title="T">dag</a>).<a title="((T) =&gt; Unit)Unit" id="16070">foreach</a>(<a href="#17892" title="(T)Unit">visit</a>);
+				<a href="#17891" title="sbt.wrap.MutableSetWrapper[T]">finished</a> <a href="wrap/Wrappers.scala.html#16141" title="(T)Unit">+=</a> <a href="#17993" title="T">dag</a>;
+			}
+		}
+
+		<a href="#17892" title="(T)Unit">visit</a>(<a href="#17887" title="T">root</a>);
+	
+		<a href="#17891" title="sbt.wrap.MutableSetWrapper[T]">finished</a>.<a href="wrap/Wrappers.scala.html#16137" title="=&gt; List[T]">toList</a>;
+	}
+}
+
+
+        </pre>
+    </body>
+</html>

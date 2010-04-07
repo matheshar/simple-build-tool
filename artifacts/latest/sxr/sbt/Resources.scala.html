@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+			<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" ></meta>
+        <title>sbt/Resources.scala</title>
+        <script type="text/javascript" src="../jquery-all.js"></script>
+        <script type="text/javascript" src="../linked.js"></script>
+        <link rel="stylesheet" type="text/css" href="../style.css" title="Style"></link>
+    </head>
+    <body>
+        <pre>
+<span class="comment">/* sbt -- Simple Build Tool
+ * Copyright 2008, 2009  Mark Harrah
+ */</span>
+<span class="keyword">package</span> sbt
+
+<span class="keyword">import</span> java.io.File
+<span class="keyword">import</span> xsbti.AppProvider
+<span class="keyword">import</span> FileUtilities._
+
+<span class="keyword">object</span> <a title="object sbt.Resources" id="8623">Resources</a>
+{
+	<span class="keyword">def</span> <a title="(String)sbt.Resources" id="73592">apply</a>(<a title="String" id="73596">basePath</a>: <span title="String">String</span>) =
+	{
+		<span title="(Boolean)Unit">require</span>(<a href="#73596" title="String">basePath</a>.<a title="(java.lang.String)Boolean" id="5786">startsWith</a>(<span title="java.lang.String(&quot;/&quot;)" class="string">&quot;/&quot;</span>))
+		<span class="keyword">val</span> <a title="java.net.URL" id="73598">resource</a> = <a title="()java.lang.Class[_ &lt;: java.lang.Object]" id="3459">getClass</a>.<a title="(java.lang.String)java.net.URL" id="4603">getResource</a>(<a href="#73596" title="String">basePath</a>)
+		<span title="sbt.Resources" class="keyword">if</span>(<a href="#73598" title="java.net.URL">resource</a> <a title="(AnyRef)Boolean" id="3457">==</a> <span title="Null(null)" class="keyword">null</span>)
+			<span title="(String)Nothing">error</span>(<span title="java.lang.String(&quot;Resource base directory '&quot;)" class="string">&quot;Resource base directory '&quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#73596" title="String">basePath</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot;' not on classpath.&quot;)" class="string">&quot;' not on classpath.&quot;</span>)
+		<span class="keyword">else</span>
+		{
+			<span class="keyword">val</span> <a title="java.io.File" id="73603">file</a> = <a href="FileUtilities.scala.html#15324" title="(java.net.URL)java.io.File">toFile</a>(<a href="#73598" title="java.net.URL">resource</a>)
+			<span title="sbt.Resources" class="keyword">if</span>(<a href="#73603" title="java.io.File">file</a>.<a title="()Boolean" id="16021">exists</a>)
+				<span title="sbt.Resources" class="keyword">new</span> <a href="#8622" title="sbt.Resources">Resources</a>(<a href="#73603" title="java.io.File">file</a>)
+			<span class="keyword">else</span>
+				<span title="(String)Nothing">error</span>(<span title="java.lang.String(&quot;Resource base directory '&quot;)" class="string">&quot;Resource base directory '&quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#73596" title="String">basePath</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot;' does not exist.&quot;)" class="string">&quot;' does not exist.&quot;</span>)
+		}
+	}
+	<span class="keyword">private</span> <span class="keyword">val</span> <a title="java.lang.String" id="73593">LoadErrorPrefix</a> = <span title="java.lang.String(&quot;Error loading initial project: &quot;)" class="string">&quot;Error loading initial project: &quot;</span>
+}
+
+<span class="keyword">class</span> <a title="class Resources extends java.lang.Object with ScalaObject" id="8622">Resources</a>(<span class="keyword">val</span> <a title="java.io.File" id="73616">baseDirectory</a>: <span title="java.io.File">File</span>)
+{
+	<span class="keyword">import</span> Resources._
+	<span class="comment">// The returned directory is not actually read-only, but it should be treated that way</span>
+	<span class="keyword">def</span> <a title="(String,String)Either[String,java.io.File]" id="73609">readOnlyResourceDirectory</a>(<a title="String" id="73619">group</a>: <span title="String">String</span>, <a title="String" id="73620">name</a>: <span title="String">String</span>): <span title="Either[String,java.io.File]">Either</span>[String, File] =
+	{
+		<span class="keyword">val</span> <a title="java.io.File" id="73621">groupDirectory</a> = <span title="(java.io.File,java.lang.String)java.io.File" class="keyword">new</span> <span title="java.io.File">File</span>(<a href="#73616" title="=&gt; java.io.File">baseDirectory</a>, <a href="#73619" title="String">group</a>)
+		<span title="Either[String,java.io.File]" class="keyword">if</span>(<a href="#73621" title="java.io.File">groupDirectory</a>.<span title="()Boolean">isDirectory</span>)
+		{
+			<span class="keyword">val</span> <a title="java.io.File" id="73637">resourceDirectory</a> = <span title="(java.io.File,java.lang.String)java.io.File" class="keyword">new</span> <span title="java.io.File">File</span>(<a href="#73621" title="java.io.File">groupDirectory</a>, <a href="#73620" title="String">name</a>)
+			<span title="Either[String,java.io.File]" class="keyword">if</span>(<a href="#73637" title="java.io.File">resourceDirectory</a>.<span title="()Boolean">isDirectory</span>)
+				<a title="(java.io.File)Right[Nothing,java.io.File]" id="490">Right</a>(<a href="#73637" title="java.io.File">resourceDirectory</a>)
+			<span class="keyword">else</span>
+				<span title="(java.lang.String)Left[java.lang.String,Nothing]">Left</span>(<span title="java.lang.String(&quot;Resource directory '&quot;)" class="string">&quot;Resource directory '&quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#73620" title="String">name</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot;' in group '&quot;)" class="string">&quot;' in group '&quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#73619" title="String">group</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot;' not found.&quot;)" class="string">&quot;' not found.&quot;</span>)
+		}
+		<span class="keyword">else</span>
+			<span title="(java.lang.String)Left[java.lang.String,Nothing]">Left</span>(<span title="java.lang.String(&quot;Group '&quot;)" class="string">&quot;Group '&quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#73619" title="String">group</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot;' not found.&quot;)" class="string">&quot;' not found.&quot;</span>)
+	}
+	<span class="keyword">def</span> <a title="[T](String,String,sbt.Logger)((java.io.File) =&gt; Either[String,T])Either[String,T]" id="73610">readWriteResourceDirectory</a>[<a title="&gt;: Nothing &lt;: Any" id="73612">T</a>](<a title="String" id="73658">group</a>: <span title="String">String</span>, <a title="String" id="73659">name</a>: <span title="String">String</span>, <a title="sbt.Logger" id="73660">log</a>: <a href="Logger.scala.html#11784" title="sbt.Logger">Logger</a>)
+		(<a title="(java.io.File) =&gt; Either[String,T]" id="73661">withDirectory</a>: File =&gt; Either[String, T]): <span title="Either[String,T]">Either</span>[String, T] =
+			<a href="#73609" title="(String,String)Either[String,java.io.File]">readOnlyResourceDirectory</a>(<a href="#73658" title="String">group</a>, <a href="#73659" title="String">name</a>).<span title="=&gt; Either.RightProjection[String,java.io.File]">right</span> <span title="((java.io.File) =&gt; Either[String,T])Either[String,T]">flatMap</span>(<a title="java.io.File" id="73667">file</a> =&gt; <a href="#73613" title="(java.io.File,sbt.Logger)((java.io.File) =&gt; Either[String,T])Either[String,T]">readWriteResourceDirectory</a>(<a href="#73667" title="java.io.File">file</a>, <a href="#73660" title="sbt.Logger">log</a>)(<a href="#73661" title="(java.io.File) =&gt; Either[String,T]">withDirectory</a>))
+	<span class="keyword">def</span> <a title="[T](java.io.File,sbt.Logger)((java.io.File) =&gt; Either[String,T])Either[String,T]" id="73613">readWriteResourceDirectory</a>[<a title="&gt;: Nothing &lt;: Any" id="73615">T</a>](<a title="java.io.File" id="73669">readOnly</a>: <span title="java.io.File">File</span>, <a title="sbt.Logger" id="73670">log</a>: <a href="Logger.scala.html#11784" title="sbt.Logger">Logger</a>)
+		(<a title="(java.io.File) =&gt; Either[String,T]" id="73671">withDirectory</a>: File =&gt; Either[String, T]): <span title="Either[String,T]">Either</span>[String, T] =
+	{
+		<span title="(Boolean)Unit">require</span>(<a href="#73669" title="java.io.File">readOnly</a>.<span title="()Boolean">isDirectory</span>)
+		<span class="keyword">def</span> <a title="(java.io.File)(java.io.File)Either[String,T]" id="73675">readWrite</a>(<a title="java.io.File" id="73677">readOnly</a>: <span title="java.io.File">File</span>)(<a title="java.io.File" id="73678">temporary</a>: <span title="java.io.File">File</span>): <span title="Either[String,T]">Either</span>[String, T] =
+		{
+			<span class="keyword">val</span> <a title="java.io.File" id="73679">readWriteDirectory</a> = <span title="(java.io.File,java.lang.String)java.io.File" class="keyword">new</span> <span title="java.io.File">File</span>(<a href="#73678" title="java.io.File">temporary</a>, <a href="#73677" title="java.io.File">readOnly</a>.<a title="()java.lang.String" id="16008">getName</a>)
+			<a href="FileUtilities.scala.html#9046" title="object sbt.FileUtilities">FileUtilities</a>.<a href="FileUtilities.scala.html#15272" title="(java.io.File,java.io.File,sbt.Logger)Option[String]">copyDirectory</a>(<a href="#73677" title="java.io.File">readOnly</a>, <a href="#73679" title="java.io.File">readWriteDirectory</a>, <a href="#73670" title="sbt.Logger">log</a>).<a title="(=&gt; Unit)Either[String,Unit] with Product" id="19029">toLeft</a>(<span title="Unit">(</span>)).<span title="=&gt; Either.RightProjection[String,Unit]">right</span> <span title="((Unit) =&gt; Either[String,T])Either[String,T]">flatMap</span> { <a title="Unit" id="73712">x</a> =&gt;
+				<a href="#73671" title="(java.io.File)Either[String,T]" id="16333">withDirectory</a>(<a href="#73679" title="java.io.File">readWriteDirectory</a>)
+			}
+		}
+		<a href="FileUtilities.scala.html#15253" title="(sbt.Logger)((java.io.File) =&gt; Either[String,T])Either[String,T]">doInTemporaryDirectory</a>(<a href="#73670" title="sbt.Logger">log</a>)(<a href="#73675" title="(java.io.File)(java.io.File)Either[String,T]">readWrite</a>(<a href="#73669" title="java.io.File">readOnly</a>))
+	}
+}
+        </pre>
+    </body>
+</html>

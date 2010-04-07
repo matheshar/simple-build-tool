@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="utf-8"?>
+			<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" ></meta>
+        <title>sbt/Conditional.scala</title>
+        <script type="text/javascript" src="../jquery-all.js"></script>
+        <script type="text/javascript" src="../linked.js"></script>
+        <link rel="stylesheet" type="text/css" href="../style.css" title="Style"></link>
+    </head>
+    <body>
+        <pre>
+<span class="comment">/* sbt -- Simple Build Tool
+ * Copyright 2008, 2009 Mark Harrah
+ */</span>
+<span class="keyword">package</span> sbt
+
+<span class="keyword">import</span> xsbt.AnalyzingCompiler
+
+<span class="keyword">trait</span> <a title="trait Conditional[Source, Product, External] extends java.lang.Object with NotNull with ScalaObject" id="9960">Conditional</a>[<a title="&gt;: Nothing &lt;: Any" id="13397">Source</a>, <a title="&gt;: Nothing &lt;: Any" id="13398">Product</a>, <a title="&gt;: Nothing &lt;: Any" id="13399">External</a>] <span class="keyword">extends</span> <span title="NotNull">NotNull</span>
+{
+	<span class="keyword">type</span> <a title="&gt;: Nothing &lt;: sbt.TaskAnalysis[Source,Product,External]" id="26699">AnalysisType</a> &lt;: TaskAnalysis[Source, Product, External]
+	<span class="keyword">val</span> <a title="Conditional.this.AnalysisType" id="26700">analysis</a>: <a href="#26699" title="Conditional.this.AnalysisType">AnalysisType</a> = <a href="#26702" title="=&gt; Conditional.this.AnalysisType">loadAnalysis</a>
+
+	<span class="keyword">protected</span> <span class="keyword">def</span> <a title="=&gt; Conditional.this.AnalysisType" id="26702">loadAnalysis</a>: <a href="#26699" title="Conditional.this.AnalysisType">AnalysisType</a>
+	<span class="keyword">protected</span> <span class="keyword">def</span> <a title="=&gt; sbt.Logger" id="26703">log</a>: <a href="Logger.scala.html#11784" title="sbt.Logger">Logger</a>
+
+	<span class="keyword">protected</span> <span class="keyword">def</span> <a title="=&gt; String" id="26704">productType</a>: <span title="String">String</span>
+	<span class="keyword">protected</span> <span class="keyword">def</span> <a title="=&gt; String" id="26705">productTypePlural</a>: <span title="String">String</span>
+
+	<span class="keyword">protected</span> <span class="keyword">def</span> <a title="=&gt; Iterable[Source]" id="26706">sourcesToProcess</a>: <span title="Iterable[Source]">Iterable</span>[Source]
+
+	<span class="keyword">protected</span> <span class="keyword">def</span> <a title="(Source)Boolean" id="26707">sourceExists</a>(<a title="Source" id="56460">source</a>: <a href="#13397" title="Source">Source</a>): <span title="Boolean">Boolean</span>
+	<span class="keyword">protected</span> <span class="keyword">def</span> <a title="(Source)Long" id="26708">sourceLastModified</a>(<a title="Source" id="34644">source</a>: <a href="#13397" title="Source">Source</a>): <span title="Long">Long</span>
+
+	<span class="keyword">protected</span> <span class="keyword">def</span> <a title="(Product)Boolean" id="26709">productExists</a>(<a title="Product" id="34646">product</a>: <a href="#13398" title="Product">Product</a>): <span title="Boolean">Boolean</span>
+	<span class="keyword">protected</span> <span class="keyword">def</span> <a title="(Product)Long" id="26710">productLastModified</a>(<a title="Product" id="34649">product</a>: <a href="#13398" title="Product">Product</a>): <span title="Long">Long</span>
+
+	<span class="keyword">protected</span> <span class="keyword">def</span> <a title="(Iterable[External])Iterable[(External, Conditional.this.ExternalInfo)]" id="26711">externalInfo</a>(<a title="Iterable[External]" id="34667">externals</a>: <span title="Iterable[External]">Iterable</span>[External]): <span title="Iterable[(External, Conditional.this.ExternalInfo)]">Iterable</span>[(External, ExternalInfo)]
+
+	<span class="keyword">protected</span> <span class="keyword">def</span> <a title="(Conditional.this.ConditionalAnalysis)Option[String]" id="26712">execute</a>(<a title="Conditional.this.ConditionalAnalysis" id="34430">cAnalysis</a>: <a href="#26716" title="Conditional.this.ConditionalAnalysis">ConditionalAnalysis</a>): <a title="Option[String]" id="897">Option</a>[String]
+
+	<span class="keyword">final</span> <span class="keyword">case</span> <span class="keyword">class</span> <a title="class ExternalInfo extends java.lang.Object with NotNull with ScalaObject with Product" id="56472">ExternalInfo</a>(<a title="Boolean" id="56492">available</a>: <span title="Boolean">Boolean</span>, <a title="Long" id="56493">lastModified</a>: <span title="Long">Long</span>) <span class="keyword">extends</span> <span title="NotNull">NotNull</span>
+	<span class="keyword">trait</span> <a title="trait ConditionalAnalysis extends java.lang.Object with NotNull" id="26716">ConditionalAnalysis</a> <span class="keyword">extends</span> <span title="NotNull">NotNull</span>
+	{
+		<span class="keyword">def</span> <a title="=&gt; Iterable[Source]" id="34421">dirtySources</a>: <span title="Iterable[Source]">Iterable</span>[Source]
+		<span class="keyword">def</span> <a title="=&gt; Iterable[Source]" id="34422">cleanSources</a>: <span title="Iterable[Source]">Iterable</span>[Source]
+		<span class="keyword">def</span> <a title="=&gt; Int" id="34423">directlyModifiedSourcesCount</a>: <span title="Int">Int</span>
+		<span class="keyword">def</span> <a title="=&gt; Int" id="34424">invalidatedSourcesCount</a>: <span title="Int">Int</span>
+		<span class="keyword">def</span> <a title="=&gt; Int" id="34425">removedSourcesCount</a>: <span title="Int">Int</span>
+	}
+
+	<span class="keyword">final</span> <span class="keyword">def</span> <a title="=&gt; Option[String]" id="26717">run</a> =
+	{
+		<span class="keyword">val</span> <a title="Option[String]" id="34610">result</a> = <a href="#26712" title="(Conditional.this.ConditionalAnalysis)Option[String]">execute</a>(<a href="#26718" title="=&gt; &lt;refinement&gt; extends java.lang.Object with Conditional.this.ConditionalAnalysis">analyze</a>)
+		<a href="#26722" title="(Boolean)Unit">processingComplete</a>(<a href="#34610" title="Option[String]">result</a>.<a title="=&gt; Boolean" id="19010">isEmpty</a>)
+		<a href="#34610" title="Option[String]">result</a>
+	}
+	<span class="keyword">private</span> <span class="keyword">def</span> <a title="=&gt; &lt;refinement&gt; extends java.lang.Object with Conditional.this.ConditionalAnalysis" id="26718">analyze</a> =
+	{
+		<span class="keyword">import</span> scala.collection.mutable.HashSet
+
+		<span class="keyword">val</span> <a title="Iterable[Source]" id="34614">sourcesSnapshot</a> = <a href="#26706" title="=&gt; Iterable[Source]">sourcesToProcess</a>
+		<span class="keyword">val</span> <a title="scala.collection.mutable.HashSet[Source]" id="34615">removedSources</a> = <span title="scala.collection.mutable.HashSet[Source]" class="keyword">new</span> <span title="scala.collection.mutable.HashSet[Source]">HashSet</span>[Source]
+		<a href="#34615" title="scala.collection.mutable.HashSet[Source]">removedSources</a> <span title="(Iterable[Source])Unit">++=</span> <a href="#26700" title="=&gt; Conditional.this.AnalysisType">analysis</a>.<a href="Analysis.scala.html#25252" title="=&gt; scala.collection.Set[Source]">allSources</a>
+		<a href="#34615" title="scala.collection.mutable.HashSet[Source]">removedSources</a> <span title="(Iterable[Source])Unit">--=</span> <a href="#34614" title="Iterable[Source]">sourcesSnapshot</a>
+		<span class="keyword">val</span> <a title="Int" id="34616">removedCount</a> = <a href="#34615" title="scala.collection.mutable.HashSet[Source]">removedSources</a>.<span title="=&gt; Int">size</span>
+		<span class="keyword">for</span>(<a title="((Source) =&gt; Unit)Unit" id="34630">removed</a> &lt;- <a href="#34615" title="scala.collection.mutable.HashSet[Source]">removedSources</a>)
+		{
+			<a href="#26703" title="=&gt; sbt.Logger">log</a>.<a href="Logger.scala.html#19516" title="(=&gt; String)Unit">debug</a>(<span title="java.lang.String(&quot;Source &quot;)" class="string">&quot;Source &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#34630" title="Source">removed</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot; removed.&quot;)" class="string">&quot; removed.&quot;</span>)
+			<a href="#26700" title="=&gt; Conditional.this.AnalysisType">analysis</a>.<a href="Analysis.scala.html#25263" title="(Source)Unit">removeDependent</a>(<a href="#34630" title="Source">removed</a>)
+		}
+
+		<span class="keyword">val</span> <a title="scala.collection.mutable.HashSet[Source]" id="34617">unmodified</a> = <span title="scala.collection.mutable.HashSet[Source]" class="keyword">new</span> <span title="scala.collection.mutable.HashSet[Source]">HashSet</span>[Source]
+		<span class="keyword">val</span> <a title="scala.collection.mutable.HashSet[Source]" id="34618">modified</a> = <span title="scala.collection.mutable.HashSet[Source]" class="keyword">new</span> <span title="scala.collection.mutable.HashSet[Source]">HashSet</span>[Source]
+
+		<span class="keyword">for</span>(<a title="((Source) =&gt; Unit)Unit" id="34635">source</a> &lt;- <a href="#34614" title="Iterable[Source]">sourcesSnapshot</a>)
+		{
+			<span title="Unit" class="keyword">if</span>(<a href="#26721" title="(Source)Boolean">isSourceModified</a>(<a href="#34635" title="Source">source</a>))
+			{
+				<a href="#26703" title="=&gt; sbt.Logger">log</a>.<a href="Logger.scala.html#19516" title="(=&gt; String)Unit">debug</a>(<span title="java.lang.String(&quot;Source &quot;)" class="string">&quot;Source &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#34635" title="Source">source</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot; directly modified.&quot;)" class="string">&quot; directly modified.&quot;</span>)
+				<a href="#34618" title="scala.collection.mutable.HashSet[Source]">modified</a> <span title="(Source)Unit">+=</span> <a href="#34635" title="Source">source</a>
+			}
+			<span class="keyword">else</span>
+			{
+				<a href="#26703" title="=&gt; sbt.Logger">log</a>.<a href="Logger.scala.html#19516" title="(=&gt; String)Unit">debug</a>(<span title="java.lang.String(&quot;Source &quot;)" class="string">&quot;Source &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#34635" title="Source">source</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot; unmodified.&quot;)" class="string">&quot; unmodified.&quot;</span>)
+				<a href="#34617" title="scala.collection.mutable.HashSet[Source]">unmodified</a> <span title="(Source)Unit">+=</span> <a href="#34635" title="Source">source</a>
+			}
+		}
+		<span class="keyword">val</span> <a title="Int" id="34619">directlyModifiedCount</a> = <a href="#34618" title="scala.collection.mutable.HashSet[Source]">modified</a>.<span title="=&gt; Int">size</span>
+		<span class="keyword">for</span>(<a href="#34670" title="(((External, Conditional.this.ExternalInfo)) =&gt; Unit)Unit">(</a><a title="External" id="34675">external</a>, <a title="Conditional.this.ExternalInfo" id="34676">info</a>) &lt;- <a href="#26711" title="(Iterable[External])Iterable[(External, Conditional.this.ExternalInfo)]">externalInfo</a>(<a href="#26700" title="=&gt; Conditional.this.AnalysisType">analysis</a>.<a href="Analysis.scala.html#25254" title="=&gt; scala.collection.Set[External]">allExternals</a>))
+		{
+			<span class="keyword">val</span> <a title="scala.collection.Set[Source]" id="34677">dependentSources</a> = <a href="#26700" title="=&gt; Conditional.this.AnalysisType">analysis</a>.<a href="Analysis.scala.html#25257" title="(External)Option[scala.collection.Set[Source]]">externalDependencies</a>(<a href="#34675" title="External">external</a>).<a title="(=&gt; scala.collection.Set[Source])scala.collection.Set[Source]" id="19015">getOrElse</a>(<a title="=&gt; collection.immutable.Set.type" id="6083">Set</a>.<a title="scala.collection.immutable.Set[Source]" id="22690">empty</a>)
+			<span title="Unit" class="keyword">if</span>(<a href="#34676" title="Conditional.this.ExternalInfo">info</a>.<a href="#56492" title="=&gt; Boolean">available</a>)
+			{
+				<span class="keyword">val</span> <a title="Long" id="34689">dependencyLastModified</a> = <a href="#34676" title="Conditional.this.ExternalInfo">info</a>.<a href="#56493" title="=&gt; Long">lastModified</a>
+				<span class="keyword">for</span>(<a title="((Source) =&gt; Unit)Unit" id="34691">dependentSource</a> &lt;- <a href="#34677" title="scala.collection.Set[Source]">dependentSources</a>; <a title="((scala.collection.Set[Product]) =&gt; Unit)Unit" id="34693">dependentProducts</a> &lt;- <a href="#26700" title="=&gt; Conditional.this.AnalysisType">analysis</a>.<a href="Analysis.scala.html#25256" title="(Source)Option[scala.collection.Set[Product]]">products</a>(<a href="#34691" title="Source">dependentSource</a>))
+				{
+					<a href="#34693" title="scala.collection.Set[Product]">dependentProducts</a>.<span title="((Product) =&gt; Boolean)Option[Product]">find</span>(<a title="Product" id="34695">p</a> =&gt; <a href="#26710" title="(Product)Long">productLastModified</a>(<a href="#34695" title="Product">p</a>) <span title="(Long)Boolean">&lt;</span> <a href="#34689" title="Long">dependencyLastModified</a>) <span title="Unit" class="keyword">match</span>
+					{
+						<span title="Unit" class="keyword">case</span> Some(<a title="Product" id="34697">modifiedProduct</a>) =&gt;
+						{
+							<a href="#26703" title="=&gt; sbt.Logger">log</a>.<a href="Logger.scala.html#19516" title="(=&gt; String)Unit">debug</a>(<a href="#26704" title="=&gt; String">productType</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot; &quot;)" class="string">&quot; &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#34697" title="Product">modifiedProduct</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot; older than external dependency &quot;)" class="string">&quot; older than external dependency &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#34675" title="External">external</a>)
+							<a href="#34617" title="scala.collection.mutable.HashSet[Source]">unmodified</a> <span title="(Source)Unit">-=</span> <a href="#34691" title="Source">dependentSource</a>
+							<a href="#34618" title="scala.collection.mutable.HashSet[Source]">modified</a> <span title="(Source)Unit">+=</span> <a href="#34691" title="Source">dependentSource</a>
+						}
+						<span title="Unit" class="keyword">case</span> <span title="object None">None</span> =&gt; <span title="Unit">(</span>)
+					}
+				}
+			}
+			<span class="keyword">else</span>
+			{
+				<a href="#26703" title="=&gt; sbt.Logger">log</a>.<a href="Logger.scala.html#19516" title="(=&gt; String)Unit">debug</a>(<span title="java.lang.String(&quot;External dependency &quot;)" class="string">&quot;External dependency &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#34675" title="External">external</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot; not found.&quot;)" class="string">&quot; not found.&quot;</span>)
+				<a href="#34617" title="scala.collection.mutable.HashSet[Source]">unmodified</a> <span title="(Iterable[Source])Unit">--=</span> <a href="#34677" title="scala.collection.Set[Source]">dependentSources</a>
+				<a href="#34618" title="scala.collection.mutable.HashSet[Source]">modified</a> <span title="(Iterable[Source])Unit">++=</span> <a href="#34677" title="scala.collection.Set[Source]">dependentSources</a>
+				<a href="#26700" title="=&gt; Conditional.this.AnalysisType">analysis</a>.<a href="Analysis.scala.html#25265" title="(External)Unit">removeExternalDependency</a>(<a href="#34675" title="External">external</a>)
+			}
+		}
+
+		<span class="keyword">val</span> <a title="scala.collection.mutable.HashSet[Source]" id="34620">handled</a> = <span title="scala.collection.mutable.HashSet[Source]" class="keyword">new</span> scala.collection.mutable.<span title="scala.collection.mutable.HashSet[Source]">HashSet</span>[Source]
+		<span class="keyword">val</span> <a title="Boolean" id="34621">transitive</a> = <span title="=&gt; Boolean">!</span>java.lang.<a title="object java.lang.Boolean" id="1972">Boolean</a>.<a title="(java.lang.String)Boolean" id="16355">getBoolean</a>(<span title="java.lang.String(&quot;sbt.intransitive&quot;)" class="string">&quot;sbt.intransitive&quot;</span>)
+		<span class="keyword">def</span> <a title="(Iterable[Source])Unit" id="34622">markModified</a>(<a title="Iterable[Source]" id="34707">changed</a>: <span title="Iterable[Source]">Iterable</span>[Source]) { <span class="keyword">for</span>(<a title="((Source) =&gt; Unit)Unit" id="34711">c</a> &lt;- <a href="#34707" title="Iterable[Source]">changed</a> <span class="keyword">if</span> <span title="=&gt; Boolean">!</span><a href="#34620" title="scala.collection.mutable.HashSet[Source]">handled</a>.<a title="(Source)Boolean" id="17897">contains</a>(<a href="#34711" title="Source">c</a>)) <a href="#34623" title="(Source)Unit">markSourceModified</a>(<a href="#34711" title="Source">c</a>) }
+		<span class="keyword">def</span> <a title="(Source)Unit" id="34623">markSourceModified</a>(<a title="Source" id="34712">src</a>: <a href="#13397" title="Source">Source</a>)
+		{
+			<a href="#34617" title="scala.collection.mutable.HashSet[Source]">unmodified</a> <span title="(Source)Unit">-=</span> <a href="#34712" title="Source">src</a>
+			<a href="#34618" title="scala.collection.mutable.HashSet[Source]">modified</a> <span title="(Source)Unit">+=</span> <a href="#34712" title="Source">src</a>
+			<a href="#34620" title="scala.collection.mutable.HashSet[Source]">handled</a> <span title="(Source)Unit">+=</span> <a href="#34712" title="Source">src</a>
+			<span title="Unit" class="keyword">if</span>(<a href="#34621" title="Boolean">transitive</a>)
+				<a href="#34624" title="(Source)Unit">markDependenciesModified</a>(<a href="#34712" title="Source">src</a>)
+		}
+		<span class="keyword">def</span> <a title="(Source)Unit" id="34624">markDependenciesModified</a>(<a title="Source" id="34716">src</a>: <a href="#13397" title="Source">Source</a>) { <a href="#26700" title="=&gt; Conditional.this.AnalysisType">analysis</a>.<a href="Analysis.scala.html#25264" title="(Source)Option[scala.collection.Set[Source]]">removeDependencies</a>(<a href="#34716" title="Source">src</a>).<a title="((scala.collection.Set[Source]) =&gt; Unit)Option[Unit]" id="19017">map</a>(<a href="#34622" title="(Iterable[Source])Unit">markModified</a>) }
+
+		<a href="#34622" title="(Iterable[Source])Unit">markModified</a>(<a href="#34618" title="scala.collection.mutable.HashSet[Source]">modified</a>.<span title="=&gt; List[Source]">toList</span>)
+		<span title="Unit" class="keyword">if</span>(<a href="#34621" title="Boolean">transitive</a>)
+			<a href="#34615" title="scala.collection.mutable.HashSet[Source]">removedSources</a>.<span title="((Source) =&gt; Unit)Unit">foreach</span>(<a href="#34624" title="(Source)Unit">markDependenciesModified</a>)
+
+		<span class="keyword">for</span>(<a title="((Source) =&gt; Unit)Unit" id="34734">changed</a> &lt;- <a href="#34615" title="scala.collection.mutable.HashSet[Source]">removedSources</a> <a title="(Iterable[Source])scala.collection.mutable.Set[Source]" id="17916">++</a> <a href="#34618" title="scala.collection.mutable.HashSet[Source]">modified</a>)
+			<a href="#26700" title="=&gt; Conditional.this.AnalysisType">analysis</a>.<a href="Analysis.scala.html#25262" title="(Source)Unit">removeSource</a>(<a href="#34734" title="Source">changed</a>)
+
+		<a title="template $anon extends java.lang.Object with Conditional.this.ConditionalAnalysis" id="34736" class="keyword">new</a> <a href="#26716" title="Conditional.this.ConditionalAnalysis">ConditionalAnalysis</a>
+		{
+			<span class="keyword">def</span> <a title="=&gt; scala.collection.Set[Source]" id="34738">dirtySources</a> = wrap.<a href="wrap/Wrappers.scala.html#14084" title="object sbt.wrap.Wrappers">Wrappers</a>.<a href="wrap/Wrappers.scala.html#18051" title="(scala.collection.mutable.Set[Source])scala.collection.Set[Source]">readOnly</a>(<a href="#34618" title="scala.collection.mutable.HashSet[Source]">modified</a>)
+			<span class="keyword">def</span> <a title="=&gt; scala.collection.Set[Source]" id="34739">cleanSources</a> = wrap.<a href="wrap/Wrappers.scala.html#14084" title="object sbt.wrap.Wrappers">Wrappers</a>.<a href="wrap/Wrappers.scala.html#18051" title="(scala.collection.mutable.Set[Source])scala.collection.Set[Source]">readOnly</a>(<a href="#34617" title="scala.collection.mutable.HashSet[Source]">unmodified</a>)
+			<span class="keyword">def</span> <a title="=&gt; Int" id="34740">directlyModifiedSourcesCount</a> = <a href="#34619" title="Int">directlyModifiedCount</a>
+			<span class="keyword">def</span> <a title="=&gt; Int" id="34741">invalidatedSourcesCount</a> = <a href="#34738" title="=&gt; scala.collection.Set[Source]">dirtySources</a>.<span title="=&gt; Int">size</span> <a title="(Int)Int" id="3096">-</a> <a href="#34619" title="Int">directlyModifiedCount</a>
+			<span class="keyword">def</span> <a title="=&gt; Int" id="34742">removedSourcesCount</a> = <a href="#34616" title="Int">removedCount</a>
+			<span class="keyword">override</span> <span class="keyword">def</span> <a title="()java.lang.String" id="34743">toString</a> =
+			{
+				<span title="java.lang.String(&quot;  Source analysis: &quot;)" class="string">&quot;  Source analysis: &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#34740" title="=&gt; Int">directlyModifiedSourcesCount</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot; new/modified, &quot;)" class="string">&quot; new/modified, &quot;</span> <span title="(Any)java.lang.String">+</span>
+					<a href="#34741" title="=&gt; Int">invalidatedSourcesCount</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot; indirectly invalidated, &quot;)" class="string">&quot; indirectly invalidated, &quot;</span> <span title="(Any)java.lang.String">+</span>
+					<a href="#34742" title="=&gt; Int">removedSourcesCount</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot; removed.&quot;)" class="string">&quot; removed.&quot;</span>
+			}
+		}
+	}
+
+	<span class="keyword">protected</span> <span class="keyword">def</span> <a title="=&gt; Boolean" id="26719">checkLastModified</a> = <span title="Boolean(true)" class="keyword">true</span>
+	<span class="keyword">protected</span> <span class="keyword">def</span> <a title="=&gt; Boolean" id="26720">noProductsImpliesModified</a> = <span title="Boolean(true)" class="keyword">true</span>
+	<span class="keyword">protected</span> <span class="keyword">def</span> <a title="(Source)Boolean" id="26721">isSourceModified</a>(<a title="Source" id="34636">source</a>: <a href="#13397" title="Source">Source</a>) =
+	{
+		<a href="#26700" title="=&gt; Conditional.this.AnalysisType">analysis</a>.<a href="Analysis.scala.html#25256" title="(Source)Option[scala.collection.Set[Product]]">products</a>(<a href="#34636" title="Source">source</a>) <span title="Boolean" class="keyword">match</span>
+		{
+			<span title="Boolean" class="keyword">case</span> <span title="object None">None</span> =&gt;
+			{
+				<a href="#26703" title="=&gt; sbt.Logger">log</a>.<a href="Logger.scala.html#19516" title="(=&gt; String)Unit">debug</a>(<span title="java.lang.String(&quot;New file &quot;)" class="string">&quot;New file &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#34636" title="Source">source</a>)
+				<span title="Boolean(true)" class="keyword">true</span>
+			}
+			<span title="Boolean" class="keyword">case</span> Some(<a title="scala.collection.Set[Product]" id="34641">sourceProducts</a>) =&gt;
+			{
+				<span class="keyword">val</span> <a title="Long" id="34642">sourceModificationTime</a> = <a href="#26708" title="(Source)Long">sourceLastModified</a>(<a href="#34636" title="Source">source</a>)
+				<span class="keyword">def</span> <a title="(Product)Boolean" id="34643">isOutofdate</a>(<a title="Product" id="34645">p</a>: <a href="#13398" title="Product">Product</a>) =
+					<span title="=&gt; Boolean">!</span><a href="#26709" title="(Product)Boolean">productExists</a>(<a href="#34645" title="Product">p</a>) <span title="(Boolean)Boolean">||</span> (<a href="#26719" title="=&gt; Boolean">checkLastModified</a> <span title="(Boolean)Boolean">&amp;&amp;</span> <a href="#26710" title="(Product)Long">productLastModified</a>(<a href="#34645" title="Product">p</a>) <span title="(Long)Boolean">&lt;</span> <a href="#34642" title="Long">sourceModificationTime</a>)
+
+				<a href="#34641" title="scala.collection.Set[Product]">sourceProducts</a>.<span title="((Product) =&gt; Boolean)Option[Product]">find</span>(<a href="#34643" title="(Product)Boolean">isOutofdate</a>) <span title="Boolean" class="keyword">match</span>
+				{
+					<span title="Boolean" class="keyword">case</span> Some(<a title="Product" id="34653">modifiedProduct</a>) =&gt;
+						<a href="#26703" title="=&gt; sbt.Logger">log</a>.<a href="Logger.scala.html#19516" title="(=&gt; String)Unit">debug</a>(<span title="java.lang.String(&quot;Outdated &quot;)" class="string">&quot;Outdated &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#26704" title="=&gt; String">productType</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot;: &quot;)" class="string">&quot;: &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#34653" title="Product">modifiedProduct</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot; for source &quot;)" class="string">&quot; for source &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#34636" title="Source">source</a>)
+						<span title="Boolean(true)" class="keyword">true</span>
+					<span title="Boolean" class="keyword">case</span> <span title="object None">None</span> =&gt;
+						<span title="Boolean" class="keyword">if</span>(<a href="#26720" title="=&gt; Boolean">noProductsImpliesModified</a> <span title="(Boolean)Boolean">&amp;&amp;</span> <a href="#34641" title="scala.collection.Set[Product]">sourceProducts</a>.<a title="=&gt; Boolean" id="17943">isEmpty</a>)
+						{
+							<span class="comment">// necessary for change detection that depends on last modified</span>
+							<a href="#26703" title="=&gt; sbt.Logger">log</a>.<a href="Logger.scala.html#19516" title="(=&gt; String)Unit">debug</a>(<span title="java.lang.String(&quot;Source &quot;)" class="string">&quot;Source &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#34636" title="Source">source</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot; has no products, marking it modified.&quot;)" class="string">&quot; has no products, marking it modified.&quot;</span>)
+							<span title="Boolean(true)" class="keyword">true</span>
+						}
+						<span class="keyword">else</span>
+							<span title="Boolean(false)" class="keyword">false</span>
+				}
+			}
+		}
+	}
+	<span class="keyword">protected</span> <span class="keyword">def</span> <a title="(Boolean)Unit" id="26722">processingComplete</a>(<a title="Boolean" id="34835">success</a>: <span title="Boolean">Boolean</span>)
+	{
+		<span title="Unit" class="keyword">if</span>(<a href="#34835" title="Boolean">success</a>)
+		{
+			<a href="#26700" title="=&gt; Conditional.this.AnalysisType">analysis</a>.<a href="Analysis.scala.html#25249" title="()Option[String]">save</a>()
+			<a href="#26703" title="=&gt; sbt.Logger">log</a>.<a href="Logger.scala.html#19517" title="(=&gt; String)Unit">info</a>(<span title="java.lang.String(&quot;  Post-analysis: &quot;)" class="string">&quot;  Post-analysis: &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#26700" title="=&gt; Conditional.this.AnalysisType">analysis</a>.<a href="Analysis.scala.html#25253" title="=&gt; scala.collection.Set[Product]">allProducts</a>.<span title="=&gt; Seq[Product]">toSeq</span>.<a title="=&gt; Int" id="16519">length</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot; &quot;)" class="string">&quot; &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#26705" title="=&gt; String">productTypePlural</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot;.&quot;)" class="string">&quot;.&quot;</span>)
+		}
+		<span class="keyword">else</span>
+			<a href="#26700" title="=&gt; Conditional.this.AnalysisType">analysis</a>.<a href="Analysis.scala.html#25250" title="()Option[String]">revert</a>()
+	}
+}
+
+<span class="keyword">abstract</span> <span class="keyword">class</span> <a title="class AbstractCompileConfiguration extends java.lang.Object with NotNull with ScalaObject" id="10410">AbstractCompileConfiguration</a> <span class="keyword">extends</span> <span title="NotNull">NotNull</span>
+{
+	<span class="keyword">def</span> <a title="=&gt; String" id="26772">label</a>: <span title="String">String</span>
+	<span class="keyword">def</span> <a title="=&gt; sbt.PathFinder" id="26773">sourceRoots</a>: <a href="Path.scala.html#8754" title="sbt.PathFinder">PathFinder</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.PathFinder" id="26774">sources</a>: <a href="Path.scala.html#8754" title="sbt.PathFinder">PathFinder</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="26775">outputDirectory</a>: <a href="Path.scala.html#10152" title="sbt.Path">Path</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.PathFinder" id="26776">classpath</a>: <a href="Path.scala.html#8754" title="sbt.PathFinder">PathFinder</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="26777">analysisPath</a>: <a href="Path.scala.html#10152" title="sbt.Path">Path</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="26778">projectPath</a>: <a href="Path.scala.html#10152" title="sbt.Path">Path</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.Logger" id="26779">log</a>: <a href="Logger.scala.html#11784" title="sbt.Logger">Logger</a>
+	<span class="keyword">def</span> <a title="=&gt; Seq[String]" id="26780">options</a>: <span title="Seq[String]">Seq</span>[String]
+	<span class="keyword">def</span> <a title="=&gt; Seq[String]" id="26781">javaOptions</a>: <span title="Seq[String]">Seq</span>[String]
+	<span class="keyword">def</span> <a title="=&gt; Int" id="26782">maxErrors</a>: <span title="Int">Int</span>
+	<span class="keyword">def</span> <a title="=&gt; sbt.CompileOrder.Value" id="26783">compileOrder</a>: CompileOrder.<span title="sbt.CompileOrder.Value">Value</span>
+}
+<span class="keyword">abstract</span> <span class="keyword">class</span> <a title="class CompileConfiguration extends sbt.AbstractCompileConfiguration with ScalaObject" id="10995">CompileConfiguration</a> <span class="keyword">extends</span> <a href="#10410" title="sbt.AbstractCompileConfiguration">AbstractCompileConfiguration</a>
+{
+	<span class="keyword">def</span> <a title="=&gt; sbt.Fingerprints" id="26785">fingerprints</a>: <a href="#56507" title="sbt.Fingerprints">Fingerprints</a>
+}
+<span class="keyword">final</span> <span class="keyword">case</span> <span class="keyword">class</span> <a title="class Fingerprints extends java.lang.Object with NotNull with ScalaObject with Product" id="56507">Fingerprints</a>(<a title="Iterable[String]" id="56749">superclassNames</a>: <span title="Iterable[String]">Iterable</span>[String], <a title="Iterable[String]" id="56750">annotationNames</a>: <span title="Iterable[String]">Iterable</span>[String]) <span class="keyword">extends</span> <span title="NotNull">NotNull</span>
+
+<span class="keyword">import</span> java.io.File
+<span class="keyword">class</span> <a title="class CompileConditional extends sbt.AbstractCompileConditional with ScalaObject" id="8037">CompileConditional</a>(<span class="keyword">override</span> <span class="keyword">val</span> <a title="sbt.CompileConfiguration" id="35456">config</a>: <a href="#10995" title="sbt.CompileConfiguration">CompileConfiguration</a>, <a title="xsbt.AnalyzingCompiler" id="35457">compiler</a>: <a href="../AnalyzingCompiler.scala.html#12411" title="xsbt.AnalyzingCompiler">AnalyzingCompiler</a>) <span class="keyword">extends</span> <a href="#8940" title="sbt.AbstractCompileConditional">AbstractCompileConditional</a>(<a href="#35456" title="sbt.CompileConfiguration">config</a>, <a href="#35457" title="xsbt.AnalyzingCompiler">compiler</a>)
+{
+	<span class="keyword">import</span> config._
+	<span class="keyword">type</span> <a title="sbt.CompileAnalysis" id="26767">AnalysisType</a> = <a href="Analysis.scala.html#6996" title="sbt.CompileAnalysis">CompileAnalysis</a>
+	<span class="keyword">protected</span> <span class="keyword">def</span> <a title="(sbt.Path,sbt.Path,sbt.Logger)sbt.CompileAnalysis" id="26768">constructAnalysis</a>(<a title="sbt.Path" id="56526">analysisPath</a>: <a href="Path.scala.html#10152" title="sbt.Path">Path</a>, <a title="sbt.Path" id="56527">projectPath</a>: <a href="Path.scala.html#10152" title="sbt.Path">Path</a>, <a title="sbt.Logger" id="56528">log</a>: <a href="Logger.scala.html#11784" title="sbt.Logger">Logger</a>) =
+		<span title="sbt.CompileAnalysis" class="keyword">new</span> <a href="Analysis.scala.html#6996" title="sbt.CompileAnalysis">CompileAnalysis</a>(<a href="#56526" title="sbt.Path">analysisPath</a>, <a href="#56527" title="sbt.Path">projectPath</a>, <a href="#56528" title="sbt.Logger">log</a>)
+	<span class="keyword">protected</span> <span class="keyword">def</span> <a title="=&gt; CompileConditional.this.CompileAnalysisCallback" id="26769">analysisCallback</a> = <span title="CompileConditional.this.CompileAnalysisCallback" class="keyword">new</span> <a href="#26770" title="CompileConditional.this.CompileAnalysisCallback">CompileAnalysisCallback</a>
+	<span class="keyword">protected</span> <span class="keyword">class</span> <a title="class CompileAnalysisCallback extends sbt.BasicCompileAnalysisCallback with ScalaObject" id="26770">CompileAnalysisCallback</a> <span class="keyword">extends</span> <a href="AnalysisCallback.scala.html#7398" title="sbt.BasicCompileAnalysisCallback">BasicCompileAnalysisCallback</a>(<a href="#26778" title="=&gt; sbt.Path">projectPath</a>, <a href="#26700" title="=&gt; CompileConditional.this.AnalysisType">analysis</a>)
+	{
+		<span class="keyword">private</span>[<span class="keyword">this</span>] <span class="keyword">val</span> <a title="sbt.Fingerprints" id="56543">fingerprints0</a> = <a href="#26785" title="=&gt; sbt.Fingerprints">fingerprints</a>
+		<span class="keyword">def</span> <a title="=&gt; Iterable[String]" id="56544">superclassNames</a> = <a href="#56543" title="sbt.Fingerprints">fingerprints0</a>.<a href="#56749" title="=&gt; Iterable[String]">superclassNames</a>
+		<span class="keyword">def</span> <a title="=&gt; Iterable[String]" id="56545">annotationNames</a> = <a href="#56543" title="sbt.Fingerprints">fingerprints0</a>.<a href="#56750" title="=&gt; Iterable[String]">annotationNames</a>
+		<span class="keyword">def</span> <a title="(sbt.Path,String,String,Boolean)Unit" id="56546">foundSubclass</a>(<a title="sbt.Path" id="56555">sourcePath</a>: <a href="Path.scala.html#10152" title="sbt.Path">Path</a>, <a title="String" id="56556">subclassName</a>: <span title="String">String</span>, <a title="String" id="56557">superclassName</a>: <span title="String">String</span>, <a title="Boolean" id="56558">isModule</a>: <span title="Boolean">Boolean</span>): <span title="Unit">Unit</span> =
+			<a href="AnalysisCallback.scala.html#34553" title="=&gt; sbt.CompileAnalysis">analysis</a>.<a href="Analysis.scala.html#26927" title="(sbt.Path,sbt.Discovered)Unit">addTest</a>(<a href="#56555" title="sbt.Path">sourcePath</a>, <a href="impl/TestParser.scala.html#40340" title="(Boolean,String,String)sbt.DiscoveredSubclass">DiscoveredSubclass</a>(<a href="#56558" title="Boolean">isModule</a>, <a href="#56556" title="String">subclassName</a>, <a href="#56557" title="String">superclassName</a>))
+		<span class="keyword">def</span> <a title="(sbt.Path,String,String,Boolean)Unit" id="56547">foundAnnotated</a>(<a title="sbt.Path" id="56564">sourcePath</a>: <a href="Path.scala.html#10152" title="sbt.Path">Path</a>, <a title="String" id="56565">className</a>: <span title="String">String</span>, <a title="String" id="56566">annotationName</a>: <span title="String">String</span>, <a title="Boolean" id="56567">isModule</a>: <span title="Boolean">Boolean</span>): <span title="Unit">Unit</span> =
+			<a href="AnalysisCallback.scala.html#34553" title="=&gt; sbt.CompileAnalysis">analysis</a>.<a href="Analysis.scala.html#26927" title="(sbt.Path,sbt.Discovered)Unit">addTest</a>(<a href="#56564" title="sbt.Path">sourcePath</a>, <a href="impl/TestParser.scala.html#40384" title="(Boolean,String,String)sbt.DiscoveredAnnotated">DiscoveredAnnotated</a>(<a href="#56567" title="Boolean">isModule</a>, <a href="#56565" title="String">className</a>, <a href="#56566" title="String">annotationName</a>))
+	}
+}
+<span class="keyword">abstract</span> <span class="keyword">class</span> <a title="class AbstractCompileConditional extends java.lang.Object with sbt.Conditional[sbt.Path,sbt.Path,java.io.File] with ScalaObject" id="8940">AbstractCompileConditional</a>(<span class="keyword">val</span> <a title="sbt.AbstractCompileConfiguration" id="34394">config</a>: <a href="#10410" title="sbt.AbstractCompileConfiguration">AbstractCompileConfiguration</a>, <span class="keyword">val</span> <a title="xsbt.AnalyzingCompiler" id="34395">compiler</a>: <a href="../AnalyzingCompiler.scala.html#12411" title="xsbt.AnalyzingCompiler">AnalyzingCompiler</a>) <span class="keyword">extends</span> <a href="#9960" title="sbt.Conditional[sbt.Path,sbt.Path,java.io.File]">Conditional</a>[Path, Path, File]
+{
+	<span class="keyword">import</span> config._
+	<span class="keyword">type</span> <a title="&gt;: Nothing &lt;: sbt.BasicCompileAnalysis" id="26731">AnalysisType</a> &lt;: BasicCompileAnalysis
+	<span class="keyword">protected</span> <span class="keyword">def</span> <a title="=&gt; AbstractCompileConditional.this.AnalysisType" id="26732">loadAnalysis</a> =
+	{
+		<span class="keyword">val</span> <a title="AbstractCompileConditional.this.AnalysisType" id="56573">a</a> = <a href="#26733" title="(sbt.Path,sbt.Path,sbt.Logger)AbstractCompileConditional.this.AnalysisType">constructAnalysis</a>(<a href="#26777" title="=&gt; sbt.Path">analysisPath</a>, <a href="#26778" title="=&gt; sbt.Path">projectPath</a>, <a href="#26734" title="=&gt; sbt.Logger">log</a>)
+		<span class="keyword">for</span>(<a title="((String) =&gt; Unit)Unit" id="56575">errorMessage</a> &lt;- <a href="#56573" title="AbstractCompileConditional.this.AnalysisType">a</a>.<a href="Analysis.scala.html#26890" title="()Option[String]">load</a>())
+			<a title="(String)Nothing" id="6085">error</a>(<a href="#56575" title="String">errorMessage</a>)
+		<a href="#56573" title="AbstractCompileConditional.this.AnalysisType">a</a>
+	}
+	<span class="keyword">protected</span> <span class="keyword">def</span> <a title="(sbt.Path,sbt.Path,sbt.Logger)AbstractCompileConditional.this.AnalysisType" id="26733">constructAnalysis</a>(<a title="sbt.Path" id="34414">analysisPath</a>: <a href="Path.scala.html#10152" title="sbt.Path">Path</a>, <a title="sbt.Path" id="34415">projectPath</a>: <a href="Path.scala.html#10152" title="sbt.Path">Path</a>, <a title="sbt.Logger" id="34416">log</a>: <a href="Logger.scala.html#11784" title="sbt.Logger">Logger</a>): <a href="#26731" title="AbstractCompileConditional.this.AnalysisType">AnalysisType</a>
+
+	<span class="keyword">protected</span> <span class="keyword">def</span> <a title="=&gt; sbt.Logger" id="26734">log</a> = <a href="#34394" title="=&gt; sbt.AbstractCompileConfiguration">config</a>.<a href="#26779" title="=&gt; sbt.Logger">log</a>
+
+	<span class="keyword">protected</span> <span class="keyword">def</span> <a title="=&gt; java.lang.String" id="26735">productType</a> = <span title="java.lang.String(&quot;class&quot;)" class="string">&quot;class&quot;</span>
+	<span class="keyword">protected</span> <span class="keyword">def</span> <a title="=&gt; java.lang.String" id="26736">productTypePlural</a> = <span title="java.lang.String(&quot;classes&quot;)" class="string">&quot;classes&quot;</span>
+	<span class="keyword">protected</span> <span class="keyword">def</span> <a title="=&gt; scala.collection.Set[sbt.Path]" id="26737">sourcesToProcess</a> = <a href="#26774" title="=&gt; sbt.PathFinder">sources</a>.<a href="Path.scala.html#15978" title="=&gt; scala.collection.Set[sbt.Path]">get</a>
+
+	<span class="keyword">protected</span> <span class="keyword">def</span> <a title="(sbt.Path)Boolean" id="26738">sourceExists</a>(<a title="sbt.Path" id="56582">source</a>: <a href="Path.scala.html#10152" title="sbt.Path">Path</a>) = <a href="#56582" title="sbt.Path">source</a>.<a href="Path.scala.html#17865" title="=&gt; java.io.File">asFile</a>.<span title="()Boolean">exists</span>
+	<span class="keyword">protected</span> <span class="keyword">def</span> <a title="(sbt.Path)Long" id="26739">sourceLastModified</a>(<a title="sbt.Path" id="56584">source</a>: <a href="Path.scala.html#10152" title="sbt.Path">Path</a>) = <a href="#56584" title="sbt.Path">source</a>.<a href="Path.scala.html#17865" title="=&gt; java.io.File">asFile</a>.<span title="()Long">lastModified</span>
+
+	<span class="keyword">protected</span> <span class="keyword">def</span> <a title="(sbt.Path)Boolean" id="26740">productExists</a>(<a title="sbt.Path" id="56586">product</a>: <a href="Path.scala.html#10152" title="sbt.Path">Path</a>) = <a href="#56586" title="sbt.Path">product</a>.<a href="Path.scala.html#17865" title="=&gt; java.io.File">asFile</a>.<span title="()Boolean">exists</span>
+	<span class="keyword">protected</span> <span class="keyword">def</span> <a title="(sbt.Path)Long" id="26741">productLastModified</a>(<a title="sbt.Path" id="56588">product</a>: <a href="Path.scala.html#10152" title="sbt.Path">Path</a>) = <a href="#56588" title="sbt.Path">product</a>.<a href="Path.scala.html#17865" title="=&gt; java.io.File">asFile</a>.<span title="()Long">lastModified</span>
+
+	<span class="keyword">private</span> <span class="keyword">def</span> <a title="=&gt; java.io.File" id="26742">libraryJar</a> = <a href="#34395" title="=&gt; xsbt.AnalyzingCompiler">compiler</a>.<a href="../AnalyzingCompiler.scala.html#27001" title="=&gt; xsbt.ScalaInstance">scalaInstance</a>.<a href="../ScalaInstance.scala.html#23072" title="=&gt; java.io.File">libraryJar</a>
+	<span class="keyword">private</span> <span class="keyword">def</span> <a title="=&gt; java.io.File" id="26743">compilerJar</a> = <a href="#34395" title="=&gt; xsbt.AnalyzingCompiler">compiler</a>.<a href="../AnalyzingCompiler.scala.html#27001" title="=&gt; xsbt.ScalaInstance">scalaInstance</a>.<a href="../ScalaInstance.scala.html#23074" title="=&gt; java.io.File">compilerJar</a>
+	<span class="keyword">protected</span> <span class="keyword">def</span> <a title="(Iterable[java.io.File])Iterable[(java.io.File, AbstractCompileConditional.this.ExternalInfo)]" id="26744">externalInfo</a>(<a title="Iterable[java.io.File]" id="56594">externals</a>: <span title="Iterable[java.io.File]">Iterable</span>[File]) =
+	{
+		<span class="keyword">val</span> <a href="#17583" title="(sbt.wrap.Set[java.io.File], sbt.wrap.Set[java.io.File])">(</a><a href="#56596" title="sbt.wrap.Set[java.io.File]" id="17583">classpathJars</a>, <a href="#56596" title="sbt.wrap.Set[java.io.File]" id="17585">classpathDirs</a>) = <a href="ClasspathUtilities.scala.html#11386" title="object sbt.ClasspathUtilities">ClasspathUtilities</a>.<a href="ClasspathUtilities.scala.html#30149" title="(Iterable[sbt.Path])(sbt.wrap.Set[java.io.File], sbt.wrap.Set[java.io.File])">buildSearchPaths</a>(<a href="#26776" title="=&gt; sbt.PathFinder">classpath</a>.<a href="Path.scala.html#15978" title="=&gt; scala.collection.Set[sbt.Path]">get</a> <span title="(Iterable[sbt.Path])Collection[sbt.Path]">++</span> <span title="(sbt.Path*)Seq[sbt.Path]">Seq</span>(<a href="Path.scala.html#10153" title="object sbt.Path">Path</a>.<a href="Path.scala.html#15373" title="(java.io.File)sbt.Path">fromFile</a>(<a href="#26742" title="=&gt; java.io.File">libraryJar</a>),  <a href="Path.scala.html#10153" title="object sbt.Path">Path</a>.<a href="Path.scala.html#15373" title="(java.io.File)sbt.Path">fromFile</a>(<a href="#26743" title="=&gt; java.io.File">compilerJar</a>)))
+		<span class="keyword">for</span>(<a title="((java.io.File) =&gt; (java.io.File, AbstractCompileConditional.this.ExternalInfo))Iterable[(java.io.File, AbstractCompileConditional.this.ExternalInfo)]" id="56610">external</a> &lt;- <a href="#56594" title="Iterable[java.io.File]">externals</a>) <span class="keyword">yield</span>
+		{
+			<span class="keyword">val</span> <a title="Boolean" id="56611">available</a> = <a href="#56610" title="java.io.File">external</a>.<span title="()Boolean">exists</span> <span title="(Boolean)Boolean">&amp;&amp;</span> (<a href="#56610" title="java.io.File">external</a> <span title="(AnyRef)Boolean">==</span> <a href="#26742" title="=&gt; java.io.File">libraryJar</a> <span title="(Boolean)Boolean">||</span> <a href="ClasspathUtilities.scala.html#11386" title="object sbt.ClasspathUtilities">ClasspathUtilities</a>.<a href="ClasspathUtilities.scala.html#30150" title="(sbt.wrap.Set[java.io.File],sbt.wrap.Set[java.io.File],java.io.File)Boolean">onClasspath</a>(<a href="#17583" title="sbt.wrap.Set[java.io.File]">classpathJars</a>, <a href="#17585" title="sbt.wrap.Set[java.io.File]">classpathDirs</a>, <a href="#56610" title="java.io.File">external</a>) )
+			<span title="Unit" class="keyword">if</span>(<span title="=&gt; Boolean">!</span><a href="#56611" title="Boolean">available</a>)
+				<a href="#26734" title="=&gt; sbt.Logger">log</a>.<a href="Logger.scala.html#19516" title="(=&gt; String)Unit">debug</a>(<span title="java.lang.String(&quot;External &quot;)" class="string">&quot;External &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#56610" title="java.io.File">external</a> <span title="(Any)java.lang.String">+</span> (<span title="Any" class="keyword">if</span>(<a href="#56610" title="java.io.File">external</a>.<span title="()Boolean">exists</span>) <span title="java.lang.String(&quot; not on classpath.&quot;)" class="string">&quot; not on classpath.&quot;</span> <span class="keyword">else</span> <span title="java.lang.String(&quot; does not exist.&quot;)" class="string">&quot; does not exist.&quot;</span>))
+			<span title="(java.io.File,AbstractCompileConditional.this.ExternalInfo)(java.io.File, AbstractCompileConditional.this.ExternalInfo)">(</span><a href="#56610" title="java.io.File">external</a>, <a href="#56472" title="(Boolean,Long)AbstractCompileConditional.this.ExternalInfo">ExternalInfo</a>(<a href="#56611" title="Boolean">available</a>, <a href="#56610" title="java.io.File">external</a>.<span title="()Long">lastModified</span>))
+		}
+	}
+
+	<span class="keyword">import</span> ChangeDetection.{LastModifiedOnly, HashOnly, HashAndLastModified, HashAndProductsExist}
+	<span class="keyword">protected</span> <span class="keyword">def</span> <a title="=&gt; sbt.ChangeDetection.Value" id="26746">changeDetectionMethod</a>: ChangeDetection.<span title="sbt.ChangeDetection.Value">Value</span> = <a href="#34449" title="=&gt; sbt.ChangeDetection.Value">HashAndProductsExist</a>
+	<span class="keyword">override</span> <span class="keyword">protected</span> <span class="keyword">def</span> <a title="=&gt; Boolean" id="26747">checkLastModified</a> = <a href="#26746" title="=&gt; sbt.ChangeDetection.Value">changeDetectionMethod</a> <a title="(AnyRef)Boolean" id="5738">!=</a> <a href="#34449" title="=&gt; sbt.ChangeDetection.Value">HashAndProductsExist</a>
+	<span class="keyword">override</span> <span class="keyword">protected</span> <span class="keyword">def</span> <a title="=&gt; Boolean" id="26748">noProductsImpliesModified</a> = <a href="#26746" title="=&gt; sbt.ChangeDetection.Value">changeDetectionMethod</a> <span title="(AnyRef)Boolean">==</span> <a href="#34443" title="=&gt; sbt.ChangeDetection.Value">LastModifiedOnly</a>
+	<span class="keyword">override</span> <span class="keyword">protected</span> <span class="keyword">def</span> <a title="(sbt.Path)Boolean" id="26749">isSourceModified</a>(<a title="sbt.Path" id="56628">source</a>: <a href="Path.scala.html#10152" title="sbt.Path">Path</a>) =
+		<a href="#26746" title="=&gt; sbt.ChangeDetection.Value">changeDetectionMethod</a> <span title="Boolean" class="keyword">match</span>
+		{
+			<span title="Boolean" class="keyword">case</span> <a href="#34447" title="=&gt; sbt.ChangeDetection.Value">HashAndLastModified</a> | <a href="#34449" title="=&gt; sbt.ChangeDetection.Value">HashAndProductsExist</a> =&gt;
+				<span class="comment">// behavior will differ because of checkLastModified</span>
+				<span class="comment">// hash modified must come first so that the latest hash is calculated for every source</span>
+				<a href="#26754" title="(sbt.Path)Boolean">hashModified</a>(<a href="#56628" title="sbt.Path">source</a>) <span title="(Boolean)Boolean">||</span> <span class="keyword">super</span>.<a href="#26721" title="(sbt.Path)Boolean">isSourceModified</a>(<a href="#56628" title="sbt.Path">source</a>)
+			<span title="Boolean" class="keyword">case</span> <a href="#34445" title="=&gt; sbt.ChangeDetection.Value">HashOnly</a> =&gt; <a href="#26754" title="(sbt.Path)Boolean">hashModified</a>(<a href="#56628" title="sbt.Path">source</a>)
+			<span title="Boolean" class="keyword">case</span> <a href="#34443" title="=&gt; sbt.ChangeDetection.Value">LastModifiedOnly</a> =&gt; <span class="keyword">super</span>.<a href="#26721" title="(sbt.Path)Boolean">isSourceModified</a>(<a href="#56628" title="sbt.Path">source</a>)
+		}
+
+	<span class="keyword">import</span> scala.collection.mutable.{Buffer, ListBuffer}
+	<span class="keyword">private</span> <span class="keyword">val</span> <a title="scala.collection.mutable.Buffer[(sbt.Path, Option[Array[Byte]])]" id="26751">newHashes</a>: <a title="scala.collection.mutable.Buffer[(sbt.Path, Option[Array[Byte]])]" id="15599">Buffer</a>[(Path, Option[Array[Byte]])] = <span title="scala.collection.mutable.ListBuffer[(sbt.Path, Option[Array[Byte]])]" class="keyword">new</span> <a title="scala.collection.mutable.ListBuffer[(sbt.Path, Option[Array[Byte]])]" id="15563">ListBuffer</a>
+	<span class="keyword">private</span> <span class="keyword">def</span> <a title="(sbt.Path,String)Unit" id="26753">warnHashError</a>(<a title="sbt.Path" id="56663">source</a>: <a href="Path.scala.html#10152" title="sbt.Path">Path</a>, <a title="String" id="56664">message</a>: <span title="String">String</span>)
+	{
+		<a href="#26734" title="=&gt; sbt.Logger">log</a>.<a href="Logger.scala.html#19518" title="(=&gt; String)Unit">warn</a>(<span title="java.lang.String(&quot;Error computing hash for source &quot;)" class="string">&quot;Error computing hash for source &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#56663" title="sbt.Path">source</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot;: &quot;)" class="string">&quot;: &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#56664" title="String">message</a>)
+		<a href="#26751" title="=&gt; scala.collection.mutable.Buffer[(sbt.Path, Option[Array[Byte]])]">newHashes</a> <span title="((sbt.Path, Option[Array[Byte]]))Unit">+=</span> (<span title="(sbt.Path,object None)(sbt.Path, object None)">(</span><a href="#56663" title="sbt.Path">source</a>, <span title="object None">None</span>))
+	}
+	<span class="keyword">protected</span> <span class="keyword">def</span> <a title="(sbt.Path)Boolean" id="26754">hashModified</a>(<a title="sbt.Path" id="56631">source</a>: <a href="Path.scala.html#10152" title="sbt.Path">Path</a>) =
+	{
+		<a href="#56631" title="sbt.Path">source</a>.<a href="Path.scala.html#17861" title="=&gt; Boolean">isDirectory</a> <span title="(Boolean)Boolean">||</span>
+		(<a href="#26700" title="=&gt; AbstractCompileConditional.this.AnalysisType">analysis</a>.<a href="Analysis.scala.html#26907" title="(sbt.Path)Option[Array[Byte]]">hash</a>(<a href="#56631" title="sbt.Path">source</a>) <span title="Boolean" class="keyword">match</span>
+		{
+			<span title="Boolean" class="keyword">case</span> <span title="object None">None</span> =&gt;
+				<a href="#26734" title="=&gt; sbt.Logger">log</a>.<a href="Logger.scala.html#19516" title="(=&gt; String)Unit">debug</a>(<span title="java.lang.String(&quot;Source &quot;)" class="string">&quot;Source &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#56631" title="sbt.Path">source</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot; had no hash, marking modified.&quot;)" class="string">&quot; had no hash, marking modified.&quot;</span>)
+				<a href="Hash.scala.html#56643" title="(sbt.Path,sbt.Logger)Either[String,Array[Byte]]">Hash</a>(<a href="#56631" title="sbt.Path">source</a>, <a href="#26734" title="=&gt; sbt.Logger">log</a>).<a title="((String) =&gt; Unit,(Array[Byte]) =&gt; Unit)Unit" id="25551">fold</a>(<a title="String" id="56662">err</a> =&gt; <a href="#26753" title="(sbt.Path,String)Unit">warnHashError</a>(<a href="#56631" title="sbt.Path">source</a>, <a href="#56662" title="String">err</a>), <a title="Array[Byte]" id="56666">newHash</a> =&gt; <a href="#26751" title="=&gt; scala.collection.mutable.Buffer[(sbt.Path, Option[Array[Byte]])]">newHashes</a> <span title="((sbt.Path, Option[Array[Byte]]))Unit">+=</span> (<span title="(sbt.Path,Some[Array[Byte]])(sbt.Path, Some[Array[Byte]])">(</span><a href="#56631" title="sbt.Path">source</a>, <span title="(Array[Byte])Some[Array[Byte]]">Some</span>(<a href="#56666" title="Array[Byte]">newHash</a>))))
+				<span title="Boolean(true)" class="keyword">true</span>
+			<span title="Boolean" class="keyword">case</span> Some(<a title="Array[Byte]" id="56670">oldHash</a>) =&gt;
+			{
+				<a href="Hash.scala.html#56643" title="(sbt.Path,sbt.Logger)Either[String,Array[Byte]]">Hash</a>(<a href="#56631" title="sbt.Path">source</a>, <a href="#26734" title="=&gt; sbt.Logger">log</a>) <span title="Boolean" class="keyword">match</span>
+				{
+					<span title="Boolean" class="keyword">case</span> Left(<a title="String" id="56675">err</a>) =&gt;
+						<a href="#26753" title="(sbt.Path,String)Unit">warnHashError</a>(<a href="#56631" title="sbt.Path">source</a>, <a href="#56675" title="String">err</a>)
+						<a href="#26734" title="=&gt; sbt.Logger">log</a>.<a href="Logger.scala.html#19516" title="(=&gt; String)Unit">debug</a>(<span title="java.lang.String(&quot;Assuming source is modified because of error.&quot;)" class="string">&quot;Assuming source is modified because of error.&quot;</span>)
+						<span title="Boolean(true)" class="keyword">true</span>
+					<span title="Boolean" class="keyword">case</span> Right(<a title="Array[Byte]" id="56678">newHash</a>) =&gt;
+						<a href="#26751" title="=&gt; scala.collection.mutable.Buffer[(sbt.Path, Option[Array[Byte]])]">newHashes</a> <span title="((sbt.Path, Option[Array[Byte]]))Unit">+=</span> (<span title="(sbt.Path,Some[Array[Byte]])(sbt.Path, Some[Array[Byte]])">(</span><a href="#56631" title="sbt.Path">source</a>, <span title="(Array[Byte])Some[Array[Byte]]">Some</span>(<a href="#56678" title="Array[Byte]">newHash</a>)))
+						<span class="keyword">val</span> <a title="Boolean" id="56679">different</a> = <span title="=&gt; Boolean">!</span>(<a href="#56670" title="Array[Byte]">oldHash</a> <a title="(Any)Boolean" id="17119">deepEquals</a> <a href="#56678" title="Array[Byte]">newHash</a>)
+						<span title="Unit" class="keyword">if</span>(<a href="#56679" title="Boolean">different</a>)
+							<a href="#26734" title="=&gt; sbt.Logger">log</a>.<a href="Logger.scala.html#19516" title="(=&gt; String)Unit">debug</a>(<span title="java.lang.String(&quot;Hash for source &quot;)" class="string">&quot;Hash for source &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#56631" title="sbt.Path">source</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot; changed (was &quot;)" class="string">&quot; changed (was &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="Hash.scala.html#9982" title="object sbt.Hash">Hash</a>.<a href="Hash.scala.html#56640" title="(Array[Byte])String">toHex</a>(<a href="#56670" title="Array[Byte]">oldHash</a>) <span title="(Any)java.lang.String">+</span>
+							<span title="java.lang.String(&quot;, is now &quot;)" class="string">&quot;, is now &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="Hash.scala.html#9982" title="object sbt.Hash">Hash</a>.<a href="Hash.scala.html#56640" title="(Array[Byte])String">toHex</a>(<a href="#56678" title="Array[Byte]">newHash</a>) <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot;), marking modified.&quot;)" class="string">&quot;), marking modified.&quot;</span>)
+						<a href="#56679" title="Boolean">different</a>
+				}
+			}
+		})
+	}
+	<span class="keyword">private</span> <span class="keyword">def</span> <a title="=&gt; Iterable[sbt.Path]" id="26755">scalaJars</a>: <span title="Iterable[sbt.Path]">Iterable</span>[Path] =
+	{
+		<span class="keyword">val</span> <a title="xsbt.ScalaInstance" id="56696">instance</a> = <a href="#34395" title="=&gt; xsbt.AnalyzingCompiler">compiler</a>.<a href="../AnalyzingCompiler.scala.html#27001" title="=&gt; xsbt.ScalaInstance">scalaInstance</a>
+		<span title="(java.io.File*)Seq[java.io.File]">Seq</span>(<a href="#56696" title="xsbt.ScalaInstance">instance</a>.<a href="../ScalaInstance.scala.html#23072" title="=&gt; java.io.File">libraryJar</a>, <a href="#56696" title="xsbt.ScalaInstance">instance</a>.<a href="../ScalaInstance.scala.html#23074" title="=&gt; java.io.File">compilerJar</a>).<a title="((java.io.File) =&gt; sbt.Path)Seq[sbt.Path]" id="16538">map</a>(<a href="Path.scala.html#10153" title="object sbt.Path">Path</a>.<a href="Path.scala.html#15373" title="(java.io.File)sbt.Path">fromFile</a>)
+	}
+	<span class="keyword">protected</span> <span class="keyword">def</span> <a title="(AbstractCompileConditional.this.ConditionalAnalysis)Option[String]" id="26756">execute</a>(<a title="AbstractCompileConditional.this.ConditionalAnalysis" id="34428">executeAnalysis</a>: <a href="#26716" title="AbstractCompileConditional.this.ConditionalAnalysis">ConditionalAnalysis</a>) =
+	{
+		<a href="#26734" title="=&gt; sbt.Logger">log</a>.<a href="Logger.scala.html#19517" title="(=&gt; String)Unit">info</a>(<a href="#34428" title="AbstractCompileConditional.this.ConditionalAnalysis">executeAnalysis</a>.<a title="()java.lang.String" id="5730">toString</a>)
+		<a href="#26757" title="()Unit">finishHashes</a>()
+		<span class="keyword">import</span> executeAnalysis.dirtySources
+
+		<span class="comment">// the output directory won't show up in the classpath unless it exists, so do this before classpath.get</span>
+		<span class="keyword">val</span> <a title="java.io.File" id="34432">outputDir</a> = <a href="#26775" title="=&gt; sbt.Path">outputDirectory</a>.<a href="Path.scala.html#17865" title="=&gt; java.io.File">asFile</a>
+		<a href="FileUtilities.scala.html#9046" title="object sbt.FileUtilities">FileUtilities</a>.<a href="FileUtilities.scala.html#15246" title="(java.io.File,sbt.Logger)Option[String]">createDirectory</a>(<a href="#34432" title="java.io.File">outputDir</a>, <a href="#26734" title="=&gt; sbt.Logger">log</a>)
+
+		<span class="keyword">val</span> <a title="scala.collection.Set[sbt.Path]" id="34433">cp</a> = <a href="#26776" title="=&gt; sbt.PathFinder">classpath</a>.<a href="Path.scala.html#15978" title="=&gt; scala.collection.Set[sbt.Path]">get</a>
+		<span title="Unit" class="keyword">if</span>(<span title="=&gt; Boolean">!</span><a href="#34421" title="=&gt; Iterable[sbt.Path]">dirtySources</a>.<a title="=&gt; Boolean" id="16104">isEmpty</a>)
+			<a href="#26758" title="(Iterable[sbt.Path])Unit">checkClasspath</a>(<a href="#34433" title="scala.collection.Set[sbt.Path]">cp</a>)
+		<span class="keyword">def</span> <a title="=&gt; Option[String]" id="34434">run</a> =
+		{
+			<span class="keyword">val</span> <a title="sbt.Compile" id="34453">compile</a> = <span title="sbt.Compile" class="keyword">new</span> <a href="Compile.scala.html#10560" title="sbt.Compile">Compile</a>(<a href="#34394" title="=&gt; sbt.AbstractCompileConfiguration">config</a>.<a href="#26782" title="=&gt; Int">maxErrors</a>, <a href="#34395" title="=&gt; xsbt.AnalyzingCompiler">compiler</a>, <a href="#26759" title="=&gt; sbt.AnalysisCallback">analysisCallback</a>, <a href="#26778" title="=&gt; sbt.Path">projectPath</a>)
+			<a href="Compile.scala.html#29452" title="(String,Iterable[sbt.Path],Iterable[sbt.Path],sbt.Path,Seq[String],Seq[String],sbt.CompileOrder.Value,sbt.Logger)Option[String]">compile</a>(<a href="#26772" title="=&gt; String">label</a>, <a href="#34421" title="=&gt; Iterable[sbt.Path]">dirtySources</a>, <a href="#34433" title="scala.collection.Set[sbt.Path]">cp</a>, <a href="#26775" title="=&gt; sbt.Path">outputDirectory</a>, <a href="#26780" title="=&gt; Seq[String]">options</a>, <a href="#26781" title="=&gt; Seq[String]">javaOptions</a>, <a href="#26783" title="=&gt; sbt.CompileOrder.Value">compileOrder</a>, <a href="#26734" title="=&gt; sbt.Logger">log</a>)
+		}
+		<span class="keyword">val</span> <a title="java.lang.ClassLoader" id="34435">loader</a> = <a href="ClasspathUtilities.scala.html#11386" title="object sbt.ClasspathUtilities">ClasspathUtilities</a>.<a href="ClasspathUtilities.scala.html#30139" title="(Iterable[sbt.Path])java.lang.ClassLoader">toLoader</a>(<a href="#34433" title="scala.collection.Set[sbt.Path]">cp</a> <span title="(Iterable[sbt.Path])Collection[sbt.Path]">++</span> <a href="#26755" title="=&gt; Iterable[sbt.Path]">scalaJars</a>)
+		<span class="keyword">val</span> <a title="Option[String]" id="34436">r</a> = classfile.<a href="classfile/Analyze.scala.html#34494" title="(sbt.Path,sbt.Path,Iterable[sbt.Path],Iterable[sbt.Path],sbt.Logger)(=&gt; scala.collection.Set[sbt.Path],sbt.AnalysisCallback,java.lang.ClassLoader)(=&gt; Option[String])Option[String]">Analyze</a>(<a href="#26778" title="=&gt; sbt.Path">projectPath</a>, <a href="#26775" title="=&gt; sbt.Path">outputDirectory</a>, <a href="#34421" title="=&gt; Iterable[sbt.Path]">dirtySources</a>, <a href="#26773" title="=&gt; sbt.PathFinder">sourceRoots</a>.<a href="Path.scala.html#15978" title="=&gt; scala.collection.Set[sbt.Path]">get</a>, <a href="#26734" title="=&gt; sbt.Logger">log</a>)(<a href="#26700" title="=&gt; AbstractCompileConditional.this.AnalysisType">analysis</a>.<a href="Analysis.scala.html#26864" title="=&gt; scala.collection.mutable.Set[sbt.Path]">allProducts</a>, <a href="#26759" title="=&gt; sbt.AnalysisCallback">analysisCallback</a>, <a href="#34435" title="java.lang.ClassLoader">loader</a>)(<a href="#34434" title="=&gt; Option[String]">run</a>)
+		<span title="Unit" class="keyword">if</span>(<a href="#26734" title="=&gt; sbt.Logger">log</a>.<a href="Logger.scala.html#19513" title="(sbt.Level.Value)Boolean">atLevel</a>(<a href="Logger.scala.html#8242" title="object sbt.Level">Level</a>.<a href="Logger.scala.html#28477" title="=&gt; sbt.Level.Value">Debug</a>))
+		{
+			<span class="comment">/** This checks that the plugin accounted for all classes in the output directory.*/</span>
+			<span class="keyword">val</span> <a title="scala.collection.mutable.Set[sbt.Path]" id="34520">classes</a> = scala.collection.mutable.<a title="(sbt.Path*)scala.collection.mutable.Set[sbt.Path]" id="15534">HashSet</a>(<a href="#26700" title="=&gt; AbstractCompileConditional.this.AnalysisType">analysis</a>.<a href="Analysis.scala.html#26864" title="=&gt; scala.collection.mutable.Set[sbt.Path]">allProducts</a>.<span title="=&gt; Seq[sbt.Path]">toSeq</span>: _*)
+			<span class="keyword">val</span> <a title="scala.collection.Set[sbt.Path]" id="34521">actualClasses</a> = (<a href="#26775" title="=&gt; sbt.Path">outputDirectory</a> <a href="Path.scala.html#15971" title="(sbt.FileFilter)sbt.PathFinder">**</a> <a href="NameFilter.scala.html#30459" title="(String)sbt.NameFilter">GlobFilter</a>(<span title="java.lang.String(&quot;*.class&quot;)" class="string">&quot;*.class&quot;</span>)).<a href="Path.scala.html#15978" title="=&gt; scala.collection.Set[sbt.Path]">get</a>
+			<span class="keyword">val</span> <a title="List[sbt.Path]" id="34522">missedClasses</a> = <a href="#34521" title="scala.collection.Set[sbt.Path]">actualClasses</a>.<span title="=&gt; List[sbt.Path]">toList</span>.<a title="((sbt.Path) =&gt; Boolean)List[sbt.Path]" id="17758">remove</a>(<a href="#34520" title="scala.collection.mutable.Set[sbt.Path]">classes</a>.<a href="#34525" title="(sbt.Path)Boolean" id="17941">contains</a>)
+			<a href="#34522" title="List[sbt.Path]">missedClasses</a>.<a title="((sbt.Path) =&gt; Unit)Unit" id="17756">foreach</a>(<a title="sbt.Path" id="34527">c</a> =&gt; <a href="#26734" title="=&gt; sbt.Logger">log</a>.<a href="Logger.scala.html#19516" title="(=&gt; String)Unit">debug</a>(<span title="java.lang.String(&quot;Missed class: &quot;)" class="string">&quot;Missed class: &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#34527" title="sbt.Path">c</a>))
+			<a href="#26734" title="=&gt; sbt.Logger">log</a>.<a href="Logger.scala.html#19516" title="(=&gt; String)Unit">debug</a>(<span title="java.lang.String(&quot;Total missed classes: &quot;)" class="string">&quot;Total missed classes: &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#34522" title="List[sbt.Path]">missedClasses</a>.<a title="=&gt; Int" id="17735">length</a>)
+		}
+		<a href="#34436" title="Option[String]">r</a>
+	}
+	<span class="keyword">private</span> <span class="keyword">def</span> <a title="()Unit" id="26757">finishHashes</a>()
+	{
+		<span title="Unit" class="keyword">if</span>(<a href="#26746" title="=&gt; sbt.ChangeDetection.Value">changeDetectionMethod</a> <span title="(AnyRef)Boolean">==</span> <a href="#34443" title="=&gt; sbt.ChangeDetection.Value">LastModifiedOnly</a>)
+			<a href="#26700" title="=&gt; AbstractCompileConditional.this.AnalysisType">analysis</a>.<a href="Analysis.scala.html#26908" title="()Unit">clearHashes</a>()
+		<span class="keyword">else</span>
+		{
+			<span class="keyword">for</span>(<a href="#56707" title="(((sbt.Path, Option[Array[Byte]])) =&gt; Unit)Unit" id="16542">(</a><a title="sbt.Path" id="56712">path</a>, <a title="Option[Array[Byte]]" id="56713">hash</a>) &lt;- <a href="#26751" title="=&gt; scala.collection.mutable.Buffer[(sbt.Path, Option[Array[Byte]])]">newHashes</a>)
+			{
+				<a href="#56713" title="Option[Array[Byte]]">hash</a> <span title="Unit" class="keyword">match</span>
+				{
+					<span title="Unit" class="keyword">case</span> <span title="object None">None</span> =&gt; <a href="#26700" title="=&gt; AbstractCompileConditional.this.AnalysisType">analysis</a>.<a href="Analysis.scala.html#26906" title="(sbt.Path)Unit">clearHash</a>(<a href="#56712" title="sbt.Path">path</a>)
+					<span title="Unit" class="keyword">case</span> Some(<a title="Array[Byte]" id="56715">hash</a>) =&gt; <a href="#26700" title="=&gt; AbstractCompileConditional.this.AnalysisType">analysis</a>.<a href="Analysis.scala.html#26905" title="(sbt.Path,Array[Byte])Unit">setHash</a>(<a href="#56712" title="sbt.Path">path</a>, <a href="#56715" title="Array[Byte]">hash</a>)
+				}
+			}
+		}
+		<a href="#26751" title="=&gt; scala.collection.mutable.Buffer[(sbt.Path, Option[Array[Byte]])]">newHashes</a>.<a title="()Unit" id="18532">clear</a>()
+	}
+	<span class="keyword">private</span> <span class="keyword">def</span> <a title="(Iterable[sbt.Path])Unit" id="26758">checkClasspath</a>(<a title="Iterable[sbt.Path]" id="34452">cp</a>: <span title="Iterable[sbt.Path]">Iterable</span>[Path])
+	{
+		<span class="keyword">import</span> scala.collection.mutable.{HashMap, HashSet, Set}
+		<span class="keyword">val</span> <a title="scala.collection.mutable.HashMap[String,scala.collection.mutable.Set[sbt.Path]]" id="56719">collisions</a> = <span title="scala.collection.mutable.HashMap[String,scala.collection.mutable.Set[sbt.Path]]" class="keyword">new</span> <a title="scala.collection.mutable.HashMap[String,scala.collection.mutable.Set[sbt.Path]]" id="15716">HashMap</a>[String, Set[Path]]
+		<span class="keyword">for</span>(<a title="((sbt.Path) =&gt; Unit)Unit" id="56724">jar</a> &lt;- <a href="#34452" title="Iterable[sbt.Path]">cp</a> <span class="keyword">if</span> <a href="ClasspathUtilities.scala.html#11386" title="object sbt.ClasspathUtilities">ClasspathUtilities</a>.<a href="ClasspathUtilities.scala.html#30144" title="(sbt.Path)Boolean">isArchive</a>(<a href="#56724" title="sbt.Path">jar</a>))
+			<a href="#56719" title="scala.collection.mutable.HashMap[String,scala.collection.mutable.Set[sbt.Path]]">collisions</a>.<a title="(String,=&gt; scala.collection.mutable.Set[sbt.Path])scala.collection.mutable.Set[sbt.Path]" id="24193">getOrElseUpdate</a>(<a href="#56724" title="sbt.Path">jar</a>.<a href="Path.scala.html#17865" title="=&gt; java.io.File">asFile</a>.<a title="()java.lang.String" id="16008">getName</a>, <span title="scala.collection.mutable.HashSet[sbt.Path]" class="keyword">new</span> <span title="scala.collection.mutable.HashSet[sbt.Path]">HashSet</span>[Path]) <a title="(sbt.Path)Unit" id="17910">+=</a> <a href="#56724" title="sbt.Path">jar</a>
+		<span class="keyword">for</span>(<a href="#56727" title="(((String, scala.collection.mutable.Set[sbt.Path])) =&gt; Unit)Unit">(</a><a title="String" id="56732">name</a>, <a title="scala.collection.mutable.Set[sbt.Path]" id="56733">jars</a>) &lt;- <a href="#56719" title="scala.collection.mutable.HashMap[String,scala.collection.mutable.Set[sbt.Path]]">collisions</a>)
+		{
+			<span title="Unit" class="keyword">if</span>(<a href="#56733" title="scala.collection.mutable.Set[sbt.Path]">jars</a>.<span title="=&gt; Int">size</span> <a title="(Int)Boolean" id="3093">&gt;</a> <span title="Int(1)" class="int">1</span>)
+			{
+				<a href="#26734" title="=&gt; sbt.Logger">log</a>.<a href="Logger.scala.html#19516" title="(=&gt; String)Unit">debug</a>(<span title="java.lang.String(&quot;Possible duplicate classpath locations for jar &quot;)" class="string">&quot;Possible duplicate classpath locations for jar &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#56732" title="String">name</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot;: &quot;)" class="string">&quot;: &quot;</span>)
+				<span class="keyword">for</span>(<a title="((sbt.Path) =&gt; Unit)Unit" id="56738">jar</a> &lt;- <a href="#56733" title="scala.collection.mutable.Set[sbt.Path]">jars</a>) <a href="#26734" title="=&gt; sbt.Logger">log</a>.<a href="Logger.scala.html#19516" title="(=&gt; String)Unit">debug</a>(<span title="java.lang.String(&quot;\011&quot;)" class="string">&quot;\t&quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#56738" title="sbt.Path">jar</a>.<a href="Path.scala.html#17872" title="=&gt; String">absolutePath</a>)
+			}
+		}
+	}
+
+	<span class="keyword">protected</span> <span class="keyword">def</span> <a title="=&gt; sbt.AnalysisCallback" id="26759">analysisCallback</a>: <a href="AnalysisCallback.scala.html#9171" title="sbt.AnalysisCallback">AnalysisCallback</a>
+}
+<span class="keyword">object</span> <a title="object sbt.ChangeDetection" id="6598">ChangeDetection</a> <span class="keyword">extends</span> <a title="Enumeration" id="21705">Enumeration</a>
+{
+	<span class="keyword">val</span> <a title="sbt.ChangeDetection.Value" id="34443">LastModifiedOnly</a>, <a title="sbt.ChangeDetection.Value" id="34445">HashOnly</a>, <a title="sbt.ChangeDetection.Value" id="34447">HashAndLastModified</a>, <a title="sbt.ChangeDetection.Value" id="34449">HashAndProductsExist</a> = <span title="=&gt; sbt.ChangeDetection.Value">Value</span>
+}
+        </pre>
+    </body>
+</html>

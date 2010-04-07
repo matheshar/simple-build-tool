@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+			<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" ></meta>
+        <title>sbt/classfile/Parser.scala</title>
+        <script type="text/javascript" src="../../jquery-all.js"></script>
+        <script type="text/javascript" src="../../linked.js"></script>
+        <link rel="stylesheet" type="text/css" href="../../style.css" title="Style"></link>
+    </head>
+    <body>
+        <pre>
+<span class="comment">/* sbt -- Simple Build Tool
+ * Copyright 2009 Mark Harrah
+ */</span>
+<span class="keyword">package</span> sbt.classfile
+<span class="keyword">import</span> sbt._
+
+<span class="keyword">import</span> java.io.{DataInputStream, File, InputStream}
+
+<span class="comment">// Translation of jdepend.framework.ClassFileParser by Mike Clark, Clarkware Consulting, Inc.</span>
+<span class="comment">// BSD Licensed</span>
+<span class="comment">//</span>
+<span class="comment">// Note that unlike the rest of sbt, some things might be null.</span>
+
+<span class="keyword">import</span> Constants._
+
+<span class="keyword">private</span>[sbt] <span class="keyword">object</span> <a title="object sbt.classfile.Parser" id="12996">Parser</a>
+{
+	<span class="keyword">def</span> <a title="(java.io.File,sbt.Logger)sbt.classfile.ClassFile" id="38410">apply</a>(<a title="java.io.File" id="38423">file</a>: <a title="java.io.File" id="3620">File</a>, <a title="sbt.Logger" id="38424">log</a>: <a href="../Logger.scala.html#11784" title="sbt.Logger">Logger</a>): <a href="ClassFile.scala.html#13058" title="sbt.classfile.ClassFile">ClassFile</a> = <a href="../FileUtilities.scala.html#9046" title="object sbt.FileUtilities">FileUtilities</a>.<a href="../FileUtilities.scala.html#15310" title="(java.io.File,sbt.Logger)((java.io.InputStream) =&gt; Either[String,sbt.classfile.ClassFile])Either[String,sbt.classfile.ClassFile]">readStreamValue</a>(<a href="#38423" title="java.io.File">file</a>, <a href="#38424" title="sbt.Logger">log</a>)(<a href="#38411" title="(String,sbt.Logger)(java.io.InputStream)Either[String,sbt.classfile.ClassFile]">parse</a>(<a href="#38423" title="java.io.File">file</a>.<a href="#38454" title="()java.lang.String" id="16015">getCanonicalPath</a>, <a href="#38424" title="sbt.Logger">log</a>)).<a title="=&gt; Either.RightProjection[String,sbt.classfile.ClassFile]" id="25550">right</a>.<a title="=&gt; sbt.classfile.ClassFile" id="25508">get</a>
+	<span class="keyword">private</span> <span class="keyword">def</span> <a title="(String,sbt.Logger)(java.io.InputStream)Either[String,sbt.classfile.ClassFile]" id="38411">parse</a>(<a title="String" id="38451">fileName</a>: <span title="String">String</span>, <a title="sbt.Logger" id="38452">log</a>: <a href="../Logger.scala.html#11784" title="sbt.Logger">Logger</a>)(<a title="java.io.InputStream" id="38453">is</a>: <span title="java.io.InputStream">InputStream</span>): <a title="Either[String,sbt.classfile.ClassFile]" id="336">Either</a>[String, ClassFile] = <a title="(sbt.classfile.ClassFile)Right[Nothing,sbt.classfile.ClassFile]" id="490">Right</a>(<a href="#38412" title="(String,java.io.InputStream,sbt.Logger)sbt.classfile.ClassFile">parseImpl</a>(<a href="#38451" title="String">fileName</a>, <a href="#38453" title="java.io.InputStream">is</a>, <a href="#38452" title="sbt.Logger">log</a>))
+	<span class="keyword">private</span> <span class="keyword">def</span> <a title="(String,java.io.InputStream,sbt.Logger)sbt.classfile.ClassFile" id="38412">parseImpl</a>(<a title="String" id="38459">filename</a>: <span title="String">String</span>, <a title="java.io.InputStream" id="38460">is</a>: <span title="java.io.InputStream">InputStream</span>, <a title="sbt.Logger" id="38461">log</a>: <a href="../Logger.scala.html#11784" title="sbt.Logger">Logger</a>): <a href="ClassFile.scala.html#13058" title="sbt.classfile.ClassFile">ClassFile</a> =
+	{
+		<span class="keyword">val</span> <a title="java.io.DataInputStream" id="38462">in</a> = <span title="java.io.DataInputStream" class="keyword">new</span> <span title="java.io.DataInputStream">DataInputStream</span>(<a href="#38460" title="java.io.InputStream">is</a>)
+		<a title="template $anon extends java.lang.Object with sbt.classfile.ClassFile" id="38497" class="keyword">new</a> <a href="ClassFile.scala.html#13058" title="sbt.classfile.ClassFile">ClassFile</a>
+		{
+			<span title="(Boolean,Any)Unit">assume</span>(<a href="#38462" title="java.io.DataInputStream">in</a>.<span title="()Int">readInt</span>() <span title="(Int)Boolean">==</span> <span title="Int(-889275714)">JavaMagic</span>, <span title="java.lang.String(&quot;Invalid class file: &quot;)" class="string">&quot;Invalid class file: &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#38499" title="=&gt; String">fileName</a>)
+
+			<span class="keyword">val</span> <a title="String" id="38499">fileName</a> = <a href="#38459" title="String">filename</a>
+			<span class="keyword">val</span> <a title="Int" id="38501">minorVersion</a>: <span title="Int">Int</span> = <a href="#38462" title="java.io.DataInputStream">in</a>.<span title="()Int">readUnsignedShort</span>()
+			<span class="keyword">val</span> <a title="Int" id="38503">majorVersion</a>: <span title="Int">Int</span> = <a href="#38462" title="java.io.DataInputStream">in</a>.<span title="()Int">readUnsignedShort</span>()
+
+			<span class="keyword">val</span> <a title="Array[sbt.classfile.Constant]" id="38505">constantPool</a> = <a href="#38416" title="(java.io.DataInputStream)Array[sbt.classfile.Constant]">parseConstantPool</a>(<a href="#38462" title="java.io.DataInputStream">in</a>)
+			<span class="keyword">val</span> <a title="Int" id="38507">accessFlags</a>: <span title="Int">Int</span> = <a href="#38462" title="java.io.DataInputStream">in</a>.<span title="()Int">readUnsignedShort</span>()
+
+			<span class="keyword">val</span> <a title="java.lang.String" id="38509">className</a> = <a href="#38526" title="(Int)java.lang.String">getClassConstantName</a>(<a href="#38462" title="java.io.DataInputStream">in</a>.<span title="()Int">readUnsignedShort</span>())
+			<span class="keyword">val</span> <a title="java.lang.String" id="38511">superClassName</a> = <a href="#38526" title="(Int)java.lang.String">getClassConstantName</a>(<a href="#38462" title="java.io.DataInputStream">in</a>.<span title="()Int">readUnsignedShort</span>())
+			<span class="keyword">val</span> <a title="Array[java.lang.String]" id="38513">interfaceNames</a> = <a href="#38413" title="(Int)(=&gt; java.lang.String)(implicit scala.reflect.Manifest[java.lang.String])Array[java.lang.String]">array</a>(<a href="#38462" title="java.io.DataInputStream">in</a>.<span title="()Int">readUnsignedShort</span>())(<a href="#38526" title="(Int)java.lang.String">getClassConstantName</a>(<a href="#38462" title="java.io.DataInputStream">in</a>.<span title="()Int">readUnsignedShort</span>()))
+
+			<span class="keyword">val</span> <a title="Array[sbt.classfile.FieldOrMethodInfo]" id="38515">fields</a> = <a href="#38524" title="()Array[sbt.classfile.FieldOrMethodInfo]">readFieldsOrMethods</a>()
+			<span class="keyword">val</span> <a title="Array[sbt.classfile.FieldOrMethodInfo]" id="38517">methods</a> = <a href="#38524" title="()Array[sbt.classfile.FieldOrMethodInfo]">readFieldsOrMethods</a>()
+
+			<span class="keyword">val</span> <a title="Array[sbt.classfile.AttributeInfo]" id="38519">attributes</a> = <a href="#38413" title="(Int)(=&gt; sbt.classfile.AttributeInfo)(implicit scala.reflect.Manifest[sbt.classfile.AttributeInfo])Array[sbt.classfile.AttributeInfo]">array</a>(<a href="#38462" title="java.io.DataInputStream">in</a>.<span title="()Int">readUnsignedShort</span>())(<a href="#38529" title="()sbt.classfile.AttributeInfo">parseAttribute</a>())
+
+			<span class="keyword">lazy</span> <span class="keyword">val</span> <a title="Option[String]" id="38522">sourceFile</a> =
+				<span class="keyword">for</span>(<a title="((sbt.classfile.AttributeInfo) =&gt; String)Option[String]" id="38829">sourceFileAttribute</a> &lt;- <a href="#38519" title="=&gt; Array[sbt.classfile.AttributeInfo]">attributes</a>.<a title="((sbt.classfile.AttributeInfo) =&gt; Boolean)Option[sbt.classfile.AttributeInfo]" id="16073">find</a>(<a href="#38819" title="sbt.classfile.AttributeInfo">_</a>.<a href="ClassFile.scala.html#38752" title="=&gt; Boolean">isSourceFile</a>)) <span class="keyword">yield</span>
+					<a href="#38525" title="(Int)String">toUTF8</a>(<a href="#38419" title="(sbt.classfile.AttributeInfo)Int">entryIndex</a>(<a href="#38829" title="sbt.classfile.AttributeInfo">sourceFileAttribute</a>))
+
+			<span class="keyword">def</span> <a title="(sbt.classfile.AttributeInfo)String" id="38523">stringValue</a>(<a title="sbt.classfile.AttributeInfo" id="38848">a</a>: <a href="ClassFile.scala.html#12908" title="sbt.classfile.AttributeInfo">AttributeInfo</a>) = <a href="#38525" title="(Int)String">toUTF8</a>(<a href="#38419" title="(sbt.classfile.AttributeInfo)Int">entryIndex</a>(<a href="#38848" title="sbt.classfile.AttributeInfo">a</a>))
+
+			<span class="keyword">private</span> <span class="keyword">def</span> <a title="()Array[sbt.classfile.FieldOrMethodInfo]" id="38524">readFieldsOrMethods</a>() = <a href="#38413" title="(Int)(=&gt; sbt.classfile.FieldOrMethodInfo)(implicit scala.reflect.Manifest[sbt.classfile.FieldOrMethodInfo])Array[sbt.classfile.FieldOrMethodInfo]">array</a>(<a href="#38462" title="java.io.DataInputStream">in</a>.<span title="()Int">readUnsignedShort</span>())(<a href="#38528" title="()sbt.classfile.FieldOrMethodInfo">parseFieldOrMethodInfo</a>())
+			<span class="keyword">private</span> <span class="keyword">def</span> <a title="(Int)String" id="38525">toUTF8</a>(<a title="Int" id="38646">entryIndex</a>: <span title="Int">Int</span>) =
+			{
+				<span class="keyword">val</span> <a title="sbt.classfile.Constant" id="38648">entry</a> = <a href="#38505" title="(Int)sbt.classfile.Constant">constantPool</a>(<a href="#38646" title="Int">entryIndex</a>)
+				<span title="(Boolean,Any)Unit">assume</span>(<a href="#38648" title="sbt.classfile.Constant">entry</a>.<a href="ClassFile.scala.html#38554" title="=&gt; Byte">tag</a> <a title="(Int)Boolean" id="2762">==</a> <span title="Int(1)">ConstantUTF8</span>, <span title="java.lang.String(&quot;Constant pool entry is not a UTF8 type: &quot;)" class="string">&quot;Constant pool entry is not a UTF8 type: &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#38646" title="Int">entryIndex</a>)
+				<a href="#38648" title="sbt.classfile.Constant">entry</a>.<a href="ClassFile.scala.html#38560" title="=&gt; Option[AnyRef]">value</a>.<a title="=&gt; AnyRef" id="19012">get</a>.<a title="String" id="3451">asInstanceOf</a>[<span title="String">String</span>]
+			}
+			<span class="keyword">private</span> <span class="keyword">def</span> <a title="(Int)java.lang.String" id="38526">getClassConstantName</a>(<a title="Int" id="38636">entryIndex</a>: <span title="Int">Int</span>) =
+			{
+				<span class="keyword">val</span> <a title="sbt.classfile.Constant" id="38638">entry</a> = <a href="#38505" title="(Int)sbt.classfile.Constant">constantPool</a>(<a href="#38636" title="Int">entryIndex</a>)
+				<span title="java.lang.String" class="keyword">if</span>(<a href="#38638" title="sbt.classfile.Constant">entry</a> <a title="(AnyRef)Boolean" id="3457">==</a> <span title="Null(null)" class="keyword">null</span>) <span title="java.lang.String(&quot;&quot;)" class="string">&quot;&quot;</span>
+				<span class="keyword">else</span> <a href="#38420" title="(String)java.lang.String">slashesToDots</a>(<a href="#38525" title="(Int)String">toUTF8</a>(<a href="#38638" title="sbt.classfile.Constant">entry</a>.<a href="ClassFile.scala.html#38556" title="=&gt; Int">nameIndex</a>))
+			}
+			<span class="keyword">private</span> <span class="keyword">def</span> <a title="(Int)Option[String]" id="38527">toString</a>(<a title="Int" id="38714">index</a>: <span title="Int">Int</span>) =
+			{
+				<span title="Option[String]" class="keyword">if</span>(<a href="#38714" title="Int">index</a> <a title="(Int)Boolean" id="3092">&lt;=</a> <span title="Int(0)" class="int">0</span>) <span title="object None">None</span>
+				<span class="keyword">else</span> <span title="(String)Some[String]">Some</span>(<a href="#38525" title="(Int)String">toUTF8</a>(<a href="#38714" title="Int">index</a>))
+			}
+			<span class="keyword">private</span> <span class="keyword">def</span> <a title="()sbt.classfile.FieldOrMethodInfo" id="38528">parseFieldOrMethodInfo</a>() =
+				<span title="sbt.classfile.FieldOrMethodInfo" class="keyword">new</span> <a href="ClassFile.scala.html#12974" title="sbt.classfile.FieldOrMethodInfo">FieldOrMethodInfo</a>(<a href="#38462" title="java.io.DataInputStream">in</a>.<span title="()Int">readUnsignedShort</span>(), <a href="#38527" title="(Int)Option[String]">toString</a>(<a href="#38462" title="java.io.DataInputStream">in</a>.<span title="()Int">readUnsignedShort</span>()), <a href="#38527" title="(Int)Option[String]">toString</a>(<a href="#38462" title="java.io.DataInputStream">in</a>.<span title="()Int">readUnsignedShort</span>()),
+					<a href="#38413" title="(Int)(=&gt; sbt.classfile.AttributeInfo)(implicit scala.reflect.Manifest[sbt.classfile.AttributeInfo])Array[sbt.classfile.AttributeInfo]">array</a>(<a href="#38462" title="java.io.DataInputStream">in</a>.<span title="()Int">readUnsignedShort</span>())(<a href="#38529" title="()sbt.classfile.AttributeInfo">parseAttribute</a>()) )
+			<span class="keyword">private</span> <span class="keyword">def</span> <a title="()sbt.classfile.AttributeInfo" id="38529">parseAttribute</a>() =
+			{
+				<span class="keyword">val</span> <a title="Int" id="38754">nameIndex</a> = <a href="#38462" title="java.io.DataInputStream">in</a>.<span title="()Int">readUnsignedShort</span>()
+				<span class="keyword">val</span> <a title="Option[String]" id="38755">name</a> = <span title="Option[String]" class="keyword">if</span>(<a href="#38754" title="Int">nameIndex</a> <span title="(Int)Boolean">==</span> -<span title="Int(-1)" class="int">1</span>) <span title="object None">None</span> <span class="keyword">else</span> <span title="(String)Some[String]">Some</span>(<a href="#38525" title="(Int)String">toUTF8</a>(<a href="#38754" title="Int">nameIndex</a>))
+				<span class="keyword">val</span> <a title="Array[Byte]" id="38756">value</a> = <a href="#38413" title="(Int)(=&gt; Byte)(implicit scala.reflect.Manifest[Byte])Array[Byte]">array</a>(<a href="#38462" title="java.io.DataInputStream">in</a>.<span title="()Int">readInt</span>())(<a href="#38462" title="java.io.DataInputStream">in</a>.<span title="()Byte">readByte</span>())
+				<span title="sbt.classfile.AttributeInfo" class="keyword">new</span> <a href="ClassFile.scala.html#12908" title="sbt.classfile.AttributeInfo">AttributeInfo</a>(<a href="#38755" title="Option[String]">name</a>, <a href="#38756" title="Array[Byte]">value</a>)
+			}
+
+			<span class="keyword">def</span> <a title="=&gt; scala.collection.immutable.Set[String]" id="38530">types</a> = <a title="(String*)scala.collection.immutable.Set[String]" id="6083">Set</a>((<a href="#38532" title="=&gt; Array[String]">fieldTypes</a> <span title="(Iterable[String])Array[String]">++</span> <a href="#38533" title="=&gt; Array[String]">methodTypes</a> <span title="(Iterable[String])Array[String]">++</span> <a href="#38534" title="=&gt; List[String]">classConstantReferences</a>) : _*)
+
+			<span class="keyword">private</span> <span class="keyword">def</span> <a title="(Array[sbt.classfile.FieldOrMethodInfo])Array[String]" id="38531">getTypes</a>(<a title="Array[sbt.classfile.FieldOrMethodInfo]" id="38856">fieldsOrMethods</a>: <span title="Array[sbt.classfile.FieldOrMethodInfo]">Array</span>[FieldOrMethodInfo]) =
+				<a href="#38856" title="Array[sbt.classfile.FieldOrMethodInfo]">fieldsOrMethods</a>.<a title="((sbt.classfile.FieldOrMethodInfo) =&gt; Iterable[String])Array[String]" id="17110">flatMap</a> { <a title="sbt.classfile.FieldOrMethodInfo" id="38860">fieldOrMethod</a> =&gt;
+					<a href="#38421" title="(Option[String])List[String]">descriptorToTypes</a>(<a href="#38860" title="sbt.classfile.FieldOrMethodInfo">fieldOrMethod</a>.<a href="ClassFile.scala.html#38702" title="=&gt; Option[String]">descriptor</a>)
+				}
+
+			<span class="keyword">private</span> <span class="keyword">def</span> <a title="=&gt; Array[String]" id="38532">fieldTypes</a> = <a href="#38531" title="(Array[sbt.classfile.FieldOrMethodInfo])Array[String]">getTypes</a>(<a href="#38515" title="=&gt; Array[sbt.classfile.FieldOrMethodInfo]">fields</a>)
+			<span class="keyword">private</span> <span class="keyword">def</span> <a title="=&gt; Array[String]" id="38533">methodTypes</a> = <a href="#38531" title="(Array[sbt.classfile.FieldOrMethodInfo])Array[String]">getTypes</a>(<a href="#38517" title="=&gt; Array[sbt.classfile.FieldOrMethodInfo]">methods</a>)
+
+			<span class="keyword">private</span> <span class="keyword">def</span> <a title="=&gt; List[String]" id="38534">classConstantReferences</a> =
+				<a href="#38535" title="=&gt; List[sbt.classfile.Constant]">constants</a>.<a title="((sbt.classfile.Constant) =&gt; Iterable[String])List[String]" id="17773">flatMap</a> { <a title="sbt.classfile.Constant" id="39000">constant</a> =&gt;
+					<a href="#39000" title="sbt.classfile.Constant">constant</a>.<a href="ClassFile.scala.html#38554" title="=&gt; Byte">tag</a> <span title="List[String]" class="keyword">match</span>
+					{
+						<span title="List[String]" class="keyword">case</span> <a href="ClassFile.scala.html#38395" title="=&gt; Int(7)">ConstantClass</a> =&gt;
+							<span class="keyword">val</span> <a title="String" id="39001">name</a> = <a href="#38525" title="(Int)String">toUTF8</a>(<a href="#39000" title="sbt.classfile.Constant">constant</a>.<a href="ClassFile.scala.html#38556" title="=&gt; Int">nameIndex</a>)
+							<span title="List[String]" class="keyword">if</span>(<a href="#39001" title="String">name</a>.<a title="(java.lang.String)Boolean" id="5786">startsWith</a>(<span title="java.lang.String(&quot;[&quot;)" class="string">&quot;[&quot;</span>))
+								<a href="#38421" title="(Option[String])List[String]">descriptorToTypes</a>(<span title="(String)Some[String]">Some</span>(<a href="#39001" title="String">name</a>))
+							<span class="keyword">else</span>
+								<a href="#38420" title="(String)java.lang.String">slashesToDots</a>(<a href="#39001" title="String">name</a>) <a href="#39004" title="(java.lang.String)List[java.lang.String]">::</a> <span title="object Nil">Nil</span>
+						<span title="Nil.type" class="keyword">case</span> _ =&gt; <span title="object Nil">Nil</span>
+					}
+				}
+			<span class="keyword">private</span> <span class="keyword">def</span> <a title="=&gt; List[sbt.classfile.Constant]" id="38535">constants</a> =
+			{
+				<span class="keyword">def</span> <a title="(Int,List[sbt.classfile.Constant])List[sbt.classfile.Constant]" id="38950">next</a>(<a title="Int" id="38951">i</a>: <span title="Int">Int</span>, <a title="List[sbt.classfile.Constant]" id="38952">list</a>: <span title="List[sbt.classfile.Constant]">List</span>[Constant]): <span title="List[sbt.classfile.Constant]">List</span>[Constant] =
+				{
+					<span title="List[sbt.classfile.Constant]" class="keyword">if</span>(<a href="#38951" title="Int">i</a> <span title="(Int)Boolean">&lt;</span> <a href="#38505" title="=&gt; Array[sbt.classfile.Constant]">constantPool</a>.<a title="=&gt; Int" id="17100">length</a>)
+					{
+						<span class="keyword">val</span> <a title="sbt.classfile.Constant" id="38954">constant</a> = <a href="#38505" title="(Int)sbt.classfile.Constant">constantPool</a>(<a href="#38951" title="Int">i</a>)
+						<a href="#38950" title="(Int,List[sbt.classfile.Constant])List[sbt.classfile.Constant]">next</a>(<span title="Int" class="keyword">if</span>(<a href="#38954" title="sbt.classfile.Constant">constant</a>.<a href="ClassFile.scala.html#38566" title="=&gt; Boolean">wide</a>) <a href="#38951" title="Int">i</a><span title="(Int)Int">+</span><span title="Int(2)" class="int">2</span> <span class="keyword">else</span> <a href="#38951" title="Int">i</a><span title="(Int)Int">+</span><span title="Int(1)" class="int">1</span>, <a href="#38954" title="sbt.classfile.Constant">constant</a> <a href="#38994" title="(sbt.classfile.Constant)List[sbt.classfile.Constant]">::</a> <a href="#38952" title="List[sbt.classfile.Constant]">list</a>)
+					}
+					<span class="keyword">else</span>
+						<a href="#38952" title="List[sbt.classfile.Constant]">list</a>
+				}
+				<a href="#38950" title="(Int,List[sbt.classfile.Constant])List[sbt.classfile.Constant]">next</a>(<span title="Int(1)" class="int">1</span>, <span title="object Nil">Nil</span>)
+			}
+		}
+    }
+    <span class="keyword">private</span> <span class="keyword">def</span> <a title="[T](Int)(=&gt; T)(implicit scala.reflect.Manifest[T])Array[T]" id="38413">array</a>[<a title="&gt;: Nothing &lt;: Any" id="38415">T</a>](<a title="Int" id="38666">size</a>: <span title="Int">Int</span>)(<a title="=&gt; T" id="38667">f</a>: =&gt; T)(<span class="keyword">implicit</span> <a title="scala.reflect.Manifest[T]" id="38668">mf</a>: scala.reflect.<a title="scala.reflect.Manifest[T]" id="2659">Manifest</a>[T]) = <span title="object Array">Array</span>.<a title="((Int) =&gt; T)(Int)Array[T]" id="17135">fromFunction</a>(<a title="Int" id="38686">i</a> =&gt; <a href="#38667" title="=&gt; T">f</a>)(<a href="#38666" title="Int">size</a>)
+	<span class="keyword">private</span> <span class="keyword">def</span> <a title="(java.io.DataInputStream)Array[sbt.classfile.Constant]" id="38416">parseConstantPool</a>(<a title="java.io.DataInputStream" id="38538">in</a>: <span title="java.io.DataInputStream">DataInputStream</span>) =
+	{
+		<span class="keyword">val</span> <a title="Int" id="38540">constantPoolSize</a> = <a href="#38538" title="java.io.DataInputStream">in</a>.<span title="()Int">readUnsignedShort</span>()
+		<span class="keyword">val</span> <a title="Array[sbt.classfile.Constant]" id="38541">pool</a> = <span title="Array[sbt.classfile.Constant]" class="keyword">new</span> <span title="Array[sbt.classfile.Constant]">Array</span>[Constant](<a href="#38540" title="Int">constantPoolSize</a>)
+
+		<span class="keyword">def</span> <a title="(Int)Unit" id="38542">parse</a>(<a title="Int" id="38544">i</a>: <span title="Int">Int</span>): <a title="Unit" id="2114">Unit</a> =
+			<span title="Unit" class="keyword">if</span>(<a href="#38544" title="Int">i</a> <span title="(Int)Boolean">&lt;</span> <a href="#38540" title="Int">constantPoolSize</a>)
+			{
+				<span class="keyword">val</span> <a title="sbt.classfile.Constant" id="38546">constant</a> = <a href="#38417" title="(java.io.DataInputStream)sbt.classfile.Constant">getConstant</a>(<a href="#38538" title="java.io.DataInputStream">in</a>)
+				<a href="#38541" title="Array[sbt.classfile.Constant]">pool</a>(<a href="#38544" title="Int">i</a>) = <a href="#38546" title="sbt.classfile.Constant">constant</a>
+				<a href="#38542" title="(Int)Unit">parse</a>( <span title="Int" class="keyword">if</span>(<a href="#38546" title="sbt.classfile.Constant">constant</a>.<a href="ClassFile.scala.html#38566" title="=&gt; Boolean">wide</a>) <a href="#38544" title="Int">i</a><span title="(Int)Int">+</span><span title="Int(2)" class="int">2</span> <span class="keyword">else</span> <a href="#38544" title="Int">i</a><span title="(Int)Int">+</span><span title="Int(1)" class="int">1</span> )
+			}
+
+		<a href="#38542" title="(Int)Unit">parse</a>(<span title="Int(1)" class="int">1</span>)
+		<a href="#38541" title="Array[sbt.classfile.Constant]">pool</a>
+	}
+
+	<span class="keyword">private</span> <span class="keyword">def</span> <a title="(java.io.DataInputStream)sbt.classfile.Constant" id="38417">getConstant</a>(<a title="java.io.DataInputStream" id="38547">in</a>: <span title="java.io.DataInputStream">DataInputStream</span>) =
+	{
+		<span class="keyword">val</span> <a title="Byte" id="38549">tag</a> = <a href="#38547" title="java.io.DataInputStream">in</a>.<span title="()Byte">readByte</span>()
+		<a href="#38549" title="Byte">tag</a> <span title="sbt.classfile.Constant" class="keyword">match</span>
+		{
+			<span title="sbt.classfile.Constant" class="keyword">case</span> <a href="ClassFile.scala.html#38395" title="=&gt; Int(7)">ConstantClass</a> | <a href="ClassFile.scala.html#38397" title="=&gt; Int(8)">ConstantString</a> =&gt; <a href="ClassFile.scala.html#38564" title="(Byte,Int)sbt.classfile.Constant" class="keyword">new</a> <a href="ClassFile.scala.html#13082" title="sbt.classfile.Constant">Constant</a>(<a href="#38549" title="Byte">tag</a>, <a href="#38547" title="java.io.DataInputStream">in</a>.<span title="()Int">readUnsignedShort</span>())
+			<span title="sbt.classfile.Constant" class="keyword">case</span> <a href="ClassFile.scala.html#38399" title="=&gt; Int(9)">ConstantField</a> | <a href="ClassFile.scala.html#38401" title="=&gt; Int(10)">ConstantMethod</a> | <a href="ClassFile.scala.html#38403" title="=&gt; Int(11)">ConstantInterfaceMethod</a> | <a href="ClassFile.scala.html#38405" title="=&gt; Int(12)">ConstantNameAndType</a> =&gt;
+				<a href="ClassFile.scala.html#38563" title="(Byte,Int,Int)sbt.classfile.Constant" class="keyword">new</a> <a href="ClassFile.scala.html#13082" title="sbt.classfile.Constant">Constant</a>(<a href="#38549" title="Byte">tag</a>, <a href="#38547" title="java.io.DataInputStream">in</a>.<span title="()Int">readUnsignedShort</span>(), <a href="#38547" title="java.io.DataInputStream">in</a>.<span title="()Int">readUnsignedShort</span>())
+			<span title="sbt.classfile.Constant" class="keyword">case</span> <a href="ClassFile.scala.html#38387" title="=&gt; Int(3)">ConstantInteger</a> =&gt; <a href="ClassFile.scala.html#38565" title="(Byte,AnyRef)sbt.classfile.Constant" class="keyword">new</a> <a href="ClassFile.scala.html#13082" title="sbt.classfile.Constant">Constant</a>(<a href="#38549" title="Byte">tag</a>, <span title="java.lang.Integer" class="keyword">new</span> java.lang.<a title="java.lang.Integer" id="1728">Integer</a>(<a href="#38547" title="java.io.DataInputStream">in</a>.<span title="()Int">readInt</span>()))
+			<span title="sbt.classfile.Constant" class="keyword">case</span> <a href="ClassFile.scala.html#38389" title="=&gt; Int(4)">ConstantFloat</a> =&gt; <a href="ClassFile.scala.html#38565" title="(Byte,AnyRef)sbt.classfile.Constant" class="keyword">new</a> <a href="ClassFile.scala.html#13082" title="sbt.classfile.Constant">Constant</a>(<a href="#38549" title="Byte">tag</a>, <span title="java.lang.Float" class="keyword">new</span> java.lang.<a title="java.lang.Float" id="2070">Float</a>(<a href="#38547" title="java.io.DataInputStream">in</a>.<a title="()Float" id="38477">readFloat</a>()))
+			<span title="sbt.classfile.Constant" class="keyword">case</span> <a href="ClassFile.scala.html#38391" title="=&gt; Int(5)">ConstantLong</a> =&gt; <a href="ClassFile.scala.html#38565" title="(Byte,AnyRef)sbt.classfile.Constant" class="keyword">new</a> <a href="ClassFile.scala.html#13082" title="sbt.classfile.Constant">Constant</a>(<a href="#38549" title="Byte">tag</a>, <span title="java.lang.Long" class="keyword">new</span> java.lang.<a title="java.lang.Long" id="1899">Long</a>(<a href="#38547" title="java.io.DataInputStream">in</a>.<a title="()Long" id="38476">readLong</a>()))
+			<span title="sbt.classfile.Constant" class="keyword">case</span> <a href="ClassFile.scala.html#38393" title="=&gt; Int(6)">ConstantDouble</a> =&gt; <a href="ClassFile.scala.html#38565" title="(Byte,AnyRef)sbt.classfile.Constant" class="keyword">new</a> <a href="ClassFile.scala.html#13082" title="sbt.classfile.Constant">Constant</a>(<a href="#38549" title="Byte">tag</a>, <span title="java.lang.Double" class="keyword">new</span> java.lang.<a title="java.lang.Double" id="2079">Double</a>(<a href="#38547" title="java.io.DataInputStream">in</a>.<a title="()Double" id="38478">readDouble</a>()))
+			<span title="sbt.classfile.Constant" class="keyword">case</span> <a href="ClassFile.scala.html#38383" title="=&gt; Int(1)">ConstantUTF8</a> =&gt; <a href="ClassFile.scala.html#38565" title="(Byte,AnyRef)sbt.classfile.Constant" class="keyword">new</a> <a href="ClassFile.scala.html#13082" title="sbt.classfile.Constant">Constant</a>(<a href="#38549" title="Byte">tag</a>, <a href="#38547" title="java.io.DataInputStream">in</a>.<a title="()java.lang.String" id="38480">readUTF</a>())
+			<span title="Nothing" class="keyword">case</span> _ =&gt; <a title="(String)Nothing" id="6085">error</a>(<span title="java.lang.String(&quot;Unknown constant: &quot;)" class="string">&quot;Unknown constant: &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#38549" title="Byte">tag</a>)
+		}
+	}
+
+	<span class="keyword">private</span> <span class="keyword">def</span> <a title="(Byte)Int" id="38418">toInt</a>(<a title="Byte" id="38842">v</a>: <a title="Byte" id="2336">Byte</a>) = <span title="Int" class="keyword">if</span>(<a href="#38842" title="Byte">v</a> <a title="(Int)Boolean" id="2764">&lt;</a> <span title="Int(0)" class="int">0</span>) <a href="#38842" title="Byte">v</a> <a title="(Int)Int" id="2768">+</a> <span title="Int(256)" class="int">256</span> <span class="keyword">else</span> <a href="#38842" title="Byte">v</a>.<a title="=&gt; Int" id="2706">toInt</a>
+	<span class="keyword">private</span> <span class="keyword">def</span> <a title="(sbt.classfile.AttributeInfo)Int" id="38419">entryIndex</a>(<a title="sbt.classfile.AttributeInfo" id="38830">a</a>: <a href="ClassFile.scala.html#12908" title="sbt.classfile.AttributeInfo">AttributeInfo</a>) =
+	{
+		<span class="keyword">val</span> <a href="#38835" title="(Byte, Byte)" id="1327">Array</a>(<a href="#38832" title="Byte" id="17583">v0</a>, <a href="#38832" title="Byte" id="17585">v1</a>) = <a href="#38830" title="sbt.classfile.AttributeInfo">a</a>.<a href="ClassFile.scala.html#38747" title="=&gt; Array[Byte]">value</a>
+		<a href="#38418" title="(Byte)Int">toInt</a>(<a href="#17583" title="Byte">v0</a>) <a title="(Int)Int" id="3097">*</a> <span title="Int(256)" class="int">256</span> <span title="(Int)Int">+</span> <a href="#38418" title="(Byte)Int">toInt</a>(<a href="#17585" title="Byte">v1</a>)
+	}
+
+	<span class="keyword">private</span> <span class="keyword">def</span> <a title="(String)java.lang.String" id="38420">slashesToDots</a>(<a title="String" id="38643">s</a>: <span title="String">String</span>) = <a href="#38643" title="String">s</a>.<a title="(Char,Char)java.lang.String" id="5803">replace</a>(<span title="Char('/')" class="char">'/'</span>, <span title="Char('.')" class="char">'.'</span>)
+
+	<span class="keyword">private</span> <span class="keyword">def</span> <a title="(Option[String])List[String]" id="38421">descriptorToTypes</a>(<a title="Option[String]" id="38861">descriptor</a>: <a title="Option[String]" id="897">Option</a>[String]) =
+	{
+		<span class="keyword">def</span> <a title="(String,List[String])List[String]" id="38863">toTypes</a>(<a title="String" id="38864">descriptor</a>: <span title="String">String</span>, <a title="List[String]" id="38865">types</a>: <span title="List[String]">List</span>[String]): <span title="List[String]">List</span>[String] =
+		{
+			<span class="keyword">val</span> <a title="Int" id="38866">startIndex</a> = <a href="#38864" title="String">descriptor</a>.<a title="(Int)Int" id="5789">indexOf</a>(<span title="Int(76)">ClassDescriptor</span>)
+			<span title="List[String]" class="keyword">if</span>(<a href="#38866" title="Int">startIndex</a> <span title="(Int)Boolean">&lt;</span> <span title="Int(0)" class="int">0</span>)
+				<a href="#38865" title="List[String]">types</a>
+			<span class="keyword">else</span>
+			{
+				<span class="keyword">val</span> <a title="Int" id="38874">endIndex</a> = <a href="#38864" title="String">descriptor</a>.<a title="(Int,Int)Int" id="5790">indexOf</a>(<span title="Int(59)" class="char">';'</span>, <a href="#38866" title="Int">startIndex</a><span title="(Int)Int">+</span><span title="Int(1)" class="int">1</span>)
+				<span class="keyword">val</span> <a title="java.lang.String" id="38875">tpe</a> = <a href="#38420" title="(String)java.lang.String">slashesToDots</a>(<a href="#38864" title="String">descriptor</a>.<a title="(Int,Int)java.lang.String" id="5800">substring</a>(<a href="#38866" title="Int">startIndex</a> <span title="(Int)Int">+</span> <span title="Int(1)" class="int">1</span>, <a href="#38874" title="Int">endIndex</a>))
+				<a href="#38863" title="(String,List[String])List[String]">toTypes</a>(<a href="#38864" title="String">descriptor</a>.<a title="(Int)java.lang.String" id="5799">substring</a>(<a href="#38874" title="Int">endIndex</a>), <a href="#38875" title="java.lang.String">tpe</a> <a href="#38921" title="(String)List[String]">::</a> <a href="#38865" title="List[String]">types</a>)
+			}
+		}
+		<a href="#38863" title="(String,List[String])List[String]">toTypes</a>(<a href="#38861" title="Option[String]">descriptor</a>.<a title="(=&gt; String)String" id="19015">getOrElse</a>(<span title="java.lang.String(&quot;&quot;)" class="string">&quot;&quot;</span>), <span title="object Nil">Nil</span>)
+    }
+}
+
+        </pre>
+    </body>
+</html>

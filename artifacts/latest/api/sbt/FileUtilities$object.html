@@ -1,0 +1,2001 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head><title>object FileUtilities in sbt</title>
+        <meta http-equiv="content-type" content="text/html; charset=UTF8"></meta><meta content="scaladoc (version 2.7.7.final)" name="generator"></meta><link href="../style.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../script.js"></script>
+        </head>
+        <body onload="init()">
+        <table summary="" class="navigation">
+        <tr>
+          <td class="navigation-links" valign="top">
+            <!-- <table><tr></tr></table> -->
+          </td>
+          <td align="right" valign="top" style="white-space:nowrap;" rowspan="2">
+            <div class="doctitle-larger">Simple Build Tool 0.7.3 API</div>
+          </td>
+        </tr>
+        <tr><td></td></tr>
+      </table>
+        
+      <div class="entity">
+        <a href="../sbt$package.html" target="_self">sbt</a>
+        <br></br>
+        <span class="entity">object  FileUtilities</span>
+      </div><hr></hr>
+      <div class="source">
+        [source: <a href="" class="sbt/FileUtilities"><code>sbt/FileUtilities.scala</code></a>]
+      </div><hr></hr>
+      <a name="FileUtilities"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>object</code>
+        <em>FileUtilities</em>
+      </dt>
+      <dd><code> extends </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a></dd>
+    </dl>
+      <dl><dd>A collection of file related methods.</dd></dl>
+      <dl></dl>
+    
+      
+
+<table summary="" cellpadding="3" class="member">
+      <tr><td class="title" colspan="2">Value Summary</td></tr>
+      <tr>
+      <td class="modifiers" valign="top"> 
+        <code> val</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#Newline" target="_self">Newline</a></em>
+         : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> lazy val</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#scalaCompilerJar" target="_self">scalaCompilerJar</a></em>
+         : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> lazy val</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#scalaLibraryJar" target="_self">scalaLibraryJar</a></em>
+         : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> val</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#temporaryDirectory" target="_self">temporaryDirectory</a></em>
+         : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>
+        
+        <div>The directory in which temporary files are placed.</div>
+      </td>
+    </tr>
+      </table>
+<table summary="" cellpadding="3" class="member">
+      <tr><td class="title" colspan="2">Method Summary</td></tr>
+      <tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#append%28java.io.File%2CString%2Cjava.nio.charset.Charset%2Csbt.Logger%29" target="_self">append</a></em>
+        (<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>content</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <em>charset</em> : <a href="" target="contentFrame" class="java/nio/charset/Charset">java.nio.charset.Charset</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+        
+        <div>Appends the given <code>String content</code> to the provided <code>file</code> using the given encoding.
+ A new file is created if it does not exist.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#append%28java.io.File%2CArray%5BByte%5D%2Csbt.Logger%29" target="_self">append</a></em>
+        (<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>bytes</em> : <a href="" target="contentFrame" class="scala/Array">scala.Array</a>[<a href="http://www.scala-lang.org/docu/files/api/scala/Byte.html" target="_self">Byte</a>], <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+        
+        <div>Appends the given bytes to the given file.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#append%28java.io.File%2CString%2Csbt.Logger%29" target="_self">append</a></em>
+        (<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>content</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+        
+        <div>Appends the given <code>String content</code> to the provided <code>file</code> using the default encoding.
+ A new file is created if it does not exist.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#appendStream%28java.io.File%2Csbt.Logger%29" target="_self">appendStream</a></em>
+        (<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>)(<em>f</em> : (<a href="" target="contentFrame" class="java/io/OutputStream">java.io.OutputStream</a>) =&gt; <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+        
+        <div>Opens an <code>OutputStream</code> on the given file with append=true and passes the stream
+ to the provided function.  The stream is closed before this function returns.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#classLocation%28Class%5B_%5D%29" target="_self">classLocation</a></em>
+        (<em>cl</em> : <a href="" target="contentFrame" class="java/lang/Class">java.lang.Class</a>[<a href="http://www.scala-lang.org/docu/files/api/scala/Any.html" target="_self">Any</a>]) : <a href="" target="contentFrame" class="java/net/URL">java.net.URL</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#classLocation%28scala.reflect.Manifest%5BT%5D%29" target="_self">classLocation</a></em>
+        [<em>T</em>](<code>implicit </code><em>mf</em> : <a href="" target="contentFrame" class="scala/reflect/Manifest">scala.reflect.Manifest</a>[<a href="../sbt/FileUtilities$object.html#classLocation%28scala.reflect.Manifest%5BT%5D%29#T" target="_self">T</a>]) : <a href="" target="contentFrame" class="java/net/URL">java.net.URL</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#classLocationFile%28scala.reflect.Manifest%5BT%5D%29" target="_self">classLocationFile</a></em>
+        [<em>T</em>](<code>implicit </code><em>mf</em> : <a href="" target="contentFrame" class="scala/reflect/Manifest">scala.reflect.Manifest</a>[<a href="../sbt/FileUtilities$object.html#classLocationFile%28scala.reflect.Manifest%5BT%5D%29#T" target="_self">T</a>]) : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#classLocationFile%28Class%5B_%5D%29" target="_self">classLocationFile</a></em>
+        (<em>cl</em> : <a href="" target="contentFrame" class="java/lang/Class">java.lang.Class</a>[<a href="http://www.scala-lang.org/docu/files/api/scala/Any.html" target="_self">Any</a>]) : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#clean%28Iterable%5Bsbt.Path%5D%2CBoolean%2Csbt.Logger%29" target="_self">clean</a></em>
+        (<em>files</em> : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="../sbt/Path.html" target="_self">Path</a>], <em>quiet</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/Boolean.html" target="_self">Boolean</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+        
+        <div>Deletes the given files recursively.  <code>quiet</code> determines the logging level.
+ If it is true, each file in <code>files</code> is logged at the <code>info</code> level.
+ If it is false, the <code>debug</code> level is used.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#clean%28sbt.Path%2Csbt.Logger%29" target="_self">clean</a></em>
+        (<em>file</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+        
+        <div>Deletes the given file recursively.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#clean%28Iterable%5Bsbt.Path%5D%2Csbt.Logger%29" target="_self">clean</a></em>
+        (<em>files</em> : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="../sbt/Path.html" target="_self">Path</a>], <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+        
+        <div>Deletes the given files recursively.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#copy%28Iterable%5Bsbt.Path%5D%2Csbt.Path%2CBoolean%2Csbt.Logger%29" target="_self">copy</a></em>
+        (<em>sources</em> : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="../sbt/Path.html" target="_self">Path</a>], <em>destinationDirectory</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>overwrite</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/Boolean.html" target="_self">Boolean</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Either">scala.Either</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="" target="contentFrame" class="scala/collection/Set">scala.collection.Set</a>[<a href="../sbt/Path.html" target="_self">Path</a>]]
+        
+        <div>Equivalent to {@code copy(sources, destinationDirectory, overwrite, false, log)}.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#copy%28Iterable%5Bsbt.Path%5D%2Csbt.Path%2Csbt.Logger%29" target="_self">copy</a></em>
+        (<em>sources</em> : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="../sbt/Path.html" target="_self">Path</a>], <em>destinationDirectory</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Either">scala.Either</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="" target="contentFrame" class="scala/collection/Set">scala.collection.Set</a>[<a href="../sbt/Path.html" target="_self">Path</a>]]
+        
+        <div>Equivalent to {@code copy(sources, destinationDirectory, false, log)}.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#copy%28Iterable%5Bsbt.Path%5D%2Csbt.Path%2CBoolean%2CBoolean%2Csbt.Logger%29" target="_self">copy</a></em>
+        (<em>sources</em> : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="../sbt/Path.html" target="_self">Path</a>], <em>destinationDirectory</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>overwrite</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/Boolean.html" target="_self">Boolean</a>, <em>preserveLastModified</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/Boolean.html" target="_self">Boolean</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Either">scala.Either</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="" target="contentFrame" class="scala/collection/Set">scala.collection.Set</a>[<a href="../sbt/Path.html" target="_self">Path</a>]]
+        
+        <div>Copies the files declared in <code>sources</code> to the <code>destinationDirectory</code>
+ directory.  Directories are not recursively entered.  The destination hierarchy matches the
+ source paths relative to any base directories.  For example:
+
+ A source <code>(basePath ##) / x / y</code> is copied to <code>destinationDirectory / x / y</code>.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#copyDirectory%28sbt.Path%2Csbt.Path%2Csbt.Logger%29" target="_self">copyDirectory</a></em>
+        (<em>source</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>target</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+        
+        <div>Copies the contents of the <code>source</code> directory to the <code>target</code> directory .</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#copyDirectory%28java.io.File%2Cjava.io.File%2Csbt.Logger%29" target="_self">copyDirectory</a></em>
+        (<em>source</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>target</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+        
+        <div>Copies the contents of the <code>source</code> directory to the <code>target</code> directory .</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#copyFile%28java.io.File%2Cjava.io.File%2Csbt.Logger%29" target="_self">copyFile</a></em>
+        (<em>sourceFile</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>targetFile</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+        
+        <div>Copies <code>sourceFile</code> to <code>targetFile</code>.  If <code>targetFile</code>
+ exists, it is overwritten.  Note that unlike higher level copies in FileUtilities, this
+ method always performs the copy, even if sourceFile is older than targetFile.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#copyFile%28sbt.Path%2Csbt.Path%2Csbt.Logger%29" target="_self">copyFile</a></em>
+        (<em>sourceFile</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>targetFile</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+        
+        <div>Copies <code>sourceFile</code> to <code>targetFile</code>.  If <code>targetFile</code>
+ exists, it is overwritten.  Note that unlike higher level copies in FileUtilities, this
+ method always performs the copy, even if sourceFile is older than targetFile.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#copyFilesFlat%28Iterable%5Bjava.io.File%5D%2Csbt.Path%2Csbt.Logger%29" target="_self">copyFilesFlat</a></em>
+        (<em>sources</em> : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="" target="contentFrame" class="java/io/File">java.io.File</a>], <em>targetDirectory</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Either">scala.Either</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="" target="contentFrame" class="scala/collection/Set">scala.collection.Set</a>[<a href="../sbt/Path.html" target="_self">Path</a>]]
+        
+        <div>Copies the files declared in <code>sources</code> to the <code>targetDirectory</code>
+ directory.  The source directory hierarchy is flattened so that all copies are immediate
+ children of <code>targetDirectory</code>.  Directories are not recursively entered.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#copyFlat%28Iterable%5Bsbt.Path%5D%2Csbt.Path%2Csbt.Logger%29" target="_self">copyFlat</a></em>
+        (<em>sources</em> : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="../sbt/Path.html" target="_self">Path</a>], <em>destinationDirectory</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Either">scala.Either</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="" target="contentFrame" class="scala/collection/Set">scala.collection.Set</a>[<a href="../sbt/Path.html" target="_self">Path</a>]]<code> with </code><a href="" target="contentFrame" class="scala/Product">scala.Product</a>
+        
+        <div>Copies the files declared in <code>sources</code> to the <code>destinationDirectory</code>
+ directory.  The source directory hierarchy is flattened so that all copies are immediate
+ children of <code>destinationDirectory</code>.  Directories are not recursively entered.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#createDirectories%28List%5Bjava.io.File%5D%2Csbt.Logger%29" target="_self">createDirectories</a></em>
+        (<em>d</em> : <a href="" target="contentFrame" class="scala/List">scala.List</a>[<a href="" target="contentFrame" class="java/io/File">java.io.File</a>], <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+        
+        <div>Creates directories at the given locations.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#createDirectories%28Iterable%5Bsbt.Path%5D%2Csbt.Logger%29" target="_self">createDirectories</a></em>
+        (<em>d</em> : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="../sbt/Path.html" target="_self">Path</a>], <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+        
+        <div>Creates directories at the given locations.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#createDirectory%28sbt.Path%2Csbt.Logger%29" target="_self">createDirectory</a></em>
+        (<em>dir</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+        
+        <div>Creates a directory at the given location.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#createDirectory%28java.io.File%2Csbt.Logger%29" target="_self">createDirectory</a></em>
+        (<em>dir</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+        
+        <div>Creates a directory at the given location.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#createTemporaryDirectory%28sbt.Logger%29" target="_self">createTemporaryDirectory</a></em>
+        (<em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Either">scala.Either</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="" target="contentFrame" class="java/io/File">java.io.File</a>]
+        
+        <div>Creates a temporary directory and returns it.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#doInTemporaryDirectory%28sbt.Logger%29" target="_self">doInTemporaryDirectory</a></em>
+        [<em>T</em>](<em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>)(<em>action</em> : (<a href="" target="contentFrame" class="java/io/File">java.io.File</a>) =&gt; <a href="" target="contentFrame" class="scala/Either">scala.Either</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="../sbt/FileUtilities$object.html#doInTemporaryDirectory%28sbt.Logger%29#T" target="_self">T</a>]) : <a href="" target="contentFrame" class="scala/Either">scala.Either</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="../sbt/FileUtilities$object.html#doInTemporaryDirectory%28sbt.Logger%29#T" target="_self">T</a>]
+        
+        <div>Creates a temporary directory and provides its location to the given function.  The directory
+ is deleted after the function returns.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#download%28java.net.URL%2Cjava.io.File%2Csbt.Logger%29" target="_self">download</a></em>
+        (<em>url</em> : <a href="" target="contentFrame" class="java/net/URL">java.net.URL</a>, <em>to</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+        
+        <div>Retrieves the content of the given URL and writes it to the given File.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#gunzip%28sbt.Path%2Csbt.Path%2Csbt.Logger%29" target="_self">gunzip</a></em>
+        (<em>in</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>out</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+        
+        <div>Gunzips the file 'in' and writes it to 'out'.  'in' cannot be the same file as 'out'.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#gunzip%28java.io.InputStream%2Cjava.io.OutputStream%2Csbt.Logger%29" target="_self">gunzip</a></em>
+        (<em>input</em> : <a href="" target="contentFrame" class="java/io/InputStream">java.io.InputStream</a>, <em>output</em> : <a href="" target="contentFrame" class="java/io/OutputStream">java.io.OutputStream</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#gzip%28sbt.Path%2Csbt.Path%2Csbt.Logger%29" target="_self">gzip</a></em>
+        (<em>in</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>out</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+        
+        <div>Gzips the file 'in' and writes it to 'out'.  'in' cannot be the same file as 'out'.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#gzip%28java.io.InputStream%2Cjava.io.OutputStream%2Csbt.Logger%29" target="_self">gzip</a></em>
+        (<em>input</em> : <a href="" target="contentFrame" class="java/io/InputStream">java.io.InputStream</a>, <em>output</em> : <a href="" target="contentFrame" class="java/io/OutputStream">java.io.OutputStream</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+        
+        <div>Gzips the InputStream 'in' and writes it to 'output'.  Neither stream is closed.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#jar%28Iterable%5Bsbt.Path%5D%2Csbt.Path%2Cjava.util.jar.Manifest%2CBoolean%2Csbt.Logger%29" target="_self">jar</a></em>
+        (<em>sources</em> : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="../sbt/Path.html" target="_self">Path</a>], <em>outputJar</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>manifest</em> : <a href="" target="contentFrame" class="java/util/jar/Manifest">java.util.jar.Manifest</a>, <em>recursive</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/Boolean.html" target="_self">Boolean</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+        
+        <div>Creates a jar file.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#pack%28Iterable%5Bsbt.Path%5D%2Csbt.Path%2Cjava.util.jar.Manifest%2CBoolean%2Csbt.Logger%29" target="_self">pack</a></em>
+        (<em>sources</em> : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="../sbt/Path.html" target="_self">Path</a>], <em>outputJar</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>manifest</em> : <a href="" target="contentFrame" class="java/util/jar/Manifest">java.util.jar.Manifest</a>, <em>recursive</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/Boolean.html" target="_self">Boolean</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#preserve%28Iterable%5Bsbt.Path%5D%2Csbt.Logger%29" target="_self">preserve</a></em>
+        (<em>paths</em> : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="../sbt/Path.html" target="_self">Path</a>], <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Either">scala.Either</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="../sbt/Preserved.html" target="_self">Preserved</a>]
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#prune%28sbt.Path%2CIterable%5Bsbt.Path%5D%2Csbt.Logger%29" target="_self">prune</a></em>
+        (<em>directory</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>keepOnly</em> : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="../sbt/Path.html" target="_self">Path</a>], <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#read%28java.io.File%2Csbt.Logger%29" target="_self">read</a></em>
+        (<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>)(<em>f</em> : (<a href="" target="contentFrame" class="java/io/Reader">java.io.Reader</a>) =&gt; <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+        
+        <div>Opens a <code>Reader</code> on the given file using the default encoding,
+ passes it to the provided function, and closes the <code>Reader</code>.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#read%28java.io.File%2Cjava.nio.charset.Charset%2Csbt.Logger%29" target="_self">read</a></em>
+        (<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>charset</em> : <a href="" target="contentFrame" class="java/nio/charset/Charset">java.nio.charset.Charset</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>)(<em>f</em> : (<a href="" target="contentFrame" class="java/io/Reader">java.io.Reader</a>) =&gt; <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+        
+        <div>Opens a <code>Reader</code> on the given file using the default encoding,
+ passes it to the provided function, and closes the <code>Reader</code>.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#readBytes%28java.io.File%2Csbt.Logger%29" target="_self">readBytes</a></em>
+        (<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Either">scala.Either</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="" target="contentFrame" class="scala/Array">scala.Array</a>[<a href="http://www.scala-lang.org/docu/files/api/scala/Byte.html" target="_self">Byte</a>]]
+        
+        <div>Reads the entire file into a byte array.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#readBytes%28java.io.InputStream%2Csbt.Logger%29" target="_self">readBytes</a></em>
+        (<em>in</em> : <a href="" target="contentFrame" class="java/io/InputStream">java.io.InputStream</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Either">scala.Either</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="" target="contentFrame" class="scala/Array">scala.Array</a>[<a href="http://www.scala-lang.org/docu/files/api/scala/Byte.html" target="_self">Byte</a>]]
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#readChannel%28java.io.File%2Csbt.Logger%29" target="_self">readChannel</a></em>
+        (<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>)(<em>f</em> : (<a href="" target="contentFrame" class="java/nio/channels/FileChannel">java.nio.channels.FileChannel</a>) =&gt; <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+        
+        <div>Opens a <code>FileChannel</code> on the given file for reading and passes the channel
+ to the given function.  The channel is closed before this function returns.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#readChannelValue%28java.io.File%2Csbt.Logger%29" target="_self">readChannelValue</a></em>
+        [<em>R</em>](<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>)(<em>f</em> : (<a href="" target="contentFrame" class="java/nio/channels/FileChannel">java.nio.channels.FileChannel</a>) =&gt; <a href="" target="contentFrame" class="scala/Either">scala.Either</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="../sbt/FileUtilities$object.html#readChannelValue%28java.io.File%2Csbt.Logger%29#R" target="_self">R</a>]) : <a href="" target="contentFrame" class="scala/Either">scala.Either</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="../sbt/FileUtilities$object.html#readChannelValue%28java.io.File%2Csbt.Logger%29#R" target="_self">R</a>]
+        
+        <div>Opens a <code>FileChannel</code> on the given file for reading and passes the channel
+ to the given function.  The channel is closed before this function returns.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#readStream%28java.net.URL%2Csbt.Logger%29" target="_self">readStream</a></em>
+        (<em>url</em> : <a href="" target="contentFrame" class="java/net/URL">java.net.URL</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>)(<em>f</em> : (<a href="" target="contentFrame" class="java/io/InputStream">java.io.InputStream</a>) =&gt; <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+        
+        <div>Opens an <code>InputStream</code> on the given <code>URL</code> and passes the stream
+ to the provided function.  The stream is closed before this function returns.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#readStream%28java.io.File%2Csbt.Logger%29" target="_self">readStream</a></em>
+        (<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>)(<em>f</em> : (<a href="" target="contentFrame" class="java/io/InputStream">java.io.InputStream</a>) =&gt; <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+        
+        <div>Opens an <code>InputStream</code> on the given file and passes the stream
+ to the provided function.  The stream is closed before this function returns.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#readStreamValue%28java.io.File%2Csbt.Logger%29" target="_self">readStreamValue</a></em>
+        [<em>R</em>](<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>)(<em>f</em> : (<a href="" target="contentFrame" class="java/io/InputStream">java.io.InputStream</a>) =&gt; <a href="" target="contentFrame" class="scala/Either">scala.Either</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="../sbt/FileUtilities$object.html#readStreamValue%28java.io.File%2Csbt.Logger%29#R" target="_self">R</a>]) : <a href="" target="contentFrame" class="scala/Either">scala.Either</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="../sbt/FileUtilities$object.html#readStreamValue%28java.io.File%2Csbt.Logger%29#R" target="_self">R</a>]
+        
+        <div>Opens an <code>InputStream</code> on the given file and passes the stream
+ to the provided function.  The stream is closed before this function returns.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#readStreamValue%28java.net.URL%2Csbt.Logger%29" target="_self">readStreamValue</a></em>
+        [<em>R</em>](<em>url</em> : <a href="" target="contentFrame" class="java/net/URL">java.net.URL</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>)(<em>f</em> : (<a href="" target="contentFrame" class="java/io/InputStream">java.io.InputStream</a>) =&gt; <a href="" target="contentFrame" class="scala/Either">scala.Either</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="../sbt/FileUtilities$object.html#readStreamValue%28java.net.URL%2Csbt.Logger%29#R" target="_self">R</a>]) : <a href="" target="contentFrame" class="scala/Either">scala.Either</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="../sbt/FileUtilities$object.html#readStreamValue%28java.net.URL%2Csbt.Logger%29#R" target="_self">R</a>]
+        
+        <div>Opens an <code>InputStream</code> on the given <code>URL</code> and passes the stream
+ to the provided function.  The stream is closed before this function returns.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#readString%28java.io.InputStream%2Cjava.nio.charset.Charset%2Csbt.Logger%29" target="_self">readString</a></em>
+        (<em>in</em> : <a href="" target="contentFrame" class="java/io/InputStream">java.io.InputStream</a>, <em>charset</em> : <a href="" target="contentFrame" class="java/nio/charset/Charset">java.nio.charset.Charset</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Either">scala.Either</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#readString%28java.io.InputStream%2Csbt.Logger%29" target="_self">readString</a></em>
+        (<em>in</em> : <a href="" target="contentFrame" class="java/io/InputStream">java.io.InputStream</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Either">scala.Either</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#readString%28java.io.Reader%2Csbt.Logger%29" target="_self">readString</a></em>
+        (<em>in</em> : <a href="" target="contentFrame" class="java/io/Reader">java.io.Reader</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Either">scala.Either</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#readString%28java.io.File%2Csbt.Logger%29" target="_self">readString</a></em>
+        (<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Either">scala.Either</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+        
+        <div>Reads the contents of the given file into a <code>String</code> using the default encoding.
+  The resulting <code>String</code> is wrapped in <code>Right</code>.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#readString%28java.io.File%2Cjava.nio.charset.Charset%2Csbt.Logger%29" target="_self">readString</a></em>
+        (<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>charset</em> : <a href="" target="contentFrame" class="java/nio/charset/Charset">java.nio.charset.Charset</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Either">scala.Either</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+        
+        <div>Reads the contents of the given file into a <code>String</code> using the given encoding.
+  The resulting <code>String</code> is wrapped in <code>Right</code>.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#readValue%28java.io.File%2Csbt.Logger%29" target="_self">readValue</a></em>
+        [<em>R</em>](<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>)(<em>f</em> : (<a href="" target="contentFrame" class="java/io/Reader">java.io.Reader</a>) =&gt; <a href="" target="contentFrame" class="scala/Either">scala.Either</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="../sbt/FileUtilities$object.html#readValue%28java.io.File%2Csbt.Logger%29#R" target="_self">R</a>]) : <a href="" target="contentFrame" class="scala/Either">scala.Either</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="../sbt/FileUtilities$object.html#readValue%28java.io.File%2Csbt.Logger%29#R" target="_self">R</a>]
+        
+        <div>Opens a <code>Reader</code> on the given file using the default encoding,
+ passes it to the provided function, and closes the <code>Reader</code>.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#readValue%28java.io.File%2Cjava.nio.charset.Charset%2Csbt.Logger%29" target="_self">readValue</a></em>
+        [<em>R</em>](<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>charset</em> : <a href="" target="contentFrame" class="java/nio/charset/Charset">java.nio.charset.Charset</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>)(<em>f</em> : (<a href="" target="contentFrame" class="java/io/Reader">java.io.Reader</a>) =&gt; <a href="" target="contentFrame" class="scala/Either">scala.Either</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="../sbt/FileUtilities$object.html#readValue%28java.io.File%2Cjava.nio.charset.Charset%2Csbt.Logger%29#R" target="_self">R</a>]) : <a href="" target="contentFrame" class="scala/Either">scala.Either</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="../sbt/FileUtilities$object.html#readValue%28java.io.File%2Cjava.nio.charset.Charset%2Csbt.Logger%29#R" target="_self">R</a>]
+        
+        <div>Opens a <code>Reader</code> on the given file using the given encoding,
+ passes it to the provided function, and closes the <code>Reader</code>.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#scalaJars" target="_self">scalaJars</a></em>
+         : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="" target="contentFrame" class="java/io/File">java.io.File</a>]
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#sync%28sbt.Path%2Csbt.Path%2Csbt.Logger%29" target="_self">sync</a></em>
+        (<em>sourceDirectory</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>targetDirectory</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+        
+        <div>Synchronizes the contents of the <code>sourceDirectory</code> directory to the
+ <code>targetDirectory</code> directory.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#syncPaths%28sbt.PathFinder%2Csbt.Path%2Csbt.Logger%29" target="_self">syncPaths</a></em>
+        (<em>sources</em> : <a href="../sbt/PathFinder.html" target="_self">PathFinder</a>, <em>targetDirectory</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#toFile%28java.net.URL%29" target="_self">toFile</a></em>
+        (<em>url</em> : <a href="" target="contentFrame" class="java/net/URL">java.net.URL</a>) : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#touch%28java.io.File%2Csbt.Logger%29" target="_self">touch</a></em>
+        (<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+        
+        <div>Creates a file at the given location.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#touch%28sbt.Path%2Csbt.Logger%29" target="_self">touch</a></em>
+        (<em>path</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+        
+        <div>Creates a file at the given location.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#transfer%28java.io.InputStream%2Cjava.io.OutputStream%2Csbt.Logger%29" target="_self">transfer</a></em>
+        (<em>in</em> : <a href="" target="contentFrame" class="java/io/InputStream">java.io.InputStream</a>, <em>out</em> : <a href="" target="contentFrame" class="java/io/OutputStream">java.io.OutputStream</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+        
+        <div>Copies all bytes from the given input stream to the given output stream.
+ Neither stream is closed.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#transferAndClose%28java.io.InputStream%2Cjava.io.OutputStream%2Csbt.Logger%29" target="_self">transferAndClose</a></em>
+        (<em>in</em> : <a href="" target="contentFrame" class="java/io/InputStream">java.io.InputStream</a>, <em>out</em> : <a href="" target="contentFrame" class="java/io/OutputStream">java.io.OutputStream</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+        
+        <div>Copies all bytes from the given input stream to the given output stream.  The
+ input stream is closed after the method completes.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#unzip%28java.net.URL%2Csbt.Path%2Csbt.NameFilter%2Csbt.Logger%29" target="_self">unzip</a></em>
+        (<em>from</em> : <a href="" target="contentFrame" class="java/net/URL">java.net.URL</a>, <em>toDirectory</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>filter</em> : <a href="../sbt/NameFilter.html" target="_self">NameFilter</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Either">scala.Either</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="" target="contentFrame" class="scala/collection/Set">scala.collection.Set</a>[<a href="../sbt/Path.html" target="_self">Path</a>]]
+        
+        <div>Unzips the contents of the zip file <code>from</code> to the <code>toDirectory</code> directory.
+ Only the entries that match the given filter are extracted.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#unzip%28sbt.Path%2Csbt.Path%2Csbt.NameFilter%2Csbt.Logger%29" target="_self">unzip</a></em>
+        (<em>from</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>toDirectory</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>filter</em> : <a href="../sbt/NameFilter.html" target="_self">NameFilter</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Either">scala.Either</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="" target="contentFrame" class="scala/collection/Set">scala.collection.Set</a>[<a href="../sbt/Path.html" target="_self">Path</a>]]
+        
+        <div>Unzips the contents of the zip file <code>from</code> to the <code>toDirectory</code> directory.
+ Only the entries that match the given filter are extracted.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#unzip%28java.io.InputStream%2Csbt.Path%2Csbt.NameFilter%2Csbt.Logger%29" target="_self">unzip</a></em>
+        (<em>from</em> : <a href="" target="contentFrame" class="java/io/InputStream">java.io.InputStream</a>, <em>toDirectory</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>filter</em> : <a href="../sbt/NameFilter.html" target="_self">NameFilter</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Either">scala.Either</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="" target="contentFrame" class="scala/collection/Set">scala.collection.Set</a>[<a href="../sbt/Path.html" target="_self">Path</a>]]
+        
+        <div>Unzips the contents of the zip file <code>from</code> to the <code>toDirectory</code> directory.
+ Only the entries that match the given filter are extracted.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#unzip%28java.io.File%2Csbt.Path%2Csbt.Logger%29" target="_self">unzip</a></em>
+        (<em>from</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>toDirectory</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Either">scala.Either</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="" target="contentFrame" class="scala/collection/Set">scala.collection.Set</a>[<a href="../sbt/Path.html" target="_self">Path</a>]]
+        
+        <div>Unzips the contents of the zip file <code>from</code> to the <code>toDirectory</code> directory.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#unzip%28sbt.Path%2Csbt.Path%2Csbt.Logger%29" target="_self">unzip</a></em>
+        (<em>from</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>toDirectory</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Either">scala.Either</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="" target="contentFrame" class="scala/collection/Set">scala.collection.Set</a>[<a href="../sbt/Path.html" target="_self">Path</a>]]
+        
+        <div>Unzips the contents of the zip file <code>from</code> to the <code>toDirectory</code> directory.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#unzip%28java.io.InputStream%2Csbt.Path%2Csbt.Logger%29" target="_self">unzip</a></em>
+        (<em>from</em> : <a href="" target="contentFrame" class="java/io/InputStream">java.io.InputStream</a>, <em>toDirectory</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Either">scala.Either</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="" target="contentFrame" class="scala/collection/Set">scala.collection.Set</a>[<a href="../sbt/Path.html" target="_self">Path</a>]]
+        
+        <div>Unzips the contents of the zip file <code>from</code> to the <code>toDirectory</code> directory.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#unzip%28java.io.File%2Csbt.Path%2Csbt.NameFilter%2Csbt.Logger%29" target="_self">unzip</a></em>
+        (<em>from</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>toDirectory</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>filter</em> : <a href="../sbt/NameFilter.html" target="_self">NameFilter</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Either">scala.Either</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="" target="contentFrame" class="scala/collection/Set">scala.collection.Set</a>[<a href="../sbt/Path.html" target="_self">Path</a>]]
+        
+        <div>Unzips the contents of the zip file <code>from</code> to the <code>toDirectory</code> directory.
+ Only the entries that match the given filter are extracted.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#unzip%28java.net.URL%2Csbt.Path%2Csbt.Logger%29" target="_self">unzip</a></em>
+        (<em>from</em> : <a href="" target="contentFrame" class="java/net/URL">java.net.URL</a>, <em>toDirectory</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Either">scala.Either</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="" target="contentFrame" class="scala/collection/Set">scala.collection.Set</a>[<a href="../sbt/Path.html" target="_self">Path</a>]]
+        
+        <div>Unzips the contents of the zip file <code>from</code> to the <code>toDirectory</code> directory.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#withTemporaryDirectory%28sbt.Logger%29" target="_self">withTemporaryDirectory</a></em>
+        (<em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>)(<em>action</em> : (<a href="" target="contentFrame" class="java/io/File">java.io.File</a>) =&gt; <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#withTemporaryFile%28sbt.Logger%2CString%2CString%29" target="_self">withTemporaryFile</a></em>
+        [<em>T</em>](<em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>, <em>prefix</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <em>postfix</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>)(<em>action</em> : (<a href="" target="contentFrame" class="java/io/File">java.io.File</a>) =&gt; <a href="" target="contentFrame" class="scala/Either">scala.Either</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="../sbt/FileUtilities$object.html#withTemporaryFile%28sbt.Logger%2CString%2CString%29#T" target="_self">T</a>]) : <a href="" target="contentFrame" class="scala/Either">scala.Either</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="../sbt/FileUtilities$object.html#withTemporaryFile%28sbt.Logger%2CString%2CString%29#T" target="_self">T</a>]
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#write%28java.io.File%2CArray%5BByte%5D%2Csbt.Logger%29" target="_self">write</a></em>
+        (<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>bytes</em> : <a href="" target="contentFrame" class="scala/Array">scala.Array</a>[<a href="http://www.scala-lang.org/docu/files/api/scala/Byte.html" target="_self">Byte</a>], <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+        
+        <div>Writes the given bytes to the given file. If the file already exists, it is overwritten.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#write%28java.io.File%2CString%2Cjava.nio.charset.Charset%2Csbt.Logger%29" target="_self">write</a></em>
+        (<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>content</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <em>charset</em> : <a href="" target="contentFrame" class="java/nio/charset/Charset">java.nio.charset.Charset</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+        
+        <div>Writes the given <code>String content</code> to the provided <code>file</code> using the given encoding.
+ If the file already exists, it is overwritten.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#write%28java.io.File%2CString%2Csbt.Logger%29" target="_self">write</a></em>
+        (<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>content</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+        
+        <div>Writes the given <code>String content</code> to the provided <code>file</code> using the default encoding.
+ If the file exists, it is overwritten.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#write%28java.io.File%2Cjava.nio.charset.Charset%2Csbt.Logger%29" target="_self">write</a></em>
+        (<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>charset</em> : <a href="" target="contentFrame" class="java/nio/charset/Charset">java.nio.charset.Charset</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>)(<em>f</em> : (<a href="" target="contentFrame" class="java/io/Writer">java.io.Writer</a>) =&gt; <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+        
+        <div>Opens a <code>Writer</code> on the given file using the given encoding,
+ passes it to the provided function, and closes the <code>Writer</code>.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#write%28java.io.File%2Csbt.Logger%29" target="_self">write</a></em>
+        (<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>)(<em>f</em> : (<a href="" target="contentFrame" class="java/io/Writer">java.io.Writer</a>) =&gt; <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+        
+        <div>Opens a <code>Writer</code> on the given file using the default encoding,
+ passes it to the provided function, and closes the <code>Writer</code>.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#writeChannel%28java.io.File%2Csbt.Logger%29" target="_self">writeChannel</a></em>
+        (<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>)(<em>f</em> : (<a href="" target="contentFrame" class="java/nio/channels/FileChannel">java.nio.channels.FileChannel</a>) =&gt; <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+        
+        <div>Opens a <code>FileChannel</code> on the given file for writing and passes the channel
+ to the given function.  The channel is closed before this function returns.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#writeStream%28java.io.File%2Csbt.Logger%29" target="_self">writeStream</a></em>
+        (<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>)(<em>f</em> : (<a href="" target="contentFrame" class="java/io/OutputStream">java.io.OutputStream</a>) =&gt; <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+        
+        <div>Opens an <code>OutputStream</code> on the given file and passes the stream
+ to the provided function.  The stream is closed before this function returns.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/FileUtilities$object.html#zip%28Iterable%5Bsbt.Path%5D%2Csbt.Path%2CBoolean%2Csbt.Logger%29" target="_self">zip</a></em>
+        (<em>sources</em> : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="../sbt/Path.html" target="_self">Path</a>], <em>outputZip</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>recursive</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/Boolean.html" target="_self">Boolean</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+        
+        <div>Creates a zip file.</div>
+      </td>
+    </tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#getClass%28%29" target="_self">getClass</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#hashCode%28%29" target="_self">hashCode</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#equals%28Any%29" target="_self">equals</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#clone%28%29" target="_self">clone</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#toString%28%29" target="_self">toString</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#notify%28%29" target="_self">notify</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#notifyAll%28%29" target="_self">notifyAll</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#wait%28Long%29" target="_self">wait</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#wait%28Long%2CInt%29" target="_self">wait</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#wait%28%29" target="_self">wait</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#finalize%28%29" target="_self">finalize</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#%3D%3D%28AnyRef%29" target="_self">==</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#%21%3D%28AnyRef%29" target="_self">!=</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#eq%28AnyRef%29" target="_self">eq</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#ne%28AnyRef%29" target="_self">ne</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#synchronized%28T0%29" target="_self">synchronized</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html" target="_self">Any</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html#%3D%3D%28Any%29" target="_self">==</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html#%21%3D%28Any%29" target="_self">!=</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html#isInstanceOf" target="_self">isInstanceOf</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html#asInstanceOf" target="_self">asInstanceOf</a>
+        </td></tr>
+      </table>
+
+
+      
+
+<table summary="" cellpadding="3" class="member-detail">
+          <tr><td class="title">Value Details</td></tr>
+        </table><div><a name="Newline"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>val</code>
+        <em>Newline</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="temporaryDirectory"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>val</code>
+        <em>temporaryDirectory</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>The directory in which temporary files are placed.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="scalaLibraryJar"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>lazy val</code>
+        <em>scalaLibraryJar</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="scalaCompilerJar"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>lazy val</code>
+        <em>scalaCompilerJar</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr></div>
+<table summary="" cellpadding="3" class="member-detail">
+          <tr><td class="title">Method Details</td></tr>
+        </table><div><a name="preserve%28Iterable%5Bsbt.Path%5D%2Csbt.Logger%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>preserve</em>(<em>paths</em> : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="../sbt/Path.html" target="_self">Path</a>], <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Either">scala.Either</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="../sbt/Preserved.html" target="_self">Preserved</a>]
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="gzip%28sbt.Path%2Csbt.Path%2Csbt.Logger%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>gzip</em>(<em>in</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>out</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Gzips the file 'in' and writes it to 'out'.  'in' cannot be the same file as 'out'.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="gzip%28java.io.InputStream%2Cjava.io.OutputStream%2Csbt.Logger%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>gzip</em>(<em>input</em> : <a href="" target="contentFrame" class="java/io/InputStream">java.io.InputStream</a>, <em>output</em> : <a href="" target="contentFrame" class="java/io/OutputStream">java.io.OutputStream</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Gzips the InputStream 'in' and writes it to 'output'.  Neither stream is closed.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="gunzip%28java.io.InputStream%2Cjava.io.OutputStream%2Csbt.Logger%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>gunzip</em>(<em>input</em> : <a href="" target="contentFrame" class="java/io/InputStream">java.io.InputStream</a>, <em>output</em> : <a href="" target="contentFrame" class="java/io/OutputStream">java.io.OutputStream</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="gunzip%28sbt.Path%2Csbt.Path%2Csbt.Logger%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>gunzip</em>(<em>in</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>out</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Gunzips the file 'in' and writes it to 'out'.  'in' cannot be the same file as 'out'.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="jar%28Iterable%5Bsbt.Path%5D%2Csbt.Path%2Cjava.util.jar.Manifest%2CBoolean%2Csbt.Logger%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>jar</em>(<em>sources</em> : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="../sbt/Path.html" target="_self">Path</a>], <em>outputJar</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>manifest</em> : <a href="" target="contentFrame" class="java/util/jar/Manifest">java.util.jar.Manifest</a>, <em>recursive</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/Boolean.html" target="_self">Boolean</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Creates a jar file.</dd></dl>
+      <dl><dt style="margin:10px 0 0 20px;">
+        <b>Parameters</b></dt><dd><code>sources - </code>The files to include in the jar file.  The path used for the jar is relative to the base directory for the source.  That is, the path in the jar for source
+ <code>(basePath ##) / x / y</code> is <code>x / y</code>.</dd><dd><code>outputJar - </code>The file to write the jar to.</dd><dd><code>manifest - </code>The manifest for the jar.</dd><dd><code>recursive - </code>If true, any directories in <code>sources</code> are recursively processed.  Otherwise, they are not</dd><dd><code>log - </code>The Logger to use.</dd></dl>
+    <hr></hr>
+<a name="pack%28Iterable%5Bsbt.Path%5D%2Csbt.Path%2Cjava.util.jar.Manifest%2CBoolean%2Csbt.Logger%29"></a><dl>
+      <dt>
+        @<a href="" target="contentFrame" class="scala/deprecated">scala.deprecated</a><br></br>
+        <code></code>
+        <code>def</code>
+        <em>pack</em>(<em>sources</em> : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="../sbt/Path.html" target="_self">Path</a>], <em>outputJar</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>manifest</em> : <a href="" target="contentFrame" class="java/util/jar/Manifest">java.util.jar.Manifest</a>, <em>recursive</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/Boolean.html" target="_self">Boolean</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="zip%28Iterable%5Bsbt.Path%5D%2Csbt.Path%2CBoolean%2Csbt.Logger%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>zip</em>(<em>sources</em> : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="../sbt/Path.html" target="_self">Path</a>], <em>outputZip</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>recursive</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/Boolean.html" target="_self">Boolean</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Creates a zip file.</dd></dl>
+      <dl><dt style="margin:10px 0 0 20px;">
+        <b>Parameters</b></dt><dd><code>sources - </code>The files to include in the jar file.  The path used for the jar is relative to the base directory for the source.  That is, the path in the jar for source
+ <code>(basePath ##) / x / y</code> is <code>x / y</code>.</dd><dd><code>outputZip - </code>The file to write the zip to.</dd><dd><code>recursive - </code>If true, any directories in <code>sources</code> are recursively processed.  Otherwise, they are not</dd><dd><code>log - </code>The Logger to use.</dd></dl>
+    <hr></hr>
+<a name="unzip%28sbt.Path%2Csbt.Path%2Csbt.Logger%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>unzip</em>(<em>from</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>toDirectory</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Either">scala.Either</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="" target="contentFrame" class="scala/collection/Set">scala.collection.Set</a>[<a href="../sbt/Path.html" target="_self">Path</a>]]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Unzips the contents of the zip file <code>from</code> to the <code>toDirectory</code> directory.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="unzip%28java.io.File%2Csbt.Path%2Csbt.Logger%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>unzip</em>(<em>from</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>toDirectory</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Either">scala.Either</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="" target="contentFrame" class="scala/collection/Set">scala.collection.Set</a>[<a href="../sbt/Path.html" target="_self">Path</a>]]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Unzips the contents of the zip file <code>from</code> to the <code>toDirectory</code> directory.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="unzip%28java.io.InputStream%2Csbt.Path%2Csbt.Logger%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>unzip</em>(<em>from</em> : <a href="" target="contentFrame" class="java/io/InputStream">java.io.InputStream</a>, <em>toDirectory</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Either">scala.Either</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="" target="contentFrame" class="scala/collection/Set">scala.collection.Set</a>[<a href="../sbt/Path.html" target="_self">Path</a>]]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Unzips the contents of the zip file <code>from</code> to the <code>toDirectory</code> directory.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="unzip%28java.net.URL%2Csbt.Path%2Csbt.Logger%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>unzip</em>(<em>from</em> : <a href="" target="contentFrame" class="java/net/URL">java.net.URL</a>, <em>toDirectory</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Either">scala.Either</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="" target="contentFrame" class="scala/collection/Set">scala.collection.Set</a>[<a href="../sbt/Path.html" target="_self">Path</a>]]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Unzips the contents of the zip file <code>from</code> to the <code>toDirectory</code> directory.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="unzip%28sbt.Path%2Csbt.Path%2Csbt.NameFilter%2Csbt.Logger%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>unzip</em>(<em>from</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>toDirectory</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>filter</em> : <a href="../sbt/NameFilter.html" target="_self">NameFilter</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Either">scala.Either</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="" target="contentFrame" class="scala/collection/Set">scala.collection.Set</a>[<a href="../sbt/Path.html" target="_self">Path</a>]]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Unzips the contents of the zip file <code>from</code> to the <code>toDirectory</code> directory.
+ Only the entries that match the given filter are extracted.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="unzip%28java.io.File%2Csbt.Path%2Csbt.NameFilter%2Csbt.Logger%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>unzip</em>(<em>from</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>toDirectory</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>filter</em> : <a href="../sbt/NameFilter.html" target="_self">NameFilter</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Either">scala.Either</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="" target="contentFrame" class="scala/collection/Set">scala.collection.Set</a>[<a href="../sbt/Path.html" target="_self">Path</a>]]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Unzips the contents of the zip file <code>from</code> to the <code>toDirectory</code> directory.
+ Only the entries that match the given filter are extracted.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="unzip%28java.net.URL%2Csbt.Path%2Csbt.NameFilter%2Csbt.Logger%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>unzip</em>(<em>from</em> : <a href="" target="contentFrame" class="java/net/URL">java.net.URL</a>, <em>toDirectory</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>filter</em> : <a href="../sbt/NameFilter.html" target="_self">NameFilter</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Either">scala.Either</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="" target="contentFrame" class="scala/collection/Set">scala.collection.Set</a>[<a href="../sbt/Path.html" target="_self">Path</a>]]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Unzips the contents of the zip file <code>from</code> to the <code>toDirectory</code> directory.
+ Only the entries that match the given filter are extracted.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="unzip%28java.io.InputStream%2Csbt.Path%2Csbt.NameFilter%2Csbt.Logger%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>unzip</em>(<em>from</em> : <a href="" target="contentFrame" class="java/io/InputStream">java.io.InputStream</a>, <em>toDirectory</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>filter</em> : <a href="../sbt/NameFilter.html" target="_self">NameFilter</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Either">scala.Either</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="" target="contentFrame" class="scala/collection/Set">scala.collection.Set</a>[<a href="../sbt/Path.html" target="_self">Path</a>]]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Unzips the contents of the zip file <code>from</code> to the <code>toDirectory</code> directory.
+ Only the entries that match the given filter are extracted.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="transfer%28java.io.InputStream%2Cjava.io.OutputStream%2Csbt.Logger%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>transfer</em>(<em>in</em> : <a href="" target="contentFrame" class="java/io/InputStream">java.io.InputStream</a>, <em>out</em> : <a href="" target="contentFrame" class="java/io/OutputStream">java.io.OutputStream</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Copies all bytes from the given input stream to the given output stream.
+ Neither stream is closed.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="transferAndClose%28java.io.InputStream%2Cjava.io.OutputStream%2Csbt.Logger%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>transferAndClose</em>(<em>in</em> : <a href="" target="contentFrame" class="java/io/InputStream">java.io.InputStream</a>, <em>out</em> : <a href="" target="contentFrame" class="java/io/OutputStream">java.io.OutputStream</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Copies all bytes from the given input stream to the given output stream.  The
+ input stream is closed after the method completes.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="touch%28sbt.Path%2Csbt.Logger%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>touch</em>(<em>path</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Creates a file at the given location.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="touch%28java.io.File%2Csbt.Logger%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>touch</em>(<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Creates a file at the given location.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="createDirectory%28sbt.Path%2Csbt.Logger%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>createDirectory</em>(<em>dir</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Creates a directory at the given location.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="createDirectory%28java.io.File%2Csbt.Logger%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>createDirectory</em>(<em>dir</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Creates a directory at the given location.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="createDirectories%28Iterable%5Bsbt.Path%5D%2Csbt.Logger%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>createDirectories</em>(<em>d</em> : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="../sbt/Path.html" target="_self">Path</a>], <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Creates directories at the given locations.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="createDirectories%28List%5Bjava.io.File%5D%2Csbt.Logger%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>createDirectories</em>(<em>d</em> : <a href="" target="contentFrame" class="scala/List">scala.List</a>[<a href="" target="contentFrame" class="java/io/File">java.io.File</a>], <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Creates directories at the given locations.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="createTemporaryDirectory%28sbt.Logger%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>createTemporaryDirectory</em>(<em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Either">scala.Either</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="" target="contentFrame" class="java/io/File">java.io.File</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Creates a temporary directory and returns it.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="withTemporaryDirectory%28sbt.Logger%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>withTemporaryDirectory</em>(<em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>)(<em>action</em> : (<a href="" target="contentFrame" class="java/io/File">java.io.File</a>) =&gt; <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="doInTemporaryDirectory%28sbt.Logger%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>doInTemporaryDirectory</em>[<em>T</em>](<em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>)(<em>action</em> : (<a href="" target="contentFrame" class="java/io/File">java.io.File</a>) =&gt; <a href="" target="contentFrame" class="scala/Either">scala.Either</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="../sbt/FileUtilities$object.html#doInTemporaryDirectory%28sbt.Logger%29#T" target="_self">T</a>]) : <a href="" target="contentFrame" class="scala/Either">scala.Either</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="../sbt/FileUtilities$object.html#doInTemporaryDirectory%28sbt.Logger%29#T" target="_self">T</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Creates a temporary directory and provides its location to the given function.  The directory
+ is deleted after the function returns.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="withTemporaryFile%28sbt.Logger%2CString%2CString%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>withTemporaryFile</em>[<em>T</em>](<em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>, <em>prefix</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <em>postfix</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>)(<em>action</em> : (<a href="" target="contentFrame" class="java/io/File">java.io.File</a>) =&gt; <a href="" target="contentFrame" class="scala/Either">scala.Either</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="../sbt/FileUtilities$object.html#withTemporaryFile%28sbt.Logger%2CString%2CString%29#T" target="_self">T</a>]) : <a href="" target="contentFrame" class="scala/Either">scala.Either</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="../sbt/FileUtilities$object.html#withTemporaryFile%28sbt.Logger%2CString%2CString%29#T" target="_self">T</a>]
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="copyFlat%28Iterable%5Bsbt.Path%5D%2Csbt.Path%2Csbt.Logger%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>copyFlat</em>(<em>sources</em> : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="../sbt/Path.html" target="_self">Path</a>], <em>destinationDirectory</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Either">scala.Either</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="" target="contentFrame" class="scala/collection/Set">scala.collection.Set</a>[<a href="../sbt/Path.html" target="_self">Path</a>]]<code> with </code><a href="" target="contentFrame" class="scala/Product">scala.Product</a>
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Copies the files declared in <code>sources</code> to the <code>destinationDirectory</code>
+ directory.  The source directory hierarchy is flattened so that all copies are immediate
+ children of <code>destinationDirectory</code>.  Directories are not recursively entered.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="download%28java.net.URL%2Cjava.io.File%2Csbt.Logger%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>download</em>(<em>url</em> : <a href="" target="contentFrame" class="java/net/URL">java.net.URL</a>, <em>to</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Retrieves the content of the given URL and writes it to the given File.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="copy%28Iterable%5Bsbt.Path%5D%2Csbt.Path%2Csbt.Logger%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>copy</em>(<em>sources</em> : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="../sbt/Path.html" target="_self">Path</a>], <em>destinationDirectory</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Either">scala.Either</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="" target="contentFrame" class="scala/collection/Set">scala.collection.Set</a>[<a href="../sbt/Path.html" target="_self">Path</a>]]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Equivalent to {@code copy(sources, destinationDirectory, false, log)}.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="copy%28Iterable%5Bsbt.Path%5D%2Csbt.Path%2CBoolean%2Csbt.Logger%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>copy</em>(<em>sources</em> : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="../sbt/Path.html" target="_self">Path</a>], <em>destinationDirectory</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>overwrite</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/Boolean.html" target="_self">Boolean</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Either">scala.Either</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="" target="contentFrame" class="scala/collection/Set">scala.collection.Set</a>[<a href="../sbt/Path.html" target="_self">Path</a>]]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Equivalent to {@code copy(sources, destinationDirectory, overwrite, false, log)}.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="copy%28Iterable%5Bsbt.Path%5D%2Csbt.Path%2CBoolean%2CBoolean%2Csbt.Logger%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>copy</em>(<em>sources</em> : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="../sbt/Path.html" target="_self">Path</a>], <em>destinationDirectory</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>overwrite</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/Boolean.html" target="_self">Boolean</a>, <em>preserveLastModified</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/Boolean.html" target="_self">Boolean</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Either">scala.Either</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="" target="contentFrame" class="scala/collection/Set">scala.collection.Set</a>[<a href="../sbt/Path.html" target="_self">Path</a>]]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Copies the files declared in <code>sources</code> to the <code>destinationDirectory</code>
+ directory.  Directories are not recursively entered.  The destination hierarchy matches the
+ source paths relative to any base directories.  For example:
+
+ A source <code>(basePath ##) / x / y</code> is copied to <code>destinationDirectory / x / y</code>.</dd></dl>
+      <dl><dt style="margin:10px 0 0 20px;">
+        <b>Parameters</b></dt><dd><code>overwrite - </code>if true, existing destination files are always overwritten</dd><dd><code>preserveLastModified - </code>if true, the last modified time of copied files will be set equal to their corresponding source files.</dd></dl>
+    <hr></hr>
+<a name="copyFilesFlat%28Iterable%5Bjava.io.File%5D%2Csbt.Path%2Csbt.Logger%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>copyFilesFlat</em>(<em>sources</em> : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="" target="contentFrame" class="java/io/File">java.io.File</a>], <em>targetDirectory</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Either">scala.Either</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="" target="contentFrame" class="scala/collection/Set">scala.collection.Set</a>[<a href="../sbt/Path.html" target="_self">Path</a>]]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Copies the files declared in <code>sources</code> to the <code>targetDirectory</code>
+ directory.  The source directory hierarchy is flattened so that all copies are immediate
+ children of <code>targetDirectory</code>.  Directories are not recursively entered.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="copyFile%28sbt.Path%2Csbt.Path%2Csbt.Logger%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>copyFile</em>(<em>sourceFile</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>targetFile</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Copies <code>sourceFile</code> to <code>targetFile</code>.  If <code>targetFile</code>
+ exists, it is overwritten.  Note that unlike higher level copies in FileUtilities, this
+ method always performs the copy, even if sourceFile is older than targetFile.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="copyFile%28java.io.File%2Cjava.io.File%2Csbt.Logger%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>copyFile</em>(<em>sourceFile</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>targetFile</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Copies <code>sourceFile</code> to <code>targetFile</code>.  If <code>targetFile</code>
+ exists, it is overwritten.  Note that unlike higher level copies in FileUtilities, this
+ method always performs the copy, even if sourceFile is older than targetFile.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="sync%28sbt.Path%2Csbt.Path%2Csbt.Logger%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>sync</em>(<em>sourceDirectory</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>targetDirectory</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Synchronizes the contents of the <code>sourceDirectory</code> directory to the
+ <code>targetDirectory</code> directory.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="syncPaths%28sbt.PathFinder%2Csbt.Path%2Csbt.Logger%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>syncPaths</em>(<em>sources</em> : <a href="../sbt/PathFinder.html" target="_self">PathFinder</a>, <em>targetDirectory</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="prune%28sbt.Path%2CIterable%5Bsbt.Path%5D%2Csbt.Logger%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>prune</em>(<em>directory</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>keepOnly</em> : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="../sbt/Path.html" target="_self">Path</a>], <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="copyDirectory%28sbt.Path%2Csbt.Path%2Csbt.Logger%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>copyDirectory</em>(<em>source</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>target</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Copies the contents of the <code>source</code> directory to the <code>target</code> directory .</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="copyDirectory%28java.io.File%2Cjava.io.File%2Csbt.Logger%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>copyDirectory</em>(<em>source</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>target</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Copies the contents of the <code>source</code> directory to the <code>target</code> directory .</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="clean%28sbt.Path%2Csbt.Logger%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>clean</em>(<em>file</em> : <a href="../sbt/Path.html" target="_self">Path</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Deletes the given file recursively.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="clean%28Iterable%5Bsbt.Path%5D%2Csbt.Logger%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>clean</em>(<em>files</em> : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="../sbt/Path.html" target="_self">Path</a>], <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Deletes the given files recursively.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="clean%28Iterable%5Bsbt.Path%5D%2CBoolean%2Csbt.Logger%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>clean</em>(<em>files</em> : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="../sbt/Path.html" target="_self">Path</a>], <em>quiet</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/Boolean.html" target="_self">Boolean</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Deletes the given files recursively.  <code>quiet</code> determines the logging level.
+ If it is true, each file in <code>files</code> is logged at the <code>info</code> level.
+ If it is false, the <code>debug</code> level is used.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="append%28java.io.File%2CString%2Csbt.Logger%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>append</em>(<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>content</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Appends the given <code>String content</code> to the provided <code>file</code> using the default encoding.
+ A new file is created if it does not exist.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="append%28java.io.File%2CString%2Cjava.nio.charset.Charset%2Csbt.Logger%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>append</em>(<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>content</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <em>charset</em> : <a href="" target="contentFrame" class="java/nio/charset/Charset">java.nio.charset.Charset</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Appends the given <code>String content</code> to the provided <code>file</code> using the given encoding.
+ A new file is created if it does not exist.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="write%28java.io.File%2CString%2Csbt.Logger%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>write</em>(<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>content</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Writes the given <code>String content</code> to the provided <code>file</code> using the default encoding.
+ If the file exists, it is overwritten.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="write%28java.io.File%2CString%2Cjava.nio.charset.Charset%2Csbt.Logger%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>write</em>(<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>content</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <em>charset</em> : <a href="" target="contentFrame" class="java/nio/charset/Charset">java.nio.charset.Charset</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Writes the given <code>String content</code> to the provided <code>file</code> using the given encoding.
+ If the file already exists, it is overwritten.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="write%28java.io.File%2Csbt.Logger%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>write</em>(<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>)(<em>f</em> : (<a href="" target="contentFrame" class="java/io/Writer">java.io.Writer</a>) =&gt; <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Opens a <code>Writer</code> on the given file using the default encoding,
+ passes it to the provided function, and closes the <code>Writer</code>.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="write%28java.io.File%2Cjava.nio.charset.Charset%2Csbt.Logger%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>write</em>(<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>charset</em> : <a href="" target="contentFrame" class="java/nio/charset/Charset">java.nio.charset.Charset</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>)(<em>f</em> : (<a href="" target="contentFrame" class="java/io/Writer">java.io.Writer</a>) =&gt; <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Opens a <code>Writer</code> on the given file using the given encoding,
+ passes it to the provided function, and closes the <code>Writer</code>.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="read%28java.io.File%2Csbt.Logger%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>read</em>(<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>)(<em>f</em> : (<a href="" target="contentFrame" class="java/io/Reader">java.io.Reader</a>) =&gt; <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Opens a <code>Reader</code> on the given file using the default encoding,
+ passes it to the provided function, and closes the <code>Reader</code>.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="read%28java.io.File%2Cjava.nio.charset.Charset%2Csbt.Logger%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>read</em>(<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>charset</em> : <a href="" target="contentFrame" class="java/nio/charset/Charset">java.nio.charset.Charset</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>)(<em>f</em> : (<a href="" target="contentFrame" class="java/io/Reader">java.io.Reader</a>) =&gt; <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Opens a <code>Reader</code> on the given file using the default encoding,
+ passes it to the provided function, and closes the <code>Reader</code>.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="readValue%28java.io.File%2Csbt.Logger%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>readValue</em>[<em>R</em>](<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>)(<em>f</em> : (<a href="" target="contentFrame" class="java/io/Reader">java.io.Reader</a>) =&gt; <a href="" target="contentFrame" class="scala/Either">scala.Either</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="../sbt/FileUtilities$object.html#readValue%28java.io.File%2Csbt.Logger%29#R" target="_self">R</a>]) : <a href="" target="contentFrame" class="scala/Either">scala.Either</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="../sbt/FileUtilities$object.html#readValue%28java.io.File%2Csbt.Logger%29#R" target="_self">R</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Opens a <code>Reader</code> on the given file using the default encoding,
+ passes it to the provided function, and closes the <code>Reader</code>.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="readValue%28java.io.File%2Cjava.nio.charset.Charset%2Csbt.Logger%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>readValue</em>[<em>R</em>](<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>charset</em> : <a href="" target="contentFrame" class="java/nio/charset/Charset">java.nio.charset.Charset</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>)(<em>f</em> : (<a href="" target="contentFrame" class="java/io/Reader">java.io.Reader</a>) =&gt; <a href="" target="contentFrame" class="scala/Either">scala.Either</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="../sbt/FileUtilities$object.html#readValue%28java.io.File%2Cjava.nio.charset.Charset%2Csbt.Logger%29#R" target="_self">R</a>]) : <a href="" target="contentFrame" class="scala/Either">scala.Either</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="../sbt/FileUtilities$object.html#readValue%28java.io.File%2Cjava.nio.charset.Charset%2Csbt.Logger%29#R" target="_self">R</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Opens a <code>Reader</code> on the given file using the given encoding,
+ passes it to the provided function, and closes the <code>Reader</code>.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="readString%28java.io.File%2Csbt.Logger%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>readString</em>(<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Either">scala.Either</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Reads the contents of the given file into a <code>String</code> using the default encoding.
+  The resulting <code>String</code> is wrapped in <code>Right</code>.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="readString%28java.io.File%2Cjava.nio.charset.Charset%2Csbt.Logger%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>readString</em>(<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>charset</em> : <a href="" target="contentFrame" class="java/nio/charset/Charset">java.nio.charset.Charset</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Either">scala.Either</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Reads the contents of the given file into a <code>String</code> using the given encoding.
+  The resulting <code>String</code> is wrapped in <code>Right</code>.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="readString%28java.io.InputStream%2Csbt.Logger%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>readString</em>(<em>in</em> : <a href="" target="contentFrame" class="java/io/InputStream">java.io.InputStream</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Either">scala.Either</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="readString%28java.io.InputStream%2Cjava.nio.charset.Charset%2Csbt.Logger%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>readString</em>(<em>in</em> : <a href="" target="contentFrame" class="java/io/InputStream">java.io.InputStream</a>, <em>charset</em> : <a href="" target="contentFrame" class="java/nio/charset/Charset">java.nio.charset.Charset</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Either">scala.Either</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="readString%28java.io.Reader%2Csbt.Logger%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>readString</em>(<em>in</em> : <a href="" target="contentFrame" class="java/io/Reader">java.io.Reader</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Either">scala.Either</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="append%28java.io.File%2CArray%5BByte%5D%2Csbt.Logger%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>append</em>(<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>bytes</em> : <a href="" target="contentFrame" class="scala/Array">scala.Array</a>[<a href="http://www.scala-lang.org/docu/files/api/scala/Byte.html" target="_self">Byte</a>], <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Appends the given bytes to the given file.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="write%28java.io.File%2CArray%5BByte%5D%2Csbt.Logger%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>write</em>(<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>bytes</em> : <a href="" target="contentFrame" class="scala/Array">scala.Array</a>[<a href="http://www.scala-lang.org/docu/files/api/scala/Byte.html" target="_self">Byte</a>], <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Writes the given bytes to the given file. If the file already exists, it is overwritten.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="readBytes%28java.io.File%2Csbt.Logger%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>readBytes</em>(<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Either">scala.Either</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="" target="contentFrame" class="scala/Array">scala.Array</a>[<a href="http://www.scala-lang.org/docu/files/api/scala/Byte.html" target="_self">Byte</a>]]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Reads the entire file into a byte array.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="readBytes%28java.io.InputStream%2Csbt.Logger%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>readBytes</em>(<em>in</em> : <a href="" target="contentFrame" class="java/io/InputStream">java.io.InputStream</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>) : <a href="" target="contentFrame" class="scala/Either">scala.Either</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="" target="contentFrame" class="scala/Array">scala.Array</a>[<a href="http://www.scala-lang.org/docu/files/api/scala/Byte.html" target="_self">Byte</a>]]
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="appendStream%28java.io.File%2Csbt.Logger%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>appendStream</em>(<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>)(<em>f</em> : (<a href="" target="contentFrame" class="java/io/OutputStream">java.io.OutputStream</a>) =&gt; <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Opens an <code>OutputStream</code> on the given file with append=true and passes the stream
+ to the provided function.  The stream is closed before this function returns.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="writeStream%28java.io.File%2Csbt.Logger%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>writeStream</em>(<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>)(<em>f</em> : (<a href="" target="contentFrame" class="java/io/OutputStream">java.io.OutputStream</a>) =&gt; <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Opens an <code>OutputStream</code> on the given file and passes the stream
+ to the provided function.  The stream is closed before this function returns.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="readStream%28java.io.File%2Csbt.Logger%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>readStream</em>(<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>)(<em>f</em> : (<a href="" target="contentFrame" class="java/io/InputStream">java.io.InputStream</a>) =&gt; <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Opens an <code>InputStream</code> on the given file and passes the stream
+ to the provided function.  The stream is closed before this function returns.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="readStreamValue%28java.io.File%2Csbt.Logger%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>readStreamValue</em>[<em>R</em>](<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>)(<em>f</em> : (<a href="" target="contentFrame" class="java/io/InputStream">java.io.InputStream</a>) =&gt; <a href="" target="contentFrame" class="scala/Either">scala.Either</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="../sbt/FileUtilities$object.html#readStreamValue%28java.io.File%2Csbt.Logger%29#R" target="_self">R</a>]) : <a href="" target="contentFrame" class="scala/Either">scala.Either</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="../sbt/FileUtilities$object.html#readStreamValue%28java.io.File%2Csbt.Logger%29#R" target="_self">R</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Opens an <code>InputStream</code> on the given file and passes the stream
+ to the provided function.  The stream is closed before this function returns.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="readStream%28java.net.URL%2Csbt.Logger%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>readStream</em>(<em>url</em> : <a href="" target="contentFrame" class="java/net/URL">java.net.URL</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>)(<em>f</em> : (<a href="" target="contentFrame" class="java/io/InputStream">java.io.InputStream</a>) =&gt; <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Opens an <code>InputStream</code> on the given <code>URL</code> and passes the stream
+ to the provided function.  The stream is closed before this function returns.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="readStreamValue%28java.net.URL%2Csbt.Logger%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>readStreamValue</em>[<em>R</em>](<em>url</em> : <a href="" target="contentFrame" class="java/net/URL">java.net.URL</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>)(<em>f</em> : (<a href="" target="contentFrame" class="java/io/InputStream">java.io.InputStream</a>) =&gt; <a href="" target="contentFrame" class="scala/Either">scala.Either</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="../sbt/FileUtilities$object.html#readStreamValue%28java.net.URL%2Csbt.Logger%29#R" target="_self">R</a>]) : <a href="" target="contentFrame" class="scala/Either">scala.Either</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="../sbt/FileUtilities$object.html#readStreamValue%28java.net.URL%2Csbt.Logger%29#R" target="_self">R</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Opens an <code>InputStream</code> on the given <code>URL</code> and passes the stream
+ to the provided function.  The stream is closed before this function returns.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="writeChannel%28java.io.File%2Csbt.Logger%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>writeChannel</em>(<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>)(<em>f</em> : (<a href="" target="contentFrame" class="java/nio/channels/FileChannel">java.nio.channels.FileChannel</a>) =&gt; <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Opens a <code>FileChannel</code> on the given file for writing and passes the channel
+ to the given function.  The channel is closed before this function returns.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="readChannel%28java.io.File%2Csbt.Logger%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>readChannel</em>(<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>)(<em>f</em> : (<a href="" target="contentFrame" class="java/nio/channels/FileChannel">java.nio.channels.FileChannel</a>) =&gt; <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Opens a <code>FileChannel</code> on the given file for reading and passes the channel
+ to the given function.  The channel is closed before this function returns.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="readChannelValue%28java.io.File%2Csbt.Logger%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>readChannelValue</em>[<em>R</em>](<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>log</em> : <a href="../sbt/Logger.html" target="_self">Logger</a>)(<em>f</em> : (<a href="" target="contentFrame" class="java/nio/channels/FileChannel">java.nio.channels.FileChannel</a>) =&gt; <a href="" target="contentFrame" class="scala/Either">scala.Either</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="../sbt/FileUtilities$object.html#readChannelValue%28java.io.File%2Csbt.Logger%29#R" target="_self">R</a>]) : <a href="" target="contentFrame" class="scala/Either">scala.Either</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="../sbt/FileUtilities$object.html#readChannelValue%28java.io.File%2Csbt.Logger%29#R" target="_self">R</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Opens a <code>FileChannel</code> on the given file for reading and passes the channel
+ to the given function.  The channel is closed before this function returns.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="toFile%28java.net.URL%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>toFile</em>(<em>url</em> : <a href="" target="contentFrame" class="java/net/URL">java.net.URL</a>) : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="classLocation%28Class%5B_%5D%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>classLocation</em>(<em>cl</em> : <a href="" target="contentFrame" class="java/lang/Class">java.lang.Class</a>[<a href="http://www.scala-lang.org/docu/files/api/scala/Any.html" target="_self">Any</a>]) : <a href="" target="contentFrame" class="java/net/URL">java.net.URL</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="classLocationFile%28Class%5B_%5D%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>classLocationFile</em>(<em>cl</em> : <a href="" target="contentFrame" class="java/lang/Class">java.lang.Class</a>[<a href="http://www.scala-lang.org/docu/files/api/scala/Any.html" target="_self">Any</a>]) : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="classLocation%28scala.reflect.Manifest%5BT%5D%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>classLocation</em>[<em>T</em>](<code>implicit </code><em>mf</em> : <a href="" target="contentFrame" class="scala/reflect/Manifest">scala.reflect.Manifest</a>[<a href="../sbt/FileUtilities$object.html#classLocation%28scala.reflect.Manifest%5BT%5D%29#T" target="_self">T</a>]) : <a href="" target="contentFrame" class="java/net/URL">java.net.URL</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="classLocationFile%28scala.reflect.Manifest%5BT%5D%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>classLocationFile</em>[<em>T</em>](<code>implicit </code><em>mf</em> : <a href="" target="contentFrame" class="scala/reflect/Manifest">scala.reflect.Manifest</a>[<a href="../sbt/FileUtilities$object.html#classLocationFile%28scala.reflect.Manifest%5BT%5D%29#T" target="_self">T</a>]) : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="scalaJars"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>scalaJars</em> : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="" target="contentFrame" class="java/io/File">java.io.File</a>]
+      </dt>
+      <dd></dd>
+    </dl><hr></hr></div>
+
+
+    <hr></hr>
+        <table summary="" class="navigation">
+        <tr>
+          <td class="navigation-links" valign="top">
+            <!-- <table><tr></tr></table> -->
+          </td>
+          <td align="right" valign="top" style="white-space:nowrap;" rowspan="2">
+            <div class="doctitle-larger">Simple Build Tool 0.7.3 API</div>
+          </td>
+        </tr>
+        <tr><td></td></tr>
+      </table>
+      </body>
+      </html>

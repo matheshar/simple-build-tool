@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+			<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" ></meta>
+        <title>CompilerArguments.scala</title>
+        <script type="text/javascript" src="jquery-all.js"></script>
+        <script type="text/javascript" src="linked.js"></script>
+        <link rel="stylesheet" type="text/css" href="style.css" title="Style"></link>
+    </head>
+    <body>
+        <pre>
+<span class="keyword">package</span> xsbt
+
+	<span class="keyword">import</span> java.io.File
+	<span class="keyword">import</span> CompilerArguments.{abs, absString}
+
+<span class="comment">/** Forms the list of options that is passed to the compiler from the required inputs and other options.
+* The directory containing scala-library.jar and scala-compiler.jar (scalaLibDirectory) is required in
+* order to add these jars to the boot classpath. The 'scala.home' property must be unset because Scala
+* puts jars in that directory on the bootclasspath.  Because we use multiple Scala versions,
+* this would lead to compiling against the wrong library jar.*/</span>
+<span class="keyword">class</span> <a title="class CompilerArguments extends java.lang.Object with ScalaObject" id="12669">CompilerArguments</a>(<a title="xsbt.ScalaInstance" id="33411">scalaInstance</a>: <a href="ScalaInstance.scala.html#12786" title="xsbt.ScalaInstance">ScalaInstance</a>, <a title="Boolean" id="33412">autoBootClasspath</a>: <span title="Boolean">Boolean</span>, <a title="Boolean" id="33413">compilerOnClasspath</a>: <span title="Boolean">Boolean</span>)
+{
+	<span class="keyword">def</span> <a title="(Set[java.io.File],Set[java.io.File],java.io.File,Seq[String])Seq[String]" id="33406">apply</a>(<a title="Set[java.io.File]" id="33423">sources</a>: <span title="Set[java.io.File]">Set</span>[File], <a title="Set[java.io.File]" id="33424">classpath</a>: <span title="Set[java.io.File]">Set</span>[File], <a title="java.io.File" id="33425">outputDirectory</a>: <a title="java.io.File" id="3620">File</a>, <a title="Seq[String]" id="33426">options</a>: <span title="Seq[String]">Seq</span>[String]): <span title="Seq[String]">Seq</span>[String] =
+	{
+		<a href="#33409" title="()Unit">checkScalaHomeUnset</a>()
+		<span class="keyword">val</span> <a title="Seq[java.lang.String]" id="79703">bootClasspathOption</a> = <span title="Seq[java.lang.String]" class="keyword">if</span>(<a href="#33412" title="Boolean">autoBootClasspath</a>) <span title="(java.lang.String*)Seq[java.lang.String]">Seq</span>(<span title="java.lang.String(&quot;-bootclasspath&quot;)" class="string">&quot;-bootclasspath&quot;</span>, <a href="#33410" title="=&gt; java.lang.String">createBootClasspath</a>) <span class="keyword">else</span> <span title="object Nil">Nil</span>
+		<span class="keyword">val</span> <a title="Set[java.io.File]" id="79704">cpWithCompiler</a> = <a href="#33407" title="(Set[java.io.File])Set[java.io.File]">finishClasspath</a>(<a href="#33424" title="Set[java.io.File]">classpath</a>)
+		<span class="keyword">val</span> <a title="Seq[String]" id="79705">classpathOption</a> = <span title="(String*)Seq[String]">Seq</span>(<span title="java.lang.String(&quot;-cp&quot;)" class="string">&quot;-cp&quot;</span>, <a href="#33418" title="(Set[java.io.File])String">absString</a>(<a href="#79704" title="Set[java.io.File]">cpWithCompiler</a>) )
+		<span class="keyword">val</span> <a title="Seq[java.lang.String]" id="79706">outputOption</a> = <span title="(java.lang.String*)Seq[java.lang.String]">Seq</span>(<span title="java.lang.String(&quot;-d&quot;)" class="string">&quot;-d&quot;</span>, <a href="#33425" title="java.io.File">outputDirectory</a>.<span title="()java.lang.String">getAbsolutePath</span>)
+		<a href="#33426" title="Seq[String]">options</a> <span title="(Iterable[String])Seq[String]">++</span> <a href="#79706" title="Seq[java.lang.String]">outputOption</a> <span title="(Iterable[String])Seq[String]">++</span> <a href="#79703" title="Seq[java.lang.String]">bootClasspathOption</a> <span title="(Iterable[String])Seq[String]">++</span> <a href="#79705" title="Seq[String]">classpathOption</a> <span title="(Iterable[String])Seq[String]">++</span> <a href="#33408" title="(Set[java.io.File])scala.collection.immutable.Set[java.lang.String]">abs</a>(<a href="#33423" title="Set[java.io.File]">sources</a>)
+	}
+	<span class="keyword">def</span> <a title="(Set[java.io.File])Set[java.io.File]" id="33407">finishClasspath</a>(<a title="Set[java.io.File]" id="66026">classpath</a>: <span title="Set[java.io.File]">Set</span>[File]): <span title="Set[java.io.File]">Set</span>[File] =
+		<a href="#66026" title="Set[java.io.File]">classpath</a> <a title="(Iterable[java.io.File])scala.collection.immutable.Set[java.io.File]" id="22697">++</a> (<span title="List[java.io.File]" class="keyword">if</span>(<a href="#33413" title="Boolean">compilerOnClasspath</a>) <a href="#33411" title="xsbt.ScalaInstance">scalaInstance</a>.<a href="ScalaInstance.scala.html#23074" title="=&gt; java.io.File">compilerJar</a> <a href="#79752" title="(java.io.File)List[java.io.File]" id="17725">::</a> <span title="object Nil">Nil</span> <span class="keyword">else</span> <span title="object Nil">Nil</span>)
+	<span class="keyword">protected</span> <span class="keyword">def</span> <a title="(Set[java.io.File])scala.collection.immutable.Set[java.lang.String]" id="33408">abs</a>(<a title="Set[java.io.File]" id="79730">files</a>: <span title="Set[java.io.File]">Set</span>[File]) = <a href="#79730" title="Set[java.io.File]">files</a>.<a title="((java.io.File) =&gt; java.lang.String)scala.collection.immutable.Set[java.lang.String]" id="22709">map</a>(<a href="#79734" title="java.io.File">_</a>.<span title="()java.lang.String">getAbsolutePath</span>)
+	<span class="keyword">protected</span> <span class="keyword">def</span> <a title="()Unit" id="33409">checkScalaHomeUnset</a>()
+	{
+		<span class="keyword">val</span> <a title="java.lang.String" id="79755">scalaHome</a> = <span title="object java.lang.System">System</span>.<a title="(java.lang.String)java.lang.String" id="34097">getProperty</a>(<span title="java.lang.String(&quot;scala.home&quot;)" class="string">&quot;scala.home&quot;</span>)
+		<a title="(Boolean,Any)Unit" id="6089">assert</a>((<a href="#79755" title="java.lang.String">scalaHome</a> <a title="(AnyRef)Boolean" id="5739">eq</a> <span title="Null(null)" class="keyword">null</span>) <a title="(Boolean)Boolean" id="2698">||</a> <a href="#79755" title="implicit scala.Predef.stringWrapper : (String)scala.runtime.RichString">scalaHome</a>.<span title="=&gt; Boolean">isEmpty</span>, <span title="java.lang.String(&quot;'scala.home' should not be set (was &quot;)" class="string">&quot;'scala.home' should not be set (was &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#79755" title="java.lang.String">scalaHome</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot;)&quot;)" class="string">&quot;)&quot;</span>)
+	}
+	<span class="comment">/** Add the correct Scala library jar to the boot classpath.*/</span>
+	<span class="keyword">def</span> <a title="=&gt; java.lang.String" id="33410">createBootClasspath</a> =
+	{
+		<span class="keyword">val</span> <a title="java.lang.String" id="66029">originalBoot</a> = <span title="object java.lang.System">System</span>.<a title="(java.lang.String,java.lang.String)java.lang.String" id="34098">getProperty</a>(<span title="java.lang.String(&quot;sun.boot.class.path&quot;)" class="string">&quot;sun.boot.class.path&quot;</span>, <span title="java.lang.String(&quot;&quot;)" class="string">&quot;&quot;</span>)
+		<span class="keyword">val</span> <a title="java.lang.String" id="66030">newBootPrefix</a> = <span title="java.lang.String" class="keyword">if</span>(<a href="#66029" title="implicit scala.Predef.stringWrapper : (String)scala.runtime.RichString">originalBoot</a>.<span title="=&gt; Boolean">isEmpty</span>) <span title="java.lang.String(&quot;&quot;)" class="string">&quot;&quot;</span> <span class="keyword">else</span> <a href="#66029" title="java.lang.String">originalBoot</a> <span title="(Any)java.lang.String">+</span> <span title="object java.io.File">File</span>.<span title="java.lang.String">pathSeparator</span>
+		<a href="#66030" title="java.lang.String">newBootPrefix</a> <span title="(Any)java.lang.String">+</span> <a href="#33411" title="xsbt.ScalaInstance">scalaInstance</a>.<a href="ScalaInstance.scala.html#23072" title="=&gt; java.io.File">libraryJar</a>.<span title="()java.lang.String">getAbsolutePath</span>
+	}
+}
+<span class="keyword">object</span> <a title="object xsbt.CompilerArguments" id="12670">CompilerArguments</a>
+{
+	<span class="keyword">def</span> <a title="(Seq[java.io.File])Seq[String]" id="33415">abs</a>(<a title="Seq[java.io.File]" id="79772">files</a>: <span title="Seq[java.io.File]">Seq</span>[File]): <span title="Seq[String]">Seq</span>[String] = <a href="#79772" title="Seq[java.io.File]">files</a>.<a title="((java.io.File) =&gt; java.lang.String)Seq[java.lang.String]" id="16538">map</a>(<a href="#79775" title="java.io.File">_</a>.<span title="()java.lang.String">getAbsolutePath</span>)
+	<span class="keyword">def</span> <a title="(Set[java.io.File])Seq[String]" id="33416">abs</a>(<a title="Set[java.io.File]" id="79776">files</a>: <span title="Set[java.io.File]">Set</span>[File]): <span title="Seq[String]">Seq</span>[String] = <a href="#33415" title="(Seq[java.io.File])Seq[String]">abs</a>(<a href="#79776" title="Set[java.io.File]">files</a>.<span title="=&gt; Seq[java.io.File]">toSeq</span>)
+	<span class="keyword">def</span> <a title="(Seq[java.io.File])String" id="33417">absString</a>(<a title="Seq[java.io.File]" id="66025">files</a>: <span title="Seq[java.io.File]">Seq</span>[File]): <span title="String">String</span> = <a href="#33415" title="(Seq[java.io.File])Seq[String]">abs</a>(<a href="#66025" title="Seq[java.io.File]">files</a>).<a title="(String)String" id="16097">mkString</a>(<span title="object java.io.File">File</span>.<span title="java.lang.String">pathSeparator</span>)
+	<span class="keyword">def</span> <a title="(Set[java.io.File])String" id="33418">absString</a>(<a title="Set[java.io.File]" id="66024">files</a>: <span title="Set[java.io.File]">Set</span>[File]): <span title="String">String</span> = <a href="#33417" title="(Seq[java.io.File])String">absString</a>(<a href="#66024" title="Set[java.io.File]">files</a>.<span title="=&gt; Seq[java.io.File]">toSeq</span>)
+}
+        </pre>
+    </body>
+</html>

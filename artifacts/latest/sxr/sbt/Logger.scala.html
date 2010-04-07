@@ -1,0 +1,407 @@
+<?xml version="1.0" encoding="utf-8"?>
+			<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" ></meta>
+        <title>sbt/Logger.scala</title>
+        <script type="text/javascript" src="../jquery-all.js"></script>
+        <script type="text/javascript" src="../linked.js"></script>
+        <link rel="stylesheet" type="text/css" href="../style.css" title="Style"></link>
+    </head>
+    <body>
+        <pre>
+<span class="comment">/* sbt -- Simple Build Tool
+ * Copyright 2008, 2009, 2010 Mark Harrah
+ */</span>
+<span class="keyword">package</span> sbt
+
+<span class="keyword">import</span> scala.collection.mutable.{Buffer, HashMap, ListBuffer}
+
+<span class="keyword">sealed</span> <span class="keyword">trait</span> <a title="trait LogEvent extends java.lang.Object with NotNull" id="9456">LogEvent</a> <span class="keyword">extends</span> <span title="NotNull">NotNull</span>
+<span class="keyword">final</span> <span class="keyword">class</span> <a title="class Success extends java.lang.Object with sbt.LogEvent with ScalaObject" id="7743">Success</a>(<span class="keyword">val</span> <a title="String" id="68383">msg</a>: <span title="String">String</span>) <span class="keyword">extends</span> <a href="#9456" title="sbt.LogEvent">LogEvent</a>
+<span class="keyword">final</span> <span class="keyword">class</span> <a title="class Log extends java.lang.Object with sbt.LogEvent with ScalaObject" id="11622">Log</a>(<span class="keyword">val</span> <a title="sbt.Level.Value" id="68394">level</a>: Level.<span title="sbt.Level.Value">Value</span>, <span class="keyword">val</span> <a title="String" id="68395">msg</a>: <span title="String">String</span>) <span class="keyword">extends</span> <a href="#9456" title="sbt.LogEvent">LogEvent</a>
+<span class="keyword">final</span> <span class="keyword">class</span> <a title="class Trace extends java.lang.Object with sbt.LogEvent with ScalaObject" id="9354">Trace</a>(<span class="keyword">val</span> <a title="Throwable" id="68402">exception</a>: <a title="Throwable" id="2088">Throwable</a>) <span class="keyword">extends</span> <a href="#9456" title="sbt.LogEvent">LogEvent</a>
+<span class="keyword">final</span> <span class="keyword">class</span> <a title="class SetLevel extends java.lang.Object with sbt.LogEvent with ScalaObject" id="9099">SetLevel</a>(<span class="keyword">val</span> <a title="sbt.Level.Value" id="68409">newLevel</a>: Level.<span title="sbt.Level.Value">Value</span>) <span class="keyword">extends</span> <a href="#9456" title="sbt.LogEvent">LogEvent</a>
+<span class="keyword">final</span> <span class="keyword">class</span> <a title="class SetTrace extends java.lang.Object with sbt.LogEvent with ScalaObject" id="6546">SetTrace</a>(<span class="keyword">val</span> <a title="Int" id="68416">level</a>: <span title="Int">Int</span>) <span class="keyword">extends</span> <a href="#9456" title="sbt.LogEvent">LogEvent</a>
+<span class="keyword">final</span> <span class="keyword">class</span> <a title="class ControlEvent extends java.lang.Object with sbt.LogEvent with ScalaObject" id="10485">ControlEvent</a>(<span class="keyword">val</span> <a title="sbt.ControlEvent.Value" id="68434">event</a>: ControlEvent.<span title="sbt.ControlEvent.Value">Value</span>, <span class="keyword">val</span> <a title="String" id="68435">msg</a>: <span title="String">String</span>) <span class="keyword">extends</span> <a href="#9456" title="sbt.LogEvent">LogEvent</a>
+
+<span class="keyword">object</span> <a title="object sbt.ControlEvent" id="10486">ControlEvent</a> <span class="keyword">extends</span> <span title="Enumeration">Enumeration</span>
+{
+	<span class="keyword">val</span> <a title="sbt.ControlEvent.Value" id="68428">Start</a>, <a title="sbt.ControlEvent.Value" id="68430">Header</a>, <a title="sbt.ControlEvent.Value" id="68432">Finish</a> = <span title="=&gt; sbt.ControlEvent.Value">Value</span>
+}
+
+<span class="keyword">abstract</span> <span class="keyword">class</span> <a title="class Logger extends java.lang.Object with xsbt.CompileLogger with sbt.IvyLogger with ScalaObject" id="11784">Logger</a> <span class="keyword">extends</span> xsbt.<a href="../CompileLogger.scala.html#12174" title="xsbt.CompileLogger">CompileLogger</a> <span class="keyword">with</span> <a href="../IvyLogger.scala.html#9870" title="sbt.IvyLogger">IvyLogger</a>
+{
+	<span class="keyword">def</span> <a title="=&gt; sbt.Level.Value" id="19507">getLevel</a>: Level.<span title="sbt.Level.Value">Value</span>
+	<span class="keyword">def</span> <a title="(sbt.Level.Value)Unit" id="19508">setLevel</a>(<a title="sbt.Level.Value" id="34302">newLevel</a>: Level.<span title="sbt.Level.Value">Value</span>)
+	<span class="keyword">def</span> <a title="(Int)Unit" id="19509">setTrace</a>(<a title="Int" id="68447">flag</a>: <span title="Int">Int</span>)
+	<span class="keyword">def</span> <a title="=&gt; Int" id="19510">getTrace</a>: <span title="Int">Int</span>
+	<span class="keyword">final</span> <span class="keyword">def</span> <a title="=&gt; Boolean" id="19511">traceEnabled</a> = <a href="#19510" title="=&gt; Int">getTrace</a> <span title="(Int)Boolean">&gt;=</span> <span title="Int(0)" class="int">0</span>
+	<span class="keyword">def</span> <a title="=&gt; Boolean" id="19512">ansiCodesSupported</a> = <span title="Boolean(false)" class="keyword">false</span>
+
+	<span class="keyword">def</span> <a title="(sbt.Level.Value)Boolean" id="19513">atLevel</a>(<a title="sbt.Level.Value" id="28474">level</a>: Level.<span title="sbt.Level.Value">Value</span>) = <a href="#28474" title="sbt.Level.Value">level</a>.<span title="=&gt; Int">id</span> <span title="(Int)Boolean">&gt;=</span> <a href="#19507" title="=&gt; sbt.Level.Value">getLevel</a>.<span title="=&gt; Int">id</span>
+	<span class="keyword">def</span> <a title="(=&gt; Throwable)Unit" id="19514">trace</a>(<a title="=&gt; Throwable" id="19565">t</a>: =&gt; Throwable): <span title="Unit">Unit</span>
+	<span class="keyword">final</span> <span class="keyword">def</span> <a title="(=&gt; String)Unit" id="19515">verbose</a>(<a title="=&gt; String" id="68452">message</a>: =&gt; String): <span title="Unit">Unit</span> = <a href="#19516" title="(=&gt; String)Unit">debug</a>(<a href="#68452" title="=&gt; String">message</a>)
+	<span class="keyword">final</span> <span class="keyword">def</span> <a title="(=&gt; String)Unit" id="19516">debug</a>(<a title="=&gt; String" id="23819">message</a>: =&gt; String): <span title="Unit">Unit</span> = <a href="#19521" title="(sbt.Level.Value,=&gt; String)Unit">log</a>(<a href="#8242" title="object sbt.Level">Level</a>.<a href="#28477" title="=&gt; sbt.Level.Value">Debug</a>, <a href="#23819" title="=&gt; String">message</a>)
+	<span class="keyword">final</span> <span class="keyword">def</span> <a title="(=&gt; String)Unit" id="19517">info</a>(<a title="=&gt; String" id="29705">message</a>: =&gt; String): <span title="Unit">Unit</span> = <a href="#19521" title="(sbt.Level.Value,=&gt; String)Unit">log</a>(<a href="#8242" title="object sbt.Level">Level</a>.<a href="#28479" title="=&gt; sbt.Level.Value">Info</a>, <a href="#29705" title="=&gt; String">message</a>)
+	<span class="keyword">final</span> <span class="keyword">def</span> <a title="(=&gt; String)Unit" id="19518">warn</a>(<a title="=&gt; String" id="29680">message</a>: =&gt; String): <span title="Unit">Unit</span> = <a href="#19521" title="(sbt.Level.Value,=&gt; String)Unit">log</a>(<a href="#8242" title="object sbt.Level">Level</a>.<a href="#28481" title="=&gt; sbt.Level.Value">Warn</a>, <a href="#29680" title="=&gt; String">message</a>)
+	<span class="keyword">final</span> <span class="keyword">def</span> <a title="(=&gt; String)Unit" id="19519">error</a>(<a title="=&gt; String" id="19537">message</a>: =&gt; String): <span title="Unit">Unit</span> = <a href="#19521" title="(sbt.Level.Value,=&gt; String)Unit">log</a>(<a href="#8242" title="object sbt.Level">Level</a>.<a href="#28483" title="=&gt; sbt.Level.Value">Error</a>, <a href="#19537" title="=&gt; String">message</a>)
+	<span class="keyword">def</span> <a title="(=&gt; String)Unit" id="19520">success</a>(<a title="=&gt; String" id="35169">message</a>: =&gt; String): <span title="Unit">Unit</span>
+	<span class="keyword">def</span> <a title="(sbt.Level.Value,=&gt; String)Unit" id="19521">log</a>(<a title="sbt.Level.Value" id="66605">level</a>: Level.<span title="sbt.Level.Value">Value</span>, <a title="=&gt; String" id="66606">message</a>: =&gt; String): <span title="Unit">Unit</span>
+	<span class="keyword">def</span> <a title="(sbt.ControlEvent.Value,=&gt; String)Unit" id="19522">control</a>(<a title="sbt.ControlEvent.Value" id="68478">event</a>: ControlEvent.<span title="sbt.ControlEvent.Value">Value</span>, <a title="=&gt; String" id="68479">message</a>: =&gt; String): <span title="Unit">Unit</span>
+
+	<span class="keyword">def</span> <a title="(Seq[sbt.LogEvent])Unit" id="19523">logAll</a>(<a title="Seq[sbt.LogEvent]" id="68480">events</a>: <span title="Seq[sbt.LogEvent]">Seq</span>[LogEvent]): <span title="Unit">Unit</span>
+	<span class="comment">/** Defined in terms of other methods in Logger and should not be called from them. */</span>
+	<span class="keyword">final</span> <span class="keyword">def</span> <a title="(sbt.LogEvent)Unit" id="19524">log</a>(<a title="sbt.LogEvent" id="66599">event</a>: <a href="#9456" title="sbt.LogEvent">LogEvent</a>)
+	{
+		<a href="#66599" title="sbt.LogEvent">event</a> <span title="Unit" class="keyword">match</span>
+		{
+			<span title="Unit" class="keyword">case</span> <a title="sbt.Success" id="68481">s</a>: <a href="#7743" title="sbt.Success">Success</a> =&gt; <a href="#19520" title="(=&gt; String)Unit">success</a>(<a href="#68481" title="sbt.Success">s</a>.<a href="#68383" title="=&gt; String">msg</a>)
+			<span title="Unit" class="keyword">case</span> <a title="sbt.Log" id="68482">l</a>: <a href="#11622" title="sbt.Log">Log</a> =&gt; <a href="#19521" title="(sbt.Level.Value,=&gt; String)Unit">log</a>(<a href="#68482" title="sbt.Log">l</a>.<a href="#68394" title="=&gt; sbt.Level.Value">level</a>, <a href="#68482" title="sbt.Log">l</a>.<a href="#68395" title="=&gt; String">msg</a>)
+			<span title="Unit" class="keyword">case</span> <a title="sbt.Trace" id="68489">t</a>: <a href="#9354" title="sbt.Trace">Trace</a> =&gt; <a href="#19514" title="(=&gt; Throwable)Unit">trace</a>(<a href="#68489" title="sbt.Trace">t</a>.<a href="#68402" title="=&gt; Throwable">exception</a>)
+			<span title="Unit" class="keyword">case</span> <a title="sbt.SetLevel" id="68491">setL</a>: <a href="#9099" title="sbt.SetLevel">SetLevel</a> =&gt; <a href="#19508" title="(sbt.Level.Value)Unit">setLevel</a>(<a href="#68491" title="sbt.SetLevel">setL</a>.<a href="#68409" title="=&gt; sbt.Level.Value">newLevel</a>)
+			<span title="Unit" class="keyword">case</span> <a title="sbt.SetTrace" id="68492">setT</a>: <a href="#6546" title="sbt.SetTrace">SetTrace</a> =&gt; <a href="#19509" title="(Int)Unit">setTrace</a>(<a href="#68492" title="sbt.SetTrace">setT</a>.<a href="#68416" title="=&gt; Int">level</a>)
+			<span title="Unit" class="keyword">case</span> <a title="sbt.ControlEvent" id="68493">c</a>: <a href="#10485" title="sbt.ControlEvent">ControlEvent</a> =&gt; <a href="#19522" title="(sbt.ControlEvent.Value,=&gt; String)Unit">control</a>(<a href="#68493" title="sbt.ControlEvent">c</a>.<a href="#68434" title="=&gt; sbt.ControlEvent.Value">event</a>, <a href="#68493" title="sbt.ControlEvent">c</a>.<a href="#68435" title="=&gt; String">msg</a>)
+		}
+	}
+
+	<span class="keyword">import</span> xsbti.F0
+	<span class="keyword">def</span> <a title="(xsbti.F0[String])Unit" id="19526">debug</a>(<a title="xsbti.F0[String]" id="23823">msg</a>: <a href="../xsbti/F0.java.html#5851" title="xsbti.F0[String]">F0</a>[String]): <span title="Unit">Unit</span> = <a href="#19531" title="(sbt.Level.Value,xsbti.F0[String])Unit">log</a>(<a href="#8242" title="object sbt.Level">Level</a>.<a href="#28477" title="=&gt; sbt.Level.Value">Debug</a>, <a href="#23823" title="xsbti.F0[String]">msg</a>)
+	<span class="keyword">def</span> <a title="(xsbti.F0[String])Unit" id="19527">warn</a>(<a title="xsbti.F0[String]" id="29683">msg</a>: <a href="../xsbti/F0.java.html#5851" title="xsbti.F0[String]">F0</a>[String]): <span title="Unit">Unit</span> = <a href="#19531" title="(sbt.Level.Value,xsbti.F0[String])Unit">log</a>(<a href="#8242" title="object sbt.Level">Level</a>.<a href="#28481" title="=&gt; sbt.Level.Value">Warn</a>, <a href="#29683" title="xsbti.F0[String]">msg</a>)
+	<span class="keyword">def</span> <a title="(xsbti.F0[String])Unit" id="19528">info</a>(<a title="xsbti.F0[String]" id="29709">msg</a>: <a href="../xsbti/F0.java.html#5851" title="xsbti.F0[String]">F0</a>[String]): <span title="Unit">Unit</span> = <a href="#19531" title="(sbt.Level.Value,xsbti.F0[String])Unit">log</a>(<a href="#8242" title="object sbt.Level">Level</a>.<a href="#28479" title="=&gt; sbt.Level.Value">Info</a>, <a href="#29709" title="xsbti.F0[String]">msg</a>)
+	<span class="keyword">def</span> <a title="(xsbti.F0[String])Unit" id="19529">error</a>(<a title="xsbti.F0[String]" id="19541">msg</a>: <a href="../xsbti/F0.java.html#5851" title="xsbti.F0[String]">F0</a>[String]): <span title="Unit">Unit</span> = <a href="#19531" title="(sbt.Level.Value,xsbti.F0[String])Unit">log</a>(<a href="#8242" title="object sbt.Level">Level</a>.<a href="#28483" title="=&gt; sbt.Level.Value">Error</a>, <a href="#19541" title="xsbti.F0[String]">msg</a>)
+	<span class="keyword">def</span> <a title="(xsbti.F0[Throwable])Unit" id="19530">trace</a>(<a title="xsbti.F0[Throwable]" id="19568">msg</a>: <a href="../xsbti/F0.java.html#5851" title="xsbti.F0[Throwable]">F0</a>[Throwable]) = <a href="#19514" title="(=&gt; Throwable)Unit">trace</a>(<a href="#19568" title="xsbti.F0[Throwable]">msg</a>.<a href="../xsbti/F0.java.html#19544" title="()Throwable">apply</a>)
+	<span class="keyword">def</span> <a title="(sbt.Level.Value,xsbti.F0[String])Unit" id="19531">log</a>(<a title="sbt.Level.Value" id="66597">level</a>: Level.<span title="sbt.Level.Value">Value</span>, <a title="xsbti.F0[String]" id="66598">msg</a>: <a href="../xsbti/F0.java.html#5851" title="xsbti.F0[String]">F0</a>[String]): <span title="Unit">Unit</span> = <a href="#19521" title="(sbt.Level.Value,=&gt; String)Unit">log</a>(<a href="#66597" title="sbt.Level.Value">level</a>, <a href="#66598" title="xsbti.F0[String]">msg</a>.<a href="../xsbti/F0.java.html#19544" title="()String">apply</a>)
+}
+
+<span class="comment">/** Implements the level-setting methods of Logger.*/</span>
+<span class="keyword">abstract</span> <span class="keyword">class</span> <a title="class BasicLogger extends sbt.Logger with ScalaObject" id="7596">BasicLogger</a> <span class="keyword">extends</span> <a href="#11784" title="sbt.Logger">Logger</a>
+{
+	<span class="keyword">private</span> <span class="keyword">var</span> <a title="Int" id="68525">traceEnabledVar</a> = java.lang.Integer.<span title="Int(2147483647)">MAX_VALUE</span>
+	<span class="keyword">private</span> <span class="keyword">var</span> <a title="sbt.Level.Value" id="68526">level</a>: Level.<span title="sbt.Level.Value">Value</span> = <a href="#8242" title="object sbt.Level">Level</a>.<a href="#28479" title="=&gt; sbt.Level.Value">Info</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.Level.Value" id="67289">getLevel</a> = <a href="#68526" title="=&gt; sbt.Level.Value">level</a>
+	<span class="keyword">def</span> <a title="(sbt.Level.Value)Unit" id="67290">setLevel</a>(<a title="sbt.Level.Value" id="68079">newLevel</a>: Level.<span title="sbt.Level.Value">Value</span>) { <a href="#68526" title="(sbt.Level.Value)Unit">level</a> = <a href="#68079" title="sbt.Level.Value">newLevel</a> }
+	<span class="keyword">def</span> <a title="(Int)Unit" id="67291">setTrace</a>(<a title="Int" id="68529">level</a>: <span title="Int">Int</span>) { <a href="#68525" title="(Int)Unit">traceEnabledVar</a> = <a href="#68529" title="Int">level</a> }
+	<span class="keyword">def</span> <a title="=&gt; Int" id="67292">getTrace</a> = <a href="#68525" title="=&gt; Int">traceEnabledVar</a>
+}
+
+<span class="keyword">final</span> <span class="keyword">class</span> <a title="class SynchronizedLogger extends sbt.Logger with ScalaObject" id="10929">SynchronizedLogger</a>(<a title="sbt.Logger" id="68548">delegate</a>: <a href="#11784" title="sbt.Logger">Logger</a>) <span class="keyword">extends</span> <a href="#11784" title="sbt.Logger">Logger</a>
+{
+	<span class="keyword">override</span> <span class="keyword">lazy</span> <span class="keyword">val</span> <a title="Boolean" id="68536">ansiCodesSupported</a> = <a href="#68548" title="sbt.Logger">delegate</a>.<a href="#19512" title="=&gt; Boolean">ansiCodesSupported</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.Level.Value" id="68537">getLevel</a> = { <a href="#10929" title="(sbt.Level.Value)sbt.Level.Value">synchronized</a> { <a href="#68548" title="sbt.Logger">delegate</a>.<a href="#19507" title="=&gt; sbt.Level.Value">getLevel</a> } }
+	<span class="keyword">def</span> <a title="(sbt.Level.Value)Unit" id="68538">setLevel</a>(<a title="sbt.Level.Value" id="68552">newLevel</a>: Level.<span title="sbt.Level.Value">Value</span>) { <a href="#10929" title="(Unit)Unit">synchronized</a> { <a href="#68548" title="sbt.Logger">delegate</a>.<a href="#19508" title="(sbt.Level.Value)Unit">setLevel</a>(<a href="#68552" title="sbt.Level.Value">newLevel</a>) } }
+	<span class="keyword">def</span> <a title="(Int)Unit" id="68539">setTrace</a>(<a title="Int" id="68554">level</a>: <span title="Int">Int</span>) { <a href="#10929" title="(Unit)Unit">synchronized</a> { <a href="#68548" title="sbt.Logger">delegate</a>.<a href="#19509" title="(Int)Unit">setTrace</a>(<a href="#68554" title="Int">level</a>) } }
+	<span class="keyword">def</span> <a title="=&gt; Int" id="68540">getTrace</a>: <span title="Int">Int</span> = { <a href="#10929" title="(Int)Int">synchronized</a> { <a href="#68548" title="sbt.Logger">delegate</a>.<a href="#19510" title="=&gt; Int">getTrace</a> } }
+
+	<span class="keyword">def</span> <a title="(=&gt; Throwable)Unit" id="68541">trace</a>(<a title="=&gt; Throwable" id="68558">t</a>: =&gt; Throwable) { <a href="#10929" title="(Unit)Unit">synchronized</a> { <a href="#68548" title="sbt.Logger">delegate</a>.<a href="#19514" title="(=&gt; Throwable)Unit">trace</a>(<a href="#68558" title="=&gt; Throwable">t</a>) } }
+	<span class="keyword">def</span> <a title="(sbt.Level.Value,=&gt; String)Unit" id="68542">log</a>(<a title="sbt.Level.Value" id="68561">level</a>: Level.<span title="sbt.Level.Value">Value</span>, <a title="=&gt; String" id="68562">message</a>: =&gt; String) { <a href="#10929" title="(Unit)Unit">synchronized</a> { <a href="#68548" title="sbt.Logger">delegate</a>.<a href="#19521" title="(sbt.Level.Value,=&gt; String)Unit">log</a>(<a href="#68561" title="sbt.Level.Value">level</a>, <a href="#68562" title="=&gt; String">message</a>) } }
+	<span class="keyword">def</span> <a title="(=&gt; String)Unit" id="68543">success</a>(<a title="=&gt; String" id="68570">message</a>: =&gt; String) { <a href="#10929" title="(Unit)Unit">synchronized</a> { <a href="#68548" title="sbt.Logger">delegate</a>.<a href="#19520" title="(=&gt; String)Unit">success</a>(<a href="#68570" title="=&gt; String">message</a>) } }
+	<span class="keyword">def</span> <a title="(sbt.ControlEvent.Value,=&gt; String)Unit" id="68544">control</a>(<a title="sbt.ControlEvent.Value" id="68572">event</a>: ControlEvent.<span title="sbt.ControlEvent.Value">Value</span>, <a title="=&gt; String" id="68573">message</a>: =&gt; String) { <a href="#10929" title="(Unit)Unit">synchronized</a> { <a href="#68548" title="sbt.Logger">delegate</a>.<a href="#19522" title="(sbt.ControlEvent.Value,=&gt; String)Unit">control</a>(<a href="#68572" title="sbt.ControlEvent.Value">event</a>, <a href="#68573" title="=&gt; String">message</a>) } }
+	<span class="keyword">def</span> <a title="(Seq[sbt.LogEvent])Unit" id="68545">logAll</a>(<a title="Seq[sbt.LogEvent]" id="68575">events</a>: <span title="Seq[sbt.LogEvent]">Seq</span>[LogEvent]) { <a href="#10929" title="(Unit)Unit">synchronized</a> { <a href="#68548" title="sbt.Logger">delegate</a>.<a href="#19523" title="(Seq[sbt.LogEvent])Unit">logAll</a>(<a href="#68575" title="Seq[sbt.LogEvent]">events</a>) } }
+}
+
+<span class="keyword">final</span> <span class="keyword">class</span> <a title="class MultiLogger extends sbt.BasicLogger with ScalaObject" id="9708">MultiLogger</a>(<a title="List[sbt.Logger]" id="68592">delegates</a>: <a title="List[sbt.Logger]" id="495">List</a>[Logger]) <span class="keyword">extends</span> <a href="#7596" title="sbt.BasicLogger">BasicLogger</a>
+{
+	<span class="keyword">override</span> <span class="keyword">lazy</span> <span class="keyword">val</span> <a title="Boolean" id="68581">ansiCodesSupported</a> = <a href="#68592" title="List[sbt.Logger]">delegates</a>.<a title="((sbt.Logger) =&gt; Boolean)Boolean" id="17762">forall</a>(<a href="#68594" title="sbt.Logger">_</a>.<a href="#19512" title="=&gt; Boolean">ansiCodesSupported</a>)
+	<span class="keyword">override</span> <span class="keyword">def</span> <a title="(sbt.Level.Value)Unit" id="68582">setLevel</a>(<a title="sbt.Level.Value" id="68595">newLevel</a>: Level.<span title="sbt.Level.Value">Value</span>)
+	{
+		<span class="keyword">super</span>.<a href="#67290" title="(sbt.Level.Value)Unit">setLevel</a>(<a href="#68595" title="sbt.Level.Value">newLevel</a>)
+		<a href="#68589" title="(sbt.LogEvent)Unit">dispatch</a>(<span title="sbt.SetLevel" class="keyword">new</span> <a href="#9099" title="sbt.SetLevel">SetLevel</a>(<a href="#68595" title="sbt.Level.Value">newLevel</a>))
+	}
+	<span class="keyword">override</span> <span class="keyword">def</span> <a title="(Int)Unit" id="68583">setTrace</a>(<a title="Int" id="68598">level</a>: <span title="Int">Int</span>)
+	{
+		<span class="keyword">super</span>.<a href="#67291" title="(Int)Unit">setTrace</a>(<a href="#68598" title="Int">level</a>)
+		<a href="#68589" title="(sbt.LogEvent)Unit">dispatch</a>(<span title="sbt.SetTrace" class="keyword">new</span> <a href="#6546" title="sbt.SetTrace">SetTrace</a>(<a href="#68598" title="Int">level</a>))
+	}
+	<span class="keyword">def</span> <a title="(=&gt; Throwable)Unit" id="68584">trace</a>(<a title="=&gt; Throwable" id="68600">t</a>: =&gt; Throwable) { <a href="#68589" title="(sbt.LogEvent)Unit">dispatch</a>(<span title="sbt.Trace" class="keyword">new</span> <a href="#9354" title="sbt.Trace">Trace</a>(<a href="#68600" title="=&gt; Throwable">t</a>)) }
+	<span class="keyword">def</span> <a title="(sbt.Level.Value,=&gt; String)Unit" id="68585">log</a>(<a title="sbt.Level.Value" id="68601">level</a>: Level.<span title="sbt.Level.Value">Value</span>, <a title="=&gt; String" id="68602">message</a>: =&gt; String) { <a href="#68589" title="(sbt.LogEvent)Unit">dispatch</a>(<span title="sbt.Log" class="keyword">new</span> <a href="#11622" title="sbt.Log">Log</a>(<a href="#68601" title="sbt.Level.Value">level</a>, <a href="#68602" title="=&gt; String">message</a>)) }
+	<span class="keyword">def</span> <a title="(=&gt; String)Unit" id="68586">success</a>(<a title="=&gt; String" id="68603">message</a>: =&gt; String) { <a href="#68589" title="(sbt.LogEvent)Unit">dispatch</a>(<span title="sbt.Success" class="keyword">new</span> <a href="#7743" title="sbt.Success">Success</a>(<a href="#68603" title="=&gt; String">message</a>)) }
+	<span class="keyword">def</span> <a title="(Seq[sbt.LogEvent])Unit" id="68587">logAll</a>(<a title="Seq[sbt.LogEvent]" id="68604">events</a>: <span title="Seq[sbt.LogEvent]">Seq</span>[LogEvent]) { <a href="#68592" title="List[sbt.Logger]">delegates</a>.<span title="((sbt.Logger) =&gt; Unit)Unit">foreach</span>(<a href="#68606" title="sbt.Logger">_</a>.<a href="#19523" title="(Seq[sbt.LogEvent])Unit">logAll</a>(<a href="#68604" title="Seq[sbt.LogEvent]">events</a>)) }
+	<span class="keyword">def</span> <a title="(sbt.ControlEvent.Value,=&gt; String)Unit" id="68588">control</a>(<a title="sbt.ControlEvent.Value" id="68607">event</a>: ControlEvent.<span title="sbt.ControlEvent.Value">Value</span>, <a title="=&gt; String" id="68608">message</a>: =&gt; String) { <a href="#68592" title="List[sbt.Logger]">delegates</a>.<span title="((sbt.Logger) =&gt; Unit)Unit">foreach</span>(<a href="#68610" title="sbt.Logger">_</a>.<a href="#19522" title="(sbt.ControlEvent.Value,=&gt; String)Unit">control</a>(<a href="#68607" title="sbt.ControlEvent.Value">event</a>, <a href="#68608" title="=&gt; String">message</a>)) }
+	<span class="keyword">private</span> <span class="keyword">def</span> <a title="(sbt.LogEvent)Unit" id="68589">dispatch</a>(<a title="sbt.LogEvent" id="68597">event</a>: <a href="#9456" title="sbt.LogEvent">LogEvent</a>) { <a href="#68592" title="List[sbt.Logger]">delegates</a>.<span title="((sbt.Logger) =&gt; Unit)Unit">foreach</span>(<a href="#68612" title="sbt.Logger">_</a>.<a href="#19524" title="(sbt.LogEvent)Unit">log</a>(<a href="#68597" title="sbt.LogEvent">event</a>)) }
+}
+
+<span class="comment">/** A filter logger is used to delegate messages but not the logging level to another logger.  This means
+* that messages are logged at the higher of the two levels set by this logger and its delegate.
+* */</span>
+<span class="keyword">final</span> <span class="keyword">class</span> <a title="class FilterLogger extends sbt.BasicLogger with ScalaObject" id="9630">FilterLogger</a>(<a title="sbt.Logger" id="67305">delegate</a>: <a href="#11784" title="sbt.Logger">Logger</a>) <span class="keyword">extends</span> <a href="#7596" title="sbt.BasicLogger">BasicLogger</a>
+{
+	<span class="keyword">override</span> <span class="keyword">lazy</span> <span class="keyword">val</span> <a title="Boolean" id="67297">ansiCodesSupported</a> = <a href="#67305" title="sbt.Logger">delegate</a>.<a href="#19512" title="=&gt; Boolean">ansiCodesSupported</a>
+	<span class="keyword">def</span> <a title="(=&gt; Throwable)Unit" id="67298">trace</a>(<a title="=&gt; Throwable" id="68616">t</a>: =&gt; Throwable)
+	{
+		<span title="Unit" class="keyword">if</span>(<a href="#19511" title="=&gt; Boolean">traceEnabled</a>)
+			<a href="#67305" title="sbt.Logger">delegate</a>.<a href="#19514" title="(=&gt; Throwable)Unit">trace</a>(<a href="#68616" title="=&gt; Throwable">t</a>)
+	}
+	<span class="keyword">override</span> <span class="keyword">def</span> <a title="(Int)Unit" id="67299">setTrace</a>(<a title="Int" id="68618">level</a>: <span title="Int">Int</span>) { <a href="#67305" title="sbt.Logger">delegate</a>.<a href="#19509" title="(Int)Unit">setTrace</a>(<a href="#68618" title="Int">level</a>) }
+	<span class="keyword">override</span> <span class="keyword">def</span> <a title="=&gt; Int" id="67300">getTrace</a> = <a href="#67305" title="sbt.Logger">delegate</a>.<a href="#19510" title="=&gt; Int">getTrace</a> 
+	<span class="keyword">def</span> <a title="(sbt.Level.Value,=&gt; String)Unit" id="67301">log</a>(<a title="sbt.Level.Value" id="68621">level</a>: Level.<span title="sbt.Level.Value">Value</span>, <a title="=&gt; String" id="68622">message</a>: =&gt; String)
+	{
+		<span title="Unit" class="keyword">if</span>(<a href="#19513" title="(sbt.Level.Value)Boolean">atLevel</a>(<a href="#68621" title="sbt.Level.Value">level</a>))
+			<a href="#67305" title="sbt.Logger">delegate</a>.<a href="#19521" title="(sbt.Level.Value,=&gt; String)Unit">log</a>(<a href="#68621" title="sbt.Level.Value">level</a>, <a href="#68622" title="=&gt; String">message</a>)
+	}
+	<span class="keyword">def</span> <a title="(=&gt; String)Unit" id="67302">success</a>(<a title="=&gt; String" id="68629">message</a>: =&gt; String)
+	{
+		<span title="Unit" class="keyword">if</span>(<a href="#19513" title="(sbt.Level.Value)Boolean">atLevel</a>(<a href="#8242" title="object sbt.Level">Level</a>.<a href="#28479" title="=&gt; sbt.Level.Value">Info</a>))
+			<a href="#67305" title="sbt.Logger">delegate</a>.<a href="#19520" title="(=&gt; String)Unit">success</a>(<a href="#68629" title="=&gt; String">message</a>)
+	}
+	<span class="keyword">def</span> <a title="(sbt.ControlEvent.Value,=&gt; String)Unit" id="67303">control</a>(<a title="sbt.ControlEvent.Value" id="68630">event</a>: ControlEvent.<span title="sbt.ControlEvent.Value">Value</span>, <a title="=&gt; String" id="68631">message</a>: =&gt; String)
+	{
+		<span title="Unit" class="keyword">if</span>(<a href="#19513" title="(sbt.Level.Value)Boolean">atLevel</a>(<a href="#8242" title="object sbt.Level">Level</a>.<a href="#28479" title="=&gt; sbt.Level.Value">Info</a>))
+			<a href="#67305" title="sbt.Logger">delegate</a>.<a href="#19522" title="(sbt.ControlEvent.Value,=&gt; String)Unit">control</a>(<a href="#68630" title="sbt.ControlEvent.Value">event</a>, <a href="#68631" title="=&gt; String">message</a>)
+	}
+	<span class="keyword">def</span> <a title="(Seq[sbt.LogEvent])Unit" id="67304">logAll</a>(<a title="Seq[sbt.LogEvent]" id="68632">events</a>: <span title="Seq[sbt.LogEvent]">Seq</span>[LogEvent]): <span title="Unit">Unit</span> = <a href="#67305" title="sbt.Logger">delegate</a>.<a href="#19523" title="(Seq[sbt.LogEvent])Unit">logAll</a>(<a href="#68632" title="Seq[sbt.LogEvent]">events</a>)
+}
+
+<span class="comment">/** A logger that can buffer the logging done on it by currently executing Thread and
+* then can flush the buffer to the delegate logger provided in the constructor.  Use
+* 'startRecording' to start buffering and then 'play' from to flush the buffer for the
+* current Thread to the backing logger.  The logging level set at the
+* time a message is originally logged is used, not the level at the time 'play' is
+* called.
+*
+* This class assumes that it is the only client of the delegate logger.
+*
+* This logger is thread-safe.
+* */</span>
+<span class="keyword">final</span> <span class="keyword">class</span> <a title="class BufferedLogger extends sbt.Logger with ScalaObject" id="6441">BufferedLogger</a>(<a title="sbt.Logger" id="67281">delegate</a>: <a href="#11784" title="sbt.Logger">Logger</a>) <span class="keyword">extends</span> <a href="#11784" title="sbt.Logger">Logger</a>
+{
+	<span class="keyword">override</span> <span class="keyword">lazy</span> <span class="keyword">val</span> <a title="Boolean" id="67248">ansiCodesSupported</a> = <a href="#67281" title="sbt.Logger">delegate</a>.<a href="#19512" title="=&gt; Boolean">ansiCodesSupported</a>
+	<span class="keyword">private</span>[<span class="keyword">this</span>] <span class="keyword">val</span> <a title="sbt.wrap.MutableMapWrapper[java.lang.Thread,scala.collection.mutable.Buffer[sbt.LogEvent]]" id="67249">buffers</a> = wrap.<a href="wrap/Wrappers.scala.html#14084" title="object sbt.wrap.Wrappers">Wrappers</a>.<a href="wrap/Wrappers.scala.html#18027" title="sbt.wrap.MutableMapWrapper[java.lang.Thread,scala.collection.mutable.Buffer[sbt.LogEvent]]">weakMap</a>[<a title="java.lang.Thread" id="2028">Thread</a>, <a title="scala.collection.mutable.Buffer[sbt.LogEvent]" id="15599">Buffer</a>[LogEvent]]
+	<span class="keyword">private</span>[<span class="keyword">this</span>] <span class="keyword">var</span> <a title="Boolean" id="67250">recordingAll</a> = <span title="Boolean(false)" class="keyword">false</span>
+
+	<span class="keyword">private</span>[<span class="keyword">this</span>] <span class="keyword">def</span> <a title="=&gt; scala.collection.mutable.Buffer[sbt.LogEvent]" id="67251">getOrCreateBuffer</a> = <a href="#67249" title="sbt.wrap.MutableMapWrapper[java.lang.Thread,scala.collection.mutable.Buffer[sbt.LogEvent]]">buffers</a>.<a href="wrap/Wrappers.scala.html#29625" title="(java.lang.Thread,=&gt; scala.collection.mutable.Buffer[sbt.LogEvent])scala.collection.mutable.Buffer[sbt.LogEvent]">getOrElseUpdate</a>(<a href="#67254" title="=&gt; java.lang.Thread">key</a>, <a href="#67253" title="=&gt; scala.collection.mutable.ListBuffer[sbt.LogEvent]">createBuffer</a>)
+	<span class="keyword">private</span>[<span class="keyword">this</span>] <span class="keyword">def</span> <a title="=&gt; Option[scala.collection.mutable.Buffer[sbt.LogEvent]]" id="67252">buffer</a> = <span title="Option[scala.collection.mutable.Buffer[sbt.LogEvent]]" class="keyword">if</span>(<a href="#67250" title="Boolean">recordingAll</a>) <a title="(scala.collection.mutable.Buffer[sbt.LogEvent])Some[scala.collection.mutable.Buffer[sbt.LogEvent]]" id="286">Some</a>(<a href="#67251" title="=&gt; scala.collection.mutable.Buffer[sbt.LogEvent]">getOrCreateBuffer</a>) <span class="keyword">else</span> <a href="#67249" title="sbt.wrap.MutableMapWrapper[java.lang.Thread,scala.collection.mutable.Buffer[sbt.LogEvent]]">buffers</a>.<a href="wrap/Wrappers.scala.html#29618" title="(java.lang.Thread)Option[scala.collection.mutable.Buffer[sbt.LogEvent]]">get</a>(<a href="#67254" title="=&gt; java.lang.Thread">key</a>)
+	<span class="keyword">private</span>[<span class="keyword">this</span>] <span class="keyword">def</span> <a title="=&gt; scala.collection.mutable.ListBuffer[sbt.LogEvent]" id="67253">createBuffer</a> = <span title="scala.collection.mutable.ListBuffer[sbt.LogEvent]" class="keyword">new</span> <a title="scala.collection.mutable.ListBuffer[sbt.LogEvent]" id="15563">ListBuffer</a>[LogEvent]
+	<span class="keyword">private</span>[<span class="keyword">this</span>] <span class="keyword">def</span> <a title="=&gt; java.lang.Thread" id="67254">key</a> = <a title="object java.lang.Thread" id="2029">Thread</a>.<a title="()java.lang.Thread" id="33094">currentThread</a>
+
+	@<a title="deprecated" id="201">deprecated</a> <span class="keyword">def</span> <a title="()Unit" id="67255">startRecording</a>() = <a href="#67257" title="()Unit">recordAll</a>()
+	<span class="comment">/** Enables buffering for logging coming from the current Thread. */</span>
+	<span class="keyword">def</span> <a title="()Unit" id="67256">record</a>(): <span title="Unit">Unit</span> = <a href="#6441" title="(Unit)Unit">synchronized</a> { <a href="#67249" title="sbt.wrap.MutableMapWrapper[java.lang.Thread,scala.collection.mutable.Buffer[sbt.LogEvent]]">buffers</a>(<a href="#67254" title="=&gt; java.lang.Thread">key</a>) = <a href="#67253" title="=&gt; scala.collection.mutable.ListBuffer[sbt.LogEvent]">createBuffer</a> }
+	<span class="comment">/** Enables buffering for logging coming from all Threads. */</span>
+	<span class="keyword">def</span> <a title="()Unit" id="67257">recordAll</a>(): <span title="Unit">Unit</span> = <a href="#6441" title="(Unit)Unit">synchronized</a>{ <a href="#67250" title="Boolean">recordingAll</a> = <span title="Boolean(true)" class="keyword">true</span> }
+	<span class="keyword">def</span> <a title="[T](=&gt; T)T" id="67258">buffer</a>[<a title="&gt;: Nothing &lt;: Any" id="67260">T</a>](<a title="=&gt; T" id="68760">f</a>: =&gt; T): <a href="#67260" title="T">T</a> =
+	{
+		<a href="#67256" title="()Unit">record</a>()
+		<span class="keyword">try</span> { <a href="#68760" title="=&gt; T">f</a> }
+		<span class="keyword">finally</span> { <a href="Control.scala.html#11797" title="object sbt.Control">Control</a>.<a href="Control.scala.html#25436" title="(=&gt; Unit)Unit">trap</a>(<a href="#67268" title="()Unit">stop</a>()) }
+	}
+	<span class="keyword">def</span> <a title="[T](=&gt; T)T" id="67261">bufferAll</a>[<a title="&gt;: Nothing &lt;: Any" id="67263">T</a>](<a title="=&gt; T" id="68763">f</a>: =&gt; T): <a href="#67263" title="T">T</a> =
+	{
+		<a href="#67257" title="()Unit">recordAll</a>()
+		<span class="keyword">try</span> { <a href="#68763" title="=&gt; T">f</a> }
+		<span class="keyword">finally</span> { <a href="Control.scala.html#11797" title="object sbt.Control">Control</a>.<a href="Control.scala.html#25436" title="(=&gt; Unit)Unit">trap</a>(<a href="#67269" title="()Unit">stopAll</a>()) }
+	}
+
+	<span class="comment">/** Flushes the buffer to the delegate logger for the current thread.  This method calls logAll on the delegate
+	* so that the messages are written consecutively. The buffer is cleared in the process. */</span>
+	<span class="keyword">def</span> <a title="()Unit" id="67264">play</a>(): <span title="Unit">Unit</span> =
+ 		<a href="#6441" title="(Unit)Unit">synchronized</a>
+		{
+			<span class="keyword">for</span>(<a title="((scala.collection.mutable.Buffer[sbt.LogEvent]) =&gt; Unit)Unit" id="68768">buffer</a> &lt;- <a href="#67249" title="sbt.wrap.MutableMapWrapper[java.lang.Thread,scala.collection.mutable.Buffer[sbt.LogEvent]]">buffers</a>.<a href="wrap/Wrappers.scala.html#29618" title="(java.lang.Thread)Option[scala.collection.mutable.Buffer[sbt.LogEvent]]">get</a>(<a href="#67254" title="=&gt; java.lang.Thread">key</a>))
+				<a href="#67281" title="sbt.Logger">delegate</a>.<a href="#19523" title="(Seq[sbt.LogEvent])Unit">logAll</a>(wrap.<a href="wrap/Wrappers.scala.html#14084" title="object sbt.wrap.Wrappers">Wrappers</a>.<a href="wrap/Wrappers.scala.html#18054" title="(scala.collection.mutable.Buffer[sbt.LogEvent])Seq[sbt.LogEvent]">readOnly</a>(<a href="#68768" title="scala.collection.mutable.Buffer[sbt.LogEvent]">buffer</a>))
+		}
+	<span class="keyword">def</span> <a title="()Unit" id="67265">playAll</a>(): <span title="Unit">Unit</span> =
+		<a href="#6441" title="(Unit)Unit">synchronized</a>
+		{
+			<span class="keyword">for</span>(<a title="((scala.collection.mutable.Buffer[sbt.LogEvent]) =&gt; Unit)Unit" id="68827">buffer</a> &lt;- <a href="#67249" title="sbt.wrap.MutableMapWrapper[java.lang.Thread,scala.collection.mutable.Buffer[sbt.LogEvent]]">buffers</a>.<a href="wrap/Wrappers.scala.html#29621" title="=&gt; List[scala.collection.mutable.Buffer[sbt.LogEvent]]">values</a>)
+				<a href="#67281" title="sbt.Logger">delegate</a>.<a href="#19523" title="(Seq[sbt.LogEvent])Unit">logAll</a>(wrap.<a href="wrap/Wrappers.scala.html#14084" title="object sbt.wrap.Wrappers">Wrappers</a>.<a href="wrap/Wrappers.scala.html#18054" title="(scala.collection.mutable.Buffer[sbt.LogEvent])Seq[sbt.LogEvent]">readOnly</a>(<a href="#68827" title="scala.collection.mutable.Buffer[sbt.LogEvent]">buffer</a>))
+		}
+	<span class="comment">/** Clears buffered events for the current thread and disables buffering. */</span>
+	<span class="keyword">def</span> <a title="()Unit" id="67266">clear</a>(): <span title="Unit">Unit</span> = <a href="#6441" title="(Unit)Unit">synchronized</a> { <a href="#67249" title="sbt.wrap.MutableMapWrapper[java.lang.Thread,scala.collection.mutable.Buffer[sbt.LogEvent]]">buffers</a> <a href="wrap/Wrappers.scala.html#29629" title="(java.lang.Thread)Unit">-=</a> <a href="#67254" title="=&gt; java.lang.Thread">key</a> }
+	<span class="comment">/** Clears buffered events for all threads and disables all buffering. */</span>
+	<span class="keyword">def</span> <a title="()Unit" id="67267">clearAll</a>(): <span title="Unit">Unit</span> = <a href="#6441" title="(Unit)Unit">synchronized</a> { <a href="#67249" title="sbt.wrap.MutableMapWrapper[java.lang.Thread,scala.collection.mutable.Buffer[sbt.LogEvent]]">buffers</a>.<a href="wrap/Wrappers.scala.html#29626" title="()Unit">clear</a>(); <a href="#67250" title="Boolean">recordingAll</a> = <span title="Boolean(false)" class="keyword">false</span> }
+	<span class="comment">/** Plays buffered events for the current thread and disables buffering. */</span>
+	<span class="keyword">def</span> <a title="()Unit" id="67268">stop</a>(): <span title="Unit">Unit</span> =
+		<a href="#6441" title="(Unit)Unit">synchronized</a>
+		{
+			<a href="#67264" title="()Unit">play</a>()
+			<a href="#67266" title="()Unit">clear</a>()
+		}
+	<span class="keyword">def</span> <a title="()Unit" id="67269">stopAll</a>(): <span title="Unit">Unit</span> =
+		<a href="#6441" title="(Unit)Unit">synchronized</a>
+		{
+			<a href="#67265" title="()Unit">playAll</a>()
+			<a href="#67267" title="()Unit">clearAll</a>()
+		}
+
+	<span class="keyword">def</span> <a title="(sbt.Level.Value)Unit" id="67270">setLevel</a>(<a title="sbt.Level.Value" id="67306">newLevel</a>: Level.<span title="sbt.Level.Value">Value</span>): <span title="Unit">Unit</span> =
+		<a href="#6441" title="(Unit)Unit">synchronized</a>
+		{
+			<a href="#67252" title="=&gt; Option[scala.collection.mutable.Buffer[sbt.LogEvent]]">buffer</a>.<span title="((scala.collection.mutable.Buffer[sbt.LogEvent]) =&gt; Unit)Unit">foreach</span>{<a href="#68872" title="scala.collection.mutable.Buffer[sbt.LogEvent]">_</a>  <span title="(sbt.LogEvent)Unit">+=</span> <span title="sbt.SetLevel" class="keyword">new</span> <a href="#9099" title="sbt.SetLevel">SetLevel</a>(<a href="#67306" title="sbt.Level.Value">newLevel</a>) }
+			<a href="#67281" title="sbt.Logger">delegate</a>.<a href="#19508" title="(sbt.Level.Value)Unit">setLevel</a>(<a href="#67306" title="sbt.Level.Value">newLevel</a>)
+		}
+	<span class="keyword">def</span> <a title="=&gt; sbt.Level.Value" id="67271">getLevel</a> = <a href="#6441" title="(sbt.Level.Value)sbt.Level.Value">synchronized</a> { <a href="#67281" title="sbt.Logger">delegate</a>.<a href="#19507" title="=&gt; sbt.Level.Value">getLevel</a> }
+	<span class="keyword">def</span> <a title="=&gt; Int" id="67272">getTrace</a> = <a href="#6441" title="(Int)Int">synchronized</a> { <a href="#67281" title="sbt.Logger">delegate</a>.<a href="#19510" title="=&gt; Int">getTrace</a> }
+	<span class="keyword">def</span> <a title="(Int)Unit" id="67273">setTrace</a>(<a title="Int" id="68879">level</a>: <span title="Int">Int</span>): <span title="Unit">Unit</span> =
+		<a href="#6441" title="(Unit)Unit">synchronized</a>
+		{
+			<a href="#67252" title="=&gt; Option[scala.collection.mutable.Buffer[sbt.LogEvent]]">buffer</a>.<span title="((scala.collection.mutable.Buffer[sbt.LogEvent]) =&gt; Unit)Unit">foreach</span>{<a href="#68883" title="scala.collection.mutable.Buffer[sbt.LogEvent]">_</a>  <span title="(sbt.LogEvent)Unit">+=</span> <span title="sbt.SetTrace" class="keyword">new</span> <a href="#6546" title="sbt.SetTrace">SetTrace</a>(<a href="#68879" title="Int">level</a>) }
+			<a href="#67281" title="sbt.Logger">delegate</a>.<a href="#19509" title="(Int)Unit">setTrace</a>(<a href="#68879" title="Int">level</a>)
+		}
+
+	<span class="keyword">def</span> <a title="(=&gt; Throwable)Unit" id="67274">trace</a>(<a title="=&gt; Throwable" id="68884">t</a>: =&gt; Throwable): <span title="Unit">Unit</span> =
+		<a href="#67280" title="(=&gt; Boolean,=&gt; sbt.LogEvent,(sbt.Logger) =&gt; Unit)Unit">doBufferableIf</a>(<a href="#19511" title="=&gt; Boolean">traceEnabled</a>, <span title="sbt.Trace" class="keyword">new</span> <a href="#9354" title="sbt.Trace">Trace</a>(<a href="#68884" title="=&gt; Throwable">t</a>), <a href="#68889" title="sbt.Logger">_</a>.<a href="#19514" title="(=&gt; Throwable)Unit">trace</a>(<a href="#68884" title="=&gt; Throwable">t</a>))
+	<span class="keyword">def</span> <a title="(=&gt; String)Unit" id="67275">success</a>(<a title="=&gt; String" id="68891">message</a>: =&gt; String): <span title="Unit">Unit</span> =
+		<a href="#67279" title="(sbt.Level.Value,=&gt; sbt.LogEvent,(sbt.Logger) =&gt; Unit)Unit">doBufferable</a>(<a href="#8242" title="object sbt.Level">Level</a>.<a href="#28479" title="=&gt; sbt.Level.Value">Info</a>, <span title="sbt.Success" class="keyword">new</span> <a href="#7743" title="sbt.Success">Success</a>(<a href="#68891" title="=&gt; String">message</a>), <a href="#68896" title="sbt.Logger">_</a>.<a href="#19520" title="(=&gt; String)Unit">success</a>(<a href="#68891" title="=&gt; String">message</a>))
+	<span class="keyword">def</span> <a title="(sbt.Level.Value,=&gt; String)Unit" id="67276">log</a>(<a title="sbt.Level.Value" id="68897">level</a>: Level.<span title="sbt.Level.Value">Value</span>, <a title="=&gt; String" id="68898">message</a>: =&gt; String): <span title="Unit">Unit</span> =
+		<a href="#67279" title="(sbt.Level.Value,=&gt; sbt.LogEvent,(sbt.Logger) =&gt; Unit)Unit">doBufferable</a>(<a href="#68897" title="sbt.Level.Value">level</a>, <span title="sbt.Log" class="keyword">new</span> <a href="#11622" title="sbt.Log">Log</a>(<a href="#68897" title="sbt.Level.Value">level</a>, <a href="#68898" title="=&gt; String">message</a>), <a href="#68900" title="sbt.Logger">_</a>.<a href="#19521" title="(sbt.Level.Value,=&gt; String)Unit">log</a>(<a href="#68897" title="sbt.Level.Value">level</a>, <a href="#68898" title="=&gt; String">message</a>))
+	<span class="keyword">def</span> <a title="(Seq[sbt.LogEvent])Unit" id="67277">logAll</a>(<a title="Seq[sbt.LogEvent]" id="68907">events</a>: <span title="Seq[sbt.LogEvent]">Seq</span>[LogEvent]): <span title="Unit">Unit</span> =
+		<a href="#6441" title="(Unit)Unit">synchronized</a>
+		{
+			<a href="#67252" title="=&gt; Option[scala.collection.mutable.Buffer[sbt.LogEvent]]">buffer</a> <span title="Unit" class="keyword">match</span>
+			{
+				<span title="Unit" class="keyword">case</span> Some(<a title="scala.collection.mutable.Buffer[sbt.LogEvent]" id="68910">b</a>) =&gt; <a href="#68910" title="scala.collection.mutable.Buffer[sbt.LogEvent]">b</a> <a title="(Iterable[sbt.LogEvent])Unit" id="18513">++=</a> <a href="#68907" title="Seq[sbt.LogEvent]">events</a>
+				<span title="Unit" class="keyword">case</span> <span title="object None">None</span> =&gt; <a href="#67281" title="sbt.Logger">delegate</a>.<a href="#19523" title="(Seq[sbt.LogEvent])Unit">logAll</a>(<a href="#68907" title="Seq[sbt.LogEvent]">events</a>)
+			}
+		}
+	<span class="keyword">def</span> <a title="(sbt.ControlEvent.Value,=&gt; String)Unit" id="67278">control</a>(<a title="sbt.ControlEvent.Value" id="68913">event</a>: ControlEvent.<span title="sbt.ControlEvent.Value">Value</span>, <a title="=&gt; String" id="68914">message</a>: =&gt; String): <span title="Unit">Unit</span> =
+		<a href="#67279" title="(sbt.Level.Value,=&gt; sbt.LogEvent,(sbt.Logger) =&gt; Unit)Unit">doBufferable</a>(<a href="#8242" title="object sbt.Level">Level</a>.<a href="#28479" title="=&gt; sbt.Level.Value">Info</a>, <span title="sbt.ControlEvent" class="keyword">new</span> <a href="#10485" title="sbt.ControlEvent">ControlEvent</a>(<a href="#68913" title="sbt.ControlEvent.Value">event</a>, <a href="#68914" title="=&gt; String">message</a>), <a href="#68916" title="sbt.Logger">_</a>.<a href="#19522" title="(sbt.ControlEvent.Value,=&gt; String)Unit">control</a>(<a href="#68913" title="sbt.ControlEvent.Value">event</a>, <a href="#68914" title="=&gt; String">message</a>))
+	<span class="keyword">private</span> <span class="keyword">def</span> <a title="(sbt.Level.Value,=&gt; sbt.LogEvent,(sbt.Logger) =&gt; Unit)Unit" id="67279">doBufferable</a>(<a title="sbt.Level.Value" id="68892">level</a>: Level.<span title="sbt.Level.Value">Value</span>, <a title="=&gt; sbt.LogEvent" id="68893">appendIfBuffered</a>: =&gt; LogEvent, <a title="(sbt.Logger) =&gt; Unit" id="68894">doUnbuffered</a>: Logger =&gt; Unit): <span title="Unit">Unit</span> =
+		<a href="#67280" title="(=&gt; Boolean,=&gt; sbt.LogEvent,(sbt.Logger) =&gt; Unit)Unit">doBufferableIf</a>(<a href="#19513" title="(sbt.Level.Value)Boolean">atLevel</a>(<a href="#68892" title="sbt.Level.Value">level</a>), <a href="#68893" title="=&gt; sbt.LogEvent">appendIfBuffered</a>, <a href="#68894" title="(sbt.Logger) =&gt; Unit">doUnbuffered</a>)
+	<span class="keyword">private</span> <span class="keyword">def</span> <a title="(=&gt; Boolean,=&gt; sbt.LogEvent,(sbt.Logger) =&gt; Unit)Unit" id="67280">doBufferableIf</a>(<a title="=&gt; Boolean" id="68885">condition</a>: =&gt; Boolean, <a title="=&gt; sbt.LogEvent" id="68886">appendIfBuffered</a>: =&gt; LogEvent, <a title="(sbt.Logger) =&gt; Unit" id="68887">doUnbuffered</a>: Logger =&gt; Unit): <span title="Unit">Unit</span> =
+		<a href="#6441" title="(Unit)Unit">synchronized</a>
+		{
+			<span title="Unit" class="keyword">if</span>(<a href="#68885" title="=&gt; Boolean">condition</a>)
+			{
+				<a href="#67252" title="=&gt; Option[scala.collection.mutable.Buffer[sbt.LogEvent]]">buffer</a> <span title="Unit" class="keyword">match</span>
+				{
+					<span title="Unit" class="keyword">case</span> Some(<a title="scala.collection.mutable.Buffer[sbt.LogEvent]" id="68919">b</a>) =&gt; <a href="#68919" title="scala.collection.mutable.Buffer[sbt.LogEvent]">b</a> <span title="(sbt.LogEvent)Unit">+=</span> <a href="#68886" title="=&gt; sbt.LogEvent">appendIfBuffered</a>
+					<span title="Unit" class="keyword">case</span> <span title="object None">None</span> =&gt; <a href="#68887" title="(sbt.Logger)Unit" id="16333">doUnbuffered</a>(<a href="#67281" title="sbt.Logger">delegate</a>)
+				}
+			}
+		}
+}
+
+<span class="keyword">object</span> <a title="object sbt.ConsoleLogger" id="7558">ConsoleLogger</a>
+{
+	<span class="keyword">private</span> <span class="keyword">val</span> <a title="Boolean" id="68921">formatEnabled</a> = <a href="#68924" title="=&gt; Boolean">ansiSupported</a> <a title="(Boolean)Boolean" id="2699">&amp;&amp;</a> <span title="=&gt; Boolean">!</span><a href="#68923" title="=&gt; Boolean">formatExplicitlyDisabled</a>
+
+	<span class="keyword">private</span>[<span class="keyword">this</span>] <span class="keyword">def</span> <a title="=&gt; Boolean" id="68923">formatExplicitlyDisabled</a> = java.lang.<a title="object java.lang.Boolean" id="1972">Boolean</a>.<a title="(java.lang.String)Boolean" id="16355">getBoolean</a>(<span title="java.lang.String(&quot;sbt.log.noformat&quot;)" class="string">&quot;sbt.log.noformat&quot;</span>)
+	<span class="keyword">private</span>[<span class="keyword">this</span>] <span class="keyword">def</span> <a title="=&gt; Boolean" id="68924">ansiSupported</a> =
+		<span class="keyword">try</span> { jline.<a title="object jline.Terminal" id="43795">Terminal</a>.<a title="()jline.Terminal" id="68933">getTerminal</a>.<a title="()Boolean" id="68936">isANSISupported</a> }
+		<span class="keyword">catch</span> { <span title="Boolean" class="keyword">case</span> <a title="Exception" id="68952">e</a>: <a title="Exception" id="2076">Exception</a> =&gt; <span title="=&gt; Boolean">!</span><a href="#68926" title="=&gt; Boolean">isWindows</a> }
+
+	<span class="keyword">private</span>[<span class="keyword">this</span>] <span class="keyword">def</span> <a title="=&gt; java.lang.String" id="68925">os</a> = <span title="object java.lang.System">System</span>.<a title="(java.lang.String)java.lang.String" id="34097">getProperty</a>(<span title="java.lang.String(&quot;os.name&quot;)" class="string">&quot;os.name&quot;</span>)
+	<span class="keyword">private</span>[<span class="keyword">this</span>] <span class="keyword">def</span> <a title="=&gt; Boolean" id="68926">isWindows</a> = <a href="#68925" title="=&gt; java.lang.String">os</a>.<a title="()java.lang.String" id="5812">toLowerCase</a>.<a title="(java.lang.String)Int" id="5793">indexOf</a>(<span title="java.lang.String(&quot;windows&quot;)" class="string">&quot;windows&quot;</span>) <span title="(Int)Boolean">&gt;=</span> <span title="Int(0)" class="int">0</span>
+}
+
+<span class="comment">/** A logger that logs to the console.  On supported systems, the level labels are
+* colored.
+*
+* This logger is not thread-safe.*/</span>
+<span class="keyword">class</span> <a title="class ConsoleLogger extends sbt.BasicLogger with ScalaObject" id="7557">ConsoleLogger</a> <span class="keyword">extends</span> <a href="#7596" title="sbt.BasicLogger">BasicLogger</a>
+{
+	<span class="keyword">override</span> <span class="keyword">def</span> <a title="=&gt; Boolean" id="68067">ansiCodesSupported</a> = <a href="#7558" title="object sbt.ConsoleLogger">ConsoleLogger</a>.<a href="#68921" title="=&gt; Boolean">formatEnabled</a>
+	<span class="keyword">def</span> <a title="(sbt.Level.Value)java.lang.String" id="68068">messageColor</a>(<a title="sbt.Level.Value" id="68967">level</a>: Level.<span title="sbt.Level.Value">Value</span>) = Console.<span title="java.lang.String(&quot;\033[0m&quot;)">RESET</span>
+	<span class="keyword">def</span> <a title="(sbt.Level.Value)java.lang.String" id="68069">labelColor</a>(<a title="sbt.Level.Value" id="69056">level</a>: Level.<span title="sbt.Level.Value">Value</span>) =
+		<a href="#69056" title="sbt.Level.Value">level</a> <span title="java.lang.String" class="keyword">match</span>
+		{
+			<span title="java.lang.String(&quot;\033[31m&quot;)" class="keyword">case</span> <a href="#8242" title="object sbt.Level">Level</a>.<a href="#28483" title="=&gt; sbt.Level.Value">Error</a> =&gt; Console.<span title="java.lang.String(&quot;\033[31m&quot;)">RED</span>
+			<span title="java.lang.String(&quot;\033[33m&quot;)" class="keyword">case</span> <a href="#8242" title="object sbt.Level">Level</a>.<a href="#28481" title="=&gt; sbt.Level.Value">Warn</a> =&gt; Console.<span title="java.lang.String(&quot;\033[33m&quot;)">YELLOW</span>
+			<span title="java.lang.String(&quot;\033[0m&quot;)" class="keyword">case</span> _ =&gt; Console.<span title="java.lang.String(&quot;\033[0m&quot;)">RESET</span>
+		}
+	<span class="keyword">def</span> <a title="=&gt; java.lang.String" id="68070">successLabelColor</a> = Console.<span title="java.lang.String(&quot;\033[32m&quot;)">GREEN</span>
+	<span class="keyword">def</span> <a title="=&gt; java.lang.String" id="68071">successMessageColor</a> = Console.<span title="java.lang.String(&quot;\033[0m&quot;)">RESET</span>
+	<span class="keyword">override</span> <span class="keyword">def</span> <a title="(=&gt; String)Unit" id="68072">success</a>(<a title="=&gt; String" id="69062">message</a>: =&gt; String)
+	{
+		<span title="Unit" class="keyword">if</span>(<a href="#19513" title="(sbt.Level.Value)Boolean">atLevel</a>(<a href="#8242" title="object sbt.Level">Level</a>.<a href="#28479" title="=&gt; sbt.Level.Value">Info</a>))
+			<a href="#68076" title="(String,String,String,String)Unit">log</a>(<a href="#68070" title="=&gt; java.lang.String">successLabelColor</a>, <a href="#8242" title="object sbt.Level">Level</a>.<a href="#28485" title="=&gt; java.lang.String">SuccessLabel</a>, <a href="#68071" title="=&gt; java.lang.String">successMessageColor</a>, <a href="#69062" title="=&gt; String">message</a>)
+	}
+	<span class="keyword">def</span> <a title="(=&gt; Throwable)Unit" id="68073">trace</a>(<a title="=&gt; Throwable" id="69074">t</a>: =&gt; Throwable): <span title="Unit">Unit</span> =
+		<span title="object java.lang.System">System</span>.<span title="java.io.PrintStream">out</span>.<span title="(Unit)Unit">synchronized</span>
+		{
+			<span class="keyword">val</span> <a title="Int" id="69076">traceLevel</a> = <a href="#67292" title="=&gt; Int">getTrace</a>
+			<span title="Unit" class="keyword">if</span>(<a href="#69076" title="Int">traceLevel</a> <span title="(Int)Boolean">&gt;=</span> <span title="Int(0)" class="int">0</span>)
+				<span title="object java.lang.System">System</span>.<span title="java.io.PrintStream">out</span>.<span title="(Unit)Unit">synchronized</span> { <span title="object java.lang.System">System</span>.<span title="java.io.PrintStream">out</span>.<span title="(java.lang.String)Unit">print</span>(<a href="StackTrace.scala.html#10519" title="object sbt.StackTrace">StackTrace</a>.<a href="StackTrace.scala.html#30711" title="(Throwable,Int)String">trimmed</a>(<a href="#69074" title="=&gt; Throwable">t</a>, <a href="#69076" title="Int">traceLevel</a>)) }
+		}
+	<span class="keyword">def</span> <a title="(sbt.Level.Value,=&gt; String)Unit" id="68074">log</a>(<a title="sbt.Level.Value" id="69063">level</a>: Level.<span title="sbt.Level.Value">Value</span>, <a title="=&gt; String" id="69064">message</a>: =&gt; String)
+	{
+		<span title="Unit" class="keyword">if</span>(<a href="#19513" title="(sbt.Level.Value)Boolean">atLevel</a>(<a href="#69063" title="sbt.Level.Value">level</a>))
+			<a href="#68076" title="(String,String,String,String)Unit">log</a>(<a href="#68069" title="(sbt.Level.Value)java.lang.String">labelColor</a>(<a href="#69063" title="sbt.Level.Value">level</a>), <a href="#69063" title="sbt.Level.Value">level</a>.<span title="()java.lang.String">toString</span>, <a href="#68068" title="(sbt.Level.Value)java.lang.String">messageColor</a>(<a href="#69063" title="sbt.Level.Value">level</a>), <a href="#69064" title="=&gt; String">message</a>)
+	}
+	<span class="keyword">private</span> <span class="keyword">def</span> <a title="(String)Unit" id="68075">setColor</a>(<a title="String" id="69085">color</a>: <span title="String">String</span>)
+	{
+		<span title="Unit" class="keyword">if</span>(<a href="#68067" title="=&gt; Boolean">ansiCodesSupported</a>)
+			<span title="object java.lang.System">System</span>.<span title="java.io.PrintStream">out</span>.<span title="(Unit)Unit">synchronized</span> { <span title="object java.lang.System">System</span>.<span title="java.io.PrintStream">out</span>.<span title="(java.lang.String)Unit">print</span>(<a href="#69085" title="String">color</a>) }
+	}
+	<span class="keyword">private</span> <span class="keyword">def</span> <a title="(String,String,String,String)Unit" id="68076">log</a>(<a title="String" id="69065">labelColor</a>: <span title="String">String</span>, <a title="String" id="69066">label</a>: <span title="String">String</span>, <a title="String" id="69067">messageColor</a>: <span title="String">String</span>, <a title="String" id="69068">message</a>: <span title="String">String</span>): <span title="Unit">Unit</span> =
+		<span title="object java.lang.System">System</span>.<span title="java.io.PrintStream">out</span>.<span title="(Unit)Unit">synchronized</span>
+		{
+			<span class="keyword">for</span>(<a title="((java.lang.String) =&gt; Unit)Unit" id="69091">line</a> &lt;- <a href="#69068" title="String">message</a>.<a title="(java.lang.String)Array[java.lang.String]" id="5810">split</a>(<span title="java.lang.String(&quot;\n&quot;)" class="string">&quot;&quot;&quot;\n&quot;&quot;&quot;</span>))
+			{
+				<a href="#68075" title="(String)Unit">setColor</a>(Console.<span title="java.lang.String(&quot;\033[0m&quot;)">RESET</span>)
+				<span title="object java.lang.System">System</span>.<span title="java.io.PrintStream">out</span>.<a title="(Char)Unit" id="64884">print</a>(<span title="Char('[')" class="char">'['</span>)
+				<a href="#68075" title="(String)Unit">setColor</a>(<a href="#69065" title="String">labelColor</a>)
+				<span title="object java.lang.System">System</span>.<span title="java.io.PrintStream">out</span>.<span title="(java.lang.String)Unit">print</span>(<a href="#69066" title="String">label</a>)
+				<a href="#68075" title="(String)Unit">setColor</a>(Console.<span title="java.lang.String(&quot;\033[0m&quot;)">RESET</span>)
+				<span title="object java.lang.System">System</span>.<span title="java.io.PrintStream">out</span>.<span title="(java.lang.String)Unit">print</span>(<span title="java.lang.String(&quot;] &quot;)" class="string">&quot;] &quot;</span>)
+				<a href="#68075" title="(String)Unit">setColor</a>(<a href="#69067" title="String">messageColor</a>)
+				<span title="object java.lang.System">System</span>.<span title="java.io.PrintStream">out</span>.<span title="(java.lang.String)Unit">print</span>(<a href="#69091" title="java.lang.String">line</a>)
+				<a href="#68075" title="(String)Unit">setColor</a>(Console.<span title="java.lang.String(&quot;\033[0m&quot;)">RESET</span>)
+				<span title="object java.lang.System">System</span>.<span title="java.io.PrintStream">out</span>.<a title="()Unit" id="64892">println</a>()
+			}
+		}
+
+	<span class="keyword">def</span> <a title="(Seq[sbt.LogEvent])Unit" id="68077">logAll</a>(<a title="Seq[sbt.LogEvent]" id="69122">events</a>: <span title="Seq[sbt.LogEvent]">Seq</span>[LogEvent]) = <span title="object java.lang.System">System</span>.<span title="java.io.PrintStream">out</span>.<span title="(Unit)Unit">synchronized</span> { <a href="#69122" title="Seq[sbt.LogEvent]">events</a>.<span title="((sbt.LogEvent) =&gt; Unit)Unit">foreach</span>(<a href="#19524" title="(sbt.LogEvent)Unit">log</a>) }
+	<span class="keyword">def</span> <a title="(sbt.ControlEvent.Value,=&gt; String)Unit" id="68078">control</a>(<a title="sbt.ControlEvent.Value" id="69129">event</a>: ControlEvent.<span title="sbt.ControlEvent.Value">Value</span>, <a title="=&gt; String" id="69130">message</a>: =&gt; String)
+		{ <a href="#68076" title="(String,String,String,String)Unit">log</a>(<a href="#68069" title="(sbt.Level.Value)java.lang.String">labelColor</a>(<a href="#8242" title="object sbt.Level">Level</a>.<a href="#28479" title="=&gt; sbt.Level.Value">Info</a>), <a href="#8242" title="object sbt.Level">Level</a>.<a href="#28479" title="=&gt; sbt.Level.Value">Info</a>.<span title="()java.lang.String">toString</span>, Console.<span title="java.lang.String(&quot;\033[34m&quot;)">BLUE</span>, <a href="#69130" title="=&gt; String">message</a>) }
+}
+
+<span class="comment">/** An enumeration defining the levels available for logging.  A level includes all of the levels
+* with id larger than its own id.  For example, Warn (id=3) includes Error (id=4).*/</span>
+<span class="keyword">object</span> <a title="object sbt.Level" id="8242">Level</a> <span class="keyword">extends</span> <span title="Enumeration">Enumeration</span> <span class="keyword">with</span> <span title="NotNull">NotNull</span>
+{
+	<span class="keyword">val</span> <a title="sbt.Level.Value" id="28477">Debug</a> = <span title="(Int,String)sbt.Level.Value">Value</span>(<span title="Int(1)" class="int">1</span>, <span title="java.lang.String(&quot;debug&quot;)" class="string">&quot;debug&quot;</span>)
+	<span class="keyword">val</span> <a title="sbt.Level.Value" id="28479">Info</a> = <span title="(Int,String)sbt.Level.Value">Value</span>(<span title="Int(2)" class="int">2</span>, <span title="java.lang.String(&quot;info&quot;)" class="string">&quot;info&quot;</span>)
+	<span class="keyword">val</span> <a title="sbt.Level.Value" id="28481">Warn</a> = <span title="(Int,String)sbt.Level.Value">Value</span>(<span title="Int(3)" class="int">3</span>, <span title="java.lang.String(&quot;warn&quot;)" class="string">&quot;warn&quot;</span>)
+	<span class="keyword">val</span> <a title="sbt.Level.Value" id="28483">Error</a> = <span title="(Int,String)sbt.Level.Value">Value</span>(<span title="Int(4)" class="int">4</span>, <span title="java.lang.String(&quot;error&quot;)" class="string">&quot;error&quot;</span>)
+	<span class="comment">/** Defines the label to use for success messages.  A success message is logged at the info level but
+	* uses this label.  Because the label for levels is defined in this module, the success
+	* label is also defined here. */</span>
+	<span class="keyword">val</span> <a title="java.lang.String" id="28485">SuccessLabel</a> = <span title="java.lang.String(&quot;success&quot;)" class="string">&quot;success&quot;</span>
+
+	<span class="comment">// added because elements was renamed to iterator in 2.8.0 nightly</span>
+	<span class="keyword">def</span> <a title="=&gt; List[sbt.Level.Value]" id="28487">levels</a> = <a href="#28477" title="=&gt; sbt.Level.Value">Debug</a> <a href="#69144" title="(sbt.Level.Value)List[sbt.Level.Value]">::</a> <a href="#28479" title="=&gt; sbt.Level.Value">Info</a> <a href="#69145" title="(sbt.Level.Value)List[sbt.Level.Value]">::</a> <a href="#28481" title="=&gt; sbt.Level.Value">Warn</a> <a href="#69146" title="(sbt.Level.Value)List[sbt.Level.Value]">::</a> <a href="#28483" title="=&gt; sbt.Level.Value">Error</a> <a href="#69147" title="(sbt.Level.Value)List[sbt.Level.Value]">::</a> <a title="object Nil" id="310">Nil</a>
+	<span class="comment">/** Returns the level with the given name wrapped in Some, or None if no level exists for that name. */</span>
+	<span class="keyword">def</span> <a title="(String)Option[sbt.Level.Value]" id="28488">apply</a>(<a title="String" id="69156">s</a>: <span title="String">String</span>) = <a href="#28487" title="=&gt; List[sbt.Level.Value]">levels</a>.<a title="((sbt.Level.Value) =&gt; Boolean)Option[sbt.Level.Value]" id="17764">find</a>(<a href="#69156" title="String">s</a> <a title="(AnyRef)Boolean" id="3457">==</a> <a href="#69160" title="sbt.Level.Value">_</a>.<span title="()java.lang.String">toString</span>)
+	<span class="comment">/** Same as apply, defined for use in pattern matching. */</span>
+	<span class="keyword">private</span>[sbt] <span class="keyword">def</span> <a title="(String)Option[sbt.Level.Value]" id="28489">unapply</a>(<a title="String" id="69162">s</a>: <span title="String">String</span>) = <a href="#28488" title="(String)Option[sbt.Level.Value]">apply</a>(<a href="#69162" title="String">s</a>)
+}
+<span class="comment">/** Provides a `java.io.Writer` interface to a `Logger`.  Content is line-buffered and logged at `level`.
+* A line is delimited by `nl`, which is by default the platform line separator.*/</span>
+<span class="keyword">final</span> <span class="keyword">class</span> <a title="class LoggerWriter extends java.io.Writer with ScalaObject" id="9084">LoggerWriter</a>(<a title="sbt.Logger" id="69183">delegate</a>: <a href="#11784" title="sbt.Logger">Logger</a>, <a title="sbt.Level.Value" id="69184">level</a>: Level.<span title="sbt.Level.Value">Value</span>, <a title="String" id="69185">nl</a>: <span title="String">String</span>) <span class="keyword">extends</span> java.io.<a title="java.io.Writer" id="3755">Writer</a>
+{
+	<span class="keyword">def</span> <a title="(sbt.Logger,sbt.Level.Value)sbt.LoggerWriter" id="69172" class="keyword">this</a>(<a title="sbt.Logger" id="69190">delegate</a>: <a href="#11784" title="sbt.Logger">Logger</a>, <a title="sbt.Level.Value" id="69191">level</a>: Level.<span title="sbt.Level.Value">Value</span>) = <a href="#9084" title="LoggerWriter.this.type" class="keyword">this</a>(<a href="#69190" title="sbt.Logger">delegate</a>, <a href="#69191" title="sbt.Level.Value">level</a>, <a href="FileUtilities.scala.html#9046" title="object sbt.FileUtilities">FileUtilities</a>.<a href="FileUtilities.scala.html#15213" title="=&gt; java.lang.String">Newline</a>)
+	
+	<span class="keyword">private</span>[<span class="keyword">this</span>] <span class="keyword">val</span> <a title="StringBuilder" id="69173">buffer</a> = <a title="()StringBuilder" id="17641" class="keyword">new</a> <a title="StringBuilder" id="1383">StringBuilder</a>
+
+	<span class="keyword">override</span> <span class="keyword">def</span> <a title="()Unit" id="69174">close</a>() = <a href="#69175" title="()Unit">flush</a>()
+	<span class="keyword">override</span> <span class="keyword">def</span> <a title="()Unit" id="69175">flush</a>(): <span title="Unit">Unit</span> =
+		<a href="#9084" title="(Unit)Unit">synchronized</a> {
+			<span title="Unit" class="keyword">if</span>(<a href="#69173" title="StringBuilder">buffer</a>.<a title="=&gt; Int" id="17645">length</a> <a title="(Int)Boolean" id="3093">&gt;</a> <span title="Int(0)" class="int">0</span>)
+			{
+				<a href="#69178" title="(String)Unit">log</a>(<a href="#69173" title="StringBuilder">buffer</a>.<a title="()String" id="17693">toString</a>)
+				<a href="#69173" title="implicit scala.Predef.stringBuilderWrapper : (StringBuilder)scala.runtime.RichStringBuilder" id="787">buffer</a>.<a title="()Unit" id="18506">clear</a>()
+			}
+		}
+	<span class="keyword">override</span> <span class="keyword">def</span> <a title="(Array[Char],Int,Int)Unit" id="69176">write</a>(<a title="Array[Char]" id="69210">content</a>: <a title="Array[Char]" id="1032">Array</a>[Char], <a title="Int" id="69211">offset</a>: <span title="Int">Int</span>, <a title="Int" id="69212">length</a>: <span title="Int">Int</span>): <span title="Unit">Unit</span> =
+		<a href="#9084" title="(Unit)Unit">synchronized</a> {
+			<a href="#69173" title="StringBuilder">buffer</a>.<a title="(Array[Char],Int,Int)StringBuilder" id="17664">append</a>(<a href="#69210" title="Array[Char]">content</a>, <a href="#69211" title="Int">offset</a>, <a href="#69212" title="Int">length</a>)
+			<a href="#69177" title="()Unit">process</a>()
+		}
+
+	<span class="keyword">private</span>[<span class="keyword">this</span>] <span class="keyword">def</span> <a title="()Unit" id="69177">process</a>()
+	{
+		<span class="keyword">val</span> <a title="Int" id="69298">i</a> = <a href="#69173" title="StringBuilder">buffer</a>.<a title="(String)Int" id="17688">indexOf</a>(<a href="#69185" title="String">nl</a>)
+		<span title="Unit" class="keyword">if</span>(<a href="#69298" title="Int">i</a> <span title="(Int)Boolean">&gt;=</span> <span title="Int(0)" class="int">0</span>)
+		{
+			<a href="#69178" title="(String)Unit">log</a>(<a href="#69173" title="StringBuilder">buffer</a>.<a title="(Int,Int)String" id="17658">substring</a>(<span title="Int(0)" class="int">0</span>, <a href="#69298" title="Int">i</a>))
+			<a href="#69173" title="StringBuilder">buffer</a>.<a title="(Int,Int)StringBuilder" id="17673">delete</a>(<span title="Int(0)" class="int">0</span>, <a href="#69298" title="Int">i</a> <a title="(Int)Int" id="3095">+</a> <a href="#69185" title="String">nl</a>.<a title="()Int" id="5766">length</a>)
+			<a href="#69177" title="()Unit">process</a>()
+		}
+	}
+	<span class="keyword">private</span>[<span class="keyword">this</span>] <span class="keyword">def</span> <a title="(String)Unit" id="69178">log</a>(<a title="String" id="69202">s</a>: <span title="String">String</span>): <span title="Unit">Unit</span>  =  <a href="#69183" title="sbt.Logger">delegate</a>.<a href="#19521" title="(sbt.Level.Value,=&gt; String)Unit">log</a>(<a href="#69184" title="sbt.Level.Value">level</a>, <a href="#69202" title="String">s</a>)
+}
+        </pre>
+    </body>
+</html>

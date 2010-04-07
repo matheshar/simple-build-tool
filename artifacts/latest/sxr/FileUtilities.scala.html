@@ -1,0 +1,416 @@
+<?xml version="1.0" encoding="utf-8"?>
+			<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" ></meta>
+        <title>FileUtilities.scala</title>
+        <script type="text/javascript" src="jquery-all.js"></script>
+        <script type="text/javascript" src="linked.js"></script>
+        <link rel="stylesheet" type="text/css" href="style.css" title="Style"></link>
+    </head>
+    <body>
+        <pre>
+<span class="comment">/* sbt -- Simple Build Tool
+ * Copyright 2008, 2009 Mark Harrah
+ */</span>
+<span class="keyword">package</span> xsbt
+
+<span class="keyword">import</span> OpenResource._
+<span class="keyword">import</span> ErrorHandling.translate
+
+<span class="keyword">import</span> java.io.{ByteArrayOutputStream, File, FileInputStream, InputStream, OutputStream}
+<span class="keyword">import</span> java.net.{URI, URISyntaxException, URL}
+<span class="keyword">import</span> java.nio.charset.Charset
+<span class="keyword">import</span> java.util.jar.{Attributes, JarEntry, JarFile, JarInputStream, JarOutputStream, Manifest}
+<span class="keyword">import</span> java.util.zip.{GZIPOutputStream, ZipEntry, ZipFile, ZipInputStream, ZipOutputStream}
+<span class="keyword">import</span> scala.collection.mutable.HashSet
+<span class="keyword">import</span> scala.reflect.{Manifest =&gt; SManifest}
+<span class="keyword">import</span> Function.tupled
+
+<span class="keyword">object</span> <a title="object xsbt.FileUtilities" id="12055">FileUtilities</a>
+{
+	<span class="comment">/** The maximum number of times a unique temporary filename is attempted to be created.*/</span>
+	<span class="keyword">private</span> <span class="keyword">val</span> <a title="Int" id="32061">MaximumTries</a> = <span title="Int(10)" class="int">10</span>
+	<span class="comment">/** The producer of randomness for unique name generation.*/</span>
+	<span class="keyword">private</span> <span class="keyword">lazy</span> <span class="keyword">val</span> <a title="java.util.Random" id="32064">random</a> = <span title="java.util.Random" class="keyword">new</span> java.util.<a title="java.util.Random" id="5664">Random</a>
+	<span class="keyword">val</span> <a title="java.io.File" id="32065">temporaryDirectory</a> = <span title="java.io.File" class="keyword">new</span> <span title="java.io.File">File</span>(<span title="object java.lang.System">System</span>.<span title="(java.lang.String)java.lang.String">getProperty</span>(<span title="java.lang.String(&quot;java.io.tmpdir&quot;)" class="string">&quot;java.io.tmpdir&quot;</span>))
+	<span class="comment">/** The size of the byte or char buffer used in various methods.*/</span>
+	<span class="keyword">private</span> <span class="keyword">val</span> <a title="Int" id="32067">BufferSize</a> = <span title="Int(8192)" class="int">8192</span>
+	<span class="keyword">private</span> <span class="keyword">val</span> <a title="java.lang.String" id="32069">Newline</a> = <span title="object java.lang.System">System</span>.<span title="(java.lang.String)java.lang.String">getProperty</span>(<span title="java.lang.String(&quot;line.separator&quot;)" class="string">&quot;line.separator&quot;</span>)
+
+	<span class="keyword">def</span> <a title="=&gt; java.nio.charset.Charset" id="32071">utf8</a> = <a title="object java.nio.charset.Charset" id="21505">Charset</a>.<a title="(java.lang.String)java.nio.charset.Charset" id="29205">forName</a>(<span title="java.lang.String(&quot;UTF-8&quot;)" class="string">&quot;UTF-8&quot;</span>)
+
+	<span class="keyword">def</span> <a title="(Class[_])java.net.URL" id="32072">classLocation</a>(<a title="Class[_]" id="36613">cl</a>: <span title="Class[_]">Class</span>[_]): <span title="java.net.URL">URL</span> =
+	{
+		<span class="keyword">val</span> <a title="java.security.CodeSource" id="36617">codeSource</a> = <a href="#36613" title="Class[_]">cl</a>.<a title="()java.security.ProtectionDomain" id="4942">getProtectionDomain</a>.<a title="()java.security.CodeSource" id="36620">getCodeSource</a>
+		<span title="java.net.URL" class="keyword">if</span>(<a href="#36617" title="java.security.CodeSource">codeSource</a> <span title="(AnyRef)Boolean">==</span> <span title="Null(null)" class="keyword">null</span>) <span title="(String)Nothing">error</span>(<span title="java.lang.String(&quot;No class location for &quot;)" class="string">&quot;No class location for &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#36613" title="Class[_]">cl</a>)
+		<span class="keyword">else</span> <a href="#36617" title="java.security.CodeSource">codeSource</a>.<a title="()java.net.URL" id="36631">getLocation</a>
+	}
+	<span class="keyword">def</span> <a title="(Class[_])java.io.File" id="32073">classLocationFile</a>(<a title="Class[_]" id="36638">cl</a>: <span title="Class[_]">Class</span>[_]): <span title="java.io.File">File</span> = <a href="#32080" title="(java.net.URL)java.io.File">toFile</a>(<a href="#32072" title="(Class[_])java.net.URL">classLocation</a>(<a href="#36638" title="Class[_]">cl</a>))
+	<span class="keyword">def</span> <a title="[T](implicit scala.reflect.Manifest[T])java.net.URL" id="32074">classLocation</a>[<a title="&gt;: Nothing &lt;: Any" id="32076">T</a>](<span class="keyword">implicit</span> <a title="scala.reflect.Manifest[T]" id="36655">mf</a>: <span title="scala.reflect.Manifest[T]">SManifest</span>[T]): <span title="java.net.URL">URL</span> = <a href="#32072" title="(Class[_])java.net.URL">classLocation</a>(<a href="#36655" title="scala.reflect.Manifest[T]">mf</a>.<span title="=&gt; Class[_]">erasure</span>)
+	<span class="keyword">def</span> <a title="[T](implicit scala.reflect.Manifest[T])java.io.File" id="32077">classLocationFile</a>[<a title="&gt;: Nothing &lt;: Any" id="32079">T</a>](<span class="keyword">implicit</span> <a title="scala.reflect.Manifest[T]" id="36663">mf</a>: <span title="scala.reflect.Manifest[T]">SManifest</span>[T]): <span title="java.io.File">File</span> = <a href="#32073" title="(Class[_])java.io.File">classLocationFile</a>(<a href="#36663" title="scala.reflect.Manifest[T]">mf</a>.<span title="=&gt; Class[_]">erasure</span>)
+
+	<span class="keyword">def</span> <a title="(java.net.URL)java.io.File" id="32080">toFile</a>(<a title="java.net.URL" id="36642">url</a>: <span title="java.net.URL">URL</span>) =
+		<span class="keyword">try</span> { <span title="(java.net.URI)java.io.File" class="keyword">new</span> <span title="java.io.File">File</span>(<a href="#36642" title="java.net.URL">url</a>.<a title="()java.net.URI" id="25111">toURI</a>) }
+		<span class="keyword">catch</span> { <span title="java.io.File" class="keyword">case</span> _: <a title="java.net.URISyntaxException" id="4351">URISyntaxException</a> =&gt; <span title="java.io.File" class="keyword">new</span> <span title="java.io.File">File</span>(<a href="#36642" title="java.net.URL">url</a>.<span title="()java.lang.String">getPath</span>) }
+
+	<span class="comment">/** Converts the given URL to a File.  If the URL is for an entry in a jar, the File for the jar is returned. */</span>
+	<span class="keyword">def</span> <a title="(java.net.URL)java.io.File" id="32081">asFile</a>(<a title="java.net.URL" id="36668">url</a>: <span title="java.net.URL">URL</span>): <span title="java.io.File">File</span> =
+	{
+		<a href="#36668" title="java.net.URL">url</a>.<span title="()java.lang.String">getProtocol</span> <span title="java.io.File" class="keyword">match</span>
+		{
+			<span title="java.io.File" class="keyword">case</span> <span title="java.lang.String(&quot;file&quot;)" class="string">&quot;file&quot;</span> =&gt; <a href="#32080" title="(java.net.URL)java.io.File">toFile</a>(<a href="#36668" title="java.net.URL">url</a>)
+			<span title="java.io.File" class="keyword">case</span> <span title="java.lang.String(&quot;jar&quot;)" class="string">&quot;jar&quot;</span> =&gt;
+				<span class="keyword">val</span> <a title="java.lang.String" id="36669">path</a> = <a href="#36668" title="java.net.URL">url</a>.<span title="()java.lang.String">getPath</span>
+				<span class="keyword">val</span> <a title="Int" id="36670">end</a> = <a href="#36669" title="java.lang.String">path</a>.<a title="(Int)Int" id="5789">indexOf</a>(<span title="Int(33)" class="char">'!'</span>)
+				<span title="(java.net.URI)java.io.File" class="keyword">new</span> <span title="java.io.File">File</span>(<span title="java.net.URI" class="keyword">new</span> <a title="java.net.URI" id="4495">URI</a>(<span title="java.lang.String" class="keyword">if</span>(<a href="#36670" title="Int">end</a> <a title="(Int)Boolean" id="3089">==</a> -<span title="Int(-1)" class="int">1</span>) <a href="#36669" title="java.lang.String">path</a> <span class="keyword">else</span> <a href="#36669" title="java.lang.String">path</a>.<span title="(Int,Int)java.lang.String">substring</span>(<span title="Int(0)" class="int">0</span>, <a href="#36670" title="Int">end</a>)))
+			<span title="Nothing" class="keyword">case</span> _ =&gt; <span title="(String)Nothing">error</span>(<span title="java.lang.String(&quot;Invalid protocol &quot;)" class="string">&quot;Invalid protocol &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#36668" title="java.net.URL">url</a>.<span title="()java.lang.String">getProtocol</span>)
+		}
+	}
+	<span class="keyword">def</span> <a title="(java.io.File)Unit" id="32082">assertDirectory</a>(<a title="java.io.File" id="36690">file</a>: <span title="java.io.File">File</span>) { <a title="(Boolean,Any)Unit" id="6089">assert</a>(<a href="#36690" title="java.io.File">file</a>.<span title="()Boolean">isDirectory</span>, (<span title="java.lang.String" class="keyword">if</span>(<a href="#36690" title="java.io.File">file</a>.<span title="()Boolean">exists</span>) <span title="java.lang.String(&quot;Not a directory: &quot;)" class="string">&quot;Not a directory: &quot;</span> <span class="keyword">else</span> <span title="java.lang.String(&quot;Directory not found: &quot;)" class="string">&quot;Directory not found: &quot;</span>) <span title="(Any)java.lang.String">+</span> <a href="#36690" title="java.io.File">file</a>) }
+	<span class="keyword">def</span> <a title="(java.io.File*)Unit" id="32083">assertDirectories</a>(<a title="java.io.File*" id="36698">file</a>: <a title="java.io.File*" id="2689">File</a>*) { <a href="#36698" title="java.io.File*">file</a>.<span title="((java.io.File) =&gt; Unit)Unit">foreach</span>(<a href="#32082" title="(java.io.File)Unit">assertDirectory</a>) }
+
+	<span class="comment">// &quot;base.extension&quot; -&gt; (base, extension)</span>
+	<span class="keyword">def</span> <a title="(String)(String, String)" id="32084">split</a>(<a title="String" id="36701">name</a>: <span title="String">String</span>): <a title="(String, String)" id="1326">(</a>String, String) =
+	{
+		<span class="keyword">val</span> <a title="Int" id="36702">lastDot</a> = <a href="#36701" title="String">name</a>.<a title="(Int)Int" id="5791">lastIndexOf</a>(<span title="Int(46)" class="char">'.'</span>)
+		<span title="(String, String)" class="keyword">if</span>(<a href="#36702" title="Int">lastDot</a> <span title="(Int)Boolean">&gt;=</span> <span title="Int(0)" class="int">0</span>)
+			<span title="(java.lang.String,java.lang.String)(java.lang.String, java.lang.String)">(</span><a href="#36701" title="String">name</a>.<span title="(Int,Int)java.lang.String">substring</span>(<span title="Int(0)" class="int">0</span>, <a href="#36702" title="Int">lastDot</a>), <a href="#36701" title="String">name</a>.<span title="(Int)java.lang.String">substring</span>(<a href="#36702" title="Int">lastDot</a><span title="(Int)Int">+</span><span title="Int(1)" class="int">1</span>))
+		<span class="keyword">else</span>
+			<span title="(String,java.lang.String)(String, java.lang.String)">(</span><a href="#36701" title="String">name</a>, <span title="java.lang.String(&quot;&quot;)" class="string">&quot;&quot;</span>)
+	}
+
+	<span class="keyword">def</span> <a title="(Iterable[java.io.File])Unit" id="32085">touch</a>(<a title="Iterable[java.io.File]" id="36740">files</a>: <span title="Iterable[java.io.File]">Iterable</span>[File]): <span title="Unit">Unit</span> = <a href="#36740" title="Iterable[java.io.File]">files</a>.<span title="((java.io.File) =&gt; Unit)Unit">foreach</span>(<a href="#32086" title="(java.io.File)Unit">touch</a>)
+	<span class="comment">/** Creates a file at the given location.*/</span>
+	<span class="keyword">def</span> <a title="(java.io.File)Unit" id="32086">touch</a>(<a title="java.io.File" id="36742">file</a>: <span title="java.io.File">File</span>)
+	{
+		<a href="#32088" title="(java.io.File)Unit">createDirectory</a>(<a href="#36742" title="java.io.File">file</a>.<span title="()java.io.File">getParentFile</span>)
+		<span class="keyword">val</span> <a title="Boolean" id="36746">created</a> = <a href="ErrorHandling.scala.html#32136" title="(=&gt; String)(=&gt; Boolean)Boolean">translate</a>(<span title="java.lang.String(&quot;Could not create file &quot;)" class="string">&quot;Could not create file &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#36742" title="java.io.File">file</a>) { <a href="#36742" title="java.io.File">file</a>.<a title="()Boolean" id="16027">createNewFile</a>() }
+		<span title="Unit" class="keyword">if</span>(<a href="#36746" title="Boolean">created</a> <span title="(Boolean)Boolean">||</span> <a href="#36742" title="java.io.File">file</a>.<span title="()Boolean">isDirectory</span>)
+			<span title="Unit">(</span>)
+		<span class="keyword">else</span> <span title="Unit" class="keyword">if</span>(<span title="=&gt; Boolean">!</span><a href="#36742" title="java.io.File">file</a>.<a title="(Long)Boolean" id="16038">setLastModified</a>(<span title="object java.lang.System">System</span>.<a title="()Long" id="34091">currentTimeMillis</a>))
+			<span title="(String)Nothing">error</span>(<span title="java.lang.String(&quot;Could not update last modified time for file &quot;)" class="string">&quot;Could not update last modified time for file &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#36742" title="java.io.File">file</a>)
+	}
+	<span class="keyword">def</span> <a title="(Iterable[java.io.File])Unit" id="32087">createDirectories</a>(<a title="Iterable[java.io.File]" id="36761">dirs</a>: <span title="Iterable[java.io.File]">Iterable</span>[File]): <span title="Unit">Unit</span> =
+		<a href="#36761" title="Iterable[java.io.File]">dirs</a>.<span title="((java.io.File) =&gt; Unit)Unit">foreach</span>(<a href="#32088" title="(java.io.File)Unit">createDirectory</a>)
+	<span class="keyword">def</span> <a title="(java.io.File)Unit" id="32088">createDirectory</a>(<a title="java.io.File" id="36747">dir</a>: <span title="java.io.File">File</span>): <span title="Unit">Unit</span> =
+	{
+		<span class="keyword">def</span> <a title="=&gt; java.lang.String" id="36764">failBase</a> = <span title="java.lang.String(&quot;Could not create directory &quot;)" class="string">&quot;Could not create directory &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#36747" title="java.io.File">dir</a>
+		<span title="Unit" class="keyword">if</span>(<a href="#36747" title="java.io.File">dir</a>.<span title="()Boolean">isDirectory</span> <span title="(Boolean)Boolean">||</span> <a href="#36747" title="java.io.File">dir</a>.<a title="()Boolean" id="16036">mkdirs</a>())
+			<span title="Unit">(</span>)
+		<span class="keyword">else</span> <span title="Unit" class="keyword">if</span>(<a href="#36747" title="java.io.File">dir</a>.<span title="()Boolean">exists</span>)
+			<span title="(String)Nothing">error</span>(<a href="#36764" title="=&gt; java.lang.String">failBase</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot;: file exists and is not a directory.&quot;)" class="string">&quot;: file exists and is not a directory.&quot;</span>)
+		<span class="keyword">else</span>
+			<span title="(String)Nothing">error</span>(<a href="#36764" title="=&gt; java.lang.String">failBase</a>)
+	}
+	<span class="keyword">def</span> <a title="(java.io.File,java.io.File)Set[java.io.File]" id="32089">unzip</a>(<a title="java.io.File" id="36765">from</a>: <span title="java.io.File">File</span>, <a title="java.io.File" id="36766">toDirectory</a>: <span title="java.io.File">File</span>): <span title="Set[java.io.File]">Set</span>[File] = <a href="#32090" title="(java.io.File,java.io.File,xsbt.NameFilter)Set[java.io.File]">unzip</a>(<a href="#36765" title="java.io.File">from</a>, <a href="#36766" title="java.io.File">toDirectory</a>, <a href="NameFilter.scala.html#12625" title="object xsbt.AllPassFilter">AllPassFilter</a>)
+	<span class="keyword">def</span> <a title="(java.io.File,java.io.File,xsbt.NameFilter)Set[java.io.File]" id="32090">unzip</a>(<a title="java.io.File" id="36783">from</a>: <span title="java.io.File">File</span>, <a title="java.io.File" id="36784">toDirectory</a>: <span title="java.io.File">File</span>, <a title="xsbt.NameFilter" id="36785">filter</a>: <a href="NameFilter.scala.html#12645" title="xsbt.NameFilter">NameFilter</a>): <span title="Set[java.io.File]">Set</span>[File] = <a href="OpenResource.scala.html#36796" title="(java.io.File)((java.io.FileInputStream) =&gt; Set[java.io.File])Set[java.io.File]">fileInputStream</a>(<a href="#36783" title="java.io.File">from</a>)(<a title="java.io.FileInputStream" id="36814">in</a> =&gt; <a href="#32091" title="(java.io.InputStream,java.io.File,xsbt.NameFilter)Set[java.io.File]">unzip</a>(<a href="#36814" title="java.io.FileInputStream">in</a>, <a href="#36784" title="java.io.File">toDirectory</a>, <a href="#36785" title="xsbt.NameFilter">filter</a>))
+	<span class="keyword">def</span> <a title="(java.io.InputStream,java.io.File,xsbt.NameFilter)Set[java.io.File]" id="32091">unzip</a>(<a title="java.io.InputStream" id="36768">from</a>: <span title="java.io.InputStream">InputStream</span>, <a title="java.io.File" id="36769">toDirectory</a>: <span title="java.io.File">File</span>, <a title="xsbt.NameFilter" id="36770">filter</a>: <a href="NameFilter.scala.html#12645" title="xsbt.NameFilter">NameFilter</a>): <span title="Set[java.io.File]">Set</span>[File] =
+	{
+		<a href="#32088" title="(java.io.File)Unit">createDirectory</a>(<a href="#36769" title="java.io.File">toDirectory</a>)
+		<a href="OpenResource.scala.html#36796" title="(java.io.InputStream)((java.util.zip.ZipInputStream) =&gt; scala.collection.immutable.Set[java.io.File])scala.collection.immutable.Set[java.io.File]">zipInputStream</a>(<a href="#36768" title="java.io.InputStream">from</a>) { <a title="java.util.zip.ZipInputStream" id="36878">zipInput</a> =&gt; <a href="#32092" title="(java.util.zip.ZipInputStream,java.io.File,xsbt.NameFilter)scala.collection.immutable.Set[java.io.File]">extract</a>(<a href="#36878" title="java.util.zip.ZipInputStream">zipInput</a>, <a href="#36769" title="java.io.File">toDirectory</a>, <a href="#36770" title="xsbt.NameFilter">filter</a>) }
+	}
+	<span class="keyword">private</span> <span class="keyword">def</span> <a title="(java.util.zip.ZipInputStream,java.io.File,xsbt.NameFilter)scala.collection.immutable.Set[java.io.File]" id="32092">extract</a>(<a title="java.util.zip.ZipInputStream" id="36879">from</a>: <a title="java.util.zip.ZipInputStream" id="21158">ZipInputStream</a>, <a title="java.io.File" id="36880">toDirectory</a>: <span title="java.io.File">File</span>, <a title="xsbt.NameFilter" id="36881">filter</a>: <a href="NameFilter.scala.html#12645" title="xsbt.NameFilter">NameFilter</a>) =
+	{
+		<span class="keyword">val</span> <a title="scala.collection.mutable.HashSet[java.io.File]" id="36883">set</a> = <span title="scala.collection.mutable.HashSet[java.io.File]" class="keyword">new</span> <a title="scala.collection.mutable.HashSet[java.io.File]" id="15533">HashSet</a>[File]
+		<span class="keyword">def</span> <a title="()Unit" id="36884">next</a>()
+		{
+			<span class="keyword">val</span> <a title="java.util.zip.ZipEntry" id="36885">entry</a> = <a href="#36879" title="java.util.zip.ZipInputStream">from</a>.<a title="()java.util.zip.ZipEntry" id="36836">getNextEntry</a>
+			<span title="Unit" class="keyword">if</span>(<a href="#36885" title="java.util.zip.ZipEntry">entry</a> <span title="(AnyRef)Boolean">==</span> <span title="Null(null)" class="keyword">null</span>)
+				<span title="Unit">(</span>)
+			<span class="keyword">else</span>
+			{
+				<span class="keyword">val</span> <a title="java.lang.String" id="36887">name</a> = <a href="#36885" title="java.util.zip.ZipEntry">entry</a>.<a title="()java.lang.String" id="29753">getName</a>
+				<span title="Unit" class="keyword">if</span>(<a href="#36881" title="xsbt.NameFilter">filter</a>.<a href="NameFilter.scala.html#36777" title="(String)Boolean">accept</a>(<a href="#36887" title="java.lang.String">name</a>))
+				{
+					<span class="keyword">val</span> <a title="java.io.File" id="36891">target</a> = <span title="(java.io.File,java.lang.String)java.io.File" class="keyword">new</span> <span title="java.io.File">File</span>(<a href="#36880" title="java.io.File">toDirectory</a>, <a href="#36887" title="java.lang.String">name</a>)
+					<span class="comment">//log.debug(&quot;Extracting zip entry '&quot; + name + &quot;' to '&quot; + target + &quot;'&quot;)</span>
+					<span title="Unit" class="keyword">if</span>(<a href="#36885" title="java.util.zip.ZipEntry">entry</a>.<a title="()Boolean" id="29768">isDirectory</a>)
+						<a href="#32088" title="(java.io.File)Unit">createDirectory</a>(<a href="#36891" title="java.io.File">target</a>)
+					<span class="keyword">else</span>
+					{
+						<a href="#36883" title="scala.collection.mutable.HashSet[java.io.File]">set</a> <a title="(java.io.File)Unit" id="17898">+=</a> <a href="#36891" title="java.io.File">target</a>
+						<a href="ErrorHandling.scala.html#32136" title="(=&gt; String)(=&gt; Unit)Unit">translate</a>(<span title="java.lang.String(&quot;Error extracting zip entry '&quot;)" class="string">&quot;Error extracting zip entry '&quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#36887" title="java.lang.String">name</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot;' to '&quot;)" class="string">&quot;' to '&quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#36891" title="java.io.File">target</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot;': &quot;)" class="string">&quot;': &quot;</span>) {
+							<a href="OpenResource.scala.html#36796" title="(java.io.File)((java.io.FileOutputStream) =&gt; Unit)Unit">fileOutputStream</a>(<span title="Boolean(false)" class="keyword">false</span>)(<a href="#36891" title="java.io.File">target</a>) { <a title="java.io.FileOutputStream" id="36951">out</a> =&gt; <a href="#32093" title="(java.io.InputStream,java.io.OutputStream)Unit">transfer</a>(<a href="#36879" title="java.util.zip.ZipInputStream">from</a>, <a href="#36951" title="java.io.FileOutputStream">out</a>) }
+						}
+					}
+					<span class="comment">//target.setLastModified(entry.getTime)</span>
+				}
+				<span class="keyword">else</span>
+				<span title="Unit">{</span>
+					<span class="comment">//log.debug(&quot;Ignoring zip entry '&quot; + name + &quot;'&quot;)</span>
+				}
+				<a href="#36879" title="java.util.zip.ZipInputStream">from</a>.<a title="()Unit" id="36837">closeEntry</a>()
+				<a href="#36884" title="()Unit">next</a>()
+			}
+		}
+		<a href="#36884" title="()Unit">next</a>()
+		<span title="(java.io.File*)scala.collection.immutable.Set[java.io.File]">Set</span>() <a title="(Iterable[java.io.File])scala.collection.immutable.Set[java.io.File]" id="22697">++</a> <a href="#36883" title="scala.collection.mutable.HashSet[java.io.File]">set</a>
+	}
+
+	<span class="comment">/** Copies all bytes from the given input stream to the given output stream.
+	* Neither stream is closed.*/</span>
+	<span class="keyword">def</span> <a title="(java.io.InputStream,java.io.OutputStream)Unit" id="32093">transfer</a>(<a title="java.io.InputStream" id="36952">in</a>: <span title="java.io.InputStream">InputStream</span>, <a title="java.io.OutputStream" id="36953">out</a>: <span title="java.io.OutputStream">OutputStream</span>): <span title="Unit">Unit</span> = <a href="#32095" title="(java.io.InputStream,java.io.OutputStream,Boolean)Unit">transferImpl</a>(<a href="#36952" title="java.io.InputStream">in</a>, <a href="#36953" title="java.io.OutputStream">out</a>, <span title="Boolean(false)" class="keyword">false</span>)
+	<span class="comment">/** Copies all bytes from the given input stream to the given output stream.  The
+	* input stream is closed after the method completes.*/</span>
+	<span class="keyword">def</span> <a title="(java.io.InputStream,java.io.OutputStream)Unit" id="32094">transferAndClose</a>(<a title="java.io.InputStream" id="36969">in</a>: <span title="java.io.InputStream">InputStream</span>, <a title="java.io.OutputStream" id="36970">out</a>: <span title="java.io.OutputStream">OutputStream</span>): <span title="Unit">Unit</span> = <a href="#32095" title="(java.io.InputStream,java.io.OutputStream,Boolean)Unit">transferImpl</a>(<a href="#36969" title="java.io.InputStream">in</a>, <a href="#36970" title="java.io.OutputStream">out</a>, <span title="Boolean(true)" class="keyword">true</span>)
+	<span class="keyword">private</span> <span class="keyword">def</span> <a title="(java.io.InputStream,java.io.OutputStream,Boolean)Unit" id="32095">transferImpl</a>(<a title="java.io.InputStream" id="36966">in</a>: <span title="java.io.InputStream">InputStream</span>, <a title="java.io.OutputStream" id="36967">out</a>: <span title="java.io.OutputStream">OutputStream</span>, <a title="Boolean" id="36968">close</a>: <span title="Boolean">Boolean</span>)
+	{
+		<span class="keyword">try</span>
+		{
+			<span class="keyword">val</span> <a title="Array[Byte]" id="36971">buffer</a> = <span title="Array[Byte]" class="keyword">new</span> <span title="Array[Byte]">Array</span>[Byte](<a href="#32067" title="=&gt; Int">BufferSize</a>)
+			<span class="keyword">def</span> <a title="()Unit" id="36972">read</a>()
+			{
+				<span class="keyword">val</span> <a title="Int" id="36974">byteCount</a> = <a href="#36966" title="java.io.InputStream">in</a>.<a title="(Array[Byte])Int" id="29591">read</a>(<a href="#36971" title="Array[Byte]">buffer</a>)
+				<span title="Unit" class="keyword">if</span>(<a href="#36974" title="Int">byteCount</a> <span title="(Int)Boolean">&gt;=</span> <span title="Int(0)" class="int">0</span>)
+				{
+					<a href="#36967" title="java.io.OutputStream">out</a>.<a title="(Array[Byte],Int,Int)Unit" id="29868">write</a>(<a href="#36971" title="Array[Byte]">buffer</a>, <span title="Int(0)" class="int">0</span>, <a href="#36974" title="Int">byteCount</a>)
+					<a href="#36972" title="()Unit">read</a>()
+				}
+			}
+			<a href="#36972" title="()Unit">read</a>()
+		}
+		<span class="keyword">finally</span> { <span title="Unit" class="keyword">if</span>(<a href="#36968" title="Boolean">close</a>) <a href="#36966" title="java.io.InputStream">in</a>.<a title="()Unit" id="29595">close</a> }
+	}
+
+	<span class="comment">/** Creates a temporary directory and provides its location to the given function.  The directory
+	* is deleted after the function returns.*/</span>
+	<span class="keyword">def</span> <a title="[T]((java.io.File) =&gt; T)T" id="32096">withTemporaryDirectory</a>[<a title="&gt;: Nothing &lt;: Any" id="32098">T</a>](<a title="(java.io.File) =&gt; T" id="36998">action</a>: File =&gt; T): <a href="#32098" title="T">T</a> =
+	{
+		<span class="keyword">val</span> <a title="java.io.File" id="36999">dir</a> = <a href="#32099" title="=&gt; java.io.File">createTemporaryDirectory</a>
+		<span class="keyword">try</span> { <a href="#36998" title="(java.io.File)T">action</a>(<a href="#36999" title="java.io.File">dir</a>) }
+		<span class="keyword">finally</span> { <a href="#32102" title="(java.io.File)Unit">delete</a>(<a href="#36999" title="java.io.File">dir</a>) }
+	}
+	<span class="keyword">def</span> <a title="=&gt; java.io.File" id="32099">createTemporaryDirectory</a>: <span title="java.io.File">File</span> =
+	{
+		<span class="keyword">def</span> <a title="(Int)java.io.File" id="37004">create</a>(<a title="Int" id="37005">tries</a>: <a title="Int" id="2351">Int</a>): <span title="java.io.File">File</span> =
+		{
+			<span title="java.io.File" class="keyword">if</span>(<a href="#37005" title="Int">tries</a> <span title="(Int)Boolean">&gt;</span> <a href="#32061" title="=&gt; Int">MaximumTries</a>)
+				<span title="(String)Nothing">error</span>(<span title="java.lang.String(&quot;Could not create temporary directory.&quot;)" class="string">&quot;Could not create temporary directory.&quot;</span>)
+			<span class="keyword">else</span>
+			{
+				<span class="keyword">val</span> <a title="java.lang.String" id="37007">randomName</a> = <span title="java.lang.String(&quot;sbt_&quot;)" class="string">&quot;sbt_&quot;</span> <span title="(Any)java.lang.String">+</span> java.lang.<a title="object java.lang.Integer" id="1729">Integer</a>.<a title="(Int)java.lang.String" id="18225">toHexString</a>(<a href="#32063" title="=&gt; java.util.Random">random</a>.<a title="()Int" id="36598">nextInt</a>)
+				<span class="keyword">val</span> <a title="java.io.File" id="37008">f</a> = <span title="(java.io.File,java.lang.String)java.io.File" class="keyword">new</span> <span title="java.io.File">File</span>(<a href="#32065" title="=&gt; java.io.File">temporaryDirectory</a>, <a href="#37007" title="java.lang.String">randomName</a>)
+
+				<span class="keyword">try</span> { <a href="#32088" title="(java.io.File)Unit">createDirectory</a>(<a href="#37008" title="java.io.File">f</a>); <a href="#37008" title="java.io.File">f</a> }
+				<span class="keyword">catch</span> { <span title="java.io.File" class="keyword">case</span> <a title="Exception" id="37024">e</a>: <span title="Exception">Exception</span> =&gt; <a href="#37004" title="(Int)java.io.File">create</a>(<a href="#37005" title="Int">tries</a> <span title="(Int)Int">+</span> <span title="Int(1)" class="int">1</span>) }
+			}
+		}
+		<a href="#37004" title="(Int)java.io.File">create</a>(<span title="Int(0)" class="int">0</span>)
+	}
+
+	<span class="keyword">private</span>[xsbt] <span class="keyword">def</span> <a title="(java.io.File)Iterable[java.io.File]" id="32100">jars</a>(<a title="java.io.File" id="37043">dir</a>: <span title="java.io.File">File</span>): <span title="Iterable[java.io.File]">Iterable</span>[File] = <a href="#32104" title="(java.io.File,java.io.FileFilter)Array[java.io.File]">listFiles</a>(<a href="#37043" title="java.io.File">dir</a>, <a href="NameFilter.scala.html#37061" title="implicit xsbt.GlobFilter.apply : (String)xsbt.NameFilter">GlobFilter</a>(<span title="java.lang.String(&quot;*.jar&quot;)" class="string">&quot;*.jar&quot;</span>))
+
+	<span class="keyword">def</span> <a title="(Iterable[java.io.File])Unit" id="32101">delete</a>(<a title="Iterable[java.io.File]" id="37003">files</a>: <span title="Iterable[java.io.File]">Iterable</span>[File]): <span title="Unit">Unit</span> = <a href="#37003" title="Iterable[java.io.File]">files</a>.<span title="((java.io.File) =&gt; Unit)Unit">foreach</span>(<a href="#32102" title="(java.io.File)Unit">delete</a>)
+	<span class="keyword">def</span> <a title="(java.io.File)Unit" id="32102">delete</a>(<a title="java.io.File" id="37002">file</a>: <span title="java.io.File">File</span>)
+	{
+		<a href="ErrorHandling.scala.html#32136" title="(=&gt; String)(=&gt; AnyVal)AnyVal">translate</a>(<span title="java.lang.String(&quot;Error deleting file &quot;)" class="string">&quot;Error deleting file &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#37002" title="java.io.File">file</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot;: &quot;)" class="string">&quot;: &quot;</span>)
+		{
+			<span title="AnyVal" class="keyword">if</span>(<a href="#37002" title="java.io.File">file</a>.<span title="()Boolean">isDirectory</span>)
+			{
+				<a href="#32101" title="(Iterable[java.io.File])Unit">delete</a>(<a href="#32105" title="(java.io.File)Array[java.io.File]">listFiles</a>(<a href="#37002" title="java.io.File">file</a>))
+				<a href="#37002" title="java.io.File">file</a>.<span title="()Boolean">delete</span>
+			}
+			<span class="keyword">else</span> <span title="Unit" class="keyword">if</span>(<a href="#37002" title="java.io.File">file</a>.<span title="()Boolean">exists</span>)
+				<a href="#37002" title="java.io.File">file</a>.<span title="()Boolean">delete</span>
+		}
+	}
+	<span class="keyword">def</span> <a title="(java.io.FileFilter)(java.io.File)Array[java.io.File]" id="32103">listFiles</a>(<a title="java.io.FileFilter" id="37054">filter</a>: java.io.<span title="java.io.FileFilter">FileFilter</span>)(<a title="java.io.File" id="37055">dir</a>: <span title="java.io.File">File</span>): <span title="Array[java.io.File]">Array</span>[File] = <a href="#32106" title="(Array[java.io.File])Array[java.io.File]">wrapNull</a>(<a href="#37055" title="java.io.File">dir</a>.<span title="(java.io.FileFilter)Array[java.io.File]">listFiles</span>(<a href="#37054" title="java.io.FileFilter">filter</a>))
+	<span class="keyword">def</span> <a title="(java.io.File,java.io.FileFilter)Array[java.io.File]" id="32104">listFiles</a>(<a title="java.io.File" id="37052">dir</a>: <span title="java.io.File">File</span>, <a title="java.io.FileFilter" id="37053">filter</a>: java.io.<span title="java.io.FileFilter">FileFilter</span>): <span title="Array[java.io.File]">Array</span>[File] = <a href="#32106" title="(Array[java.io.File])Array[java.io.File]">wrapNull</a>(<a href="#37052" title="java.io.File">dir</a>.<span title="(java.io.FileFilter)Array[java.io.File]">listFiles</span>(<a href="#37053" title="java.io.FileFilter">filter</a>))
+	<span class="keyword">def</span> <a title="(java.io.File)Array[java.io.File]" id="32105">listFiles</a>(<a title="java.io.File" id="37045">dir</a>: <span title="java.io.File">File</span>): <span title="Array[java.io.File]">Array</span>[File] = <a href="#32106" title="(Array[java.io.File])Array[java.io.File]">wrapNull</a>(<a href="#37045" title="java.io.File">dir</a>.<a title="()Array[java.io.File]" id="16032">listFiles</a>())
+	<span class="keyword">private</span> <span class="keyword">def</span> <a title="(Array[java.io.File])Array[java.io.File]" id="32106">wrapNull</a>(<a title="Array[java.io.File]" id="37078">a</a>: <span title="Array[java.io.File]">Array</span>[File]) =
+	{
+		<span title="Array[java.io.File]" class="keyword">if</span>(<a href="#37078" title="Array[java.io.File]">a</a> <span title="(AnyRef)Boolean">==</span> <span title="Null(null)" class="keyword">null</span>)
+			<span title="Array[java.io.File]" class="keyword">new</span> <span title="Array[java.io.File]">Array</span>[File](<span title="Int(0)" class="int">0</span>)
+		<span class="keyword">else</span>
+			<a href="#37078" title="Array[java.io.File]">a</a>
+	}
+
+
+	<span class="comment">/** Creates a jar file.
+	* @param sources The files to include in the jar file paired with the entry name in the jar.
+	* @param outputJar The file to write the jar to.
+	* @param manifest The manifest for the jar.*/</span>
+	<span class="keyword">def</span> <a title="(Iterable[(java.io.File, String)],java.io.File,java.util.jar.Manifest)Unit" id="32107">jar</a>(<a title="Iterable[(java.io.File, String)]" id="37087">sources</a>: <span title="Iterable[(java.io.File, String)]">Iterable</span>[(File,String)], <a title="java.io.File" id="37088">outputJar</a>: <span title="java.io.File">File</span>, <a title="java.util.jar.Manifest" id="37089">manifest</a>: <a title="java.util.jar.Manifest" id="21655">Manifest</a>): <span title="Unit">Unit</span> =
+		<a href="#32109" title="(Iterable[(java.io.File, String)],java.io.File,Option[java.util.jar.Manifest])Unit">archive</a>(<a href="#37087" title="Iterable[(java.io.File, String)]">sources</a>, <a href="#37088" title="java.io.File">outputJar</a>, <span title="(java.util.jar.Manifest)Some[java.util.jar.Manifest]">Some</span>(<a href="#37089" title="java.util.jar.Manifest">manifest</a>))
+	<span class="comment">/** Creates a zip file.
+	* @param sources The files to include in the zip file paired with the entry name in the zip.
+	* @param outputZip The file to write the zip to.*/</span>
+	<span class="keyword">def</span> <a title="(Iterable[(java.io.File, String)],java.io.File)Unit" id="32108">zip</a>(<a title="Iterable[(java.io.File, String)]" id="37094">sources</a>: <span title="Iterable[(java.io.File, String)]">Iterable</span>[(File,String)], <a title="java.io.File" id="37095">outputZip</a>: <span title="java.io.File">File</span>): <span title="Unit">Unit</span> =
+		<a href="#32109" title="(Iterable[(java.io.File, String)],java.io.File,Option[java.util.jar.Manifest])Unit">archive</a>(<a href="#37094" title="Iterable[(java.io.File, String)]">sources</a>, <a href="#37095" title="java.io.File">outputZip</a>, <span title="object None">None</span>)
+
+	<span class="keyword">private</span> <span class="keyword">def</span> <a title="(Iterable[(java.io.File, String)],java.io.File,Option[java.util.jar.Manifest])Unit" id="32109">archive</a>(<a title="Iterable[(java.io.File, String)]" id="37090">sources</a>: <span title="Iterable[(java.io.File, String)]">Iterable</span>[(File,String)], <a title="java.io.File" id="37091">outputFile</a>: <span title="java.io.File">File</span>, <a title="Option[java.util.jar.Manifest]" id="37092">manifest</a>: <span title="Option[java.util.jar.Manifest]">Option</span>[Manifest])
+	{
+		<span title="Unit" class="keyword">if</span>(<a href="#37091" title="java.io.File">outputFile</a>.<span title="()Boolean">isDirectory</span>)
+			<span title="(String)Nothing">error</span>(<span title="java.lang.String(&quot;Specified output file &quot;)" class="string">&quot;Specified output file &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#37091" title="java.io.File">outputFile</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot; is a directory.&quot;)" class="string">&quot; is a directory.&quot;</span>)
+		<span class="keyword">else</span>
+		{
+			<span class="keyword">val</span> <a title="java.io.File" id="37096">outputDir</a> = <a href="#37091" title="java.io.File">outputFile</a>.<span title="()java.io.File">getParentFile</span>
+			<a href="#32088" title="(java.io.File)Unit">createDirectory</a>(<a href="#37096" title="java.io.File">outputDir</a>)
+			<a href="#32112" title="(java.io.File,Option[java.util.jar.Manifest])((java.util.zip.ZipOutputStream) =&gt; Unit)Unit">withZipOutput</a>(<a href="#37091" title="java.io.File">outputFile</a>, <a href="#37092" title="Option[java.util.jar.Manifest]">manifest</a>)
+			{ <a title="java.util.zip.ZipOutputStream" id="37101">output</a> =&gt;
+				<span class="keyword">val</span> <a title="(String) =&gt; java.util.zip.ZipEntry" id="37102">createEntry</a>: (String =&gt; ZipEntry) = <span title="(String) =&gt; java.util.zip.ZipEntry" class="keyword">if</span>(<a href="#37092" title="Option[java.util.jar.Manifest]">manifest</a>.<a title="=&gt; Boolean" id="19011">isDefined</a>) <span title="java.util.jar.JarEntry" class="keyword">new</span> <a title="java.util.jar.JarEntry" id="21640">JarEntry</a>(<a href="#37104" title="String">_</a>) <span class="keyword">else</span> <span title="java.util.zip.ZipEntry" class="keyword">new</span> <a title="java.util.zip.ZipEntry" id="21146">ZipEntry</a>(<a href="#37107" title="String">_</a>)
+				<a href="#32110" title="(Iterable[(java.io.File, String)],java.util.zip.ZipOutputStream)((String) =&gt; java.util.zip.ZipEntry)Unit">writeZip</a>(<a href="#37090" title="Iterable[(java.io.File, String)]">sources</a>, <a href="#37101" title="java.util.zip.ZipOutputStream">output</a>)(<a href="#37102" title="(String) =&gt; java.util.zip.ZipEntry">createEntry</a>)
+			}
+		}
+	}
+	<span class="keyword">private</span> <span class="keyword">def</span> <a title="(Iterable[(java.io.File, String)],java.util.zip.ZipOutputStream)((String) =&gt; java.util.zip.ZipEntry)Unit" id="32110">writeZip</a>(<a title="Iterable[(java.io.File, String)]" id="37110">sources</a>: <span title="Iterable[(java.io.File, String)]">Iterable</span>[(File,String)], <a title="java.util.zip.ZipOutputStream" id="37111">output</a>: <span title="java.util.zip.ZipOutputStream">ZipOutputStream</span>)(<a title="(String) =&gt; java.util.zip.ZipEntry" id="37112">createEntry</a>: String =&gt; ZipEntry)
+	{
+		<span class="keyword">def</span> <a title="(java.io.File,String)Unit" id="37113">add</a>(<a title="java.io.File" id="37114">sourceFile</a>: <span title="java.io.File">File</span>, <a title="String" id="37115">name</a>: <span title="String">String</span>)
+		{
+			<span title="Unit" class="keyword">if</span>(<a href="#37114" title="java.io.File">sourceFile</a>.<span title="()Boolean">isDirectory</span>)
+				<span title="Unit">(</span>)
+			<span class="keyword">else</span> <span title="Unit" class="keyword">if</span>(<a href="#37114" title="java.io.File">sourceFile</a>.<span title="()Boolean">exists</span>)
+			{
+				<span class="keyword">val</span> <a title="java.util.zip.ZipEntry" id="37116">nextEntry</a> = <a href="#37112" title="(String)java.util.zip.ZipEntry">createEntry</a>(<a href="#32111" title="(String)String">normalizeName</a>(<a href="#37115" title="String">name</a>))
+				<a href="#37116" title="java.util.zip.ZipEntry">nextEntry</a>.<a title="(Long)Unit" id="29754">setTime</a>(<a href="#37114" title="java.io.File">sourceFile</a>.<span title="()Long">lastModified</span>)
+				<a href="#37111" title="java.util.zip.ZipOutputStream">output</a>.<a title="(java.util.zip.ZipEntry)Unit" id="29727">putNextEntry</a>(<a href="#37116" title="java.util.zip.ZipEntry">nextEntry</a>)
+				<a href="#32094" title="(java.io.InputStream,java.io.OutputStream)Unit">transferAndClose</a>(<a title="(java.io.File)java.io.FileInputStream" id="29876" class="keyword">new</a> <a title="java.io.FileInputStream" id="3761">FileInputStream</a>(<a href="#37114" title="java.io.File">sourceFile</a>), <a href="#37111" title="java.util.zip.ZipOutputStream">output</a>)
+			}
+			<span class="keyword">else</span>
+				<span title="(String)Nothing">error</span>(<span title="java.lang.String(&quot;Source &quot;)" class="string">&quot;Source &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#37114" title="java.io.File">sourceFile</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot; does not exist.&quot;)" class="string">&quot; does not exist.&quot;</span>)
+		}
+		<a href="#37110" title="Iterable[(java.io.File, String)]">sources</a>.<span title="(((java.io.File, String)) =&gt; Unit)Unit">foreach</span>(<span title="((java.io.File, String) =&gt; Unit)((java.io.File, String)) =&gt; Unit">tupled</span>(<a href="#37113" title="(java.io.File,String)Unit">add</a>))
+		<a href="#37111" title="java.util.zip.ZipOutputStream">output</a>.<a title="()Unit" id="29728">closeEntry</a>()
+	}
+	<span class="keyword">private</span> <span class="keyword">def</span> <a title="(String)String" id="32111">normalizeName</a>(<a title="String" id="37117">name</a>: <span title="String">String</span>) =
+	{
+		<span class="keyword">val</span> <a title="Char" id="37119">sep</a> = <span title="object java.io.File">File</span>.<span title="Char">separatorChar</span>
+		<span title="String" class="keyword">if</span>(<a href="#37119" title="Char">sep</a> <span title="(Char)Boolean">==</span> <span title="Char('/')" class="char">'/'</span>) <a href="#37117" title="String">name</a> <span class="keyword">else</span> <a href="#37117" title="String">name</a>.<a title="(Char,Char)java.lang.String" id="5803">replace</a>(<a href="#37119" title="Char">sep</a>, <span title="Char('/')" class="char">'/'</span>)
+	}
+
+	<span class="keyword">private</span> <span class="keyword">def</span> <a title="(java.io.File,Option[java.util.jar.Manifest])((java.util.zip.ZipOutputStream) =&gt; Unit)Unit" id="32112">withZipOutput</a>(<a title="java.io.File" id="37097">file</a>: <span title="java.io.File">File</span>, <a title="Option[java.util.jar.Manifest]" id="37098">manifest</a>: <span title="Option[java.util.jar.Manifest]">Option</span>[Manifest])(<a title="(java.util.zip.ZipOutputStream) =&gt; Unit" id="37099">f</a>: ZipOutputStream =&gt; Unit)
+	{
+		<a href="OpenResource.scala.html#36796" title="(java.io.File)((java.io.FileOutputStream) =&gt; Any)Any">fileOutputStream</a>(<span title="Boolean(false)" class="keyword">false</span>)(<a href="#37097" title="java.io.File">file</a>) { <a title="java.io.FileOutputStream" id="37218">fileOut</a> =&gt;
+			<span class="keyword">val</span> <a href="#17583" title="(java.util.zip.ZipOutputStream, java.lang.String)">(</a><a href="#37219" title="java.util.zip.ZipOutputStream" id="17583">zipOut</a>, <a href="#37219" title="java.lang.String" id="17585">ext</a>) =
+				<a href="#37098" title="Option[java.util.jar.Manifest]">manifest</a> <span title="(java.util.zip.ZipOutputStream, java.lang.String)" class="keyword">match</span>
+				{
+					<span title="(java.util.jar.JarOutputStream, java.lang.String)" class="keyword">case</span> <a id="1">Some</a>(<a title="java.util.jar.Manifest" id="37222">mf</a>) =&gt;
+					{
+						<span class="keyword">import</span> Attributes.Name.MANIFEST_VERSION
+						<span class="keyword">val</span> <a title="java.util.jar.Attributes" id="37224">main</a> = <a href="#37222" title="java.util.jar.Manifest">mf</a>.<a title="()java.util.jar.Attributes" id="26222">getMainAttributes</a>
+						<span title="Unit" class="keyword">if</span>(<span title="=&gt; Boolean">!</span><a href="#37224" title="java.util.jar.Attributes">main</a>.<a title="(Any)Boolean" id="26302">containsKey</a>(<span title="java.util.jar.Attributes.Name">MANIFEST_VERSION</span>))
+							<a href="#37224" title="java.util.jar.Attributes">main</a>.<a title="(Any,Any)java.lang.Object" id="26298">put</a>(<span title="java.util.jar.Attributes.Name">MANIFEST_VERSION</span>, <span title="java.lang.String(&quot;1.0&quot;)" class="string">&quot;1.0&quot;</span>)
+						<span title="(java.util.jar.JarOutputStream,java.lang.String)(java.util.jar.JarOutputStream, java.lang.String)">(</span><span title="java.util.jar.JarOutputStream" class="keyword">new</span> <a title="java.util.jar.JarOutputStream" id="21652">JarOutputStream</a>(<a href="#37218" title="java.io.FileOutputStream">fileOut</a>, <a href="#37222" title="java.util.jar.Manifest">mf</a>), <span title="java.lang.String(&quot;jar&quot;)" class="string">&quot;jar&quot;</span>)
+					}
+					<span title="(java.util.zip.ZipOutputStream, java.lang.String)" class="keyword">case</span> <span title="object None">None</span> =&gt; <span title="(java.util.zip.ZipOutputStream,java.lang.String)(java.util.zip.ZipOutputStream, java.lang.String)">(</span><span title="java.util.zip.ZipOutputStream" class="keyword">new</span> <span title="java.util.zip.ZipOutputStream">ZipOutputStream</span>(<a href="#37218" title="java.io.FileOutputStream">fileOut</a>), <span title="java.lang.String(&quot;zip&quot;)" class="string">&quot;zip&quot;</span>)
+				}
+			<span class="keyword">try</span> { <a href="#37099" title="(java.util.zip.ZipOutputStream)Unit">f</a>(<a href="#17583" title="java.util.zip.ZipOutputStream">zipOut</a>) }
+			<span class="keyword">catch</span> { <span title="java.lang.String" class="keyword">case</span> <a title="Exception" id="37241">e</a>: <span title="Exception">Exception</span> =&gt; <span title="java.lang.String(&quot;Error writing &quot;)" class="string">&quot;Error writing &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#17585" title="java.lang.String">ext</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot;: &quot;)" class="string">&quot;: &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#37241" title="Exception">e</a>.<a title="()java.lang.String" id="17620">toString</a> }
+			<span class="keyword">finally</span> { <a href="#17583" title="java.util.zip.ZipOutputStream">zipOut</a>.<a title="()Unit" id="29731">close</a> }
+		}
+	}
+	<span class="keyword">def</span> <a title="(java.io.File,java.io.File)Option[String]" id="32113">relativize</a>(<a title="java.io.File" id="32133">base</a>: <span title="java.io.File">File</span>, <a title="java.io.File" id="32134">file</a>: <span title="java.io.File">File</span>): <span title="Option[String]">Option</span>[String] =
+	{
+		<span class="keyword">val</span> <a title="java.lang.String" id="37246">pathString</a> = <a href="#32134" title="java.io.File">file</a>.<span title="()java.lang.String">getAbsolutePath</span>
+		<a href="#32114" title="(java.io.File)Option[String]">baseFileString</a>(<a href="#32133" title="java.io.File">base</a>) <a title="((String) =&gt; Option[String])Option[String]" id="19019">flatMap</a>
+		{
+			<a title="String" id="37250">baseString</a> =&gt;
+			{
+				<span title="Option[String]" class="keyword">if</span>(<a href="#37246" title="java.lang.String">pathString</a>.<a title="(java.lang.String)Boolean" id="5786">startsWith</a>(<a href="#37250" title="String">baseString</a>))
+					<span title="(java.lang.String)Some[java.lang.String]">Some</span>(<a href="#37246" title="java.lang.String">pathString</a>.<span title="(Int)java.lang.String">substring</span>(<a href="#37250" title="String">baseString</a>.<span title="()Int">length</span>))
+				<span class="keyword">else</span>
+					<span title="object None">None</span>
+			}
+		}
+	}
+	<span class="keyword">private</span> <span class="keyword">def</span> <a title="(java.io.File)Option[String]" id="32114">baseFileString</a>(<a title="java.io.File" id="37247">baseFile</a>: <span title="java.io.File">File</span>): <span title="Option[String]">Option</span>[String] =
+	{
+		<span title="Option[String]" class="keyword">if</span>(<a href="#37247" title="java.io.File">baseFile</a>.<span title="()Boolean">isDirectory</span>)
+		{
+			<span class="keyword">val</span> <a title="java.lang.String" id="37254">cp</a> = <a href="#37247" title="java.io.File">baseFile</a>.<span title="()java.lang.String">getAbsolutePath</span>
+			<a title="(Boolean)Unit" id="6088">assert</a>(<a href="#37254" title="java.lang.String">cp</a>.<span title="()Int">length</span> <span title="(Int)Boolean">&gt;</span> <span title="Int(0)" class="int">0</span>)
+			<span title="Option[String]" class="keyword">if</span>(<a href="#37254" title="java.lang.String">cp</a>.<a title="(Int)Char" id="5767">charAt</a>(<a href="#37254" title="java.lang.String">cp</a>.<span title="()Int">length</span> <a title="(Int)Int" id="3096">-</a> <span title="Int(1)" class="int">1</span>) <span title="(Char)Boolean">==</span> <span title="object java.io.File">File</span>.<span title="Char">separatorChar</span>)
+				<span title="(java.lang.String)Some[java.lang.String]">Some</span>(<a href="#37254" title="java.lang.String">cp</a>)
+			<span class="keyword">else</span>
+				<span title="(java.lang.String)Some[java.lang.String]">Some</span>(<a href="#37254" title="java.lang.String">cp</a> <span title="(Any)java.lang.String">+</span> <span title="object java.io.File">File</span>.<span title="Char">separatorChar</span>)
+		}
+		<span class="keyword">else</span>
+			<span title="object None">None</span>
+	}
+	<span class="keyword">def</span> <a title="(Iterable[(java.io.File, java.io.File)])Set[java.io.File]" id="32115">copy</a>(<a title="Iterable[(java.io.File, java.io.File)]" id="37275">sources</a>: <span title="Iterable[(java.io.File, java.io.File)]">Iterable</span>[(File,File)]): <span title="Set[java.io.File]">Set</span>[File] = <span title="(java.io.File*)scala.collection.immutable.Set[java.io.File]">Set</span>( <a href="#37275" title="Iterable[(java.io.File, java.io.File)]">sources</a>.<a title="(((java.io.File, java.io.File)) =&gt; java.io.File)Iterable[java.io.File]" id="16060">map</a>(<span title="((java.io.File, java.io.File) =&gt; java.io.File)((java.io.File, java.io.File)) =&gt; java.io.File">tupled</span>(<a href="#32116" title="(java.io.File,java.io.File)java.io.File">copyImpl</a>)).<a title="=&gt; Seq[java.io.File]" id="16094">toSeq</a>.<a title="Array[java.io.File]" id="16552">toArray</a> : _*)
+	<span class="keyword">private</span> <span class="keyword">def</span> <a title="(java.io.File,java.io.File)java.io.File" id="32116">copyImpl</a>(<a title="java.io.File" id="37360">from</a>: <span title="java.io.File">File</span>, <a title="java.io.File" id="37361">to</a>: <span title="java.io.File">File</span>): <span title="java.io.File">File</span> =
+	{
+		<span title="Unit" class="keyword">if</span>(<span title="=&gt; Boolean">!</span><a href="#37361" title="java.io.File">to</a>.<span title="()Boolean">exists</span> <span title="(Boolean)Boolean">||</span> <a href="#37360" title="java.io.File">from</a>.<span title="()Long">lastModified</span> <a title="(Long)Boolean" id="3216">&gt;</a> <a href="#37361" title="java.io.File">to</a>.<span title="()Long">lastModified</span>)
+		{
+			<span title="Unit" class="keyword">if</span>(<a href="#37360" title="java.io.File">from</a>.<span title="()Boolean">isDirectory</span>)
+				<a href="#32088" title="(java.io.File)Unit">createDirectory</a>(<a href="#37361" title="java.io.File">to</a>)
+			<span class="keyword">else</span>
+			{
+				<a href="#32088" title="(java.io.File)Unit">createDirectory</a>(<a href="#37361" title="java.io.File">to</a>.<span title="()java.io.File">getParentFile</span>)
+				<a href="#32117" title="(java.io.File,java.io.File)Unit">copyFile</a>(<a href="#37360" title="java.io.File">from</a>, <a href="#37361" title="java.io.File">to</a>)
+			}
+		}
+		<a href="#37361" title="java.io.File">to</a>
+	}
+	<span class="keyword">def</span> <a title="(java.io.File,java.io.File)Unit" id="32117">copyFile</a>(<a title="java.io.File" id="37371">sourceFile</a>: <span title="java.io.File">File</span>, <a title="java.io.File" id="37372">targetFile</a>: <span title="java.io.File">File</span>)
+	{
+		<span title="(Boolean,Any)Unit">require</span>(<a href="#37371" title="java.io.File">sourceFile</a>.<span title="()Boolean">exists</span>, <span title="java.lang.String(&quot;Source file '&quot;)" class="string">&quot;Source file '&quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#37371" title="java.io.File">sourceFile</a>.<span title="()java.lang.String">getAbsolutePath</span> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot;' does not exist.&quot;)" class="string">&quot;' does not exist.&quot;</span>)
+		<span title="(Boolean,Any)Unit">require</span>(<span title="=&gt; Boolean">!</span><a href="#37371" title="java.io.File">sourceFile</a>.<span title="()Boolean">isDirectory</span>, <span title="java.lang.String(&quot;Source file '&quot;)" class="string">&quot;Source file '&quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#37371" title="java.io.File">sourceFile</a>.<span title="()java.lang.String">getAbsolutePath</span> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot;' is a directory.&quot;)" class="string">&quot;' is a directory.&quot;</span>)
+		<a href="OpenResource.scala.html#36796" title="(java.io.File)((java.nio.channels.FileChannel) =&gt; Unit)Unit">fileInputChannel</a>(<a href="#37371" title="java.io.File">sourceFile</a>) { <a title="java.nio.channels.FileChannel" id="37466">in</a> =&gt;
+			<a href="OpenResource.scala.html#36796" title="(java.io.File)((java.nio.channels.FileChannel) =&gt; Unit)Unit">fileOutputChannel</a>(<a href="#37372" title="java.io.File">targetFile</a>) { <a title="java.nio.channels.FileChannel" id="37479">out</a> =&gt;
+				<span class="keyword">val</span> <a title="Long" id="37480">copied</a> = <a href="#37479" title="java.nio.channels.FileChannel">out</a>.<a title="(java.nio.channels.ReadableByteChannel,Long,Long)Long" id="37436">transferFrom</a>(<a href="#37466" title="java.nio.channels.FileChannel">in</a>, <span title="Long(0L)" class="int">0</span>, <a href="#37466" title="java.nio.channels.FileChannel">in</a>.<span title="()Long">size</span>)
+				<span title="Unit" class="keyword">if</span>(<a href="#37480" title="Long">copied</a> <a title="(Long)Boolean" id="3213">!=</a> <a href="#37466" title="java.nio.channels.FileChannel">in</a>.<span title="()Long">size</span>)
+					<span title="(String)Nothing">error</span>(<span title="java.lang.String(&quot;Could not copy '&quot;)" class="string">&quot;Could not copy '&quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#37371" title="java.io.File">sourceFile</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot;' to '&quot;)" class="string">&quot;' to '&quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#37372" title="java.io.File">targetFile</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot;' (&quot;)" class="string">&quot;' (&quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#37480" title="Long">copied</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot;/&quot;)" class="string">&quot;/&quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#37466" title="java.nio.channels.FileChannel">in</a>.<span title="()Long">size</span> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot; bytes copied)&quot;)" class="string">&quot; bytes copied)&quot;</span>)
+			}
+		}
+	}
+	<span class="keyword">def</span> <a title="=&gt; java.nio.charset.Charset" id="32118">defaultCharset</a> = <a href="#32071" title="=&gt; java.nio.charset.Charset">utf8</a>
+	<span class="keyword">def</span> <a title="(java.io.File,String)Unit" id="32119">write</a>(<a title="java.io.File" id="34159">toFile</a>: <span title="java.io.File">File</span>, <a title="String" id="34160">content</a>: <span title="String">String</span>): <span title="Unit">Unit</span> = <a href="#32120" title="(java.io.File,String,java.nio.charset.Charset)Unit">write</a>(<a href="#34159" title="java.io.File">toFile</a>, <a href="#34160" title="String">content</a>, <a href="#32118" title="=&gt; java.nio.charset.Charset">defaultCharset</a>)
+	<span class="keyword">def</span> <a title="(java.io.File,String,java.nio.charset.Charset)Unit" id="32120">write</a>(<a title="java.io.File" id="34156">toFile</a>: <span title="java.io.File">File</span>, <a title="String" id="34157">content</a>: <span title="String">String</span>, <a title="java.nio.charset.Charset" id="34158">charset</a>: <span title="java.nio.charset.Charset">Charset</span>): <span title="Unit">Unit</span> = <a href="#32121" title="(java.io.File,String,java.nio.charset.Charset,Boolean)Unit">write</a>(<a href="#34156" title="java.io.File">toFile</a>, <a href="#34157" title="String">content</a>, <a href="#34158" title="java.nio.charset.Charset">charset</a>, <span title="Boolean(false)" class="keyword">false</span>)
+	<span class="keyword">def</span> <a title="(java.io.File,String,java.nio.charset.Charset,Boolean)Unit" id="32121">write</a>(<a title="java.io.File" id="34152">file</a>: <span title="java.io.File">File</span>, <a title="String" id="34153">content</a>: <span title="String">String</span>, <a title="java.nio.charset.Charset" id="34154">charset</a>: <span title="java.nio.charset.Charset">Charset</span>, <a title="Boolean" id="34155">append</a>: <span title="Boolean">Boolean</span>)
+	{
+		<span title="Unit" class="keyword">if</span>(<a href="#34154" title="java.nio.charset.Charset">charset</a>.<a title="()java.nio.charset.CharsetEncoder" id="29217">newEncoder</a>.<a title="(java.lang.CharSequence)Boolean" id="37510">canEncode</a>(<a href="#34153" title="String">content</a>))
+			<a href="OpenResource.scala.html#36796" title="(java.io.File)((java.io.BufferedWriter) =&gt; object None)object None">fileWriter</a>(<a href="#34154" title="java.nio.charset.Charset">charset</a>, <a href="#34155" title="Boolean">append</a>)(<a href="#34152" title="java.io.File">file</a>) { <a title="java.io.BufferedWriter" id="37575">w</a> =&gt; <a href="#37575" title="java.io.BufferedWriter">w</a>.<a title="(java.lang.String)Unit" id="29193">write</a>(<a href="#34153" title="String">content</a>); <span title="object None">None</span> }
+		<span class="keyword">else</span>
+			<span title="(String)Nothing">error</span>(<span title="java.lang.String(&quot;String cannot be encoded by charset &quot;)" class="string">&quot;String cannot be encoded by charset &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#34154" title="java.nio.charset.Charset">charset</a>.<span title="()java.lang.String">name</span>)
+	}
+	<span class="keyword">def</span> <a title="(java.io.File)String" id="32122">read</a>(<a title="java.io.File" id="37578">file</a>: <span title="java.io.File">File</span>): <span title="String">String</span> = <a href="#32123" title="(java.io.File,java.nio.charset.Charset)String">read</a>(<a href="#37578" title="java.io.File">file</a>, <a href="#32118" title="=&gt; java.nio.charset.Charset">defaultCharset</a>)
+	<span class="keyword">def</span> <a title="(java.io.File,java.nio.charset.Charset)String" id="32123">read</a>(<a title="java.io.File" id="37587">file</a>: <span title="java.io.File">File</span>, <a title="java.nio.charset.Charset" id="37588">charset</a>: <span title="java.nio.charset.Charset">Charset</span>): <span title="String">String</span> =
+	{
+		<span class="keyword">val</span> <a title="java.io.ByteArrayOutputStream" id="37596">out</a> = <a title="(Int)java.io.ByteArrayOutputStream" id="37600" class="keyword">new</a> <span title="java.io.ByteArrayOutputStream">ByteArrayOutputStream</span>(<a href="#37587" title="java.io.File">file</a>.<a title="()Long" id="16026">length</a>.<a title="=&gt; Int" id="3142">toInt</a>)
+		<a href="OpenResource.scala.html#36796" title="(java.io.File)((java.io.FileInputStream) =&gt; Unit)Unit">fileInputStream</a>(<a href="#37587" title="java.io.File">file</a>){ <a title="java.io.FileInputStream" id="37614">in</a> =&gt; <a href="#32093" title="(java.io.InputStream,java.io.OutputStream)Unit">transfer</a>(<a href="#37614" title="java.io.FileInputStream">in</a>, <a href="#37596" title="java.io.ByteArrayOutputStream">out</a>) }
+		<a href="#37596" title="java.io.ByteArrayOutputStream">out</a>.<span title="(java.lang.String)java.lang.String">toString</span>(<a href="#37588" title="java.nio.charset.Charset">charset</a>.<span title="()java.lang.String">name</span>)
+	}
+	<span class="comment">/** doesn't close the InputStream */</span>
+	<span class="keyword">def</span> <a title="(java.io.InputStream)String" id="32124">read</a>(<a title="java.io.InputStream" id="37582">in</a>: <span title="java.io.InputStream">InputStream</span>): <span title="String">String</span> = <a href="#32125" title="(java.io.InputStream,java.nio.charset.Charset)String">read</a>(<a href="#37582" title="java.io.InputStream">in</a>, <a href="#32118" title="=&gt; java.nio.charset.Charset">defaultCharset</a>)
+	<span class="comment">/** doesn't close the InputStream */</span>
+	<span class="keyword">def</span> <a title="(java.io.InputStream,java.nio.charset.Charset)String" id="32125">read</a>(<a title="java.io.InputStream" id="37580">in</a>: <span title="java.io.InputStream">InputStream</span>, <a title="java.nio.charset.Charset" id="37581">charset</a>: <span title="java.nio.charset.Charset">Charset</span>): <span title="String">String</span> =
+	{
+		<span class="keyword">val</span> <a title="java.io.ByteArrayOutputStream" id="37629">out</a> = <span title="java.io.ByteArrayOutputStream" class="keyword">new</span> <span title="java.io.ByteArrayOutputStream">ByteArrayOutputStream</span>
+		<a href="#32093" title="(java.io.InputStream,java.io.OutputStream)Unit">transfer</a>(<a href="#37580" title="java.io.InputStream">in</a>, <a href="#37629" title="java.io.ByteArrayOutputStream">out</a>)
+		<a href="#37629" title="java.io.ByteArrayOutputStream">out</a>.<span title="(java.lang.String)java.lang.String">toString</span>(<a href="#37581" title="java.nio.charset.Charset">charset</a>.<span title="()java.lang.String">name</span>)
+	}
+	<span class="keyword">def</span> <a title="(java.io.File)Array[Byte]" id="32126">readBytes</a>(<a title="java.io.File" id="37635">file</a>: <span title="java.io.File">File</span>): <span title="Array[Byte]">Array</span>[Byte] = <a href="OpenResource.scala.html#36796" title="(java.io.File)((java.io.FileInputStream) =&gt; Array[Byte])Array[Byte]">fileInputStream</a>(<a href="#37635" title="java.io.File">file</a>)(<a href="#32127" title="(java.io.InputStream)Array[Byte]">readBytes</a>)
+	<span class="comment">/** doesn't close the InputStream */</span>
+	<span class="keyword">def</span> <a title="(java.io.InputStream)Array[Byte]" id="32127">readBytes</a>(<a title="java.io.InputStream" id="37638">in</a>: <span title="java.io.InputStream">InputStream</span>): <span title="Array[Byte]">Array</span>[Byte] =
+	{
+		<span class="keyword">val</span> <a title="java.io.ByteArrayOutputStream" id="37642">out</a> = <span title="java.io.ByteArrayOutputStream" class="keyword">new</span> <span title="java.io.ByteArrayOutputStream">ByteArrayOutputStream</span>
+		<a href="#32093" title="(java.io.InputStream,java.io.OutputStream)Unit">transfer</a>(<a href="#37638" title="java.io.InputStream">in</a>, <a href="#37642" title="java.io.ByteArrayOutputStream">out</a>)
+		<a href="#37642" title="java.io.ByteArrayOutputStream">out</a>.<a title="()Array[Byte]" id="37605">toByteArray</a>
+	}
+
+	<span class="comment">// Not optimized for large files</span>
+	<span class="keyword">def</span> <a title="(java.io.File)List[String]" id="32128">readLines</a>(<a title="java.io.File" id="34169">file</a>: <span title="java.io.File">File</span>): <span title="List[String]">List</span>[String] = <a href="#32129" title="(java.io.File,java.nio.charset.Charset)List[String]">readLines</a>(<a href="#34169" title="java.io.File">file</a>, <a href="#32118" title="=&gt; java.nio.charset.Charset">defaultCharset</a>)
+	<span class="keyword">def</span> <a title="(java.io.File,java.nio.charset.Charset)List[String]" id="32129">readLines</a>(<a title="java.io.File" id="34167">file</a>: <span title="java.io.File">File</span>, <a title="java.nio.charset.Charset" id="34168">charset</a>: <span title="java.nio.charset.Charset">Charset</span>): <span title="List[String]">List</span>[String] =
+	{
+		<a href="OpenResource.scala.html#36796" title="(java.io.File)((java.io.BufferedReader) =&gt; List[String])List[String]">fileReader</a>(<a href="#34168" title="java.nio.charset.Charset">charset</a>)(<a href="#34167" title="java.io.File">file</a>){ <a title="java.io.BufferedReader" id="37732">in</a> =&gt;
+			<span class="keyword">def</span> <a title="(List[String])List[String]" id="37733">readLine</a>(<a title="List[String]" id="37734">accum</a>: <span title="List[String]">List</span>[String]): <span title="List[String]">List</span>[String] =
+			{
+				<span class="keyword">val</span> <a title="java.lang.String" id="37735">line</a> = <a href="#37732" title="java.io.BufferedReader">in</a>.<a title="()java.lang.String" id="37666">readLine</a>()
+				<span title="List[String]" class="keyword">if</span>(<a href="#37735" title="java.lang.String">line</a> <a title="(AnyRef)Boolean" id="5739">eq</a> <span title="Null(null)" class="keyword">null</span>) <a href="#37734" title="List[String]">accum</a>.<a title="=&gt; List[String]" id="17775">reverse</a> <span class="keyword">else</span> <a href="#37733" title="(List[String])List[String]">readLine</a>(<a href="#37735" title="java.lang.String">line</a> <a href="#37737" title="(String)List[String]" id="17725">::</a> <a href="#37734" title="List[String]">accum</a>)
+			}
+			<a href="#37733" title="(List[String])List[String]">readLine</a>(<a title="object Nil" id="310">Nil</a>)
+		}
+	}
+
+	<span class="comment">/** A pattern used to split a String by path separator characters.*/</span>
+	<span class="keyword">private</span> <span class="keyword">val</span> <a title="java.util.regex.Pattern" id="32130">PathSeparatorPattern</a> = java.util.regex.<a title="object java.util.regex.Pattern" id="16893">Pattern</a>.<a title="(java.lang.String)java.util.regex.Pattern" id="36578">compile</a>(<span title="object java.io.File">File</span>.<a title="java.lang.String" id="16001">pathSeparator</a>)
+
+	<span class="comment">/** Splits a String around path separator characters. */</span>
+	<span class="keyword">def</span> <a title="(String)Array[java.lang.String]" id="32132">pathSplit</a>(<a title="String" id="37740">s</a>: <span title="String">String</span>) = <a href="#32130" title="=&gt; java.util.regex.Pattern">PathSeparatorPattern</a>.<a title="(java.lang.CharSequence)Array[java.lang.String]" id="36586">split</a>(<a href="#37740" title="String">s</a>)
+}
+
+        </pre>
+    </body>
+</html>
