@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+			<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" ></meta>
+        <title>sbt/MainControl.scala</title>
+        <script type="text/javascript" src="../jquery-all.js"></script>
+        <script type="text/javascript" src="../linked.js"></script>
+        <link rel="stylesheet" type="text/css" href="../style.css" title="Style"></link>
+    </head>
+    <body>
+        <pre>
+<span class="comment">/* sbt -- Simple Build Tool
+ * Copyright 2009, 2010  Mark Harrah
+ */</span>
+<span class="keyword">package</span> sbt
+
+<span class="keyword">import</span> java.io.File
+
+<span class="keyword">private</span> <span class="keyword">case</span> <span class="keyword">class</span> <a title="class Exit extends java.lang.Object with xsbti.Exit with ScalaObject with Product" id="30600">Exit</a>(<a title="Int" id="30705">code</a>: <a title="Int" id="2351">Int</a>) <span class="keyword">extends</span> xsbti.<a href="../xsbti/Exit.java.html#5845" title="xsbti.Exit">Exit</a>
+{
+	<a title="(Boolean)Unit" id="6092">require</a>(<a href="#30705" title="=&gt; Int">code</a> <a title="(Int)Boolean" id="3094">&gt;=</a> <span title="Int(0)" class="int">0</span>)
+}
+<span class="keyword">private</span> <span class="keyword">class</span> <a title="class Reboot extends java.lang.Object with xsbti.Reboot with ScalaObject" id="7311">Reboot</a>(<span class="keyword">val</span> <a title="String" id="30643">scalaVersion</a>: <span title="String">String</span>, <a title="List[String]" id="30644">argsList</a>: <span title="List[String]">List</span>[String], <span class="keyword">val</span> <a title="xsbti.ApplicationID" id="30645">app</a>: xsbti.<a href="../xsbti/ApplicationID.java.html#5887" title="xsbti.ApplicationID">ApplicationID</a>, <span class="keyword">val</span> <a title="java.io.File" id="30646">baseDirectory</a>: <a title="java.io.File" id="3620">File</a>) <span class="keyword">extends</span> xsbti.<a href="../xsbti/Reboot.java.html#5842" title="xsbti.Reboot">Reboot</a>
+{
+	<span class="keyword">def</span> <a title="()Array[String]" id="30629">arguments</a> = <a href="#30644" title="List[String]">argsList</a>.<a title="Array[String]" id="16552">toArray</a>
+}
+<span class="keyword">private</span> <span class="keyword">class</span> <a title="class ApplicationID extends java.lang.Object with xsbti.ApplicationID with ScalaObject" id="8178">ApplicationID</a>(<a title="xsbti.ApplicationID" id="30668">delegate</a>: xsbti.<a href="../xsbti/ApplicationID.java.html#5887" title="xsbti.ApplicationID">ApplicationID</a>, <a title="String" id="30669">newVersion</a>: <span title="String">String</span>) <span class="keyword">extends</span> xsbti.<a href="../xsbti/ApplicationID.java.html#5887" title="xsbti.ApplicationID">ApplicationID</a>
+{
+	<span class="keyword">def</span> <a title="()java.lang.String" id="30658">groupID</a> = <a href="#30668" title="xsbti.ApplicationID">delegate</a>.<a href="../xsbti/ApplicationID.java.html#30636" title="()java.lang.String">groupID</a>
+	<span class="keyword">def</span> <a title="()java.lang.String" id="30659">name</a> = <a href="#30668" title="xsbti.ApplicationID">delegate</a>.<a href="../xsbti/ApplicationID.java.html#30637" title="()java.lang.String">name</a>
+	<span class="keyword">def</span> <a title="()String" id="30660">version</a> = <a href="#30669" title="String">newVersion</a>
+	
+	<span class="keyword">def</span> <a title="()java.lang.String" id="30661">mainClass</a> = <a href="#30668" title="xsbti.ApplicationID">delegate</a>.<a href="../xsbti/ApplicationID.java.html#30639" title="()java.lang.String">mainClass</a>
+	<span class="keyword">def</span> <a title="()Array[java.lang.String]" id="30662">mainComponents</a> = <a href="#30668" title="xsbti.ApplicationID">delegate</a>.<a href="../xsbti/ApplicationID.java.html#30640" title="()Array[java.lang.String]">mainComponents</a>
+	<span class="keyword">def</span> <a title="()Boolean" id="30663">crossVersioned</a> = <a href="#30668" title="xsbti.ApplicationID">delegate</a>.<a href="../xsbti/ApplicationID.java.html#30641" title="()Boolean">crossVersioned</a>
+	
+	<span class="keyword">def</span> <a title="()Array[java.io.File]" id="30664">classpathExtra</a> = <a href="#30668" title="xsbti.ApplicationID">delegate</a>.<a href="../xsbti/ApplicationID.java.html#30642" title="()Array[java.io.File]">classpathExtra</a>
+}
+<span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">class</span> <a title="class ReloadException extends java.lang.RuntimeException with ScalaObject" id="10245">ReloadException</a>(<span class="keyword">val</span> <a title="List[String]" id="30695">remainingArguments</a>: <span title="List[String]">List</span>[String], <span class="keyword">val</span> <a title="Option[String]" id="30696">buildScalaVersion</a>: <a title="Option[String]" id="897">Option</a>[String]) <span class="keyword">extends</span> <a title="java.lang.RuntimeException" id="6061">RuntimeException</a>
+{
+	<span class="keyword">override</span> <span class="keyword">def</span> <a title="()sbt.ReloadException" id="30691">fillInStackTrace</a> = <a href="#10245" title="sbt.ReloadException" class="keyword">this</a>
+}
+        </pre>
+    </body>
+</html>

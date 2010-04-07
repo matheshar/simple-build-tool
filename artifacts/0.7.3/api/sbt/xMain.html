@@ -1,0 +1,789 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head><title>class xMain in sbt</title>
+        <meta http-equiv="content-type" content="text/html; charset=UTF8"></meta><meta content="scaladoc (version 2.7.7.final)" name="generator"></meta><link href="../style.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../script.js"></script>
+        </head>
+        <body onload="init()">
+        <table summary="" class="navigation">
+        <tr>
+          <td class="navigation-links" valign="top">
+            <!-- <table><tr></tr></table> -->
+          </td>
+          <td align="right" valign="top" style="white-space:nowrap;" rowspan="2">
+            <div class="doctitle-larger">Simple Build Tool 0.7.3 API</div>
+          </td>
+        </tr>
+        <tr><td></td></tr>
+      </table>
+        
+      <div class="entity">
+        <a href="../sbt$package.html" target="_self">sbt</a>
+        <br></br>
+        <span class="entity">class  xMain</span>
+      </div><hr></hr>
+      <div class="source">
+        [source: <a href="" class="sbt/xMain"><code>sbt/xMain.scala</code></a>]
+      </div><hr></hr>
+      <a name="xMain"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>class</code>
+        <em>xMain</em>
+      </dt>
+      <dd><code> extends </code><a href="../xsbti/AppMain.html" target="_self">AppMain</a><code> with </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a></dd>
+    </dl>
+      
+
+<table summary="" cellpadding="3" class="member">
+      <tr><td class="title" colspan="2">Value Summary</td></tr>
+      <tr>
+      <td class="modifiers" valign="top"> 
+        <code> val</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/xMain.html#BatchHelpHeader" target="_self">BatchHelpHeader</a></em>
+         : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> val</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/xMain.html#ContinuousCompileCommand" target="_self">ContinuousCompileCommand</a></em>
+         : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+        
+        <div>The name of the command that compiles all sources continuously when they are modified.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> val</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/xMain.html#ContinuousCompilePollDelaySeconds" target="_self">ContinuousCompilePollDelaySeconds</a></em>
+         : <a href="http://www.scala-lang.org/docu/files/api/scala/Int.html" target="_self">Int</a>
+        
+        <div>The number of seconds between polling by the continuous compile command.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> val</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/xMain.html#ContinuousExecutePrefix" target="_self">ContinuousExecutePrefix</a></em>
+         : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+        
+        <div>The prefix used to identify a request to execute the remaining input on source changes.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> val</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/xMain.html#CrossBuildPrefix" target="_self">CrossBuildPrefix</a></em>
+         : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+        
+        <div>The prefix used to identify a request to execute the remaining input across multiple Scala versions.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> val</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/xMain.html#ExitCommand" target="_self">ExitCommand</a></em>
+         : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> val</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/xMain.html#FailureHandlerPrefix" target="_self">FailureHandlerPrefix</a></em>
+         : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+        
+        <div>The prefix used to identify the action to run after an error</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> val</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/xMain.html#FileCommandsPrefix" target="_self">FileCommandsPrefix</a></em>
+         : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+        
+        <div>The prefix used to identify a file or local port to read commands from.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> val</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/xMain.html#GetAction" target="_self">GetAction</a></em>
+         : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+        
+        <div>The name of the command that gets the value of the property given as its argument.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> val</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/xMain.html#HelpAction" target="_self">HelpAction</a></em>
+         : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+        
+        <div>The name of the command that displays the help message.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> val</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/xMain.html#InteractiveCommand" target="_self">InteractiveCommand</a></em>
+         : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> val</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/xMain.html#InteractiveHelpHeader" target="_self">InteractiveHelpHeader</a></em>
+         : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> val</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/xMain.html#ProcessorPrefix" target="_self">ProcessorPrefix</a></em>
+         : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+        
+        <div>The prefix used to identify commands for managing processors.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> val</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/xMain.html#ProjectAction" target="_self">ProjectAction</a></em>
+         : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+        
+        <div>The name of the command that sets the currently active project.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> val</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/xMain.html#ProjectConsoleAction" target="_self">ProjectConsoleAction</a></em>
+         : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+        
+        <div>The name of the command that loads a console with access to the current project through the variable 'project'.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> val</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/xMain.html#QuitCommand" target="_self">QuitCommand</a></em>
+         : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> val</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/xMain.html#RebootCommand" target="_self">RebootCommand</a></em>
+         : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+        
+        <div>The command for reloading sbt.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> val</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/xMain.html#SetAction" target="_self">SetAction</a></em>
+         : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+        
+        <div>The name of the command that sets the value of the property given as its argument.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> val</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/xMain.html#ShowActions" target="_self">ShowActions</a></em>
+         : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+        
+        <div>The name of the command that shows all available actions.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> val</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/xMain.html#ShowCurrent" target="_self">ShowCurrent</a></em>
+         : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+        
+        <div>The name of the command that shows the current project and logging level of that project.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> val</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/xMain.html#ShowProjectsAction" target="_self">ShowProjectsAction</a></em>
+         : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+        
+        <div>The name of the command that shows all available projects.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> val</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/xMain.html#SpecificBuildPrefix" target="_self">SpecificBuildPrefix</a></em>
+         : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+        
+        <div>The prefix used to identify a request to execute the remaining input after the next space against the
+ Scala version between this prefix and the space (i.e. '++version action' means execute 'action' using
+ Scala version 'version'.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> val</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/xMain.html#TerminateActions" target="_self">TerminateActions</a></em>
+         : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+        
+        <div>The list of lowercase command names that may be used to terminate the program.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> val</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/xMain.html#TraceCommand" target="_self">TraceCommand</a></em>
+         : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+        
+        <div>The name of the command that toggles logging stacktraces.</div>
+      </td>
+    </tr>
+      </table>
+<table summary="" cellpadding="3" class="member">
+      <tr><td class="title" colspan="2">Method Summary</td></tr>
+      <tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/xMain.html#checkVersion%28sbt.Project%2CString%29" target="_self">checkVersion</a></em>
+        (<em>p</em> : <a href="../sbt/Project.html" target="_self">Project</a>, <em>version</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>) : <a href="http://www.scala-lang.org/docu/files/api/scala/Boolean.html" target="_self">Boolean</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>protected def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/xMain.html#interactiveCommands" target="_self">interactiveCommands</a></em>
+         : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+        
+        <div>The list of all available commands at the interactive prompt in addition to the tasks defined
+ by a project.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>final def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/xMain.html#run%28xsbti.AppConfiguration%29" target="_self">run</a></em>
+        (<em>configuration</em> : <a href="../xsbti/AppConfiguration.html" target="_self">AppConfiguration</a>) : <a href="../xsbti/MainResult.html" target="_self">MainResult</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>final def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/xMain.html#run%28xsbti.AppConfiguration%2CList%5BString%5D%2COption%5BString%5D%29" target="_self">run</a></em>
+        (<em>configuration</em> : <a href="../xsbti/AppConfiguration.html" target="_self">AppConfiguration</a>, <em>remainingArguments</em> : <a href="" target="contentFrame" class="scala/List">scala.List</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>], <em>buildScalaVersion</em> : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]) : <a href="../xsbti/MainResult.html" target="_self">MainResult</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/xMain.html#traceExplanation" target="_self">traceExplanation</a></em>
+         : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/xMain.html#validTraceArguments" target="_self">validTraceArguments</a></em>
+         : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+        
+        
+      </td>
+    </tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#getClass%28%29" target="_self">getClass</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#hashCode%28%29" target="_self">hashCode</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#equals%28Any%29" target="_self">equals</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#clone%28%29" target="_self">clone</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#toString%28%29" target="_self">toString</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#notify%28%29" target="_self">notify</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#notifyAll%28%29" target="_self">notifyAll</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#wait%28Long%29" target="_self">wait</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#wait%28Long%2CInt%29" target="_self">wait</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#wait%28%29" target="_self">wait</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#finalize%28%29" target="_self">finalize</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#%3D%3D%28AnyRef%29" target="_self">==</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#%21%3D%28AnyRef%29" target="_self">!=</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#eq%28AnyRef%29" target="_self">eq</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#ne%28AnyRef%29" target="_self">ne</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#synchronized%28T0%29" target="_self">synchronized</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html" target="_self">Any</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html#%3D%3D%28Any%29" target="_self">==</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html#%21%3D%28Any%29" target="_self">!=</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html#isInstanceOf" target="_self">isInstanceOf</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html#asInstanceOf" target="_self">asInstanceOf</a>
+        </td></tr>
+      </table>
+
+<table summary="" cellpadding="3" class="member">
+      <tr><td class="title" colspan="2">Object Summary</td></tr>
+      <tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/xMain.CrossBuild$object.html" target="_self">CrossBuild</a></em>
+        <code> extends </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/xMain.SetProject$object.html" target="_self">SetProject</a></em>
+        <code> extends </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> object</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/xMain.SpecificBuild$object.html" target="_self">SpecificBuild</a></em>
+        <code> extends </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        
+        
+      </td>
+    </tr>
+      </table>
+      
+
+<table summary="" cellpadding="3" class="member-detail">
+          <tr><td class="title">Value Details</td></tr>
+        </table><div><a name="ProjectConsoleAction"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>val</code>
+        <em>ProjectConsoleAction</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>The name of the command that loads a console with access to the current project through the variable 'project'.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="ShowCurrent"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>val</code>
+        <em>ShowCurrent</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>The name of the command that shows the current project and logging level of that project.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="ShowActions"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>val</code>
+        <em>ShowActions</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>The name of the command that shows all available actions.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="ProjectAction"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>val</code>
+        <em>ProjectAction</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>The name of the command that sets the currently active project.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="ShowProjectsAction"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>val</code>
+        <em>ShowProjectsAction</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>The name of the command that shows all available projects.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="ExitCommand"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>val</code>
+        <em>ExitCommand</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="QuitCommand"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>val</code>
+        <em>QuitCommand</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="InteractiveCommand"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>val</code>
+        <em>InteractiveCommand</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="TerminateActions"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>val</code>
+        <em>TerminateActions</em> : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>The list of lowercase command names that may be used to terminate the program.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="SetAction"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>val</code>
+        <em>SetAction</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>The name of the command that sets the value of the property given as its argument.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="GetAction"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>val</code>
+        <em>GetAction</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>The name of the command that gets the value of the property given as its argument.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="HelpAction"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>val</code>
+        <em>HelpAction</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>The name of the command that displays the help message.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="RebootCommand"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>val</code>
+        <em>RebootCommand</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>The command for reloading sbt.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="TraceCommand"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>val</code>
+        <em>TraceCommand</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>The name of the command that toggles logging stacktraces.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="ContinuousCompileCommand"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>val</code>
+        <em>ContinuousCompileCommand</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>The name of the command that compiles all sources continuously when they are modified.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="ContinuousExecutePrefix"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>val</code>
+        <em>ContinuousExecutePrefix</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>The prefix used to identify a request to execute the remaining input on source changes.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="CrossBuildPrefix"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>val</code>
+        <em>CrossBuildPrefix</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>The prefix used to identify a request to execute the remaining input across multiple Scala versions.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="SpecificBuildPrefix"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>val</code>
+        <em>SpecificBuildPrefix</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>The prefix used to identify a request to execute the remaining input after the next space against the
+ Scala version between this prefix and the space (i.e. '++version action' means execute 'action' using
+ Scala version 'version'.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="FileCommandsPrefix"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>val</code>
+        <em>FileCommandsPrefix</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>The prefix used to identify a file or local port to read commands from.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="FailureHandlerPrefix"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>val</code>
+        <em>FailureHandlerPrefix</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>The prefix used to identify the action to run after an error</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="ProcessorPrefix"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>val</code>
+        <em>ProcessorPrefix</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>The prefix used to identify commands for managing processors.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="ContinuousCompilePollDelaySeconds"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>val</code>
+        <em>ContinuousCompilePollDelaySeconds</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/Int.html" target="_self">Int</a>
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>The number of seconds between polling by the continuous compile command.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="BatchHelpHeader"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>val</code>
+        <em>BatchHelpHeader</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="InteractiveHelpHeader"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>val</code>
+        <em>InteractiveHelpHeader</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr></div>
+<table summary="" cellpadding="3" class="member-detail">
+          <tr><td class="title">Method Details</td></tr>
+        </table><div><a name="run%28xsbti.AppConfiguration%29"></a><dl>
+      <dt>
+        
+        <code>final</code>
+        <code>def</code>
+        <em>run</em>(<em>configuration</em> : <a href="../xsbti/AppConfiguration.html" target="_self">AppConfiguration</a>) : <a href="../xsbti/MainResult.html" target="_self">MainResult</a>
+      </dt>
+      <dd></dd>
+    </dl><dl>
+        <dt style="margin:10px 0 0 20px;">
+          <b>Overrides</b>
+        </dt>
+        <dd>
+        <a href="../xsbti/AppMain.html" target="_self">AppMain</a>.<a href="../xsbti/AppMain.html#run%28xsbti.AppConfiguration%29" target="_self">run</a>
+        </dd>
+      </dl><hr></hr>
+<a name="run%28xsbti.AppConfiguration%2CList%5BString%5D%2COption%5BString%5D%29"></a><dl>
+      <dt>
+        
+        <code>final</code>
+        <code>def</code>
+        <em>run</em>(<em>configuration</em> : <a href="../xsbti/AppConfiguration.html" target="_self">AppConfiguration</a>, <em>remainingArguments</em> : <a href="" target="contentFrame" class="scala/List">scala.List</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>], <em>buildScalaVersion</em> : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]) : <a href="../xsbti/MainResult.html" target="_self">MainResult</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="checkVersion%28sbt.Project%2CString%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>checkVersion</em>(<em>p</em> : <a href="../sbt/Project.html" target="_self">Project</a>, <em>version</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>) : <a href="http://www.scala-lang.org/docu/files/api/scala/Boolean.html" target="_self">Boolean</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="interactiveCommands"></a><dl>
+      <dt>
+        
+        <code>protected</code>
+        <code>def</code>
+        <em>interactiveCommands</em> : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>The list of all available commands at the interactive prompt in addition to the tasks defined
+ by a project.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="validTraceArguments"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>validTraceArguments</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="traceExplanation"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>traceExplanation</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr></div>
+
+
+    <hr></hr>
+        <table summary="" class="navigation">
+        <tr>
+          <td class="navigation-links" valign="top">
+            <!-- <table><tr></tr></table> -->
+          </td>
+          <td align="right" valign="top" style="white-space:nowrap;" rowspan="2">
+            <div class="doctitle-larger">Simple Build Tool 0.7.3 API</div>
+          </td>
+        </tr>
+        <tr><td></td></tr>
+      </table>
+      </body>
+      </html>

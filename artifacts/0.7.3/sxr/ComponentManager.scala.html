@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+			<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" ></meta>
+        <title>ComponentManager.scala</title>
+        <script type="text/javascript" src="jquery-all.js"></script>
+        <script type="text/javascript" src="linked.js"></script>
+        <link rel="stylesheet" type="text/css" href="style.css" title="Style"></link>
+    </head>
+    <body>
+        <pre>
+<span class="comment">/* sbt -- Simple Build Tool
+ * Copyright 2008, 2009, 2010 Mark Harrah
+ */</span>
+<span class="keyword">package</span> sbt
+
+<span class="keyword">import</span> java.io.{File,FileOutputStream}
+<span class="keyword">import</span> java.util.concurrent.Callable
+
+<span class="comment">/** A component manager provides access to the pieces of xsbt that are distributed as components.
+* There are two types of components.  The first type is compiled subproject jars with their dependencies.
+* The second type is a subproject distributed as a source jar so that it can be compiled against a specific
+* version of Scala.
+*
+* The component manager provides services to install and retrieve components to the local repository.
+* This is used for compiled source jars so that the compilation need not be repeated for other projects on the same
+* machine.
+*/</span>
+<span class="keyword">class</span> <a title="class ComponentManager extends java.lang.Object with NotNull with ScalaObject" id="8745">ComponentManager</a>(<a title="xsbti.GlobalLock" id="27060">globalLock</a>: xsbti.<a href="xsbti/GlobalLock.java.html#5863" title="xsbti.GlobalLock">GlobalLock</a>, <a title="xsbti.ComponentProvider" id="27061">provider</a>: xsbti.<a href="xsbti/ComponentProvider.java.html#5860" title="xsbti.ComponentProvider">ComponentProvider</a>, <span class="keyword">val</span> <a title="sbt.IvyLogger" id="27062">log</a>: <a href="IvyLogger.scala.html#9870" title="sbt.IvyLogger">IvyLogger</a>) <span class="keyword">extends</span> <span title="NotNull">NotNull</span>
+{
+	<span class="comment">/** Get all of the files for component 'id', throwing an exception if no files exist for the component. */</span>
+	<span class="keyword">def</span> <a title="(String)(sbt.IfMissing)Iterable[java.io.File]" id="27035">files</a>(<a title="String" id="65030">id</a>: <span title="String">String</span>)(<a title="sbt.IfMissing" id="65031">ifMissing</a>: <a href="#9561" title="sbt.IfMissing">IfMissing</a>): <span title="Iterable[java.io.File]">Iterable</span>[File] =
+	{
+		<span class="keyword">def</span> <a title="=&gt; Iterable[java.io.File]" id="86610">fromGlobal</a> =
+			<a href="#27039" title="(=&gt; Iterable[java.io.File])Iterable[java.io.File]">lockGlobalCache</a> {
+				<span class="keyword">try</span> { <a href="#27049" title="(String)Unit">update</a>(<a href="#65030" title="String">id</a>); <a href="#86611" title="(=&gt; Iterable[java.io.File])Iterable[java.io.File]">getOrElse</a>(<a href="#86613" title="=&gt; Iterable[java.io.File]">createAndCache</a>) }
+				<span class="keyword">catch</span> { <span title="Iterable[java.io.File]" class="keyword">case</span> <a title="sbt.NotInCache" id="86639">e</a>: <a href="IvyCache.scala.html#7614" title="sbt.NotInCache">NotInCache</a> =&gt; <a href="#86613" title="=&gt; Iterable[java.io.File]">createAndCache</a> }
+			}
+		<span class="keyword">def</span> <a title="(=&gt; Iterable[java.io.File])Iterable[java.io.File]" id="86611">getOrElse</a>(<a title="=&gt; Iterable[java.io.File]" id="86617">orElse</a>: =&gt; Iterable[File]) =
+		{
+			<span class="keyword">val</span> <a title="Array[java.io.File]" id="86618">existing</a> = <a href="#27061" title="xsbti.ComponentProvider">provider</a>.<a href="xsbti/ComponentProvider.java.html#65038" title="(java.lang.String)Array[java.io.File]">component</a>(<a href="#65030" title="String">id</a>)
+			<span title="Iterable[java.io.File]" class="keyword">if</span>(<a href="#86618" title="Array[java.io.File]">existing</a>.<a title="=&gt; Boolean" id="16522">isEmpty</a>) <a href="#86617" title="=&gt; Iterable[java.io.File]">orElse</a> <span class="keyword">else</span> <a href="#86618" title="Array[java.io.File]">existing</a>
+		}
+		<span class="keyword">def</span> <a title="=&gt; Nothing" id="86612">notFound</a> = <a href="#27046" title="(String)Nothing">invalid</a>(<span title="java.lang.String(&quot;Could not find required component '&quot;)" class="string">&quot;Could not find required component '&quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#65030" title="String">id</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot;'&quot;)" class="string">&quot;'&quot;</span>)
+		<span class="keyword">def</span> <a title="=&gt; Iterable[java.io.File]" id="86613">createAndCache</a> =
+			<a href="#65031" title="sbt.IfMissing">ifMissing</a> <span title="Iterable[java.io.File]" class="keyword">match</span> {
+				<span title="Nothing" class="keyword">case</span> <a href="#9562" title="object sbt.IfMissing">IfMissing</a>.<a href="#64988" title="object sbt.IfMissing.Fail">Fail</a> =&gt; <a href="#86612" title="=&gt; Nothing">notFound</a>
+				<span title="Iterable[java.io.File]" class="keyword">case</span> <a title="sbt.IfMissing.Define" id="86636">d</a>: IfMissing.<a href="#64990" title="sbt.IfMissing.Define">Define</a> =&gt;
+					<a href="#64999" title="()Unit">d</a>()
+					<span title="Unit" class="keyword">if</span>(<a href="#86636" title="sbt.IfMissing.Define">d</a>.<a href="#65000" title="=&gt; Boolean">cache</a>) <a href="#27051" title="(String)Unit">cache</a>(<a href="#65030" title="String">id</a>)
+					<a href="#86611" title="(=&gt; Iterable[java.io.File])Iterable[java.io.File]">getOrElse</a>(<a href="#86612" title="=&gt; Nothing">notFound</a>)
+			}
+
+		<a href="#27036" title="(=&gt; Iterable[java.io.File])Iterable[java.io.File]">lockLocalCache</a> { <a href="#86611" title="(=&gt; Iterable[java.io.File])Iterable[java.io.File]">getOrElse</a>(<a href="#86610" title="=&gt; Iterable[java.io.File]">fromGlobal</a>) }
+	}
+	<span class="comment">/** This is used to lock the local cache in project/boot/.  By checking the local cache first, we can avoid grabbing a global lock. */</span>
+	<span class="keyword">private</span> <span class="keyword">def</span> <a title="[T](=&gt; T)T" id="27036">lockLocalCache</a>[<a title="&gt;: Nothing &lt;: Any" id="27038">T</a>](<a title="=&gt; T" id="65035">action</a>: =&gt; T): <a href="#27038" title="T">T</a> = <a href="#27042" title="(java.io.File)(=&gt; T)T">lock</a>(<a href="#27061" title="xsbti.ComponentProvider">provider</a>.<a href="xsbti/ComponentProvider.java.html#65040" title="()java.io.File">lockFile</a>)( <a href="#65035" title="=&gt; T">action</a> )
+	<span class="comment">/** This is used to ensure atomic access to components in the global Ivy cache.*/</span>
+	<span class="keyword">private</span> <span class="keyword">def</span> <a title="[T](=&gt; T)T" id="27039">lockGlobalCache</a>[<a title="&gt;: Nothing &lt;: Any" id="27041">T</a>](<a title="=&gt; T" id="86614">action</a>: =&gt; T): <a href="#27041" title="T">T</a> = <a href="#27042" title="(java.io.File)(=&gt; T)T">lock</a>(<a href="IvyCache.scala.html#10393" title="object sbt.IvyCache">IvyCache</a>.<a href="IvyCache.scala.html#83647" title="=&gt; java.io.File">lockFile</a>)( <a href="#86614" title="=&gt; T">action</a> )
+	<span class="keyword">private</span> <span class="keyword">def</span> <a title="[T](java.io.File)(=&gt; T)T" id="27042">lock</a>[<a title="&gt;: Nothing &lt;: Any" id="27044">T</a>](<a title="java.io.File" id="86641">file</a>: <span title="java.io.File">File</span>)(<a title="=&gt; T" id="86642">action</a>: =&gt; T): <a href="#27044" title="T">T</a> = <a href="xsbti/GlobalLock.java.html#22809" title="(java.io.File,java.util.concurrent.Callable[T])T">globalLock</a>(<a href="#86641" title="java.io.File">file</a>, <a title="template $anon extends java.lang.Object with java.util.concurrent.Callable[T]" id="86646" class="keyword">new</a> <a title="java.util.concurrent.Callable[T]" id="19860">Callable</a>[T] { <span class="keyword">def</span> <a title="()T" id="86648">call</a> = <a href="#86642" title="=&gt; T">action</a> })
+	<span class="comment">/** Get the file for component 'id', throwing an exception if no files or multiple files exist for the component. */</span>
+	<span class="keyword">def</span> <a title="(String)(sbt.IfMissing)java.io.File" id="27045">file</a>(<a title="String" id="64981">id</a>: <span title="String">String</span>)(<a title="sbt.IfMissing" id="64982">ifMissing</a>: <a href="#9561" title="sbt.IfMissing">IfMissing</a>): <span title="java.io.File">File</span> =
+		<a href="#27035" title="(String)(sbt.IfMissing)Iterable[java.io.File]">files</a>(<a href="#64981" title="String">id</a>)(<a href="#64982" title="sbt.IfMissing">ifMissing</a>).<a title="=&gt; List[java.io.File]" id="16093">toList</a> <span title="java.io.File" class="keyword">match</span> {
+			<span title="java.io.File" class="keyword">case</span> <a title="java.io.File" id="86653">x</a> <a id="1">::</a> <a title="object Nil" id="310">Nil</a> =&gt; <a href="#86653" title="java.io.File">x</a>
+			<span title="Nothing" class="keyword">case</span> <a title="List[java.io.File]" id="86654">xs</a> =&gt; <a href="#27046" title="(String)Nothing">invalid</a>(<span title="java.lang.String(&quot;Expected single file for component '&quot;)" class="string">&quot;Expected single file for component '&quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#64981" title="String">id</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot;', found: &quot;)" class="string">&quot;', found: &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#86654" title="List[java.io.File]">xs</a>.<a title="(String)String" id="16097">mkString</a>(<span title="java.lang.String(&quot;, &quot;)" class="string">&quot;, &quot;</span>))
+		}
+	<span class="keyword">private</span> <span class="keyword">def</span> <a title="(String)Nothing" id="27046">invalid</a>(<a title="String" id="86632">msg</a>: <span title="String">String</span>) = <span title="Nothing" class="keyword">throw</span> <a href="#64979" title="(String)sbt.InvalidComponent" class="keyword">new</a> <a href="#11337" title="sbt.InvalidComponent">InvalidComponent</a>(<a href="#86632" title="String">msg</a>)
+	<span class="keyword">private</span> <span class="keyword">def</span> <a title="(sbt.NotInCache)Nothing" id="27047">invalid</a>(<a title="sbt.NotInCache" id="86621">e</a>: <a href="IvyCache.scala.html#7614" title="sbt.NotInCache">NotInCache</a>) = <span title="Nothing" class="keyword">throw</span> <span title="sbt.InvalidComponent" class="keyword">new</span> <a href="#11337" title="sbt.InvalidComponent">InvalidComponent</a>(<a href="#86621" title="sbt.NotInCache">e</a>.<a title="()java.lang.String" id="17616">getMessage</a>, <a href="#86621" title="sbt.NotInCache">e</a>)
+
+	<span class="keyword">def</span> <a title="(String,Iterable[java.io.File])Unit" id="27048">define</a>(<a title="String" id="65032">id</a>: <span title="String">String</span>, <a title="Iterable[java.io.File]" id="65033">files</a>: <span title="Iterable[java.io.File]">Iterable</span>[File]) = <a href="#27036" title="(=&gt; Unit)Unit">lockLocalCache</a> { <a href="#27061" title="xsbti.ComponentProvider">provider</a>.<a href="xsbti/ComponentProvider.java.html#65039" title="(java.lang.String,Array[java.io.File])Unit">defineComponent</a>(<a href="#65032" title="String">id</a>, <a href="#65033" title="Iterable[java.io.File]">files</a>.<a title="=&gt; Seq[java.io.File]" id="16094">toSeq</a>.<a title="Array[java.io.File]" id="16552">toArray</a>) }
+	<span class="comment">/** Retrieve the file for component 'id' from the local repository. */</span>
+	<span class="keyword">private</span> <span class="keyword">def</span> <a title="(String)Unit" id="27049">update</a>(<a title="String" id="86616">id</a>: <span title="String">String</span>): <span title="Unit">Unit</span> = <a href="IvyCache.scala.html#10393" title="object sbt.IvyCache">IvyCache</a>.<a href="IvyCache.scala.html#83651" title="(sbt.ModuleID,Option[xsbti.GlobalLock],sbt.IvyLogger)((java.io.File) =&gt; Unit)Unit">withCachedJar</a>(<a href="#27050" title="(String)sbt.ModuleID">sbtModuleID</a>(<a href="#86616" title="String">id</a>), <span title="(xsbti.GlobalLock)Some[xsbti.GlobalLock]">Some</span>(<a href="#27060" title="xsbti.GlobalLock">globalLock</a>), <a href="#27062" title="=&gt; sbt.IvyLogger">log</a>)(<a title="java.io.File" id="86666">jar</a> =&gt; <a href="#27048" title="(String,Iterable[java.io.File])Unit">define</a>(<a href="#86616" title="String">id</a>, <a title="(java.io.File*)Seq[java.io.File]" id="730">Seq</a>(<a href="#86666" title="java.io.File">jar</a>)) )
+
+	<span class="keyword">private</span> <span class="keyword">def</span> <a title="(String)sbt.ModuleID" id="27050">sbtModuleID</a>(<a title="String" id="86658">id</a>: <span title="String">String</span>) = <a href="IvyInterface.scala.html#21925" title="(String,String,String)sbt.ModuleID">ModuleID</a>(<span title="java.lang.String(&quot;org.scala-tools.sbt&quot;)" class="string">&quot;org.scala-tools.sbt&quot;</span>, <a href="#86658" title="String">id</a>, <a href="#8746" title="object sbt.ComponentManager">ComponentManager</a>.<a href="#82443" title="=&gt; java.lang.String">stampedVersion</a>)
+	<span class="comment">/** Install the files for component 'id' to the local repository.  This is usually used after writing files to the directory returned by 'location'. */</span>
+	<span class="keyword">def</span> <a title="(String)Unit" id="27051">cache</a>(<a title="String" id="86638">id</a>: <span title="String">String</span>): <span title="Unit">Unit</span> = <a href="IvyCache.scala.html#10393" title="object sbt.IvyCache">IvyCache</a>.<a href="IvyCache.scala.html#83648" title="(sbt.ModuleID,java.io.File,Option[xsbti.GlobalLock],sbt.IvyLogger)Unit">cacheJar</a>(<a href="#27050" title="(String)sbt.ModuleID">sbtModuleID</a>(<a href="#86638" title="String">id</a>), <a href="#27045" title="(String)(sbt.IfMissing)java.io.File">file</a>(<a href="#86638" title="String">id</a>)(<a href="#9562" title="object sbt.IfMissing">IfMissing</a>.<a href="#64988" title="object sbt.IfMissing.Fail">Fail</a>), <span title="(xsbti.GlobalLock)Some[xsbti.GlobalLock]">Some</span>(<a href="#27060" title="xsbti.GlobalLock">globalLock</a>), <a href="#27062" title="=&gt; sbt.IvyLogger">log</a>)
+	<span class="keyword">def</span> <a title="(String)Unit" id="27052">clearCache</a>(<a title="String" id="65005">id</a>: <span title="String">String</span>): <span title="Unit">Unit</span> = <a href="#27039" title="(=&gt; Unit)Unit">lockGlobalCache</a> { <a href="IvyCache.scala.html#10393" title="object sbt.IvyCache">IvyCache</a>.<a href="IvyCache.scala.html#83649" title="(sbt.ModuleID,Option[xsbti.GlobalLock],sbt.IvyLogger)Unit">clearCachedJar</a>(<a href="#27050" title="(String)sbt.ModuleID">sbtModuleID</a>(<a href="#65005" title="String">id</a>), <span title="(xsbti.GlobalLock)Some[xsbti.GlobalLock]">Some</span>(<a href="#27060" title="xsbti.GlobalLock">globalLock</a>), <a href="#27062" title="=&gt; sbt.IvyLogger">log</a>) }
+}
+<span class="keyword">class</span> <a title="class InvalidComponent extends java.lang.RuntimeException with ScalaObject" id="11337">InvalidComponent</a>(<a title="String" id="86629">msg</a>: <span title="String">String</span>, <a title="Throwable" id="86630">cause</a>: <a title="Throwable" id="2088">Throwable</a>) <span class="keyword">extends</span> <a title="java.lang.RuntimeException" id="19484">RuntimeException</a>(<a href="#86629" title="String">msg</a>, <a href="#86630" title="Throwable">cause</a>)
+{
+	<span class="keyword">def</span> <a title="(String)sbt.InvalidComponent" id="64979" class="keyword">this</a>(<a title="String" id="86624">msg</a>: <span title="String">String</span>) = <a href="#11337" title="InvalidComponent.this.type" class="keyword">this</a>(<a href="#86624" title="String">msg</a>, <span title="Null(null)" class="keyword">null</span>)
+}
+<span class="keyword">sealed</span> <span class="keyword">trait</span> <a title="trait IfMissing extends java.lang.Object with NotNull" id="9561">IfMissing</a> <span class="keyword">extends</span> <span title="NotNull">NotNull</span>
+<span class="keyword">object</span> <a title="object sbt.IfMissing" id="9562">IfMissing</a>
+{
+	<span class="keyword">object</span> <a title="object sbt.IfMissing.Fail" id="64988">Fail</a> <span class="keyword">extends</span> <a href="#9561" title="sbt.IfMissing">IfMissing</a>
+	<span class="keyword">final</span> <span class="keyword">class</span> <a title="class Define extends java.lang.Object with sbt.IfMissing with ScalaObject" id="64990">Define</a>(<span class="keyword">val</span> <a title="Boolean" id="65000">cache</a>: <a title="Boolean" id="2115">Boolean</a>, <a title="=&gt; Unit" id="65001">define</a>: =&gt; Unit) <span class="keyword">extends</span> <a href="#9561" title="sbt.IfMissing">IfMissing</a> { <span class="keyword">def</span> <a title="()Unit" id="64999">apply</a>() = <a href="#65001" title="=&gt; Unit">define</a> }
+}
+<span class="keyword">object</span> <a title="object sbt.ComponentManager" id="8746">ComponentManager</a>
+{
+	<span class="keyword">lazy</span> <span class="keyword">val</span> <a href="#17583" title="(java.lang.String, java.lang.String)" id="82438">(</a><a href="#82437" title="java.lang.String" id="17583">version</a>, <a href="#82437" title="java.lang.String" id="17585">timestamp</a>) =
+	{
+		<span class="keyword">val</span> <a title="java.util.Properties" id="82447">properties</a> = <span title="java.util.Properties" class="keyword">new</span> java.util.<a title="java.util.Properties" id="5550">Properties</a>
+		<span class="keyword">val</span> <a title="java.io.InputStream" id="82448">propertiesStream</a> = <a href="#82446" title="=&gt; java.net.URL">versionResource</a>.<a title="()java.io.InputStream" id="25114">openStream</a>
+		<span class="keyword">try</span> { <a href="#82447" title="java.util.Properties">properties</a>.<a title="(java.io.InputStream)Unit" id="56188">load</a>(<a href="#82448" title="java.io.InputStream">propertiesStream</a>) } <span class="keyword">finally</span> { <a href="#82448" title="java.io.InputStream">propertiesStream</a>.<a title="()Unit" id="29595">close</a>() }
+		<span title="(java.lang.String,java.lang.String)(java.lang.String, java.lang.String)">(</span><a href="#82447" title="java.util.Properties">properties</a>.<span title="(java.lang.String)java.lang.String">getProperty</span>(<span title="java.lang.String(&quot;version&quot;)" class="string">&quot;version&quot;</span>), <a href="#82447" title="java.util.Properties">properties</a>.<span title="(java.lang.String)java.lang.String">getProperty</span>(<span title="java.lang.String(&quot;timestamp&quot;)" class="string">&quot;timestamp&quot;</span>))
+	}
+	<span class="keyword">lazy</span> <span class="keyword">val</span> <a title="java.lang.String" id="82444">stampedVersion</a> = <a href="#82439" title="=&gt; java.lang.String">version</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot;_&quot;)" class="string">&quot;_&quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#82441" title="=&gt; java.lang.String">timestamp</a>
+
+	<span class="keyword">import</span> java.net.URL
+	<span class="keyword">private</span> <span class="keyword">def</span> <a title="=&gt; java.net.URL" id="82446">versionResource</a>: <a title="java.net.URL" id="4342">URL</a> =
+	{
+		<span class="keyword">import</span> java.util.Collections.list
+		<span class="comment">// could be just:</span>
+		<span class="comment">//    getClass.getResource(&quot;/xsbt.version.properties&quot;)</span>
+		<span class="comment">// but the launcher up until 0.7.1 contained a stale xsbt.version.properties.</span>
+		<span class="comment">//    post-0.7.1, only xsbti.jar contains xsbt.version.properties</span>
+		<span class="comment">// for the transition, we take the last one, which is the one we want because of the order resources are searched</span>
+		<a title="(java.util.Enumeration[java.net.URL])java.util.ArrayList[java.net.URL]" id="5416">list</a>(<a title="()java.lang.Class[_ &lt;: java.lang.Object]" id="3459">getClass</a>.<a title="()java.lang.ClassLoader" id="3900">getClassLoader</a>.<a title="(java.lang.String)java.util.Enumeration[java.net.URL]" id="23293">getResources</a>(<span title="java.lang.String(&quot;xsbt.version.properties&quot;)" class="string">&quot;xsbt.version.properties&quot;</span>)).<a title="(Array[java.net.URL])Array[java.net.URL]" id="42104">toArray</a>(<span title="Array[java.net.URL]" class="keyword">new</span> <a title="Array[java.net.URL]" id="1032">Array</a>[URL](<span title="Int(0)" class="int">0</span>)).<a title="=&gt; java.net.URL" id="16525">last</a>
+	}
+}
+        </pre>
+    </body>
+</html>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+			<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" ></meta>
+        <title>sbt/processor/Retrieve.scala</title>
+        <script type="text/javascript" src="../../jquery-all.js"></script>
+        <script type="text/javascript" src="../../linked.js"></script>
+        <link rel="stylesheet" type="text/css" href="../../style.css" title="Style"></link>
+    </head>
+    <body>
+        <pre>
+<span class="comment">/* sbt -- Simple Build Tool
+ * Copyright 2010  Mark Harrah
+ */</span>
+<span class="keyword">package</span> sbt.processor
+
+<span class="keyword">import</span> java.io.File
+
+<span class="keyword">class</span> <a title="class Retrieve extends java.lang.Object with NotNull with ScalaObject" id="12011">Retrieve</a>(<a title="java.io.File" id="55576">retrieveDirectory</a>: <span title="java.io.File">File</span>, <a title="sbt.ModuleID" id="55577">module</a>: <a href="../../IvyInterface.scala.html#11292" title="sbt.ModuleID">ModuleID</a>, <a title="xsbti.GlobalLock" id="55578">lock</a>: xsbti.<a href="../../xsbti/GlobalLock.java.html#5863" title="xsbti.GlobalLock">GlobalLock</a>, <a title="java.io.File" id="55579">lockFile</a>: <span title="java.io.File">File</span>, <a title="Seq[sbt.Resolver]" id="55580">repositories</a>: <a title="Seq[sbt.Resolver]" id="729">Seq</a>[Resolver], <a title="sbt.IvyLogger" id="55581">log</a>: <a href="../../IvyLogger.scala.html#9870" title="sbt.IvyLogger">IvyLogger</a>) <span class="keyword">extends</span> <a title="NotNull" id="189">NotNull</a>
+{
+	<span class="keyword">def</span> <a title="()Unit" id="55566">retrieve</a>()
+	{
+		<span class="keyword">val</span> <a title="sbt.IvyPaths" id="55582">paths</a> = <span title="sbt.IvyPaths" class="keyword">new</span> <a href="../../IvyConfigurations.scala.html#9564" title="sbt.IvyPaths">IvyPaths</a>(<a href="#55576" title="java.io.File">retrieveDirectory</a>, <span title="object None">None</span>)
+		<span class="keyword">val</span> <a title="sbt.IvyScala" id="55583">ivyScala</a> = <span title="sbt.IvyScala" class="keyword">new</span> <a href="../../IvyScala.scala.html#7278" title="sbt.IvyScala">IvyScala</a>(<span title="java.lang.String(&quot;&quot;)" class="string">&quot;&quot;</span>, <span title="object Nil">Nil</span>, <span title="Boolean(false)" class="keyword">false</span>, <span title="Boolean(true)" class="keyword">true</span>)
+		<span class="keyword">val</span> <a title="Seq[sbt.Resolver]" id="55584">fullRepositories</a> = <a href="../../IvyInterface.scala.html#11134" title="object sbt.Resolver">Resolver</a>.<a href="../../IvyInterface.scala.html#14820" title="(Seq[sbt.Resolver])Seq[sbt.Resolver]">withDefaultResolvers</a>(<a href="#55580" title="Seq[sbt.Resolver]">repositories</a>) <span class="comment">// TODO: move this somewhere under user control</span>
+		<span class="keyword">val</span> <a title="sbt.InlineIvyConfiguration" id="55585">configuration</a> = <span title="sbt.InlineIvyConfiguration" class="keyword">new</span> <a href="../../IvyConfigurations.scala.html#11217" title="sbt.InlineIvyConfiguration">InlineIvyConfiguration</a>(<a href="#55582" title="sbt.IvyPaths">paths</a>, <a href="#55584" title="Seq[sbt.Resolver]">fullRepositories</a>, <span title="object Nil">Nil</span>, <span title="object Nil">Nil</span>, <span title="(xsbti.GlobalLock)Some[xsbti.GlobalLock]">Some</span>(<a href="#55578" title="xsbti.GlobalLock">lock</a>), <a href="#55581" title="sbt.IvyLogger">log</a>)
+		<span class="keyword">val</span> <a title="sbt.InlineConfiguration" id="55586">moduleConfiguration</a> = <span title="sbt.InlineConfiguration" class="keyword">new</span> <a href="../../IvyConfigurations.scala.html#8892" title="sbt.InlineConfiguration">InlineConfiguration</a>(<a href="#55567" title="=&gt; sbt.ModuleID">thisID</a>, <a href="#55577" title="sbt.ModuleID">module</a> <a href="#55598" title="(sbt.ModuleID)List[sbt.ModuleID]" id="17725">::</a> <span title="object Nil">Nil</span>, scala.xml.<a title="object scala.xml.NodeSeq" id="14444">NodeSeq</a>.<a title="=&gt; &lt;refinement&gt; extends scala.xml.NodeSeq" id="19718">Empty</a>, <span title="object Nil">Nil</span>, <span title="object None">None</span>, <span title="(sbt.IvyScala)Some[sbt.IvyScala]">Some</span>(<a href="#55583" title="sbt.IvyScala">ivyScala</a>), <span title="Boolean(false)" class="keyword">false</span>)
+		<span class="keyword">val</span> <a title="sbt.UpdateConfiguration" id="55587">update</a> = <span title="sbt.UpdateConfiguration" class="keyword">new</span> <a href="../../IvyActions.scala.html#7980" title="sbt.UpdateConfiguration">UpdateConfiguration</a>(<a href="#55576" title="java.io.File">retrieveDirectory</a>, <a href="#55568" title="=&gt; java.lang.String">retrievePattern</a>, <span title="Boolean(true)" class="keyword">true</span>, <span title="Boolean(true)" class="keyword">true</span>)
+		<span class="keyword">val</span> <a title="sbt.IvySbt" id="55588">ivySbt</a> = <span title="sbt.IvySbt" class="keyword">new</span> <a href="../../Ivy.scala.html#7749" title="sbt.IvySbt">IvySbt</a>(<a href="#55585" title="sbt.InlineIvyConfiguration">configuration</a>)
+		<span class="keyword">val</span> <a title="ivySbt.Module" id="55589">ivyModule</a> = <span title="ivySbt.Module" class="keyword">new</span> <a href="#55588" title="sbt.IvySbt">ivySbt</a>.<a href="../../Ivy.scala.html#19629" title="ivySbt.Module">Module</a>(<a href="#55586" title="sbt.InlineConfiguration">moduleConfiguration</a>)
+		
+		<a href="../../xsbti/GlobalLock.java.html#22809" title="(java.io.File,java.util.concurrent.Callable[Unit])Unit">lock</a>(<a href="#55579" title="java.io.File">lockFile</a>, <a href="#34141" title="(=&gt; Unit)java.util.concurrent.Callable[Unit]">Callable</a> { <a href="../../IvyActions.scala.html#10381" title="object sbt.IvyActions">IvyActions</a>.<a href="../../IvyActions.scala.html#19607" title="(sbt.IvySbt#Module,sbt.UpdateConfiguration)Unit">update</a>(<a href="#55589" title="ivySbt.Module">ivyModule</a>, <a href="#55587" title="sbt.UpdateConfiguration">update</a>) } )
+	}
+	<span class="keyword">def</span> <a title="=&gt; sbt.ModuleID" id="55567">thisID</a> = <a href="../../IvyInterface.scala.html#21925" title="(String,String,String)sbt.ModuleID">ModuleID</a>(<span title="java.lang.String(&quot;org.scala-tools.sbt&quot;)" class="string">&quot;org.scala-tools.sbt&quot;</span>, <span title="java.lang.String(&quot;retrieve-processor&quot;)" class="string">&quot;retrieve-processor&quot;</span>, <span title="java.lang.String(&quot;1.0&quot;)" class="string">&quot;1.0&quot;</span>)
+	<span class="keyword">def</span> <a title="=&gt; java.lang.String" id="55568">retrievePattern</a> = <span title="java.lang.String(&quot;[artifact](-[revision])(-[classifier]).[ext]&quot;)" class="string">&quot;[artifact](-[revision])(-[classifier]).[ext]&quot;</span>
+}
+
+<span class="keyword">object</span> <a title="object sbt.processor.Callable" id="11901">Callable</a>
+{
+	<span class="keyword">def</span> <a title="[T](=&gt; T)java.util.concurrent.Callable[T]" id="34141">apply</a>[<a title="&gt;: Nothing &lt;: Any" id="34143">T</a>](<a title="=&gt; T" id="34144">f</a>: =&gt; T): java.util.concurrent.<span title="java.util.concurrent.Callable[T]">Callable</span>[T] = <a title="template $anon extends java.lang.Object with java.util.concurrent.Callable[T]" id="55607" class="keyword">new</a> java.util.concurrent.<span title="java.util.concurrent.Callable[T]">Callable</span>[T] { <span class="keyword">def</span> <a title="()T" id="55609">call</a> = <a href="#34144" title="=&gt; T">f</a> }
+}
+        </pre>
+    </body>
+</html>
