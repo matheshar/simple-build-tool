@@ -56,13 +56,19 @@ Typical usage in `sbt` is to build up paths:
     def mainScalaSourcePath = mainSourcePath / scalaDirectoryName
 }}}
 
+The argument to `\` may not contain slashes.  If you want to make a relative path that includes slashes, use `Path.fromString`:
+{{{
+    def aPath: Path = "some" / "path"
+    def relPath: Path = Path.fromString(aPath, "a/sub/path")
+}}}
+
 To convert a `java.io.File` to a `Path`, use `Path.fromFile`.  To convert a Path to a File, use `asFile`.  For example:
 {{{
     def aPath: Path = "some" / "path"
     def aFile: File = aPath.asFile
 
     def tmpFile: File = new File(System.getProperty(java.io.tmpdir))
-	def pathFromFile: Path = Path.fromFile(tmpFile)
+    def pathFromFile: Path = Path.fromFile(tmpFile)
 }}}
 
 === Path Finders ===
