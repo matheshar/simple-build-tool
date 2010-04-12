@@ -43,3 +43,14 @@ class WebstartTest(info: ProjectInfo) extends ParentProject(info)
   }
 }
 }}}
+
+To request full access to the client machine, use:
+{{{
+  <security>
+    <all-permissions/>
+  </security> 
+}}}
+
+after the `information` tag.
+
+For full details, see the [http://java.sun.com/javase/6/docs/technotes/guides/javaws/developersguide/contents.html webstart guide] and the [http://java.sun.com/j2se/1.4.2/docs/guide/jws/developersguide/syntax.html JNLP File Syntax] page.
