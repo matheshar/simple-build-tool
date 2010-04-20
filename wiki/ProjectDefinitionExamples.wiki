@@ -86,6 +86,22 @@ class SampleProject(info: ProjectInfo) extends DefaultProject(info)
 }
 }}}
 
+Or, exclude dependencies globally by putting the `exclude` element directly under `dependencies`.  Again, see the [http://ant.apache.org/ivy/history/trunk/ivyfile/exclude.html Ivy documentation] for details.
+
+{{{
+import sbt._
+
+class SampleProject(info: ProjectInfo) extends DefaultProject(info)
+{
+  val jm = "javax.mail" % "mail" % "1.4.2"
+
+  override def ivyXML =
+    <dependencies>
+      <exclude module="activation"/>
+    </dependencies>
+}
+}}}
+
 
 === Specify Dependencies Inline ===
 
