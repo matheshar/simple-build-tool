@@ -1,4 +1,11 @@
-This page describes how to use sbt's Ivy interface directly.  This interface is new in 0.7.  The source code can be found in the [http://github.com/harrah/xsbt/tree/master/ivy/ Ivy project of xsbt].
+This page describes how to use sbt's Ivy interface directly.  This interface is new in 0.7.  The source code can be found in the [http://github.com/harrah/xsbt/tree/master/ivy/ Ivy project of xsbt].  The Ivy interface is published to the `databinder.net` repository (Ivy metadata only).  You can use it in an `sbt` project like:
+
+{{{
+val sbtIvy = "org.scala-tools.sbt" %% "ivy" % "0.7.3"
+val dbRepo = Resolver.url("technically.us", new URL("http://databinder.net/repo/"))(Resolver.ivyStylePatterns)
+}}}
+
+Note that sbt, including the Ivy interface, is only built and published against Scala 2.7.7.
 
 <wiki:toc max_depth="3"/>
 
@@ -185,7 +192,7 @@ When `synchronize` is true, Ivy will remove old artifacts from the destination d
 
 == Execution ==
 
-With all of the configuration above, we can now run Ivy.  This is a two step process.  First, create instances of IvySbt and IvySbt.Module.  Think of these loosely as a connection to Ivy and a configured module, respectively.  There is some overhead saved by reusing these instances when the configuration is unchanged, especially when using external XML configuration files.
+With all of the configuration above, we can now run Ivy.  This is a two step process.  First, create instances of `IvySbt` and `IvySbt.Module`.  Think of these loosely as a connection to Ivy and a configured module, respectively.  There is some overhead saved by reusing these instances when the configuration is unchanged, especially when using external XML configuration files.
 
 Finally, call the appropriate method(s) in `IvyActions`.
 
