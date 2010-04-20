@@ -116,3 +116,38 @@ The project organization was introduced after a default behavior of using the na
 The `sbtVersion` property is used to determine the version of `sbt` that is used to build the project.
 
 The `defScalaVersion` property determines the Scala version used to run `sbt`.  This currently cannot have a value other than `'2.7.7'`.  The `buildScalaVersions` property defines the space-delimited versions of Scala used to build the project.  The first version listed is used initially.  All versions listed are used for [CrossBuild cross-building].  Inside a project definition, use `buildScalaVersion` to get the version of Scala currently building the project.
+
+== Additional Property Files ==
+
+Properties are defined in an [http://simple-build-tool.googlecode.com/svn/artifacts/latest/api/sbt/Environment.html Environment].  The built-in implementation in `sbt` that is used by `Project` is [http://simple-build-tool.googlecode.com/svn/artifacts/latest/api/sbt/BasicEnvironment.html BasicEnvironment].
+
+To create a new environment, specify a `Logger`, the location of the backing file, and optionally a parent `Environment` from which values can be inherited.  Then, define properties for that environment.  A basic example:
+
+{{{
+import sbt._
+
+class Test(info: ProjectInfo) extends DefaultProject(info)
+{
+  lazy val extra = new BasicEnvironment
+  {
+    // use the project's Logger for any properties-related logging
+    def log = Test.this.log
+    
+    // the properties file will be read from/stored to project/extra.properties
+    def envBackingPath = info.builderPath / "extra.properties"
+
+    // define some properties that will go in project/extra.properties
+    lazy val firstProperty = property[String]
+    lazy val secondProperty = property[String]
+  }
+}
+}}}
+
+To inherit values from another Environment, override `parentEnvironment` in the new `BasicEnvironment`:
+{{{
+  ...
+  override def parentEnvironment = Some(Test.this)
+  ...
+}}}
+
+If a property defined in the new environment is not specified in the new properties file, its value is taken from a property with the same name in the parent environment.
