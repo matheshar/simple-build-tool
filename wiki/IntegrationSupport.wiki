@@ -6,11 +6,22 @@ This page describes approaches to using `sbt` with third-party tools.  It is a w
 
 There is a [http://github.com/RayRacine/scallap/tree/master/tools/emacs script] to run `sbt` as an inferior-mode process from within emacs.  It uses `compile.el`, allowing one to migrate through the compiler errors.
 
-On Windows, disable JLine support by adding the system property
+On Windows, disable the native JLine interface using by adding the system property
+{{{
+-Djline.WindowsTerminal.directConsole=false
+}}}
+to your `sbt` startup script or disable JLine support completely with the system property:
 {{{
 -Djline.terminal=jline.UnsupportedTerminal
 }}}
-to your `sbt` startup script.
+
+You may want to make your sbt startup script look something like the following:
+{{{
+if "%TERM%"=="emacs" set jlineopt=-Djline.WindowsTerminal.directConsole=false
+java -Xmx512M %jlineopt% -jar ...
+}}}
+
+(From the comments in [http://code.google.com/p/simple-build-tool/issues/detail?id=63 #63])
 
 = Vim =
 
