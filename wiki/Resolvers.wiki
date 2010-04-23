@@ -55,6 +55,12 @@ Define a URL repository at .`"http://example.org/repo-releases/"`.
   val testRepo = Resolver.url("my-test-repo", url)
 }}}
 
+To specify an Ivy repository, use:
+{{{
+  val testRepo = Resolver.url("my-test-repo", url)(Resolver.ivyStylePatterns)
+}}}
+or customize the layout pattern describe in the [Resolvers#Custom_Layout Custom Layout] section below.
+
 === SFTP and SSH Repositories ===
 
 The following defines a repository that is served by SFTP from host `"example.org"`:
