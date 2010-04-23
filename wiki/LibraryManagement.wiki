@@ -125,9 +125,17 @@ Get the jdk15 version of TestNG:
 
 === Extra Attributes ===
 
-[http://ant.apache.org/ivy/history/2.1.0/concept.html#extra Extra attributes] can be specified with the `extra` method:
+[http://ant.apache.org/ivy/history/2.1.0/concept.html#extra Extra attributes] can be specified by passing key/value pairs to the `extra` method.
+
+To select dependencies by extra attributes:
 {{{
   val dep = "org" % "name" % "rev" extra("color" -> "blue")
+}}}
+
+To define extra attributes on the current project:
+{{{
+  override def projectID =
+    super.projectID extra("color" -> "blue", "component" -> "compiler-interface")
 }}}
 
 === Inline Ivy XML ===
