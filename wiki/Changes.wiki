@@ -1,4 +1,4 @@
-=== 0.7.2 to 0.7.4 (unreleased) ===
+=== 0.7.3 to 0.7.4 (unreleased) ===
  * prefix continuous compilation with run number for better feedback when logging level is 'warn'
  * Added `pomRepositoryFilter(repo: MavenRepository): Boolean` that can be overridden to exclude local repositories by default
  * Added `pomPostProcess(pom: Node): Node` to make advanced manipulation of the default pom easier (`pomExtra` already covers basic cases)
@@ -8,6 +8,7 @@
  * More accurate detection of invalid test names.  Invalid test names now generate an error and prevent the test action from running instead of just logging a warning.
  * Fix issue with using 2.8.0.RC1 compiler in tests.
  * Precompile compiler interface against 2.8.0.RC1
+ * Add `consoleOptions` for specifying options to the console.  It defaults to `compileOptions`.
 
 === 0.7.2 to 0.7.3 ===
  * Fixed issue with scala.library.jar not being on javac's classpath
