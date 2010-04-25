@@ -98,7 +98,7 @@ See the Existing Plugins section at the top of the page for examples of plugins.
 
 The installer plugin provides a task `'installer'` that creates a self-executable jar that bundles the current project.  When executed, the jar will extract the sbt launcher and the project, run sbt on the project, and execute predefined commands.
 
-To use it, declare it in your plugins:
+To use it, first declare the plugin:
 
  `project/plugins/Plugins.scala`
 {{{
@@ -108,7 +108,7 @@ class Plugins(info: ProjectInfo) extends PluginDefinition(info) {
 }
 }}}
 
-and mix it into your build definition:
+Then, mix the `BasicSelfExtractingProject` trait into your build definition:
 
  `project/build/YourProject.scala`
 {{{
@@ -122,6 +122,7 @@ class YourProject(info: ProjectInfo) extends DefaultProject(info)
 
 Overriding `installActions` is optional.  It defines the actions that sbt runs after the project is extracted.  By default, 'update' and 'compile' are run.
 
-To create the self-extracting jar, run the `installer` action on the project.  The resulting jar can be run with `java -jar ...`.
+Finally, create the self-extracting jar by running the `installer` action on the project.  The resulting jar can be run with `java -jar ...`.
 
-The installer is a subproject of sbt in the [http://github.com/harrah/xsbt/tree/master/sbt/install/ sbt/install/ directory].
+
+The installer project is a subproject of sbt in the [http://github.com/harrah/xsbt/tree/master/sbt/install/ sbt/install/ directory].
