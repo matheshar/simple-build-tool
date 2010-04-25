@@ -30,3 +30,16 @@ You can still specify compiler plugins manually.  For example:
 {{{
   override def compileOptions = CompileOption("-Xplugin:<path-to-sxr>/sxr-0.2.3.jar") :: super.compileOptions.toList
 }}}
+
+== Continuations Plugin Example ==
+
+Support for continuations in Scala 2.8 is implemented as a compiler plugin.  You can use `AutoCompilerPlugins` for this, as shown here.
+{{{
+import sbt._
+
+class ContinuationsExample(info: ProjectInfo) extends DefaultProject(info) with AutoCompilerPlugins
+{
+  val cont = compilerPlugin("org.scala-lang.plugins" % "continuations" % "2.8.0.RC1")
+  override def compileOptions = super.compileOptions ++ compileOptions("-P:continuations:enable")
+}
+}}}
