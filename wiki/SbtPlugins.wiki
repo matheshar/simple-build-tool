@@ -5,7 +5,7 @@
  * [http://github.com/hoffrocket/sbt-yui yuicompressor]
  * [http://github.com/rubbish/cuke4duke-sbt-plugin/ cuke4duke]
  * [http://github.com/jberkel/android-plugin Android]
- * [http://github.com/harrah/xsbt/tree/master/sbt/install/ Installer]
+ * [SbtPlugins#Installer_Plugin Installer]
  * [http://code.google.com/p/simple-build-tool/wiki/ExampleSbtTest sbt test framework]
  * [http://bmc.github.com/sbt-plugins/ EditSource, IzPack, and Markdown]
  * [http://github.com/Gekkio/sbt-jrebel-plugin JRebel]
@@ -32,14 +32,14 @@ res1: com.petebevin.markdown.MarkdownProcessor = Markdown Processor for Java 0.3
 
 This dependency was independent of `sbt`.  You can also create and use plugins that extend or use `sbt`.  The rest of this page describes `sbt` plugins.  The first part shows the results of a plugin that creates a self-extracting jar out of a project.   The second part shows how to create a simple plugin that provides a new action to a project.
 
-== Installer Example ==
+== Hello Lift Installer Example ==
 
  * Download the [http://simple-build-tool.googlecode.com/svn/artifacts/latest/examples/hello-lift-1.0-setup.jar jar]
  * Run `java -jar hello-lift-1.0-setup.jar` .  The Hello Lift project and an embedded `sbt` launcher will be extracted.  The project will be loaded and predefined actions run.  In this case, the project will be set up, dependencies will be downloaded, and the project will be compiled and Jetty started.  Browse to [http://localhost:8080].
  * You have a ready example Lift project.  For example, you can enter the extracted project directory and start sbt with `java -jar sbt-launcher-0.7.1.jar`.
  * The project uses [http://github.com/harrah/browse/ Scala X-Ray] to generate browsable sources.  You can view these in the `project/target/classes.sxr` directory.
  * You can run `installer` to regenerate the self-extracting jar from the project.  Note: there is currently the issue of including the sbt-launcher in the project zip, making the jar substantially larger than necessary.
- * See the `project/plugins/Plugins.scala` directory for how the plugin is defined.  The actual project for the plugin is the [http://github.com/harrah/xsbt/tree/master/sbt/install sbt install subproject].
+ * See the `project/plugins/Plugins.scala` directory for how the plugin is defined or see the [SbtPlugins#Installer_Plugin Installer Plugin] section below.
  
 == Hello World Plugin ==
 
@@ -93,3 +93,35 @@ sbt plugins are a way to reuse code between project definitions.  They can consi
 You can provide a trait that extends `Project`, `DefaultProject`, or `DefaultWebProject` that the user then mixes in to use.  You can provide multiple project types or you can just provide code that can be used to implement tasks.
 
 See the Existing Plugins section at the top of the page for examples of plugins.
+
+= Installer Plugin =
+
+The installer plugin provides a task `'installer'` that creates a self-executable jar that bundles the current project.  When executed, the jar will extract the sbt launcher and the project, run sbt on the project, and execute predefined commands.
+
+To use it, declare it in your plugins:
+
+ `project/plugins/Plugins.scala`
+{{{
+import sbt._
+class Plugins(info: ProjectInfo) extends PluginDefinition(info) {
+  val extract = "org.scala-tools.sbt" % "installer-plugin" % "0.3.0"
+}
+}}}
+
+and mix it into your build definition:
+
+ `project/build/YourProject.scala`
+{{{
+import sbt._
+class YourProject(info: ProjectInfo) extends DefaultProject(info) 
+  with extract.BasicSelfExtractingProject
+{
+  override def installActions = "update" :: "run" :: Nil
+}
+}}}
+
+Overriding `installActions` is optional.  It defines the actions that sbt runs after the project is extracted.  By default, 'update' and 'compile' are run.
+
+To create the self-extracting jar, run the `installer` action on the project.  The resulting jar can be run with `java -jar ...`.
+
+The installer is a subproject of sbt in the [http://github.com/harrah/xsbt/tree/master/sbt/install/ sbt/install/ directory].
