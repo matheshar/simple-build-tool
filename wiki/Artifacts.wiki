@@ -55,7 +55,7 @@ A common need is to publish source and doc artifacts.  The declarations would lo
 
   // define the artifacts
   val sourceArtifact = Artifact(artifactID, "src", "jar", Some("sources"), Nil, None)
-  val docsArtifact = Artifact(artifactID, "docs", "jar", Some("javadoc"), Nil, None)
+  val docsArtifact = Artifact(artifactID, "doc", "jar", Some("javadoc"), Nil, None)
 }}}
 See [Publishing] for the full details on publishing sources and docs.
 
