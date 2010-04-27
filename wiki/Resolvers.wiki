@@ -76,6 +76,19 @@ To specify a base path:
   val sftpRepo = Resolver.sftp("my-sftp-repo", "example.org", "maven2/repo-releases/")
 }}}
 
+Authentication for the repositories returned by `sftp` and `ssh` can be configured by the `as` methods.
+
+To use password authentication:
+{{{
+  val sshRepo = Resolver.ssh("my-ssh-repo", "example.org") as("name", "password")
+}}}
+
+To use key authentication:
+{{{
+  val keyFile: File = ...
+  val sshRepo = Resolver.ssh("my-ssh-repo", "example.org") as(keyFile, "keyFilePassword")
+}}}
+
 == Custom Layout ==
 
 These examples specify custom repository layouts using patterns.  The factory methods accept an implicit `Patterns` instance that defines the patterns to use.  The patterns are first resolved against the base file or URL.  The implicit normally supplied gives the default Maven-style layout.  Provide a different Patterns object to use a different layout.  For example:
