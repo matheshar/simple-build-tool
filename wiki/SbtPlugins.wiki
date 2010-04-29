@@ -2,6 +2,7 @@
 
 == Existing Plugins ==
  * [http://technically.us/spde/About spde]
+ * [http://github.com/weiglewilczek/bnd4sbt bnd4sbt]
  * [http://github.com/hoffrocket/sbt-yui yuicompressor]
  * [http://github.com/rubbish/cuke4duke-sbt-plugin/ cuke4duke]
  * [http://github.com/jberkel/android-plugin Android]
