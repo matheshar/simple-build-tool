@@ -80,13 +80,21 @@ Authentication for the repositories returned by `sftp` and `ssh` can be configur
 
 To use password authentication:
 {{{
-  val sshRepo = Resolver.ssh("my-ssh-repo", "example.org") as("name", "password")
+  val sshRepo = Resolver.ssh("my-ssh-repo", "example.org") as("user", "password")
+}}}
+or to be prompted for the password (will be in 0.7.4):
+{{{
+  val sshRepo = Resolver.ssh("my-ssh-repo", "example.org") as("user")
 }}}
 
-To use key authentication:
+To use key authentication (will be in 0.7.4):
 {{{
   val keyFile: File = ...
-  val sshRepo = Resolver.ssh("my-ssh-repo", "example.org") as(keyFile, "keyFilePassword")
+  val sshRepo = Resolver.ssh("my-ssh-repo", "example.org") as("user", keyFile, "keyFilePassword")
+}}}
+or if no keyfile password is required or if you want to be prompted for it:
+{{{
+  val sshRepo = Resolver.ssh("my-ssh-repo", "example.org") as("user", keyFile)
 }}}
 
 == Custom Layout ==
