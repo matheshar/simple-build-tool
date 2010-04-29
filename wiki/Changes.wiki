@@ -9,6 +9,7 @@
  * Fix issue with using 2.8.0.RC1 compiler in tests.
  * Precompile compiler interface against 2.8.0.RC1
  * Add `consoleOptions` for specifying options to the console.  It defaults to `compileOptions`.
+ * Properly support sftp/ssh repositories using key-based authentication.  See the updated section of the [Resolvers] page.
 
 === 0.7.2 to 0.7.3 ===
  * Fixed issue with scala.library.jar not being on javac's classpath
