@@ -74,11 +74,37 @@ The first note about `Examples` is that it is embedded in `SimulatorProject`.  T
 
 Using a `Project` definition other than `sbt.DefaultProject` is also useful for projects containing code (usually subclasses of `ScalaProject`), although this is not shown here.  This way, all project configuration can be done in the parent project if desired.
 
+=== Build Definitions in Subprojects ===
+
 Alternatively, each subproject can configured with its `project` directory as is done with a single project.  In this case, the form of `project` used would be:
 
 {{{
 def project(path: Path, deps: Project*): Project
 }}}
+
+There are performance and type-checking disadvantages to this, however.
+
+Project definitions in subprojects are built after the parent project.  When you call the `project` method to define a subproject, the subproject is built and loaded.  The consequence is that building and loading of subprojects is done separately and serially.  There is a substantial performance overhead to running multiple, small compilations and this translates to a performance disadvantage when recompiling multiple subprojects.  The disadvantage is likely less noticeable when reloading a single subproject build definition.
+
+Second, when all project definitions at top-level, there is more static type information.  If builds are defined in multiple locations, you can only refer to other projects by the Project type.
+
+{{{
+class Top(info: ProjectInfo) extends ParentProject(info)
+{
+    // create a subproject, with some custom information
+    lazy val subA = project("a", "A", info => new SubProject("something", info))
+
+    // define a subproject type that provides custom information
+    class SubProject(val customInfo: String, info: ProjectInfo)
+      extends DefaultProject(info)
+
+    // couldn't do this if SubProject was separate
+    lazy val printCustom =
+        task { println(subA.customInfo); None }
+}
+}}}
+
+Finally, any code shared between builds must be defined as [SbtPlugins plugins] because the classpaths of subprojects are not visible to each other.
 
 === Parallel Builds ===
 
