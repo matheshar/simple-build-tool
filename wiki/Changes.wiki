@@ -10,6 +10,8 @@
  * Precompile compiler interface against 2.8.0.RC1
  * Add `consoleOptions` for specifying options to the console.  It defaults to `compileOptions`.
  * Properly support sftp/ssh repositories using key-based authentication.  See the updated section of the [Resolvers] page.
+ * `def ivyUpdateLogging = UpdateLogging.DownloadOnly | Full | Quiet`.  Default is `DownloadOnly`.  `Full` will log metadata resolution and provide a final summary.
+ * `offline` property for disabling checking for newer dynamic revisions (like `-SNAPSHOT`).  This allows working offline with remote snapshots.  Not honored for plugins yet.
 
 === 0.7.2 to 0.7.3 ===
  * Fixed issue with scala.library.jar not being on javac's classpath
