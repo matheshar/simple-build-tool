@@ -10,6 +10,7 @@
  * [http://code.google.com/p/simple-build-tool/wiki/ExampleSbtTest sbt test framework]
  * [http://bmc.github.com/sbt-plugins/ EditSource, IzPack, and Markdown]
  * [http://github.com/Gekkio/sbt-jrebel-plugin JRebel]
+ * [http://github.com/markchadwick/jython-sbt-plugin Jython]
 
 == Basics ==
 
