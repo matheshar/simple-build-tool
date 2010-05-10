@@ -12,6 +12,9 @@
  * [http://github.com/Gekkio/sbt-jrebel-plugin JRebel]
  * [http://github.com/markchadwick/jython-sbt-plugin Jython]
 
+See [http://code.google.com/p/simple-build-tool/wiki/IntegrationSupport Integration Support] for IDE-related plugins.
+
+
 == Basics ==
 
 Plugins are libraries for your project definition.  Declare them like dependencies for your project, except in a plugin definition in the `project/plugins/` directory.  For example, to use [http://code.google.com/p/markdownj/ MarkdownJ] in your project definition, create:
