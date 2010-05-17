@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+			<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" ></meta>
+        <title>sbt/Process.scala</title>
+        <script type="text/javascript" src="../jquery-all.js"></script>
+        <script type="text/javascript" src="../linked.js"></script>
+        <link rel="stylesheet" type="text/css" href="../style.css" title="Style"></link>
+    </head>
+    <body>
+        <pre>
+<span class="comment">/* sbt -- Simple Build Tool
+ * Copyright 2009  Mark Harrah
+ */</span>
+<span class="keyword">package</span> sbt
+
+<span class="keyword">import</span> java.lang.{Process =&gt; JProcess, ProcessBuilder =&gt; JProcessBuilder}
+<span class="keyword">import</span> java.io.{Closeable, File, IOException}
+<span class="keyword">import</span> java.io.{BufferedReader, InputStream, InputStreamReader, OutputStream, PipedInputStream, PipedOutputStream}
+<span class="keyword">import</span> java.net.URL
+
+<span class="comment">/** Methods for constructing simple commands that can then be combined. */</span>
+<span class="keyword">object</span> <a title="object sbt.Process" id="11293">Process</a>
+{
+	<span class="keyword">implicit</span> <span class="keyword">def</span> <a title="implicit sbt.Process.apply : (String)sbt.ProcessBuilder" id="26905">apply</a>(<a title="String" id="26981">command</a>: <span title="String">String</span>): <a href="#9597" title="sbt.ProcessBuilder">ProcessBuilder</a> = <a href="#26910" title="(String,Option[java.io.File],(String, String)*)sbt.ProcessBuilder">apply</a>(<a href="#26981" title="String">command</a>, <span title="object None">None</span>)
+	<span class="keyword">implicit</span> <span class="keyword">def</span> <a title="implicit sbt.Process.apply : (Seq[String])sbt.ProcessBuilder" id="26906">apply</a>(<a title="Seq[String]" id="26980">command</a>: <span title="Seq[String]">Seq</span>[String]): <a href="#9597" title="sbt.ProcessBuilder">ProcessBuilder</a> = <a href="#26911" title="(Seq[String],Option[java.io.File],(String, String)*)sbt.ProcessBuilder">apply</a> (<a href="#26980" title="Seq[String]">command</a>.<span title="Array[String]">toArray</span>, <span title="object None">None</span>)
+	<span class="keyword">def</span> <a title="(String,Seq[String])sbt.ProcessBuilder" id="26907">apply</a>(<a title="String" id="26978">command</a>: <span title="String">String</span>, <a title="Seq[String]" id="26979">arguments</a>: <span title="Seq[String]">Seq</span>[String]): <a href="#9597" title="sbt.ProcessBuilder">ProcessBuilder</a> = <a href="#26911" title="(Seq[String],Option[java.io.File],(String, String)*)sbt.ProcessBuilder">apply</a>(<a href="#26978" title="String">command</a> <a href="#35818" title="(String)List[String]">::</a> <a href="#26979" title="Seq[String]">arguments</a>.<span title="=&gt; List[String]">toList</span>, <span title="object None">None</span>)
+	<span class="comment">/** create ProcessBuilder with working dir set to path and extra environment variables */</span>
+	<span class="keyword">def</span> <a title="(String,sbt.Path,(String, String)*)sbt.ProcessBuilder" id="26908">apply</a>(<a title="String" id="26975">command</a>: <span title="String">String</span>, <a title="sbt.Path" id="26976">cwd</a>: <a href="Path.scala.html#10200" title="sbt.Path">Path</a>, <a title="(String, String)*" id="26977">extraEnv</a>: <span title="(String, String)*">(</span>String,String)*): <a href="#9597" title="sbt.ProcessBuilder">ProcessBuilder</a> = <a href="#26909" title="(String,java.io.File,(String, String)*)sbt.ProcessBuilder">apply</a>(<a href="#26975" title="String">command</a>, <a href="#26976" title="sbt.Path">cwd</a>.<a href="Path.scala.html#18076" title="=&gt; java.io.File">asFile</a>, <a href="#26977" title="(String, String)*">extraEnv</a> : _*)
+	<span class="comment">/** create ProcessBuilder with working dir set to File and extra environment variables */</span>
+	<span class="keyword">def</span> <a title="(String,java.io.File,(String, String)*)sbt.ProcessBuilder" id="26909">apply</a>(<a title="String" id="26972">command</a>: <span title="String">String</span>, <a title="java.io.File" id="26973">cwd</a>: <span title="java.io.File">File</span>, <a title="(String, String)*" id="26974">extraEnv</a>: <span title="(String, String)*">(</span>String,String)*): <a href="#9597" title="sbt.ProcessBuilder">ProcessBuilder</a> =
+		<a href="#26910" title="(String,Option[java.io.File],(String, String)*)sbt.ProcessBuilder">apply</a>(<a href="#26972" title="String">command</a>, <a title="(java.io.File)Some[java.io.File]" id="286">Some</a>(<a href="#26973" title="java.io.File">cwd</a>), <a href="#26974" title="(String, String)*">extraEnv</a> : _*)
+	<span class="comment">/** create ProcessBuilder with working dir optionaly set to File and extra environment variables */</span>
+	<span class="keyword">def</span> <a title="(String,Option[java.io.File],(String, String)*)sbt.ProcessBuilder" id="26910">apply</a>(<a title="String" id="26969">command</a>: <span title="String">String</span>, <a title="Option[java.io.File]" id="26970">cwd</a>: <span title="Option[java.io.File]">Option</span>[File], <a title="(String, String)*" id="26971">extraEnv</a>: <span title="(String, String)*">(</span>String,String)*): <a href="#9597" title="sbt.ProcessBuilder">ProcessBuilder</a> = {
+		<a href="#26911" title="(Seq[String],Option[java.io.File],(String, String)*)sbt.ProcessBuilder">apply</a>(<a href="#26969" title="String">command</a>.<a title="(java.lang.String)Array[java.lang.String]" id="5810">split</a>(<span title="java.lang.String(&quot;\s+&quot;)" class="string">&quot;&quot;&quot;\s+&quot;&quot;&quot;</span>), <a href="#26970" title="Option[java.io.File]">cwd</a>, <a href="#26971" title="(String, String)*">extraEnv</a> : _*)
+		<span class="comment">// not smart to use this on windows, because CommandParser uses \ to escape &quot;.</span>
+		<span class="comment">/*CommandParser.parse(command) match {
+			case Left(errorMsg) =&gt; error(errorMsg)
+			case Right((cmd, args)) =&gt; apply(cmd :: args, cwd, extraEnv : _*)
+		}*/</span>
+	}
+	<span class="comment">/** create ProcessBuilder with working dir optionaly set to File and extra environment variables */</span>
+	<span class="keyword">def</span> <a title="(Seq[String],Option[java.io.File],(String, String)*)sbt.ProcessBuilder" id="26911">apply</a>(<a title="Seq[String]" id="26966">command</a>: <span title="Seq[String]">Seq</span>[String], <a title="Option[java.io.File]" id="26967">cwd</a>: <span title="Option[java.io.File]">Option</span>[File], <a title="(String, String)*" id="26968">extraEnv</a>: <span title="(String, String)*">(</span>String,String)*): <a href="#9597" title="sbt.ProcessBuilder">ProcessBuilder</a> = {
+		<span class="keyword">val</span> <a title="java.lang.ProcessBuilder" id="35979">jpb</a> = <a title="(java.lang.String*)java.lang.ProcessBuilder" id="26952" class="keyword">new</a> <span title="java.lang.ProcessBuilder">JProcessBuilder</span>(<a href="#26966" title="Seq[String]">command</a>.<span title="Array[String]">toArray</span> : _*)
+		<a href="#26967" title="Option[java.io.File]">cwd</a>.<a title="((java.io.File) =&gt; Unit)Unit" id="19239">foreach</a>(<a href="#35979" title="java.lang.ProcessBuilder">jpb</a> <a title="(java.io.File)java.lang.ProcessBuilder" id="26961">directory</a> <a href="#35986" title="java.io.File">_</a>)
+		<a href="#26968" title="(String, String)*">extraEnv</a>.<a title="(((String, String)) =&gt; Unit)Unit" id="16281">foreach</a> <a href="#35989" title="Unit">{</a> <span title="Unit" class="keyword">case</span> <a id="1">(</a><a title="String" id="35990">k</a>, <a title="String" id="35991">v</a>) =&gt; <a href="#35979" title="java.lang.ProcessBuilder">jpb</a>.<a title="()java.util.Map[java.lang.String,java.lang.String]" id="26958">environment</a>.<a title="(java.lang.String,java.lang.String)java.lang.String" id="18293">put</a>(<a href="#35990" title="String">k</a>, <a href="#35991" title="String">v</a>) }
+		<a href="#26912" title="implicit sbt.Process.apply : (java.lang.ProcessBuilder)sbt.ProcessBuilder">apply</a>(<a href="#35979" title="java.lang.ProcessBuilder">jpb</a>)
+	}
+	<span class="keyword">implicit</span> <span class="keyword">def</span> <a title="implicit sbt.Process.apply : (java.lang.ProcessBuilder)sbt.ProcessBuilder" id="26912">apply</a>(<a title="java.lang.ProcessBuilder" id="26949">builder</a>: <span title="java.lang.ProcessBuilder">JProcessBuilder</span>): <a href="#9597" title="sbt.ProcessBuilder">ProcessBuilder</a> = <span title="sbt.SimpleProcessBuilder" class="keyword">new</span> <a href="impl/ProcessImpl.scala.html#7095" title="sbt.SimpleProcessBuilder">SimpleProcessBuilder</a>(<a href="#26949" title="java.lang.ProcessBuilder">builder</a>)
+	<span class="keyword">implicit</span> <span class="keyword">def</span> <a title="implicit sbt.Process.apply : (java.io.File)sbt.FilePartialBuilder" id="26913">apply</a>(<a title="java.io.File" id="26948">file</a>: <span title="java.io.File">File</span>): <a href="#7209" title="sbt.FilePartialBuilder">FilePartialBuilder</a> = <span title="sbt.FileBuilder" class="keyword">new</span> <a href="impl/ProcessImpl.scala.html#7203" title="sbt.FileBuilder">FileBuilder</a>(<a href="#26948" title="java.io.File">file</a>)
+	<span class="keyword">implicit</span> <span class="keyword">def</span> <a title="implicit sbt.Process.apply : (java.net.URL)sbt.URLPartialBuilder" id="26914">apply</a>(<a title="java.net.URL" id="26947">url</a>: <span title="java.net.URL">URL</span>): <a href="#9468" title="sbt.URLPartialBuilder">URLPartialBuilder</a> = <span title="sbt.URLBuilder" class="keyword">new</span> <a href="impl/ProcessImpl.scala.html#7776" title="sbt.URLBuilder">URLBuilder</a>(<a href="#26947" title="java.net.URL">url</a>)
+	<span class="keyword">implicit</span> <span class="keyword">def</span> <a title="implicit sbt.Process.apply : (scala.xml.Elem)sbt.ProcessBuilder" id="26915">apply</a>(<a title="scala.xml.Elem" id="26928">command</a>: scala.xml.<a title="scala.xml.Elem" id="14725">Elem</a>): <a href="#9597" title="sbt.ProcessBuilder">ProcessBuilder</a> = <a href="#26905" title="implicit sbt.Process.apply : (String)sbt.ProcessBuilder">apply</a>(<a href="#26928" title="scala.xml.Elem">command</a>.<a title="=&gt; String" id="26945">text</a>.<a title="()java.lang.String" id="5815">trim</a>)
+	<span class="keyword">implicit</span> <span class="keyword">def</span> <a title="[T](Seq[T])(implicit (T) =&gt; sbt.SourcePartialBuilder)Seq[sbt.SourcePartialBuilder]" id="26916">applySeq</a>[<a title="&gt;: Nothing &lt;: Any" id="26918">T</a>](<a title="Seq[T]" id="35657">builders</a>: <span title="Seq[T]">Seq</span>[T])(<span class="keyword">implicit</span> <a title="(T) =&gt; sbt.SourcePartialBuilder" id="35658">convert</a>: T =&gt; SourcePartialBuilder): <span title="Seq[sbt.SourcePartialBuilder]">Seq</span>[SourcePartialBuilder] = <a href="#35657" title="Seq[T]">builders</a>.<span title="((T) =&gt; sbt.SourcePartialBuilder)Seq[sbt.SourcePartialBuilder]">map</span>(<a href="#35658" title="(T) =&gt; sbt.SourcePartialBuilder">convert</a>)
+	<span class="keyword">def</span> <a title="(Boolean)sbt.ProcessBuilder" id="26919">apply</a>(<a title="Boolean" id="26927">value</a>: <span title="Boolean">Boolean</span>): <a href="#9597" title="sbt.ProcessBuilder">ProcessBuilder</a> = <a href="#26920" title="(String,=&gt; Int)sbt.ProcessBuilder">apply</a>(<a href="#26927" title="Boolean">value</a>.<a title="()java.lang.String" id="3448">toString</a>, <span title="Int" class="keyword">if</span>(<a href="#26927" title="Boolean">value</a>) <span title="Int(0)" class="int">0</span> <span class="keyword">else</span> <span title="Int(1)" class="int">1</span>)
+	<span class="keyword">def</span> <a title="(String,=&gt; Int)sbt.ProcessBuilder" id="26920">apply</a>(<a title="String" id="26925">name</a>: <span title="String">String</span>, <a title="=&gt; Int" id="26926">exitValue</a>: =&gt; Int): <a href="#9597" title="sbt.ProcessBuilder">ProcessBuilder</a> = <span title="sbt.DummyProcessBuilder" class="keyword">new</span> <a href="impl/ProcessImpl.scala.html#11100" title="sbt.DummyProcessBuilder">DummyProcessBuilder</a>(<a href="#26925" title="String">name</a>, <a href="#26926" title="=&gt; Int">exitValue</a>)
+
+	<span class="keyword">def</span> <a title="(sbt.SourcePartialBuilder,sbt.SourcePartialBuilder*)sbt.ProcessBuilder" id="26921">cat</a>(<a title="sbt.SourcePartialBuilder" id="36284">file</a>: <a href="#10326" title="sbt.SourcePartialBuilder">SourcePartialBuilder</a>, <a title="sbt.SourcePartialBuilder*" id="36285">files</a>: <span title="sbt.SourcePartialBuilder*">SourcePartialBuilder</span>*): <a href="#9597" title="sbt.ProcessBuilder">ProcessBuilder</a> = <a href="#26922" title="(Seq[sbt.SourcePartialBuilder])sbt.ProcessBuilder">cat</a>(<a href="#36284" title="sbt.SourcePartialBuilder">file</a> <a href="#36288" title="(sbt.SourcePartialBuilder)List[sbt.SourcePartialBuilder]">::</a> <a href="#36285" title="sbt.SourcePartialBuilder*">files</a>.<span title="=&gt; List[sbt.SourcePartialBuilder]">toList</span>)
+	<span class="keyword">def</span> <a title="(Seq[sbt.SourcePartialBuilder])sbt.ProcessBuilder" id="26922">cat</a>(<a title="Seq[sbt.SourcePartialBuilder]" id="36287">files</a>: <span title="Seq[sbt.SourcePartialBuilder]">Seq</span>[SourcePartialBuilder]): <a href="#9597" title="sbt.ProcessBuilder">ProcessBuilder</a> =
+	{
+		<a title="(Boolean)Unit" id="787">require</a>(<a title="=&gt; Boolean" id="2695">!</a><a href="#36287" title="Seq[sbt.SourcePartialBuilder]">files</a>.<a title="=&gt; Boolean" id="16733">isEmpty</a>)
+		<a href="#36287" title="Seq[sbt.SourcePartialBuilder]">files</a>.<span title="((sbt.SourcePartialBuilder) =&gt; sbt.ProcessBuilder)Seq[sbt.ProcessBuilder]">map</span>(<a href="#36294" title="sbt.SourcePartialBuilder">_</a>.<a href="#26849" title="=&gt; sbt.ProcessBuilder">cat</a>).<a title="((sbt.ProcessBuilder, sbt.ProcessBuilder) =&gt; sbt.ProcessBuilder)sbt.ProcessBuilder" id="16296">reduceLeft</a>(<a href="#36301" title="sbt.ProcessBuilder">_</a> <a href="#26866" title="(sbt.ProcessBuilder)sbt.ProcessBuilder">#&amp;&amp;</a> <a href="#36302" title="sbt.ProcessBuilder">_</a>)
+	}
+}
+
+<span class="keyword">trait</span> <a title="trait SourcePartialBuilder extends java.lang.Object with NotNull with ScalaObject" id="10326">SourcePartialBuilder</a> <span class="keyword">extends</span> <span title="NotNull">NotNull</span>
+{
+	<span class="comment">/** Writes the output stream of this process to the given file. */</span>
+	<span class="keyword">def</span> <a title="(java.io.File)sbt.ProcessBuilder" id="26844">#&gt;</a> (<a title="java.io.File" id="36306">f</a>: <span title="java.io.File">File</span>): <a href="#9597" title="sbt.ProcessBuilder">ProcessBuilder</a> = <a href="#26848" title="(java.io.File,Boolean)sbt.ProcessBuilder">toFile</a>(<a href="#36306" title="java.io.File">f</a>, <span title="Boolean(false)" class="keyword">false</span>)
+	<span class="comment">/** Appends the output stream of this process to the given file. */</span>
+	<span class="keyword">def</span> <a title="(java.io.File)sbt.ProcessBuilder" id="26845">#&gt;&gt;</a> (<a title="java.io.File" id="36333">f</a>: <span title="java.io.File">File</span>): <a href="#9597" title="sbt.ProcessBuilder">ProcessBuilder</a> = <a href="#26848" title="(java.io.File,Boolean)sbt.ProcessBuilder">toFile</a>(<a href="#36333" title="java.io.File">f</a>, <span title="Boolean(true)" class="keyword">true</span>)
+	<span class="comment">/** Writes the output stream of this process to the given OutputStream. The
+	* argument is call-by-name, so the stream is recreated, written, and closed each
+	* time this process is executed. */</span>
+	<span class="keyword">def</span> <a title="(=&gt; java.io.OutputStream)sbt.ProcessBuilder" id="26846">#&gt;</a>(<a title="=&gt; java.io.OutputStream" id="36312">out</a>: =&gt; OutputStream): <a href="#9597" title="sbt.ProcessBuilder">ProcessBuilder</a> = <a href="#26847" title="(sbt.ProcessBuilder)sbt.ProcessBuilder">#&gt;</a> (<a href="impl/ProcessImpl.scala.html#36325" title="(=&gt; java.io.OutputStream)sbt.OutputStreamBuilder" class="keyword">new</a> <a href="impl/ProcessImpl.scala.html#10503" title="sbt.OutputStreamBuilder">OutputStreamBuilder</a>(<a href="#36312" title="=&gt; java.io.OutputStream">out</a>))
+	<span class="keyword">def</span> <a title="(sbt.ProcessBuilder)sbt.ProcessBuilder" id="26847">#&gt;</a>(<a title="sbt.ProcessBuilder" id="36311">b</a>: <a href="#9597" title="sbt.ProcessBuilder">ProcessBuilder</a>): <a href="#9597" title="sbt.ProcessBuilder">ProcessBuilder</a> = <span title="sbt.PipedProcessBuilder" class="keyword">new</span> <a href="impl/ProcessImpl.scala.html#10788" title="sbt.PipedProcessBuilder">PipedProcessBuilder</a>(<a href="#26850" title="=&gt; sbt.ProcessBuilder">toSource</a>, <a href="#36311" title="sbt.ProcessBuilder">b</a>, <span title="Boolean(false)" class="keyword">false</span>)
+	<span class="keyword">private</span> <span class="keyword">def</span> <a title="(java.io.File,Boolean)sbt.ProcessBuilder" id="26848">toFile</a>(<a title="java.io.File" id="36307">f</a>: <span title="java.io.File">File</span>, <a title="Boolean" id="36308">append</a>: <span title="Boolean">Boolean</span>) = <a href="#26847" title="(sbt.ProcessBuilder)sbt.ProcessBuilder">#&gt;</a> (<span title="sbt.FileOutput" class="keyword">new</span> <a href="impl/ProcessImpl.scala.html#9408" title="sbt.FileOutput">FileOutput</a>(<a href="#36307" title="java.io.File">f</a>, <a href="#36308" title="Boolean">append</a>))
+	<span class="keyword">def</span> <a title="=&gt; sbt.ProcessBuilder" id="26849">cat</a> = <a href="#26850" title="=&gt; sbt.ProcessBuilder">toSource</a>
+	<span class="keyword">protected</span> <span class="keyword">def</span> <a title="=&gt; sbt.ProcessBuilder" id="26850">toSource</a>: <a href="#9597" title="sbt.ProcessBuilder">ProcessBuilder</a>
+}
+<span class="keyword">trait</span> <a title="trait SinkPartialBuilder extends java.lang.Object with NotNull with ScalaObject" id="9336">SinkPartialBuilder</a> <span class="keyword">extends</span> <span title="NotNull">NotNull</span>
+{
+	<span class="comment">/** Reads the given file into the input stream of this process. */</span>
+	<span class="keyword">def</span> <a title="(java.io.File)sbt.ProcessBuilder" id="26872">#&lt;</a> (<a title="java.io.File" id="36371">f</a>: <span title="java.io.File">File</span>): <a href="#9597" title="sbt.ProcessBuilder">ProcessBuilder</a> = <a href="#26875" title="(sbt.ProcessBuilder)sbt.ProcessBuilder">#&lt;</a> (<span title="sbt.FileInput" class="keyword">new</span> <a href="impl/ProcessImpl.scala.html#10869" title="sbt.FileInput">FileInput</a>(<a href="#36371" title="java.io.File">f</a>))
+	<span class="comment">/** Reads the given URL into the input stream of this process. */</span>
+	<span class="keyword">def</span> <a title="(java.net.URL)sbt.ProcessBuilder" id="26873">#&lt;</a> (<a title="java.net.URL" id="36375">f</a>: <span title="java.net.URL">URL</span>): <a href="#9597" title="sbt.ProcessBuilder">ProcessBuilder</a> = <a href="#26875" title="(sbt.ProcessBuilder)sbt.ProcessBuilder">#&lt;</a> (<span title="sbt.URLInput" class="keyword">new</span> <a href="impl/ProcessImpl.scala.html#7134" title="sbt.URLInput">URLInput</a>(<a href="#36375" title="java.net.URL">f</a>))
+	<span class="comment">/** Reads the given InputStream into the input stream of this process. The
+	* argument is call-by-name, so the stream is recreated, read, and closed each
+	* time this process is executed. */</span>
+	<span class="keyword">def</span> <a title="(=&gt; java.io.InputStream)sbt.ProcessBuilder" id="26874">#&lt;</a>(<a title="=&gt; java.io.InputStream" id="36374">in</a>: =&gt; InputStream): <a href="#9597" title="sbt.ProcessBuilder">ProcessBuilder</a> = <a href="#26875" title="(sbt.ProcessBuilder)sbt.ProcessBuilder">#&lt;</a> (<a href="impl/ProcessImpl.scala.html#36381" title="(=&gt; java.io.InputStream)sbt.InputStreamBuilder" class="keyword">new</a> <a href="impl/ProcessImpl.scala.html#9036" title="sbt.InputStreamBuilder">InputStreamBuilder</a>(<a href="#36374" title="=&gt; java.io.InputStream">in</a>))
+	<span class="keyword">def</span> <a title="(sbt.ProcessBuilder)sbt.ProcessBuilder" id="26875">#&lt;</a>(<a title="sbt.ProcessBuilder" id="36373">b</a>: <a href="#9597" title="sbt.ProcessBuilder">ProcessBuilder</a>): <a href="#9597" title="sbt.ProcessBuilder">ProcessBuilder</a> = <span title="sbt.PipedProcessBuilder" class="keyword">new</span> <a href="impl/ProcessImpl.scala.html#10788" title="sbt.PipedProcessBuilder">PipedProcessBuilder</a>(<a href="#36373" title="sbt.ProcessBuilder">b</a>, <a href="#26876" title="=&gt; sbt.ProcessBuilder">toSink</a>, <span title="Boolean(false)" class="keyword">false</span>)
+	<span class="keyword">protected</span> <span class="keyword">def</span> <a title="=&gt; sbt.ProcessBuilder" id="26876">toSink</a>: <a href="#9597" title="sbt.ProcessBuilder">ProcessBuilder</a>
+}
+
+<span class="keyword">trait</span> <a title="trait URLPartialBuilder extends java.lang.Object with sbt.SourcePartialBuilder" id="9468">URLPartialBuilder</a> <span class="keyword">extends</span> <a href="#10326" title="sbt.SourcePartialBuilder">SourcePartialBuilder</a>
+<span class="keyword">trait</span> <a title="trait FilePartialBuilder extends java.lang.Object with sbt.SinkPartialBuilder with sbt.SourcePartialBuilder" id="7209">FilePartialBuilder</a> <span class="keyword">extends</span> <a href="#9336" title="sbt.SinkPartialBuilder">SinkPartialBuilder</a> <span class="keyword">with</span> <a href="#10326" title="sbt.SourcePartialBuilder">SourcePartialBuilder</a>
+{
+	<span class="keyword">def</span> <a title="(java.io.File)sbt.ProcessBuilder" id="26984">#&lt;&lt;</a>(<a title="java.io.File" id="36399">f</a>: <span title="java.io.File">File</span>): <a href="#9597" title="sbt.ProcessBuilder">ProcessBuilder</a>
+	<span class="keyword">def</span> <a title="(java.net.URL)sbt.ProcessBuilder" id="26985">#&lt;&lt;</a>(<a title="java.net.URL" id="36400">u</a>: <span title="java.net.URL">URL</span>): <a href="#9597" title="sbt.ProcessBuilder">ProcessBuilder</a>
+	<span class="keyword">def</span> <a title="(=&gt; java.io.InputStream)sbt.ProcessBuilder" id="26986">#&lt;&lt;</a>(<a title="=&gt; java.io.InputStream" id="36401">i</a>: =&gt; InputStream): <a href="#9597" title="sbt.ProcessBuilder">ProcessBuilder</a>
+	<span class="keyword">def</span> <a title="(sbt.ProcessBuilder)sbt.ProcessBuilder" id="26987">#&lt;&lt;</a>(<a title="sbt.ProcessBuilder" id="36402">p</a>: <a href="#9597" title="sbt.ProcessBuilder">ProcessBuilder</a>): <a href="#9597" title="sbt.ProcessBuilder">ProcessBuilder</a>
+}
+
+<span class="comment">/** Represents a process that is running or has finished running.
+* It may be a compound process with several underlying native processes (such as 'a #&amp;&amp; b`).*/</span>
+<span class="keyword">trait</span> <a title="trait Process extends java.lang.Object with NotNull" id="11292">Process</a> <span class="keyword">extends</span> <span title="NotNull">NotNull</span>
+{
+	<span class="comment">/** Blocks until this process exits and returns the exit code.*/</span>
+	<span class="keyword">def</span> <a title="()Int" id="30886">exitValue</a>(): <span title="Int">Int</span>
+	<span class="comment">/** Destroys this process. */</span>
+	<span class="keyword">def</span> <a title="()Unit" id="30887">destroy</a>(): <a title="Unit" id="2114">Unit</a>
+}
+<span class="comment">/** Represents a runnable process. */</span>
+<span class="keyword">trait</span> <a title="trait ProcessBuilder extends java.lang.Object with sbt.SourcePartialBuilder with sbt.SinkPartialBuilder" id="9597">ProcessBuilder</a> <span class="keyword">extends</span> <a href="#10326" title="sbt.SourcePartialBuilder">SourcePartialBuilder</a> <span class="keyword">with</span> <a href="#9336" title="sbt.SinkPartialBuilder">SinkPartialBuilder</a>
+{
+	<span class="comment">/** Starts the process represented by this builder, blocks until it exits, and returns the output as a String.  Standard error is
+	* sent to the console.  If the exit code is non-zero, an exception is thrown.*/</span>
+	<span class="keyword">def</span> <a title="=&gt; String" id="26851">!!</a> : <span title="String">String</span>
+	<span class="comment">/** Starts the process represented by this builder, blocks until it exits, and returns the output as a String.  Standard error is
+	* sent to the provided Logger.  If the exit code is non-zero, an exception is thrown.*/</span>
+	<span class="keyword">def</span> <a title="(sbt.Logger)String" id="26852">!!</a>(<a title="sbt.Logger" id="36406">log</a>: <a href="Logger.scala.html#11865" title="sbt.Logger">Logger</a>) : <span title="String">String</span>
+	<span class="comment">/** Starts the process represented by this builder.  The output is returned as a Stream that blocks when lines are not available
+	* but the process has not completed.  Standard error is sent to the console.  If the process exits with a non-zero value,
+	* the Stream will provide all lines up to termination and then throw an exception. */</span>
+	<span class="keyword">def</span> <a title="=&gt; Stream[String]" id="26853">lines</a>: <span title="Stream[String]">Stream</span>[String]
+	<span class="comment">/** Starts the process represented by this builder.  The output is returned as a Stream that blocks when lines are not available
+	* but the process has not completed.  Standard error is sent to the provided Logger.  If the process exits with a non-zero value,
+	* the Stream will provide all lines up to termination but will not throw an exception. */</span>
+	<span class="keyword">def</span> <a title="(sbt.Logger)Stream[String]" id="26854">lines</a>(<a title="sbt.Logger" id="36408">log</a>: <a href="Logger.scala.html#11865" title="sbt.Logger">Logger</a>): <span title="Stream[String]">Stream</span>[String]
+	<span class="comment">/** Starts the process represented by this builder.  The output is returned as a Stream that blocks when lines are not available
+	* but the process has not completed.  Standard error is sent to the console. If the process exits with a non-zero value,
+	* the Stream will provide all lines up to termination but will not throw an exception. */</span>
+	<span class="keyword">def</span> <a title="=&gt; Stream[String]" id="26855">lines_!</a> : <span title="Stream[String]">Stream</span>[String]
+	<span class="comment">/** Starts the process represented by this builder.  The output is returned as a Stream that blocks when lines are not available
+	* but the process has not completed.  Standard error is sent to the provided Logger. If the process exits with a non-zero value,
+	* the Stream will provide all lines up to termination but will not throw an exception. */</span>
+	<span class="keyword">def</span> <a title="(sbt.Logger)Stream[String]" id="26856">lines_!</a>(<a title="sbt.Logger" id="36410">log</a>: <a href="Logger.scala.html#11865" title="sbt.Logger">Logger</a>): <span title="Stream[String]">Stream</span>[String]
+	<span class="comment">/** Starts the process represented by this builder, blocks until it exits, and returns the exit code.  Standard output and error are
+	* sent to the console.*/</span>
+	<span class="keyword">def</span> <a title="=&gt; Int" id="26857">!</a> : <span title="Int">Int</span>
+	<span class="comment">/** Starts the process represented by this builder, blocks until it exits, and returns the exit code.  Standard output and error are
+	* sent to the given Logger.*/</span>
+	<span class="keyword">def</span> <a title="(sbt.Logger)Int" id="26858">!</a>(<a title="sbt.Logger" id="26878">log</a>: <a href="Logger.scala.html#11865" title="sbt.Logger">Logger</a>): <span title="Int">Int</span>
+	<span class="comment">/** Starts the process represented by this builder, blocks until it exits, and returns the exit code.  Standard output and error are
+	* sent to the console.  The newly started process reads from standard input of the current process.*/</span>
+	<span class="keyword">def</span> <a title="=&gt; Int" id="26859">!&lt;</a> : <span title="Int">Int</span>
+	<span class="comment">/** Starts the process represented by this builder, blocks until it exits, and returns the exit code.  Standard output and error are
+	* sent to the given Logger.  The newly started process reads from standard input of the current process.*/</span>
+	<span class="keyword">def</span> <a title="(sbt.Logger)Int" id="26860">!&lt;</a>(<a title="sbt.Logger" id="36412">log</a>: <a href="Logger.scala.html#11865" title="sbt.Logger">Logger</a>) : <span title="Int">Int</span>
+	<span class="comment">/** Starts the process represented by this builder.  Standard output and error are sent to the console.*/</span>
+	<span class="keyword">def</span> <a title="()sbt.Process" id="26861">run</a>(): <a href="#11292" title="sbt.Process">Process</a>
+	<span class="comment">/** Starts the process represented by this builder.  Standard output and error are sent to the given Logger.*/</span>
+	<span class="keyword">def</span> <a title="(sbt.Logger)sbt.Process" id="26862">run</a>(<a title="sbt.Logger" id="30884">log</a>: <a href="Logger.scala.html#11865" title="sbt.Logger">Logger</a>): <a href="#11292" title="sbt.Process">Process</a>
+	<span class="comment">/** Starts the process represented by this builder.  I/O is handled by the given ProcessIO instance.*/</span>
+	<span class="keyword">def</span> <a title="(sbt.ProcessIO)sbt.Process" id="26863">run</a>(<a title="sbt.ProcessIO" id="30870">io</a>: <a href="#11856" title="sbt.ProcessIO">ProcessIO</a>): <a href="#11292" title="sbt.Process">Process</a>
+	<span class="comment">/** Starts the process represented by this builder.  Standard output and error are sent to the console.
+	* The newly started process reads from standard input of the current process if `connectInput` is true.*/</span>
+	<span class="keyword">def</span> <a title="(Boolean)sbt.Process" id="26864">run</a>(<a title="Boolean" id="30869">connectInput</a>: <span title="Boolean">Boolean</span>): <a href="#11292" title="sbt.Process">Process</a>
+	<span class="comment">/** Starts the process represented by this builder, blocks until it exits, and returns the exit code.  Standard output and error are
+	* sent to the given Logger.
+	* The newly started process reads from standard input of the current process if `connectInput` is true.*/</span>
+	<span class="keyword">def</span> <a title="(sbt.Logger,Boolean)sbt.Process" id="26865">run</a>(<a title="sbt.Logger" id="30867">log</a>: <a href="Logger.scala.html#11865" title="sbt.Logger">Logger</a>, <a title="Boolean" id="30868">connectInput</a>: <span title="Boolean">Boolean</span>): <a href="#11292" title="sbt.Process">Process</a>
+
+	<span class="comment">/** Constructs a command that runs this command first and then `other` if this command succeeds.*/</span>
+	<span class="keyword">def</span> <a title="(sbt.ProcessBuilder)sbt.ProcessBuilder" id="26866">#&amp;&amp;</a> (<a title="sbt.ProcessBuilder" id="36303">other</a>: <a href="#9597" title="sbt.ProcessBuilder">ProcessBuilder</a>): <a href="#9597" title="sbt.ProcessBuilder">ProcessBuilder</a>
+	<span class="comment">/** Constructs a command that runs this command first and then `other` if this command does not succeed.*/</span>
+	<span class="keyword">def</span> <a title="(sbt.ProcessBuilder)sbt.ProcessBuilder" id="26867">#||</a> (<a title="sbt.ProcessBuilder" id="36413">other</a>: <a href="#9597" title="sbt.ProcessBuilder">ProcessBuilder</a>): <a href="#9597" title="sbt.ProcessBuilder">ProcessBuilder</a>
+	<span class="comment">/** Constructs a command that will run this command and pipes the output to `other`.  `other` must be a simple command.*/</span>
+	<span class="keyword">def</span> <a title="(sbt.ProcessBuilder)sbt.ProcessBuilder" id="26868">#|</a> (<a title="sbt.ProcessBuilder" id="36414">other</a>: <a href="#9597" title="sbt.ProcessBuilder">ProcessBuilder</a>): <a href="#9597" title="sbt.ProcessBuilder">ProcessBuilder</a>
+	<span class="comment">/** Constructs a command that will run this command and then `other`.  The exit code will be the exit code of `other`.*/</span>
+	<span class="keyword">def</span> <a title="(sbt.ProcessBuilder)sbt.ProcessBuilder" id="26869">##</a> (<a title="sbt.ProcessBuilder" id="36415">other</a>: <a href="#9597" title="sbt.ProcessBuilder">ProcessBuilder</a>): <a href="#9597" title="sbt.ProcessBuilder">ProcessBuilder</a>
+
+	<span class="keyword">def</span> <a title="=&gt; Boolean" id="26870">canPipeTo</a>: <span title="Boolean">Boolean</span>
+}
+<span class="comment">/** Each method will be called in a separate thread.*/</span>
+<span class="keyword">final</span> <span class="keyword">class</span> <a title="class ProcessIO extends java.lang.Object with NotNull with ScalaObject" id="11856">ProcessIO</a>(<span class="keyword">val</span> <a title="(java.io.OutputStream) =&gt; Unit" id="36421">writeInput</a>: OutputStream =&gt; Unit, <span class="keyword">val</span> <a title="(java.io.InputStream) =&gt; Unit" id="36422">processOutput</a>: InputStream =&gt; Unit, <span class="keyword">val</span> <a title="(java.io.InputStream) =&gt; Unit" id="36423">processError</a>: InputStream =&gt; Unit) <span class="keyword">extends</span> <span title="NotNull">NotNull</span>
+{
+	<span class="keyword">def</span> <a title="((java.io.InputStream) =&gt; Unit)sbt.ProcessIO" id="30881">withOutput</a>(<a title="(java.io.InputStream) =&gt; Unit" id="36424">process</a>: InputStream =&gt; Unit): <a href="#11856" title="sbt.ProcessIO">ProcessIO</a> = <span title="sbt.ProcessIO" class="keyword">new</span> <a href="#11856" title="sbt.ProcessIO">ProcessIO</a>(<a href="#36421" title="=&gt; (java.io.OutputStream) =&gt; Unit">writeInput</a>, <a href="#36424" title="(java.io.InputStream) =&gt; Unit">process</a>, <a href="#36423" title="=&gt; (java.io.InputStream) =&gt; Unit">processError</a>)
+	<span class="keyword">def</span> <a title="((java.io.InputStream) =&gt; Unit)sbt.ProcessIO" id="30882">withError</a>(<a title="(java.io.InputStream) =&gt; Unit" id="36425">process</a>: InputStream =&gt; Unit): <a href="#11856" title="sbt.ProcessIO">ProcessIO</a> = <span title="sbt.ProcessIO" class="keyword">new</span> <a href="#11856" title="sbt.ProcessIO">ProcessIO</a>(<a href="#36421" title="=&gt; (java.io.OutputStream) =&gt; Unit">writeInput</a>, <a href="#36422" title="=&gt; (java.io.InputStream) =&gt; Unit">processOutput</a>, <a href="#36425" title="(java.io.InputStream) =&gt; Unit">process</a>)
+	<span class="keyword">def</span> <a title="((java.io.OutputStream) =&gt; Unit)sbt.ProcessIO" id="30883">withInput</a>(<a title="(java.io.OutputStream) =&gt; Unit" id="36426">write</a>: OutputStream =&gt; Unit): <a href="#11856" title="sbt.ProcessIO">ProcessIO</a> = <span title="sbt.ProcessIO" class="keyword">new</span> <a href="#11856" title="sbt.ProcessIO">ProcessIO</a>(<a href="#36426" title="(java.io.OutputStream) =&gt; Unit">write</a>, <a href="#36422" title="=&gt; (java.io.InputStream) =&gt; Unit">processOutput</a>, <a href="#36423" title="=&gt; (java.io.InputStream) =&gt; Unit">processError</a>)
+}
+        </pre>
+    </body>
+</html>

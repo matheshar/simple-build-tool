@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+			<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" ></meta>
+        <title>sbt/processor/CommandRunner.scala</title>
+        <script type="text/javascript" src="../../jquery-all.js"></script>
+        <script type="text/javascript" src="../../linked.js"></script>
+        <link rel="stylesheet" type="text/css" href="../../style.css" title="Style"></link>
+    </head>
+    <body>
+        <pre>
+<span class="comment">/* sbt -- Simple Build Tool
+ * Copyright 2010  Mark Harrah
+ */</span>
+<span class="keyword">package</span> sbt.processor
+
+<span class="comment">/** Parses and executes a command (connects a parser to a runner). */</span>
+<span class="keyword">class</span> <a title="class CommandRunner extends java.lang.Object with ScalaObject" id="12034">CommandRunner</a>(<a title="sbt.processor.CommandParsing" id="66459">parser</a>: <a href="Processor.scala.html#12064" title="sbt.processor.CommandParsing">CommandParsing</a>, <a title="sbt.processor.Executing" id="66460">execute</a>: <a href="Processor.scala.html#11962" title="sbt.processor.Executing">Executing</a>)
+{
+	<span class="keyword">def</span> <a title="(String)Unit" id="66455">apply</a>(<a title="String" id="66461">processorCommand</a>: <span title="String">String</span>): <a title="Unit" id="2114">Unit</a> =
+		<a href="#66459" title="sbt.processor.CommandParsing">parser</a>.<a href="Processor.scala.html#31874" title="(String)Either[String,sbt.processor.Command]">parseCommand</a>(<a href="#66461" title="String">processorCommand</a>) <span title="Unit" class="keyword">match</span>
+		{
+			<span title="Nothing" class="keyword">case</span> Left(<a title="String" id="66462">err</a>) =&gt; <span title="Nothing" class="keyword">throw</span> <a href="Processor.scala.html#31952" title="(String)sbt.processor.ProcessorException" class="keyword">new</a> <a href="Processor.scala.html#12025" title="sbt.processor.ProcessorException">ProcessorException</a>(<a href="#66462" title="String">err</a>)
+			<span title="Unit" class="keyword">case</span> Right(<a title="sbt.processor.Command" id="66464">command</a>) =&gt; <a href="Processor.scala.html#31868" title="(sbt.processor.Command)Unit">execute</a>(<a href="#66464" title="sbt.processor.Command">command</a>)
+		}
+}
+<span class="keyword">object</span> <a title="object sbt.processor.CommandRunner" id="12035">CommandRunner</a>
+{
+	<span class="comment">/** Convenience method for constructing a CommandRunner with the minimal information required.*/</span>
+	<span class="keyword">def</span> <a title="(sbt.processor.Manager,sbt.processor.DefinitionParser,String,sbt.Logger)sbt.processor.CommandRunner" id="66466">apply</a>(<a title="sbt.processor.Manager" id="66469">manager</a>: <a href="Processor.scala.html#11932" title="sbt.processor.Manager">Manager</a>, <a title="sbt.processor.DefinitionParser" id="66470">defParser</a>: <a href="Parser.scala.html#12058" title="sbt.processor.DefinitionParser">DefinitionParser</a>, <a title="String" id="66471">prefix</a>: <span title="String">String</span>, <a title="sbt.Logger" id="66472">log</a>: <a href="../Logger.scala.html#11865" title="sbt.Logger">Logger</a>): <a href="#12034" title="sbt.processor.CommandRunner">CommandRunner</a> =
+	{
+		<span class="keyword">val</span> <a title="sbt.processor.CommandParser" id="66473">parser</a> = <span title="sbt.processor.CommandParser" class="keyword">new</span> <a href="Parser.scala.html#12040" title="sbt.processor.CommandParser">CommandParser</a>(<a href="#66467" title="(String)java.lang.String">defaultErrorMessage</a>(<a href="#66471" title="String">prefix</a>), <a href="#66470" title="sbt.processor.DefinitionParser">defParser</a>)
+		<span class="keyword">val</span> <a title="sbt.processor.InfoImpl" id="66474">info</a> = <span title="sbt.processor.InfoImpl" class="keyword">new</span> <a href="Info.scala.html#12088" title="sbt.processor.InfoImpl">InfoImpl</a>(<a href="#66469" title="sbt.processor.Manager">manager</a>, <a href="#66471" title="String">prefix</a>, <a href="#66473" title="sbt.processor.CommandParser">parser</a>, <a title="object java.lang.System" id="1831">System</a>.<a title="java.io.PrintStream" id="34068">out</a>.<a href="#66480" title="(java.lang.String)Unit" id="65406">println</a>)
+		<span class="keyword">val</span> <a title="sbt.processor.Execute" id="66475">execute</a> = <span title="sbt.processor.Execute" class="keyword">new</span> <a href="Execute.scala.html#12013" title="sbt.processor.Execute">Execute</a>(<a href="#66469" title="sbt.processor.Manager">manager</a>, <a href="#66474" title="sbt.processor.InfoImpl">info</a>, <a href="#66472" title="sbt.Logger">log</a>)
+		<span title="sbt.processor.CommandRunner" class="keyword">new</span> <a href="#12034" title="sbt.processor.CommandRunner">CommandRunner</a>(<a href="#66473" title="sbt.processor.CommandParser">parser</a>, <a href="#66475" title="sbt.processor.Execute">execute</a>)
+	}
+	<span class="keyword">def</span> <a title="(String)java.lang.String" id="66467">defaultErrorMessage</a>(<a title="String" id="66476">prefix</a>: <span title="String">String</span>) =
+		<span title="java.lang.String(&quot;Invalid processor command.  Run &quot;)" class="string">&quot;Invalid processor command.  Run &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#66476" title="String">prefix</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot;help to see valid commands.&quot;)" class="string">&quot;help to see valid commands.&quot;</span>
+}
+        </pre>
+    </body>
+</html>

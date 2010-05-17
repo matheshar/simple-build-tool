@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="utf-8"?>
+			<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" ></meta>
+        <title>sbt/ProjectPaths.scala</title>
+        <script type="text/javascript" src="../jquery-all.js"></script>
+        <script type="text/javascript" src="../linked.js"></script>
+        <link rel="stylesheet" type="text/css" href="../style.css" title="Style"></link>
+    </head>
+    <body>
+        <pre>
+<span class="comment">/* sbt -- Simple Build Tool
+ * Copyright 2008, 2009 Mark Harrah
+ */</span>
+<span class="keyword">package</span> sbt
+
+<span class="keyword">trait</span> <a title="trait PackagePaths extends java.lang.Object with NotNull" id="6660">PackagePaths</a> <span class="keyword">extends</span> <span title="NotNull">NotNull</span>
+{
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="24968">jarPath</a>: <a href="Path.scala.html#10200" title="sbt.Path">Path</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="24969">packageTestJar</a>: <a href="Path.scala.html#10200" title="sbt.Path">Path</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="24970">packageDocsJar</a>: <a href="Path.scala.html#10200" title="sbt.Path">Path</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="24971">packageSrcJar</a>: <a href="Path.scala.html#10200" title="sbt.Path">Path</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="24972">packageTestSrcJar</a>: <a href="Path.scala.html#10200" title="sbt.Path">Path</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="24973">packageProjectZip</a>: <a href="Path.scala.html#10200" title="sbt.Path">Path</a>
+}
+<span class="comment">/** These are the paths required by BasicScalaProject.*/</span>
+<span class="keyword">trait</span> <a title="trait ScalaPaths extends java.lang.Object with sbt.PackagePaths" id="10986">ScalaPaths</a> <span class="keyword">extends</span> <a href="#6660" title="sbt.PackagePaths">PackagePaths</a>
+{
+	<span class="comment">/** A PathFinder that selects all main sources.*/</span>
+	<span class="keyword">def</span> <a title="=&gt; sbt.PathFinder" id="24974">mainSources</a>: <a href="Path.scala.html#8784" title="sbt.PathFinder">PathFinder</a>
+	<span class="comment">/** A PathFinder that selects all test sources.*/</span>
+	<span class="keyword">def</span> <a title="=&gt; sbt.PathFinder" id="24975">testSources</a>: <a href="Path.scala.html#8784" title="sbt.PathFinder">PathFinder</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.PathFinder" id="24976">mainSourceRoots</a>: <a href="Path.scala.html#8784" title="sbt.PathFinder">PathFinder</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.PathFinder" id="24977">testSourceRoots</a>: <a href="Path.scala.html#8784" title="sbt.PathFinder">PathFinder</a>
+	<span class="comment">/** A PathFinder that selects all main resources.*/</span>
+	<span class="keyword">def</span> <a title="=&gt; sbt.PathFinder" id="24978">mainResources</a>: <a href="Path.scala.html#8784" title="sbt.PathFinder">PathFinder</a>
+	<span class="comment">/** A PathFinder that selects all test resources. */</span>
+	<span class="keyword">def</span> <a title="=&gt; sbt.PathFinder" id="24979">testResources</a>: <a href="Path.scala.html#8784" title="sbt.PathFinder">PathFinder</a>
+	
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="24980">mainCompilePath</a>: <a href="Path.scala.html#10200" title="sbt.Path">Path</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="24981">testCompilePath</a>: <a href="Path.scala.html#10200" title="sbt.Path">Path</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="24982">mainAnalysisPath</a>: <a href="Path.scala.html#10200" title="sbt.Path">Path</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="24983">testAnalysisPath</a>: <a href="Path.scala.html#10200" title="sbt.Path">Path</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="24984">mainDocPath</a>: <a href="Path.scala.html#10200" title="sbt.Path">Path</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="24985">testDocPath</a>: <a href="Path.scala.html#10200" title="sbt.Path">Path</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="24986">graphSourcesPath</a>: <a href="Path.scala.html#10200" title="sbt.Path">Path</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="24987">graphPackagesPath</a>: <a href="Path.scala.html#10200" title="sbt.Path">Path</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="24988">mainResourcesOutputPath</a>: <a href="Path.scala.html#10200" title="sbt.Path">Path</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="24989">testResourcesOutputPath</a>: <a href="Path.scala.html#10200" title="sbt.Path">Path</a>
+
+	<span class="comment">/** A PathFinder that selects all the classes compiled from the main sources.*/</span>
+	<span class="keyword">def</span> <a title="=&gt; sbt.PathFinder" id="24990">mainClasses</a>: <a href="Path.scala.html#8784" title="sbt.PathFinder">PathFinder</a>
+	<span class="comment">/** A PathFinder that selects all the classes compiled from the test sources.*/</span>
+	<span class="keyword">def</span> <a title="=&gt; sbt.PathFinder" id="24991">testClasses</a>: <a href="Path.scala.html#8784" title="sbt.PathFinder">PathFinder</a>
+	
+	<span class="comment">/** Declares all paths to be packaged by the package action.*/</span>
+	<span class="keyword">def</span> <a title="=&gt; sbt.PathFinder" id="24992">packagePaths</a>: <a href="Path.scala.html#8784" title="sbt.PathFinder">PathFinder</a>
+	<span class="comment">/** Declares all paths to be packaged by the package-test action.*/</span>
+	<span class="keyword">def</span> <a title="=&gt; sbt.PathFinder" id="24993">packageTestPaths</a>: <a href="Path.scala.html#8784" title="sbt.PathFinder">PathFinder</a>
+	<span class="comment">/** Declares all sources to be packaged by the package-src action.*/</span>
+	<span class="keyword">def</span> <a title="=&gt; sbt.PathFinder" id="24994">packageSourcePaths</a>: <a href="Path.scala.html#8784" title="sbt.PathFinder">PathFinder</a>
+	<span class="comment">/** Declares all sources to be packaged by the package-test-src action.*/</span>
+	<span class="keyword">def</span> <a title="=&gt; sbt.PathFinder" id="24995">packageTestSourcePaths</a>: <a href="Path.scala.html#8784" title="sbt.PathFinder">PathFinder</a>
+	<span class="comment">/** Declares all paths to be packaged by the package-project action.*/</span>
+	<span class="keyword">def</span> <a title="=&gt; sbt.PathFinder" id="24996">packageProjectPaths</a>: <a href="Path.scala.html#8784" title="sbt.PathFinder">PathFinder</a>
+	
+	<span class="comment">/** These are the directories that are created when a user makes a new project from sbt.*/</span>
+	<span class="keyword">protected</span> <span class="keyword">def</span> <a title="=&gt; List[sbt.Path]" id="24997">directoriesToCreate</a>: <span title="List[sbt.Path]">List</span>[Path]
+	<span class="comment">/** The directories to which a project writes are listed here and is used
+	* to check a project and its dependencies for collisions.*/</span>
+	<span class="keyword">def</span> <a title="=&gt; Iterable[sbt.Path]" id="24998">outputDirectories</a>: <a title="Iterable[sbt.Path]" id="372">Iterable</a>[Path]
+	
+	<span class="keyword">def</span> <a title="=&gt; String" id="24999">artifactBaseName</a>: <span title="String">String</span>
+}
+
+<span class="keyword">trait</span> <a title="trait BasicScalaPaths extends java.lang.Object with sbt.Project with sbt.ScalaPaths with ScalaObject" id="11211">BasicScalaPaths</a> <span class="keyword">extends</span> <a href="Project.scala.html#7665" title="sbt.Project">Project</a> <span class="keyword">with</span> <a href="#10986" title="sbt.ScalaPaths">ScalaPaths</a>
+{
+	<span class="keyword">def</span> <a title="=&gt; sbt.PathFinder" id="24906">mainResourcesPath</a>: <a href="Path.scala.html#8784" title="sbt.PathFinder">PathFinder</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.PathFinder" id="24907">testResourcesPath</a>: <a href="Path.scala.html#8784" title="sbt.PathFinder">PathFinder</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="24908">managedDependencyPath</a>: <a href="Path.scala.html#10200" title="sbt.Path">Path</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="24909">managedDependencyRootPath</a>: <a href="Path.scala.html#10200" title="sbt.Path">Path</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="24910">dependencyPath</a>: <a href="Path.scala.html#10200" title="sbt.Path">Path</a>
+
+	<span class="keyword">protected</span> <span class="keyword">def</span> <a title="(sbt.PathFinder)sbt.PathFinder" id="24911">sources</a>(<a title="sbt.PathFinder" id="38112">base</a>: <a href="Path.scala.html#8784" title="sbt.PathFinder">PathFinder</a>) = <a href="Project.scala.html#14919" title="(sbt.PathFinder,sbt.FileFilter)sbt.PathFinder">descendents</a>(<a href="#38112" title="sbt.PathFinder">base</a>, <a href="#24912" title="=&gt; sbt.NameFilter">sourceExtensions</a>)	
+	<span class="keyword">protected</span> <span class="keyword">def</span> <a title="=&gt; sbt.NameFilter" id="24912">sourceExtensions</a> = <a href="Project.scala.html#14855" title="implicit sbt.Project.filter : (String)sbt.NameFilter" class="string">&quot;*.scala&quot;</a> <a href="NameFilter.scala.html#18373" title="(sbt.NameFilter)sbt.NameFilter">|</a> <a href="Project.scala.html#14855" title="implicit sbt.Project.filter : (String)sbt.NameFilter" class="string">&quot;*.java&quot;</a>
+	
+	<span class="keyword">def</span> <a title="=&gt; sbt.PathFinder" id="24913">mainSources</a> =
+	{
+		<span class="keyword">val</span> <a title="sbt.PathFinder" id="38124">normal</a> = <a href="#24911" title="(sbt.PathFinder)sbt.PathFinder">sources</a>(<a href="#24976" title="=&gt; sbt.PathFinder">mainSourceRoots</a>)
+		<span title="sbt.PathFinder" class="keyword">if</span>(<a href="Project.scala.html#14830" title="=&gt; Boolean">scratch</a>)
+			<a href="#38124" title="sbt.PathFinder">normal</a> <a href="Path.scala.html#16180" title="(sbt.PathFinder)sbt.PathFinder">+++</a> (<a href="Project.scala.html#14826" title="=&gt; sbt.ProjectInfo">info</a>.<a href="ProjectInfo.scala.html#19183" title="=&gt; sbt.Path">projectPath</a> <a href="Path.scala.html#16184" title="(sbt.FileFilter)sbt.PathFinder">*</a> <a href="#24912" title="=&gt; sbt.NameFilter">sourceExtensions</a>)
+		<span class="keyword">else</span>
+			<a href="#38124" title="sbt.PathFinder">normal</a>
+	}
+	<span class="keyword">def</span> <a title="=&gt; sbt.PathFinder" id="24914">testSources</a> = <a href="#24911" title="(sbt.PathFinder)sbt.PathFinder">sources</a>(<a href="#24977" title="=&gt; sbt.PathFinder">testSourceRoots</a>)
+	
+	<span class="keyword">def</span> <a title="=&gt; sbt.PathFinder" id="24915">mainResources</a> = <a href="Project.scala.html#14919" title="(sbt.PathFinder,sbt.FileFilter)sbt.PathFinder">descendents</a>(<a href="#24906" title="=&gt; sbt.PathFinder">mainResourcesPath</a> <a href="Path.scala.html#16187" title="=&gt; sbt.PathFinder">##</a>, <a href="Project.scala.html#14855" title="implicit sbt.Project.filter : (String)sbt.NameFilter" class="string">&quot;*&quot;</a>)
+	<span class="keyword">def</span> <a title="=&gt; sbt.PathFinder" id="24916">testResources</a> = <a href="Project.scala.html#14919" title="(sbt.PathFinder,sbt.FileFilter)sbt.PathFinder">descendents</a>(<a href="#24907" title="=&gt; sbt.PathFinder">testResourcesPath</a> <a href="Path.scala.html#16187" title="=&gt; sbt.PathFinder">##</a>, <a href="Project.scala.html#14855" title="implicit sbt.Project.filter : (String)sbt.NameFilter" class="string">&quot;*&quot;</a>)
+	
+	<span class="keyword">def</span> <a title="=&gt; sbt.PathFinder" id="24917">mainClasses</a> = (<a href="#24980" title="=&gt; sbt.Path">mainCompilePath</a> <a href="Path.scala.html#18068" title="=&gt; sbt.Path">##</a>) <a href="Path.scala.html#16182" title="(sbt.FileFilter)sbt.PathFinder">**</a> <a href="Project.scala.html#14855" title="implicit sbt.Project.filter : (String)sbt.NameFilter" class="string">&quot;*.class&quot;</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.PathFinder" id="24918">testClasses</a> = (<a href="#24981" title="=&gt; sbt.Path">testCompilePath</a> <a href="Path.scala.html#18068" title="=&gt; sbt.Path">##</a>) <a href="Path.scala.html#16182" title="(sbt.FileFilter)sbt.PathFinder">**</a> <a href="Project.scala.html#14855" title="implicit sbt.Project.filter : (String)sbt.NameFilter" class="string">&quot;*.class&quot;</a>
+	
+	<span class="keyword">def</span> <a title="=&gt; sbt.PathFinder" id="24919">packagePaths</a> = <a href="#24917" title="=&gt; sbt.PathFinder">mainClasses</a> <a href="Path.scala.html#16180" title="(sbt.PathFinder)sbt.PathFinder">+++</a> <a href="#24915" title="=&gt; sbt.PathFinder">mainResources</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.PathFinder" id="24920">packageTestPaths</a> = <a href="#24918" title="=&gt; sbt.PathFinder">testClasses</a> <a href="Path.scala.html#16180" title="(sbt.PathFinder)sbt.PathFinder">+++</a> <a href="#24916" title="=&gt; sbt.PathFinder">testResources</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.PathFinder" id="24921">packageSourcePaths</a> = <a href="#24913" title="=&gt; sbt.PathFinder">mainSources</a> <a href="Path.scala.html#16180" title="(sbt.PathFinder)sbt.PathFinder">+++</a> <a href="#24915" title="=&gt; sbt.PathFinder">mainResources</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.PathFinder" id="24922">packageTestSourcePaths</a> = <a href="#24914" title="=&gt; sbt.PathFinder">testSources</a> <a href="Path.scala.html#16180" title="(sbt.PathFinder)sbt.PathFinder">+++</a> <a href="#24916" title="=&gt; sbt.PathFinder">testResources</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.PathFinder" id="24923">packageProjectPaths</a> = <a href="Project.scala.html#14919" title="(sbt.PathFinder,sbt.FileFilter)sbt.PathFinder">descendents</a>( (<a href="Project.scala.html#14826" title="=&gt; sbt.ProjectInfo">info</a>.<a href="ProjectInfo.scala.html#19183" title="=&gt; sbt.Path">projectPath</a> <a href="Path.scala.html#18068" title="=&gt; sbt.Path">##</a>), <a href="Project.scala.html#14855" title="implicit sbt.Project.filter : (String)sbt.NameFilter" class="string">&quot;*&quot;</a>) <a href="Path.scala.html#16181" title="(sbt.PathFinder)sbt.PathFinder">---</a> (<a href="#24924" title="=&gt; sbt.PathFinder">packageProjectExcludes</a> <a href="Path.scala.html#16182" title="(sbt.FileFilter)sbt.PathFinder">**</a> <a href="Project.scala.html#14855" title="implicit sbt.Project.filter : (String)sbt.NameFilter" class="string">&quot;*&quot;</a>)
+	<span class="keyword">protected</span> <span class="keyword">def</span> <a title="=&gt; sbt.PathFinder" id="24924">packageProjectExcludes</a>: <a href="Path.scala.html#8784" title="sbt.PathFinder">PathFinder</a> =
+		<a href="Project.scala.html#14872" title="=&gt; sbt.Path">outputRootPath</a> <a href="Path.scala.html#16180" title="(sbt.PathFinder)sbt.PathFinder">+++</a> <a href="#24909" title="=&gt; sbt.Path">managedDependencyRootPath</a> <a href="Path.scala.html#16180" title="(sbt.PathFinder)sbt.PathFinder">+++</a>
+		<a href="Project.scala.html#14826" title="=&gt; sbt.ProjectInfo">info</a>.<a href="ProjectInfo.scala.html#19187" title="=&gt; sbt.Path">bootPath</a> <a href="Path.scala.html#16180" title="(sbt.PathFinder)sbt.PathFinder">+++</a> <a href="Project.scala.html#14826" title="=&gt; sbt.ProjectInfo">info</a>.<a href="ProjectInfo.scala.html#19189" title="=&gt; sbt.Path">builderProjectOutputPath</a> <a href="Path.scala.html#16180" title="(sbt.PathFinder)sbt.PathFinder">+++</a>
+		<a href="Project.scala.html#14826" title="=&gt; sbt.ProjectInfo">info</a>.<a href="ProjectInfo.scala.html#19191" title="=&gt; sbt.Path">pluginsOutputPath</a> <a href="Path.scala.html#16180" title="(sbt.PathFinder)sbt.PathFinder">+++</a> <a href="Project.scala.html#14826" title="=&gt; sbt.ProjectInfo">info</a>.<a href="ProjectInfo.scala.html#19192" title="=&gt; sbt.Path">pluginsManagedSourcePath</a> <a href="Path.scala.html#16180" title="(sbt.PathFinder)sbt.PathFinder">+++</a> <a href="Project.scala.html#14826" title="=&gt; sbt.ProjectInfo">info</a>.<a href="ProjectInfo.scala.html#19193" title="=&gt; sbt.Path">pluginsManagedDependencyPath</a>
+
+	<span class="keyword">override</span> <span class="keyword">def</span> <a title="=&gt; List[sbt.Path]" id="24925">outputDirectories</a> = <a href="Project.scala.html#14871" title="=&gt; sbt.Path">outputPath</a> <a href="#38158" title="(sbt.Path)List[sbt.Path]">::</a> <a href="#24908" title="=&gt; sbt.Path">managedDependencyPath</a> <a href="#38159" title="(sbt.Path)List[sbt.Path]">::</a> <span title="object Nil">Nil</span>
+}
+
+@<span title="deprecated">deprecated</span> <span class="keyword">trait</span> <a title="trait BasicProjectPaths extends java.lang.Object with sbt.MavenStyleScalaPaths" id="10455">BasicProjectPaths</a> <span class="keyword">extends</span> <a href="#9462" title="sbt.MavenStyleScalaPaths">MavenStyleScalaPaths</a>
+<span class="keyword">trait</span> <a title="trait MavenStyleScalaPaths extends java.lang.Object with sbt.BasicScalaPaths with sbt.BasicPackagePaths with ScalaObject" id="9462">MavenStyleScalaPaths</a> <span class="keyword">extends</span> <a href="#11211" title="sbt.BasicScalaPaths">BasicScalaPaths</a> <span class="keyword">with</span> <a href="#11748" title="sbt.BasicPackagePaths">BasicPackagePaths</a>
+{
+	<span class="keyword">import</span> BasicProjectPaths._
+	
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="24928">outputPath</a>: <a href="Path.scala.html#10200" title="sbt.Path">Path</a>
+	
+	<span class="keyword">def</span> <a title="=&gt; java.lang.String" id="24929">sourceDirectoryName</a> = <a href="#34163" title="=&gt; java.lang.String">DefaultSourceDirectoryName</a>
+	<span class="keyword">def</span> <a title="=&gt; java.lang.String" id="24930">mainDirectoryName</a> = <a href="#34183" title="=&gt; java.lang.String">DefaultMainDirectoryName</a>
+	<span class="keyword">def</span> <a title="=&gt; java.lang.String" id="24931">scalaDirectoryName</a> = <a href="#34185" title="=&gt; java.lang.String">DefaultScalaDirectoryName</a>
+	<span class="keyword">def</span> <a title="=&gt; java.lang.String" id="24932">javaDirectoryName</a> = <a href="#34187" title="=&gt; java.lang.String">DefaultJavaDirectoryName</a>
+	<span class="keyword">def</span> <a title="=&gt; java.lang.String" id="24933">resourcesDirectoryName</a> = <a href="#34189" title="=&gt; java.lang.String">DefaultResourcesDirectoryName</a>
+	<span class="keyword">def</span> <a title="=&gt; java.lang.String" id="24934">testDirectoryName</a> = <a href="#34191" title="=&gt; java.lang.String">DefaultTestDirectoryName</a>
+	<span class="keyword">def</span> <a title="=&gt; java.lang.String" id="24935">mainCompileDirectoryName</a> = <a href="#34165" title="=&gt; java.lang.String">DefaultMainCompileDirectoryName</a>
+	<span class="keyword">def</span> <a title="=&gt; java.lang.String" id="24936">testCompileDirectoryName</a> = <a href="#34167" title="=&gt; java.lang.String">DefaultTestCompileDirectoryName</a>
+	<span class="keyword">def</span> <a title="=&gt; java.lang.String" id="24937">docDirectoryName</a> = <a href="#34169" title="=&gt; java.lang.String">DefaultDocDirectoryName</a>
+	<span class="keyword">def</span> <a title="=&gt; java.lang.String" id="24938">apiDirectoryName</a> = <a href="#34171" title="=&gt; java.lang.String">DefaultAPIDirectoryName</a>
+	<span class="keyword">def</span> <a title="=&gt; java.lang.String" id="24939">graphDirectoryName</a> = <a href="#34173" title="=&gt; java.lang.String">DefaultGraphDirectoryName</a>
+	<span class="keyword">def</span> <a title="=&gt; java.lang.String" id="24940">mainAnalysisDirectoryName</a> = <a href="#34175" title="=&gt; java.lang.String">DefaultMainAnalysisDirectoryName</a>
+	<span class="keyword">def</span> <a title="=&gt; java.lang.String" id="24941">testAnalysisDirectoryName</a> = <a href="#34177" title="=&gt; java.lang.String">DefaultTestAnalysisDirectoryName</a>
+	<span class="keyword">def</span> <a title="=&gt; java.lang.String" id="24942">mainResourcesOutputDirectoryName</a> = <a href="#34179" title="=&gt; java.lang.String">DefautMainResourcesOutputDirectoryName</a>
+	<span class="keyword">def</span> <a title="=&gt; java.lang.String" id="24943">testResourcesOutputDirectoryName</a> = <a href="#34181" title="=&gt; java.lang.String">DefautTestResourcesOutputDirectoryName</a>
+	
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="24944">sourcePath</a> = <a href="Project.scala.html#14854" title="implicit sbt.Project.path : (String)sbt.Path">path</a>(<a href="#24929" title="=&gt; java.lang.String">sourceDirectoryName</a>)
+	
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="24945">mainSourcePath</a> = <a href="#24944" title="=&gt; sbt.Path">sourcePath</a> <a href="Path.scala.html#18070" title="(String)sbt.Path">/</a> <a href="#24930" title="=&gt; java.lang.String">mainDirectoryName</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="24946">mainScalaSourcePath</a> = <a href="#24945" title="=&gt; sbt.Path">mainSourcePath</a> <a href="Path.scala.html#18070" title="(String)sbt.Path">/</a> <a href="#24931" title="=&gt; java.lang.String">scalaDirectoryName</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="24947">mainJavaSourcePath</a> = <a href="#24945" title="=&gt; sbt.Path">mainSourcePath</a> <a href="Path.scala.html#18070" title="(String)sbt.Path">/</a> <a href="#24932" title="=&gt; java.lang.String">javaDirectoryName</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="24948">mainResourcesPath</a> = <a href="#24945" title="=&gt; sbt.Path">mainSourcePath</a> <a href="Path.scala.html#18070" title="(String)sbt.Path">/</a> <a href="#24933" title="=&gt; java.lang.String">resourcesDirectoryName</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="24949">mainDocPath</a> = <a href="#24961" title="=&gt; sbt.Path">docPath</a> <a href="Path.scala.html#18070" title="(String)sbt.Path">/</a> <a href="#24930" title="=&gt; java.lang.String">mainDirectoryName</a> <a href="Path.scala.html#18070" title="(String)sbt.Path">/</a> <a href="#24938" title="=&gt; java.lang.String">apiDirectoryName</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="24950">mainCompilePath</a> = <a href="Project.scala.html#14871" title="=&gt; sbt.Path">outputPath</a> <a href="Path.scala.html#18070" title="(String)sbt.Path">/</a> <a href="#24935" title="=&gt; java.lang.String">mainCompileDirectoryName</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="24951">mainResourcesOutputPath</a> = <a href="Project.scala.html#14871" title="=&gt; sbt.Path">outputPath</a> <a href="Path.scala.html#18070" title="(String)sbt.Path">/</a> <a href="#24942" title="=&gt; java.lang.String">mainResourcesOutputDirectoryName</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="24952">mainAnalysisPath</a> = <a href="Project.scala.html#14871" title="=&gt; sbt.Path">outputPath</a> <a href="Path.scala.html#18070" title="(String)sbt.Path">/</a> <a href="#24940" title="=&gt; java.lang.String">mainAnalysisDirectoryName</a>
+	
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="24953">testSourcePath</a> = <a href="#24944" title="=&gt; sbt.Path">sourcePath</a> <a href="Path.scala.html#18070" title="(String)sbt.Path">/</a> <a href="#24934" title="=&gt; java.lang.String">testDirectoryName</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="24954">testJavaSourcePath</a> = <a href="#24953" title="=&gt; sbt.Path">testSourcePath</a> <a href="Path.scala.html#18070" title="(String)sbt.Path">/</a> <a href="#24932" title="=&gt; java.lang.String">javaDirectoryName</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="24955">testScalaSourcePath</a> = <a href="#24953" title="=&gt; sbt.Path">testSourcePath</a> <a href="Path.scala.html#18070" title="(String)sbt.Path">/</a> <a href="#24931" title="=&gt; java.lang.String">scalaDirectoryName</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="24956">testResourcesPath</a> = <a href="#24953" title="=&gt; sbt.Path">testSourcePath</a> <a href="Path.scala.html#18070" title="(String)sbt.Path">/</a> <a href="#24933" title="=&gt; java.lang.String">resourcesDirectoryName</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="24957">testDocPath</a> = <a href="#24961" title="=&gt; sbt.Path">docPath</a> <a href="Path.scala.html#18070" title="(String)sbt.Path">/</a> <a href="#24934" title="=&gt; java.lang.String">testDirectoryName</a> <a href="Path.scala.html#18070" title="(String)sbt.Path">/</a> <a href="#24938" title="=&gt; java.lang.String">apiDirectoryName</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="24958">testCompilePath</a> = <a href="Project.scala.html#14871" title="=&gt; sbt.Path">outputPath</a> <a href="Path.scala.html#18070" title="(String)sbt.Path">/</a> <a href="#24936" title="=&gt; java.lang.String">testCompileDirectoryName</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="24959">testResourcesOutputPath</a> = <a href="Project.scala.html#14871" title="=&gt; sbt.Path">outputPath</a> <a href="Path.scala.html#18070" title="(String)sbt.Path">/</a> <a href="#24943" title="=&gt; java.lang.String">testResourcesOutputDirectoryName</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="24960">testAnalysisPath</a> = <a href="Project.scala.html#14871" title="=&gt; sbt.Path">outputPath</a> <a href="Path.scala.html#18070" title="(String)sbt.Path">/</a> <a href="#24941" title="=&gt; java.lang.String">testAnalysisDirectoryName</a>
+	
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="24961">docPath</a> = <a href="Project.scala.html#14871" title="=&gt; sbt.Path">outputPath</a> <a href="Path.scala.html#18070" title="(String)sbt.Path">/</a> <a href="#24937" title="=&gt; java.lang.String">docDirectoryName</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="24962">graphPath</a> = <a href="Project.scala.html#14871" title="=&gt; sbt.Path">outputPath</a> <a href="Path.scala.html#18070" title="(String)sbt.Path">/</a> <a href="#24939" title="=&gt; java.lang.String">graphDirectoryName</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="24963">graphPackagesPath</a> = <a href="#24962" title="=&gt; sbt.Path">graphPath</a> <a href="Path.scala.html#18070" title="(String)sbt.Path">/</a> <span title="java.lang.String(&quot;packages&quot;)" class="string">&quot;packages&quot;</span>
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="24964">graphSourcesPath</a> = <a href="#24962" title="=&gt; sbt.Path">graphPath</a> <a href="Path.scala.html#18070" title="(String)sbt.Path">/</a> <span title="java.lang.String(&quot;sources&quot;)" class="string">&quot;sources&quot;</span>
+		
+	<span class="comment">/** These are the directories that are created when a user makes a new project from sbt.*/</span>
+	<span class="keyword">protected</span> <span class="keyword">def</span> <a title="=&gt; List[sbt.Path]" id="24965">directoriesToCreate</a>: <span title="List[sbt.Path]">List</span>[Path] =
+		<a href="#24910" title="=&gt; sbt.Path">dependencyPath</a> <a href="#38264" title="(sbt.Path)List[sbt.Path]">::</a>
+		<a href="#24946" title="=&gt; sbt.Path">mainScalaSourcePath</a> <a href="#38265" title="(sbt.Path)List[sbt.Path]">::</a>
+		<a href="#24948" title="=&gt; sbt.Path">mainResourcesPath</a> <a href="#38266" title="(sbt.Path)List[sbt.Path]">::</a>
+		<a href="#24955" title="=&gt; sbt.Path">testScalaSourcePath</a> <a href="#38267" title="(sbt.Path)List[sbt.Path]">::</a>
+		<a href="#24956" title="=&gt; sbt.Path">testResourcesPath</a> <a href="#38268" title="(sbt.Path)List[sbt.Path]">::</a>
+		<span title="object Nil">Nil</span>
+		
+	<span class="keyword">def</span> <a title="=&gt; sbt.PathFinder" id="24966">mainSourceRoots</a> = (<a href="#24947" title="=&gt; sbt.Path">mainJavaSourcePath</a><a href="Path.scala.html#18068" title="=&gt; sbt.Path">##</a>) <a href="Path.scala.html#16180" title="(sbt.PathFinder)sbt.PathFinder">+++</a> (<a href="#24946" title="=&gt; sbt.Path">mainScalaSourcePath</a><a href="Path.scala.html#18068" title="=&gt; sbt.Path">##</a>)
+	<span class="keyword">def</span> <a title="=&gt; sbt.PathFinder" id="24967">testSourceRoots</a> = (<a href="#24954" title="=&gt; sbt.Path">testJavaSourcePath</a><a href="Path.scala.html#18068" title="=&gt; sbt.Path">##</a>) <a href="Path.scala.html#16180" title="(sbt.PathFinder)sbt.PathFinder">+++</a> (<a href="#24955" title="=&gt; sbt.Path">testScalaSourcePath</a><a href="Path.scala.html#18068" title="=&gt; sbt.Path">##</a>)
+}
+
+<span class="keyword">trait</span> <a title="trait BasicPackagePaths extends java.lang.Object with sbt.ScalaPaths with sbt.PackagePaths with ScalaObject" id="11748">BasicPackagePaths</a> <span class="keyword">extends</span> <a href="#10986" title="sbt.ScalaPaths">ScalaPaths</a> <span class="keyword">with</span> <a href="#6660" title="sbt.PackagePaths">PackagePaths</a>
+{
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="25001">outputPath</a>: <a href="Path.scala.html#10200" title="sbt.Path">Path</a>
+	
+	<span class="keyword">def</span> <a title="=&gt; String" id="25002">defaultJarBaseName</a>: <span title="String">String</span> = <a href="#24999" title="=&gt; String">artifactBaseName</a>
+	<span class="keyword">def</span> <a title="=&gt; java.lang.String" id="25003">defaultJarName</a> = <a href="#25002" title="=&gt; String">defaultJarBaseName</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot;.jar&quot;)" class="string">&quot;.jar&quot;</span>
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="25004">jarPath</a> = <a href="#25001" title="=&gt; sbt.Path">outputPath</a> <a href="Path.scala.html#18070" title="(String)sbt.Path">/</a> <a href="#25003" title="=&gt; java.lang.String">defaultJarName</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="25005">packageTestJar</a> = <a href="#25010" title="(String)sbt.Path">defaultJarPath</a>(<span title="java.lang.String(&quot;-test.jar&quot;)" class="string">&quot;-test.jar&quot;</span>)
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="25006">packageDocsJar</a> = <a href="#25010" title="(String)sbt.Path">defaultJarPath</a>(<span title="java.lang.String(&quot;-docs.jar&quot;)" class="string">&quot;-docs.jar&quot;</span>)
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="25007">packageSrcJar</a>= <a href="#25010" title="(String)sbt.Path">defaultJarPath</a>(<span title="java.lang.String(&quot;-src.jar&quot;)" class="string">&quot;-src.jar&quot;</span>)
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="25008">packageTestSrcJar</a> = <a href="#25010" title="(String)sbt.Path">defaultJarPath</a>(<span title="java.lang.String(&quot;-test-src.jar&quot;)" class="string">&quot;-test-src.jar&quot;</span>)
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="25009">packageProjectZip</a> = <a href="#25010" title="(String)sbt.Path">defaultJarPath</a>(<span title="java.lang.String(&quot;-project.zip&quot;)" class="string">&quot;-project.zip&quot;</span>)
+	<span class="keyword">def</span> <a title="(String)sbt.Path" id="25010">defaultJarPath</a>(<a title="String" id="35615">extension</a>: <span title="String">String</span>) = <a href="#25001" title="=&gt; sbt.Path">outputPath</a> <a href="Path.scala.html#18070" title="(String)sbt.Path">/</a> (<a href="#24999" title="=&gt; String">artifactBaseName</a> <span title="(Any)java.lang.String">+</span> <a href="#35615" title="String">extension</a>)
+}
+
+<span class="keyword">object</span> <a title="object sbt.BasicProjectPaths" id="10456">BasicProjectPaths</a>
+{
+	<span class="keyword">val</span> <a title="java.lang.String" id="34163">DefaultSourceDirectoryName</a> = <span title="java.lang.String(&quot;src&quot;)" class="string">&quot;src&quot;</span>
+	<span class="keyword">val</span> <a title="java.lang.String" id="34165">DefaultMainCompileDirectoryName</a> = <span title="java.lang.String(&quot;classes&quot;)" class="string">&quot;classes&quot;</span>
+	<span class="keyword">val</span> <a title="java.lang.String" id="34167">DefaultTestCompileDirectoryName</a> = <span title="java.lang.String(&quot;test-classes&quot;)" class="string">&quot;test-classes&quot;</span>
+	<span class="keyword">val</span> <a title="java.lang.String" id="34169">DefaultDocDirectoryName</a> = <span title="java.lang.String(&quot;doc&quot;)" class="string">&quot;doc&quot;</span>
+	<span class="keyword">val</span> <a title="java.lang.String" id="34171">DefaultAPIDirectoryName</a> = <span title="java.lang.String(&quot;api&quot;)" class="string">&quot;api&quot;</span>
+	<span class="keyword">val</span> <a title="java.lang.String" id="34173">DefaultGraphDirectoryName</a> = <span title="java.lang.String(&quot;graph&quot;)" class="string">&quot;graph&quot;</span>
+	<span class="keyword">val</span> <a title="java.lang.String" id="34175">DefaultMainAnalysisDirectoryName</a> = <span title="java.lang.String(&quot;analysis&quot;)" class="string">&quot;analysis&quot;</span>
+	<span class="keyword">val</span> <a title="java.lang.String" id="34177">DefaultTestAnalysisDirectoryName</a> = <span title="java.lang.String(&quot;test-analysis&quot;)" class="string">&quot;test-analysis&quot;</span>
+	<span class="keyword">val</span> <a title="java.lang.String" id="34179">DefautMainResourcesOutputDirectoryName</a> = <span title="java.lang.String(&quot;resources&quot;)" class="string">&quot;resources&quot;</span>
+	<span class="keyword">val</span> <a title="java.lang.String" id="34181">DefautTestResourcesOutputDirectoryName</a> = <span title="java.lang.String(&quot;test-resources&quot;)" class="string">&quot;test-resources&quot;</span>
+	
+	<span class="keyword">val</span> <a title="java.lang.String" id="34183">DefaultMainDirectoryName</a> = <span title="java.lang.String(&quot;main&quot;)" class="string">&quot;main&quot;</span>
+	<span class="keyword">val</span> <a title="java.lang.String" id="34185">DefaultScalaDirectoryName</a> = <span title="java.lang.String(&quot;scala&quot;)" class="string">&quot;scala&quot;</span>
+	<span class="keyword">val</span> <a title="java.lang.String" id="34187">DefaultJavaDirectoryName</a> = <span title="java.lang.String(&quot;java&quot;)" class="string">&quot;java&quot;</span>
+	<span class="keyword">val</span> <a title="java.lang.String" id="34189">DefaultResourcesDirectoryName</a> = <span title="java.lang.String(&quot;resources&quot;)" class="string">&quot;resources&quot;</span>
+	<span class="keyword">val</span> <a title="java.lang.String" id="34191">DefaultTestDirectoryName</a> = <span title="java.lang.String(&quot;test&quot;)" class="string">&quot;test&quot;</span>
+	
+	<span class="comment">// forwarders to new locations</span>
+	<span class="keyword">def</span> <a title="=&gt; java.lang.String" id="34193">BootDirectoryName</a> = <a href="Project.scala.html#7666" title="object sbt.Project">Project</a>.<a href="Project.scala.html#16477" title="=&gt; java.lang.String">BootDirectoryName</a>
+	<span class="keyword">def</span> <a title="=&gt; java.lang.String" id="34194">DefaultManagedDirectoryName</a> = <a href="BasicProjectTypes.scala.html#7348" title="object sbt.BasicDependencyPaths">BasicDependencyPaths</a>.<a href="BasicProjectTypes.scala.html#22987" title="=&gt; java.lang.String">DefaultManagedDirectoryName</a>
+	<span class="keyword">def</span> <a title="=&gt; java.lang.String" id="34195">DefaultDependencyDirectoryName</a> = <a href="BasicProjectTypes.scala.html#7348" title="object sbt.BasicDependencyPaths">BasicDependencyPaths</a>.<a href="BasicProjectTypes.scala.html#22991" title="=&gt; java.lang.String">DefaultDependencyDirectoryName</a>
+}
+
+<span class="keyword">trait</span> <a title="trait WebScalaPaths extends java.lang.Object with sbt.ScalaPaths" id="10302">WebScalaPaths</a> <span class="keyword">extends</span> <a href="#10986" title="sbt.ScalaPaths">ScalaPaths</a>
+{
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="38301">temporaryWarPath</a>: <a href="Path.scala.html#10200" title="sbt.Path">Path</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.PathFinder" id="38302">webappResources</a>: <a href="Path.scala.html#8784" title="sbt.PathFinder">PathFinder</a>
+	<span class="keyword">def</span> <a title="=&gt; String" id="38303">jettyContextPath</a>: <span title="String">String</span>
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="38304">warPath</a>: <a href="Path.scala.html#10200" title="sbt.Path">Path</a>
+}
+@<span title="deprecated">deprecated</span> <span class="keyword">trait</span> <a title="trait WebProjectPaths extends java.lang.Object with sbt.MavenStyleWebScalaPaths" id="10977">WebProjectPaths</a> <span class="keyword">extends</span> <a href="#8871" title="sbt.MavenStyleWebScalaPaths">MavenStyleWebScalaPaths</a>
+<span class="keyword">trait</span> <a title="trait MavenStyleWebScalaPaths extends java.lang.Object with sbt.WebScalaPaths with sbt.MavenStyleScalaPaths with ScalaObject" id="8871">MavenStyleWebScalaPaths</a> <span class="keyword">extends</span> <a href="#10302" title="sbt.WebScalaPaths">WebScalaPaths</a> <span class="keyword">with</span> <a href="#9462" title="sbt.MavenStyleScalaPaths">MavenStyleScalaPaths</a>
+{
+	<span class="keyword">import</span> WebProjectPaths._
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="38312">temporaryWarPath</a> = <a href="Project.scala.html#14871" title="=&gt; sbt.Path">outputPath</a> <a href="Path.scala.html#18070" title="(String)sbt.Path">/</a> <a href="#38314" title="=&gt; java.lang.String">webappDirectoryName</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="38313">webappPath</a> = <a href="#24945" title="=&gt; sbt.Path">mainSourcePath</a> <a href="Path.scala.html#18070" title="(String)sbt.Path">/</a> <a href="#38314" title="=&gt; java.lang.String">webappDirectoryName</a>
+	<span class="keyword">def</span> <a title="=&gt; java.lang.String" id="38314">webappDirectoryName</a> = <a href="#38324" title="=&gt; java.lang.String">DefaultWebappDirectoryName</a>
+	<span class="keyword">def</span> <a title="=&gt; java.lang.String" id="38315">jettyContextPath</a> = <a href="#38326" title="=&gt; java.lang.String">DefaultJettyContextPath</a>
+	<span class="keyword">def</span> <a title="=&gt; java.lang.String" id="38316">defaultWarName</a> = <a href="#25002" title="=&gt; String">defaultJarBaseName</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot;.war&quot;)" class="string">&quot;.war&quot;</span>
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="38317">warPath</a> = <a href="Project.scala.html#14871" title="=&gt; sbt.Path">outputPath</a> <a href="Path.scala.html#18070" title="(String)sbt.Path">/</a> <a href="#38316" title="=&gt; java.lang.String">defaultWarName</a>
+	<span class="comment">/** Additional files to include in the web application. */</span>
+	<span class="keyword">protected</span> <span class="keyword">def</span> <a title="=&gt; sbt.PathFinder" id="38318">extraWebappFiles</a>: <a href="Path.scala.html#8784" title="sbt.PathFinder">PathFinder</a> = <a href="Path.scala.html#10201" title="object sbt.Path">Path</a>.<a href="Path.scala.html#15569" title="=&gt; sbt.PathFinder">emptyPathFinder</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.PathFinder" id="38319">webappResources</a> = <a href="Project.scala.html#14919" title="(sbt.PathFinder,sbt.FileFilter)sbt.PathFinder">descendents</a>(<a href="#38313" title="=&gt; sbt.Path">webappPath</a> <a href="Path.scala.html#18068" title="=&gt; sbt.Path">##</a>, <a href="Project.scala.html#14855" title="implicit sbt.Project.filter : (String)sbt.NameFilter" class="string">&quot;*&quot;</a>) <a href="Path.scala.html#16180" title="(sbt.PathFinder)sbt.PathFinder">+++</a> <a href="#38318" title="=&gt; sbt.PathFinder">extraWebappFiles</a>
+}
+<span class="keyword">object</span> <a title="object sbt.WebProjectPaths" id="10978">WebProjectPaths</a>
+{
+	<span class="keyword">val</span> <a title="java.lang.String" id="38324">DefaultWebappDirectoryName</a> = <span title="java.lang.String(&quot;webapp&quot;)" class="string">&quot;webapp&quot;</span>
+	<span class="keyword">val</span> <a title="java.lang.String" id="38326">DefaultJettyContextPath</a> = <span title="java.lang.String(&quot;/&quot;)" class="string">&quot;/&quot;</span>
+}
+
+<span class="comment">/** Defines default paths for a webstart project.  It directly extends WebstartOptions to make
+* it easy to implement and override webstart options in the common case of one webstartTask per
+* project.*/</span>
+<span class="keyword">trait</span> <a title="trait WebstartPaths extends java.lang.Object with sbt.ScalaPaths with ScalaObject" id="7902">WebstartPaths</a> <span class="keyword">extends</span> <a href="#10986" title="sbt.ScalaPaths">ScalaPaths</a>
+{
+	<span class="keyword">import</span> WebstartPaths._
+	
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="38351">outputPath</a>: <a href="Path.scala.html#10200" title="sbt.Path">Path</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="38352">jnlpPath</a>: <a href="Path.scala.html#10200" title="sbt.Path">Path</a>
+	
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="38353">webstartOutputDirectory</a> = <a href="#38351" title="=&gt; sbt.Path">outputPath</a> <a href="Path.scala.html#18070" title="(String)sbt.Path">/</a> <a href="#38359" title="=&gt; java.lang.String">webstartDirectoryName</a>
+	
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="38354">jnlpFile</a> = <a href="#38353" title="=&gt; sbt.Path">webstartOutputDirectory</a> <a href="Path.scala.html#18070" title="(String)sbt.Path">/</a> <a href="#38361" title="=&gt; String">jnlpFileName</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="38355">webstartLibDirectory</a> = <a href="#38353" title="=&gt; sbt.Path">webstartOutputDirectory</a> <a href="Path.scala.html#18070" title="(String)sbt.Path">/</a> <a href="#38358" title="=&gt; java.lang.String">webstartLibName</a>
+	<span class="keyword">def</span> <a title="=&gt; Option[sbt.Path]" id="38356">webstartZip</a>: <a title="Option[sbt.Path]" id="897">Option</a>[Path] = <a title="(sbt.Path)Some[sbt.Path]" id="286">Some</a>(<a href="#38351" title="=&gt; sbt.Path">outputPath</a> <a href="Path.scala.html#18070" title="(String)sbt.Path">/</a> <a href="#38360" title="=&gt; String">webstartZipName</a>)
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="38357">jnlpResourcesPath</a> = <a href="#38352" title="=&gt; sbt.Path">jnlpPath</a> <a href="Path.scala.html#18070" title="(String)sbt.Path">/</a> <a href="#10456" title="object sbt.BasicProjectPaths">BasicProjectPaths</a>.<a href="#34189" title="=&gt; java.lang.String">DefaultResourcesDirectoryName</a>
+	
+	<span class="keyword">def</span> <a title="=&gt; java.lang.String" id="38358">webstartLibName</a> = <a href="#38369" title="=&gt; java.lang.String">DefaultWebstartLibName</a>
+	<span class="keyword">def</span> <a title="=&gt; java.lang.String" id="38359">webstartDirectoryName</a> = <a href="#38365" title="=&gt; java.lang.String">DefaultWebstartDirectoryName</a>
+	
+	<span class="keyword">def</span> <a title="=&gt; String" id="38360">webstartZipName</a>: <span title="String">String</span>
+	<span class="keyword">def</span> <a title="=&gt; String" id="38361">jnlpFileName</a>: <span title="String">String</span>
+}
+<span class="keyword">object</span> <a title="object sbt.WebstartPaths" id="7903">WebstartPaths</a>
+{
+	<span class="keyword">val</span> <a title="java.lang.String" id="38365">DefaultWebstartDirectoryName</a> = <span title="java.lang.String(&quot;webstart&quot;)" class="string">&quot;webstart&quot;</span>
+	<span class="keyword">val</span> <a title="java.lang.String" id="38367">DefaultJnlpName</a> = <span title="java.lang.String(&quot;jnlp&quot;)" class="string">&quot;jnlp&quot;</span>
+	<span class="keyword">val</span> <a title="java.lang.String" id="38369">DefaultWebstartLibName</a> = <span title="java.lang.String(&quot;lib&quot;)" class="string">&quot;lib&quot;</span>
+}
+<span class="keyword">trait</span> <a title="trait MavenStyleWebstartPaths extends java.lang.Object with sbt.WebstartPaths with sbt.MavenStyleScalaPaths with ScalaObject" id="8226">MavenStyleWebstartPaths</a> <span class="keyword">extends</span> <a href="#7902" title="sbt.WebstartPaths">WebstartPaths</a> <span class="keyword">with</span> <a href="#9462" title="sbt.MavenStyleScalaPaths">MavenStyleScalaPaths</a>
+{
+	<span class="keyword">import</span> WebstartPaths._
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="38397">jnlpPath</a> = <a href="#24945" title="=&gt; sbt.Path">mainSourcePath</a> <a href="Path.scala.html#18070" title="(String)sbt.Path">/</a> <a href="#38367" title="=&gt; java.lang.String">DefaultJnlpName</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="38398">webstartMainJar</a> = <a href="#25004" title="=&gt; sbt.Path">jarPath</a>
+	<span class="keyword">def</span> <a title="=&gt; java.lang.String" id="38399">jnlpFileName</a> = <a href="#38401" title="=&gt; java.lang.String">DefaultJnlpFileName</a>
+	<span class="keyword">def</span> <a title="=&gt; java.lang.String" id="38400">webstartZipName</a> = <a href="#24999" title="=&gt; String">artifactBaseName</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot;.zip&quot;)" class="string">&quot;.zip&quot;</span>
+	<span class="keyword">def</span> <a title="=&gt; java.lang.String" id="38401">DefaultJnlpFileName</a> = <a href="#24999" title="=&gt; String">artifactBaseName</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot;.jnlp&quot;)" class="string">&quot;.jnlp&quot;</span>
+}
+
+<span class="keyword">trait</span> <a title="trait IntegrationTestPaths extends java.lang.Object with NotNull" id="8955">IntegrationTestPaths</a> <span class="keyword">extends</span> <span title="NotNull">NotNull</span>
+{
+	<span class="keyword">def</span> <a title="=&gt; sbt.PathFinder" id="38415">integrationTestSources</a>: <a href="Path.scala.html#8784" title="sbt.PathFinder">PathFinder</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.PathFinder" id="38416">integrationTestScalaSourceRoots</a>: <a href="Path.scala.html#8784" title="sbt.PathFinder">PathFinder</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="38417">integrationTestResourcesPath</a>: <a href="Path.scala.html#10200" title="sbt.Path">Path</a>
+
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="38418">integrationTestCompilePath</a>: <a href="Path.scala.html#10200" title="sbt.Path">Path</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="38419">integrationTestAnalysisPath</a>: <a href="Path.scala.html#10200" title="sbt.Path">Path</a>
+}
+<span class="keyword">trait</span> <a title="trait BasicIntegrationTestPaths extends java.lang.Object with sbt.IntegrationTestPaths with ScalaObject" id="9744">BasicIntegrationTestPaths</a> <span class="keyword">extends</span> <a href="#8955" title="sbt.IntegrationTestPaths">IntegrationTestPaths</a>
+{
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="38427">integrationTestScalaSourcePath</a>: <a href="Path.scala.html#10200" title="sbt.Path">Path</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.PathFinder" id="38428">integrationTestScalaSourceRoots</a>: <a href="Path.scala.html#8784" title="sbt.PathFinder">PathFinder</a> = <a href="#38427" title="=&gt; sbt.Path">integrationTestScalaSourcePath</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.PathFinder" id="38429">integrationTestSources</a> = <a href="#38430" title="(sbt.PathFinder)sbt.PathFinder">sources</a>(<a href="#38428" title="=&gt; sbt.PathFinder">integrationTestScalaSourceRoots</a>)
+	<span class="keyword">protected</span> <span class="keyword">def</span> <a title="(sbt.PathFinder)sbt.PathFinder" id="38430">sources</a>(<a title="sbt.PathFinder" id="38437">base</a>: <a href="Path.scala.html#8784" title="sbt.PathFinder">PathFinder</a>): <a href="Path.scala.html#8784" title="sbt.PathFinder">PathFinder</a>
+}
+<span class="keyword">trait</span> <a title="trait MavenStyleIntegrationTestPaths extends java.lang.Object with sbt.BasicIntegrationTestPaths with sbt.MavenStyleScalaPaths with ScalaObject" id="11859">MavenStyleIntegrationTestPaths</a> <span class="keyword">extends</span> <a href="#9744" title="sbt.BasicIntegrationTestPaths">BasicIntegrationTestPaths</a> <span class="keyword">with</span> <a href="#9462" title="sbt.MavenStyleScalaPaths">MavenStyleScalaPaths</a>
+{
+	<span class="keyword">import</span> IntegrationTestPaths._
+
+	<span class="keyword">def</span> <a title="=&gt; java.lang.String" id="38440">integrationTestDirectoryName</a> = <a href="#38451" title="=&gt; java.lang.String">DefaultIntegrationTestDirectoryName</a>
+	<span class="keyword">def</span> <a title="=&gt; java.lang.String" id="38441">integrationTestCompileDirectoryName</a> = <a href="#38453" title="=&gt; java.lang.String">DefaultIntegrationTestCompileDirectoryName</a>
+	<span class="keyword">def</span> <a title="=&gt; java.lang.String" id="38442">integrationTestAnalysisDirectoryName</a> = <a href="#38455" title="=&gt; java.lang.String">DefaultIntegrationTestAnalysisDirectoryName</a>
+
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="38443">integrationTestSourcePath</a> = <a href="#24944" title="=&gt; sbt.Path">sourcePath</a> <a href="Path.scala.html#18070" title="(String)sbt.Path">/</a> <a href="#38440" title="=&gt; java.lang.String">integrationTestDirectoryName</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="38444">integrationTestScalaSourcePath</a> = <a href="#38443" title="=&gt; sbt.Path">integrationTestSourcePath</a> <a href="Path.scala.html#18070" title="(String)sbt.Path">/</a> <a href="#24931" title="=&gt; java.lang.String">scalaDirectoryName</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="38445">integrationTestResourcesPath</a> = <a href="#38443" title="=&gt; sbt.Path">integrationTestSourcePath</a> <a href="Path.scala.html#18070" title="(String)sbt.Path">/</a> <a href="#24933" title="=&gt; java.lang.String">resourcesDirectoryName</a>
+
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="38446">integrationTestCompilePath</a> = <a href="Project.scala.html#14871" title="=&gt; sbt.Path">outputPath</a> <a href="Path.scala.html#18070" title="(String)sbt.Path">/</a> <a href="#38441" title="=&gt; java.lang.String">integrationTestCompileDirectoryName</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="38447">integrationTestAnalysisPath</a> = <a href="Project.scala.html#14871" title="=&gt; sbt.Path">outputPath</a> <a href="Path.scala.html#18070" title="(String)sbt.Path">/</a> <a href="#38442" title="=&gt; java.lang.String">integrationTestAnalysisDirectoryName</a>
+}
+
+<span class="keyword">object</span> <a title="object sbt.IntegrationTestPaths" id="8956">IntegrationTestPaths</a>
+{
+	<span class="keyword">val</span> <a title="java.lang.String" id="38451">DefaultIntegrationTestDirectoryName</a> = <span title="java.lang.String(&quot;it&quot;)" class="string">&quot;it&quot;</span>
+	<span class="keyword">val</span> <a title="java.lang.String" id="38453">DefaultIntegrationTestCompileDirectoryName</a> = <span title="java.lang.String(&quot;it-classes&quot;)" class="string">&quot;it-classes&quot;</span>
+	<span class="keyword">val</span> <a title="java.lang.String" id="38455">DefaultIntegrationTestAnalysisDirectoryName</a> = <span title="java.lang.String(&quot;it-analysis&quot;)" class="string">&quot;it-analysis&quot;</span>
+}
+        </pre>
+    </body>
+</html>

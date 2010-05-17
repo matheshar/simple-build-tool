@@ -1,0 +1,661 @@
+<?xml version="1.0" encoding="utf-8"?>
+			<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" ></meta>
+        <title>sbt/BasicProjectTypes.scala</title>
+        <script type="text/javascript" src="../jquery-all.js"></script>
+        <script type="text/javascript" src="../linked.js"></script>
+        <link rel="stylesheet" type="text/css" href="../style.css" title="Style"></link>
+    </head>
+    <body>
+        <pre>
+<span class="comment">/* sbt -- Simple Build Tool
+ * Copyright 2009  Mark Harrah
+ */</span>
+<span class="keyword">package</span> sbt
+
+<span class="keyword">import</span> scala.xml.{Node, NodeSeq}
+<span class="keyword">import</span> StringUtilities.{appendable,nonEmpty}
+<span class="keyword">import</span> BasicManagedProject._
+
+<span class="comment">/** A project that provides a classpath. */</span>
+<span class="keyword">trait</span> <a title="trait ClasspathProject extends java.lang.Object with sbt.Project with ScalaObject" id="10359">ClasspathProject</a> <span class="keyword">extends</span> <a href="Project.scala.html#7665" title="sbt.Project">Project</a>
+{
+	<span class="comment">/** The local classpath for this project.*/</span>
+	<span class="keyword">def</span> <a title="(sbt.Configuration)sbt.PathFinder" id="14923">projectClasspath</a>(<a title="sbt.Configuration" id="15021">config</a>: <a href="../IvyInterface.scala.html#11658" title="sbt.Configuration">Configuration</a>): <a href="Path.scala.html#8784" title="sbt.PathFinder">PathFinder</a>
+
+	<span class="comment">/** Returns the classpath of this project and the classpaths of all dependencies for the
+	* given configuration.  Specifically, this concatentates projectClasspath(config) for all
+	* projects of type ClasspathProject in topologicalSort. */</span>
+	<span class="keyword">def</span> <a title="(sbt.Configuration)sbt.PathFinder" id="14924">fullClasspath</a>(<a title="sbt.Configuration" id="16204">config</a>: <a href="../IvyInterface.scala.html#11658" title="sbt.Configuration">Configuration</a>): <a href="Path.scala.html#8784" title="sbt.PathFinder">PathFinder</a> =
+		<a href="Path.scala.html#10201" title="object sbt.Path">Path</a>.<a href="Path.scala.html#15570" title="(=&gt; Iterable[sbt.Path])sbt.PathFinder">lazyPathFinder</a>
+		{
+			<span class="keyword">val</span> <a title="sbt.wrap.MutableSetWrapper[sbt.Path]" id="16337">set</a> = <span title="sbt.wrap.MutableSetWrapper[sbt.Path]" class="keyword">new</span> wrap.<a href="wrap/Wrappers.scala.html#14275" title="sbt.wrap.MutableSetWrapper[sbt.Path]">MutableSetWrapper</a>(<a title="()java.util.LinkedHashSet[sbt.Path]" id="16417" class="keyword">new</a> java.util.<a title="java.util.LinkedHashSet[sbt.Path]" id="5547">LinkedHashSet</a>[Path])
+			<span class="keyword">for</span>(<a title="((sbt.Project) =&gt; Unit)Unit" id="18355">project</a> &lt;- <a href="Dag.scala.html#14930" title="=&gt; List[sbt.Project]">topologicalSort</a>)
+			{
+				<a href="#18355" title="sbt.Project">project</a> <span title="Unit" class="keyword">match</span>
+				{
+					<span title="Unit" class="keyword">case</span> <a title="sbt.ClasspathProject" id="18356">sp</a>: <a href="#10359" title="sbt.ClasspathProject">ClasspathProject</a> =&gt; <a href="#16337" title="sbt.wrap.MutableSetWrapper[sbt.Path]">set</a> <a href="wrap/Wrappers.scala.html#16359" title="(Iterable[sbt.Path])Unit">++=</a> <a href="#18356" title="sbt.ClasspathProject">sp</a>.<a href="#14923" title="(sbt.Configuration)sbt.PathFinder">projectClasspath</a>(<a href="#16204" title="sbt.Configuration">config</a>).<a href="Path.scala.html#16189" title="=&gt; scala.collection.Set[sbt.Path]">get</a>
+					<span title="Unit" class="keyword">case</span> _ =&gt; <span title="Unit">(</span>)
+				}
+			}
+			<a href="#16337" title="sbt.wrap.MutableSetWrapper[sbt.Path]">set</a>.<a href="wrap/Wrappers.scala.html#16348" title="=&gt; List[sbt.Path]">toList</a>
+		}
+	<span class="comment">/* Filter used to select dependencies for the classpath from managed and unmanaged directories.
+	* By default, it explicitly filters (x)sbt-launch(er)-&lt;version&gt;.jar, since it contains minified versions of various classes.*/</span>
+   <span class="keyword">def</span> <a title="=&gt; sbt.FileFilter" id="14925">classpathFilter</a>: <a href="NameFilter.scala.html#11145" title="sbt.FileFilter">FileFilter</a> = <a href="Project.scala.html#14855" title="implicit sbt.Project.filter : (String)sbt.NameFilter" class="string">&quot;*.jar&quot;</a> <a href="NameFilter.scala.html#18375" title="(sbt.NameFilter)sbt.NameFilter">-</a> <a href="Project.scala.html#14855" title="implicit sbt.Project.filter : (String)sbt.NameFilter" class="string">&quot;*sbt-launch*.jar&quot;</a>
+}
+<span class="keyword">trait</span> <a title="trait BasicDependencyProject extends java.lang.Object with sbt.BasicManagedProject with sbt.UnmanagedClasspathProject with ScalaObject" id="11127">BasicDependencyProject</a> <span class="keyword">extends</span> <a href="#8874" title="sbt.BasicManagedProject">BasicManagedProject</a> <span class="keyword">with</span> <a href="#8568" title="sbt.UnmanagedClasspathProject">UnmanagedClasspathProject</a>
+{
+	<span class="comment">/** This returns the classpath for only this project for the given configuration.*/</span>
+	<span class="keyword">def</span> <a title="(sbt.Configuration)sbt.PathFinder" id="18933">projectClasspath</a>(<a title="sbt.Configuration" id="18996">config</a>: <a href="../IvyInterface.scala.html#11658" title="sbt.Configuration">Configuration</a>) = <a href="#18982" title="(sbt.Configuration)sbt.PathFinder">fullUnmanagedClasspath</a>(<a href="#18996" title="sbt.Configuration">config</a>) <a href="Path.scala.html#16180" title="(sbt.PathFinder)sbt.PathFinder">+++</a> <a href="#18894" title="(sbt.Configuration)sbt.PathFinder">managedClasspath</a>(<a href="#18996" title="sbt.Configuration">config</a>)
+}
+<span class="comment">/** A project that provides a directory in which jars can be manually managed.*/</span>
+<span class="keyword">trait</span> <a title="trait UnmanagedClasspathProject extends java.lang.Object with sbt.ClasspathProject with ScalaObject" id="8568">UnmanagedClasspathProject</a> <span class="keyword">extends</span> <a href="#10359" title="sbt.ClasspathProject">ClasspathProject</a>
+{
+	<span class="comment">/** The location of the manually managed (unmanaged) dependency directory.*/</span>
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="18980">dependencyPath</a>: <a href="Path.scala.html#10200" title="sbt.Path">Path</a>
+	<span class="comment">/** The classpath containing all jars in the unmanaged directory. */</span>
+	<span class="keyword">def</span> <a title="=&gt; sbt.PathFinder" id="18981">unmanagedClasspath</a>: <a href="Path.scala.html#8784" title="sbt.PathFinder">PathFinder</a> =
+	{
+		<span class="keyword">val</span> <a title="sbt.PathFinder" id="19075">base</a> = <a href="Project.scala.html#14919" title="(sbt.PathFinder,sbt.FileFilter)sbt.PathFinder">descendents</a>(<a href="#18980" title="=&gt; sbt.Path">dependencyPath</a>, <a href="#14925" title="=&gt; sbt.FileFilter">classpathFilter</a>)
+		<span title="sbt.PathFinder" class="keyword">if</span>(<a href="Project.scala.html#14830" title="=&gt; Boolean">scratch</a>)
+			<a href="#19075" title="sbt.PathFinder">base</a> <a href="Path.scala.html#16180" title="(sbt.PathFinder)sbt.PathFinder">+++</a> (<a href="Project.scala.html#14826" title="=&gt; sbt.ProjectInfo">info</a>.<a href="ProjectInfo.scala.html#19183" title="=&gt; sbt.Path">projectPath</a> <a href="Path.scala.html#16184" title="(sbt.FileFilter)sbt.PathFinder">*</a> <a href="#14925" title="=&gt; sbt.FileFilter">classpathFilter</a>)
+		<span class="keyword">else</span>
+			<a href="#19075" title="sbt.PathFinder">base</a>
+	}
+	<span class="comment">/** The classpath containing all unmanaged classpath elements for the given configuration. This typically includes
+	* at least 'unmanagedClasspath'.*/</span>
+	<span class="keyword">def</span> <a title="(sbt.Configuration)sbt.PathFinder" id="18982">fullUnmanagedClasspath</a>(<a title="sbt.Configuration" id="18998">config</a>: <a href="../IvyInterface.scala.html#11658" title="sbt.Configuration">Configuration</a>): <a href="Path.scala.html#8784" title="sbt.PathFinder">PathFinder</a>
+}
+
+<span class="keyword">trait</span> <a title="trait IvyTasks extends java.lang.Object with sbt.Project with ScalaObject" id="11301">IvyTasks</a> <span class="keyword">extends</span> <a href="Project.scala.html#7665" title="sbt.Project">Project</a>
+{
+	<span class="keyword">def</span> <a title="(=&gt; Unit)IvyTasks.this.Task" id="18936">ivyTask</a>(<a title="=&gt; Unit" id="19197">action</a>: =&gt; Unit) =
+		<a href="TaskManager.scala.html#14806" title="(=&gt; Option[String])IvyTasks.this.Task">task</a>
+		{
+			<span class="keyword">try</span> { <a href="#19197" title="=&gt; Unit">action</a>; <span title="object None">None</span> }
+			<span class="keyword">catch</span> {
+				<span title="Some[java.lang.String]" class="keyword">case</span> <a title="sbt.ResolveException" id="19314">e</a>: <a href="../IvyActions.scala.html#10353" title="sbt.ResolveException">ResolveException</a> =&gt;
+					<a href="Project.scala.html#14821" title="=&gt; sbt.Logger">log</a>.<a href="Logger.scala.html#19736" title="(=&gt; String)Unit">error</a>(<a href="#19314" title="sbt.ResolveException">e</a>.<span title="()java.lang.String">toString</span>)
+					<span title="(java.lang.String)Some[java.lang.String]">Some</span>(<a href="#19314" title="sbt.ResolveException">e</a>.<span title="()java.lang.String">toString</span>)
+				<span title="Some[java.lang.String]" class="keyword">case</span> <a title="Exception" id="19781">e</a>: <a title="Exception" id="2076">Exception</a> =&gt;
+					<a href="Project.scala.html#14821" title="=&gt; sbt.Logger">log</a>.<a href="Logger.scala.html#19731" title="(=&gt; Throwable)Unit">trace</a>(<a href="#19781" title="Exception">e</a>)
+					<a href="Project.scala.html#14821" title="=&gt; sbt.Logger">log</a>.<a href="Logger.scala.html#19736" title="(=&gt; String)Unit">error</a>(<a href="#19781" title="Exception">e</a>.<span title="()java.lang.String">toString</span>)
+					<span title="(java.lang.String)Some[java.lang.String]">Some</span>(<a href="#19781" title="Exception">e</a>.<span title="()java.lang.String">toString</span>)
+			}
+		}
+	<span class="keyword">def</span> <a title="(=&gt; sbt.IvySbt#Module,=&gt; sbt.UpdateConfiguration)IvyTasks.this.Task" id="18937">updateTask</a>(<a title="=&gt; sbt.IvySbt#Module" id="19814">module</a>: =&gt; IvySbt#Module, <a title="=&gt; sbt.UpdateConfiguration" id="19815">configuration</a>: =&gt; UpdateConfiguration) =
+		<a href="#18936" title="(=&gt; Unit)IvyTasks.this.Task">ivyTask</a> { <a href="../IvyActions.scala.html#10432" title="object sbt.IvyActions">IvyActions</a>.<a href="../IvyActions.scala.html#19825" title="(sbt.IvySbt#Module,sbt.UpdateConfiguration)Unit">update</a>(<a href="#19814" title="=&gt; sbt.IvySbt#Module">module</a>, <a href="#19815" title="=&gt; sbt.UpdateConfiguration">configuration</a>) }
+
+	<span class="keyword">def</span> <a title="(=&gt; sbt.IvySbt#Module,=&gt; sbt.PublishConfiguration)IvyTasks.this.Task" id="18938">publishTask</a>(<a title="=&gt; sbt.IvySbt#Module" id="19857">module</a>: =&gt; IvySbt#Module, <a title="=&gt; sbt.PublishConfiguration" id="19858">publishConfiguration</a>: =&gt; PublishConfiguration) =
+		<a href="#18936" title="(=&gt; Unit)IvyTasks.this.Task">ivyTask</a>
+		{
+			<span class="keyword">val</span> <a title="sbt.PublishConfiguration" id="19860">publishConfig</a> = <a href="#19858" title="=&gt; sbt.PublishConfiguration">publishConfiguration</a>
+			<span class="keyword">import</span> publishConfig._
+			<span class="keyword">val</span> <a title="Option[String]" id="19862">deliveredIvy</a> = <span title="Option[String]" class="keyword">if</span>(<a href="#19869" title="=&gt; Boolean">publishIvy</a>) <span title="(String)Some[String]">Some</span>(<a href="#19864" title="=&gt; String">deliveredPattern</a>) <span class="keyword">else</span> <span title="object None">None</span>
+			<a href="../IvyActions.scala.html#10432" title="object sbt.IvyActions">IvyActions</a>.<a href="../IvyActions.scala.html#19824" title="(sbt.IvySbt#Module,String,Iterable[String],Option[String],Option[Iterable[sbt.Configuration]])Unit">publish</a>(<a href="#19857" title="=&gt; sbt.IvySbt#Module">module</a>, <a href="#19863" title="=&gt; String">resolverName</a>, <a href="#19865" title="=&gt; Iterable[String]">srcArtifactPatterns</a>, <a href="#19862" title="Option[String]">deliveredIvy</a>, <a href="#19868" title="=&gt; Option[Iterable[sbt.Configuration]]">configurations</a>)
+		}
+	<span class="keyword">def</span> <a title="(=&gt; sbt.IvySbt#Module,=&gt; sbt.PublishConfiguration,=&gt; sbt.UpdateLogging.Value)IvyTasks.this.Task" id="18939">deliverTask</a>(<a title="=&gt; sbt.IvySbt#Module" id="19905">module</a>: =&gt; IvySbt#Module, <a title="=&gt; sbt.PublishConfiguration" id="19906">deliverConfiguration</a>: =&gt; PublishConfiguration, <a title="=&gt; sbt.UpdateLogging.Value" id="19907">logging</a>: =&gt; UpdateLogging.Value) =
+		<a href="#18936" title="(=&gt; Unit)IvyTasks.this.Task">ivyTask</a>
+		{
+			<span class="keyword">val</span> <a title="sbt.PublishConfiguration" id="19909">deliverConfig</a> = <a href="#19906" title="=&gt; sbt.PublishConfiguration">deliverConfiguration</a>
+			<span class="keyword">import</span> deliverConfig._
+			<a href="../IvyActions.scala.html#10432" title="object sbt.IvyActions">IvyActions</a>.<a href="../IvyActions.scala.html#19823" title="(sbt.IvySbt#Module,String,String,Iterable[sbt.ModuleID],Option[Iterable[sbt.Configuration]],sbt.UpdateLogging.Value)Unit">deliver</a>(<a href="#19905" title="=&gt; sbt.IvySbt#Module">module</a>, <a href="#19867" title="=&gt; String">status</a>, <a href="#19864" title="=&gt; String">deliveredPattern</a>, <a href="#19866" title="=&gt; Iterable[sbt.ModuleID]">extraDependencies</a>, <a href="#19868" title="=&gt; Option[Iterable[sbt.Configuration]]">configurations</a>, <a href="#19907" title="=&gt; sbt.UpdateLogging.Value">logging</a>)
+		}
+	@<a title="deprecated" id="201">deprecated</a> <span class="keyword">def</span> <a title="(=&gt; sbt.IvySbt#Module,=&gt; sbt.Path,=&gt; Iterable[sbt.ModuleID],=&gt; scala.xml.NodeSeq,=&gt; Option[Iterable[sbt.Configuration]])IvyTasks.this.Task" id="18940">makePomTask</a>(<a title="=&gt; sbt.IvySbt#Module" id="20044">module</a>: =&gt; IvySbt#Module, <a title="=&gt; sbt.Path" id="20045">output</a>: =&gt; Path, <a title="=&gt; Iterable[sbt.ModuleID]" id="20046">extraDependencies</a>: =&gt; Iterable[ModuleID], <a title="=&gt; scala.xml.NodeSeq" id="20047">pomExtra</a>: =&gt; NodeSeq, <a title="=&gt; Option[Iterable[sbt.Configuration]]" id="20048">configurations</a>: =&gt; Option[Iterable[Configuration]]): <a href="TaskManager.scala.html#14812" title="IvyTasks.this.Task">Task</a> =
+		<a href="#18941" title="(=&gt; sbt.IvySbt#Module,=&gt; sbt.MakePomConfiguration,=&gt; sbt.Path)IvyTasks.this.Task">makePomTask</a>(<a href="#20044" title="=&gt; sbt.IvySbt#Module">module</a>, <a href="../IvyActions.scala.html#20537" title="(Iterable[sbt.ModuleID],Option[Iterable[sbt.Configuration]],scala.xml.NodeSeq)sbt.MakePomConfiguration">MakePomConfiguration</a>(<a href="#20046" title="=&gt; Iterable[sbt.ModuleID]">extraDependencies</a>, <a href="#20048" title="=&gt; Option[Iterable[sbt.Configuration]]">configurations</a>, <a href="#20047" title="=&gt; scala.xml.NodeSeq">pomExtra</a>), <a href="#20045" title="=&gt; sbt.Path">output</a>)
+	<span class="keyword">def</span> <a title="(=&gt; sbt.IvySbt#Module,=&gt; sbt.MakePomConfiguration,=&gt; sbt.Path)IvyTasks.this.Task" id="18941">makePomTask</a>(<a title="=&gt; sbt.IvySbt#Module" id="20072">module</a>: =&gt; IvySbt#Module, <a title="=&gt; sbt.MakePomConfiguration" id="20073">configuration</a>: =&gt; MakePomConfiguration, <a title="=&gt; sbt.Path" id="20074">output</a>: =&gt; Path): <a href="TaskManager.scala.html#14812" title="IvyTasks.this.Task">Task</a> =
+		<a href="#18936" title="(=&gt; Unit)IvyTasks.this.Task">ivyTask</a> { <a href="../IvyActions.scala.html#10432" title="object sbt.IvyActions">IvyActions</a>.<a href="../IvyActions.scala.html#19821" title="(sbt.IvySbt#Module,sbt.MakePomConfiguration,java.io.File)Unit">makePom</a>(<a href="#20072" title="=&gt; sbt.IvySbt#Module">module</a>, <a href="#20073" title="=&gt; sbt.MakePomConfiguration">configuration</a>, <a href="#20074" title="=&gt; sbt.Path">output</a> <a href="Path.scala.html#18076" title="=&gt; java.io.File">asFile</a>) }
+		
+
+	<span class="keyword">def</span> <a title="(sbt.IvySbt#Module,sbt.Resolver,sbt.Resolver)IvyTasks.this.Task" id="18942">installTask</a>(<a title="sbt.IvySbt#Module" id="20603">module</a>: IvySbt#<a href="../Ivy.scala.html#19850" title="sbt.IvySbt#Module">Module</a>, <a title="sbt.Resolver" id="20604">from</a>: <a href="../IvyInterface.scala.html#11181" title="sbt.Resolver">Resolver</a>, <a title="sbt.Resolver" id="20605">to</a>: <a href="../IvyInterface.scala.html#11181" title="sbt.Resolver">Resolver</a>) =
+		<a href="#18936" title="(=&gt; Unit)IvyTasks.this.Task">ivyTask</a> { <a href="../IvyActions.scala.html#10432" title="object sbt.IvyActions">IvyActions</a>.<a href="../IvyActions.scala.html#19818" title="(sbt.IvySbt#Module,String,String)Unit">install</a>(<a href="#20603" title="sbt.IvySbt#Module">module</a>, <a href="#20604" title="sbt.Resolver">from</a>.<a href="../IvyInterface.scala.html#20578" title="=&gt; String">name</a>, <a href="#20605" title="sbt.Resolver">to</a>.<a href="../IvyInterface.scala.html#20578" title="=&gt; String">name</a>) }
+		
+	<span class="keyword">def</span> <a title="(=&gt; sbt.IvySbt)IvyTasks.this.Task" id="18943">cleanCacheTask</a>(<a title="=&gt; sbt.IvySbt" id="20617">ivySbt</a>: =&gt; IvySbt) =
+		<a href="#18936" title="(=&gt; Unit)IvyTasks.this.Task">ivyTask</a> { <a href="../IvyActions.scala.html#10432" title="object sbt.IvyActions">IvyActions</a>.<a href="../IvyActions.scala.html#19819" title="(sbt.IvySbt)Unit">cleanCache</a>(<a href="#20617" title="=&gt; sbt.IvySbt">ivySbt</a>) }
+
+	<span class="keyword">def</span> <a title="(sbt.Path)IvyTasks.this.Task" id="18944">cleanLibTask</a>(<a title="sbt.Path" id="21528">managedDependencyPath</a>: <a href="Path.scala.html#10200" title="sbt.Path">Path</a>) = 
+		<a href="TaskManager.scala.html#14806" title="(=&gt; Option[String])IvyTasks.this.Task">task</a> { <a href="FileUtilities.scala.html#9085" title="object sbt.FileUtilities">FileUtilities</a>.<a href="FileUtilities.scala.html#15485" title="(Iterable[sbt.Path],sbt.Logger)Option[String]">clean</a>(<a href="#21528" title="sbt.Path">managedDependencyPath</a>.<a href="Path.scala.html#16189" title="=&gt; scala.collection.Set[sbt.Path]">get</a>, <a href="Project.scala.html#14821" title="=&gt; sbt.Logger">log</a>) }
+}
+
+<span class="comment">/** A project that provides automatic dependency management.*/</span>
+<span class="keyword">trait</span> <a title="trait ManagedProject extends java.lang.Object with sbt.ClasspathProject with sbt.IvyTasks with ScalaObject" id="11826">ManagedProject</a> <span class="keyword">extends</span> <a href="#10359" title="sbt.ClasspathProject">ClasspathProject</a> <span class="keyword">with</span> <a href="#11301" title="sbt.IvyTasks">IvyTasks</a>
+{
+	<span class="comment">/** This is the public ID of the project (used for publishing, for example) */</span>
+	<span class="keyword">def</span> <a title="=&gt; String" id="18831">moduleID</a>: <span title="String">String</span> = <a href="Project.scala.html#14921" title="=&gt; java.lang.String">normalizedName</a> <span title="(Any)java.lang.String">+</span> <a href="#14791" title="(String)java.lang.String">appendable</a>(<a href="Project.scala.html#14911" title="=&gt; String">crossScalaVersionString</a>)
+	<span class="comment">/** This is the full public ID of the project (used for publishing, for example) */</span>
+	<span class="keyword">def</span> <a title="=&gt; sbt.ModuleID" id="18832">projectID</a>: <a href="../IvyInterface.scala.html#11352" title="sbt.ModuleID">ModuleID</a> = <a href="../IvyInterface.scala.html#22236" title="(String,String,String)sbt.ModuleID">ModuleID</a>(<a href="Project.scala.html#14829" title="=&gt; String">organization</a>, <a href="#18831" title="=&gt; String">moduleID</a>, <a href="Project.scala.html#14828" title="=&gt; sbt.Version">version</a>.<span title="()java.lang.String">toString</span>).<a href="../IvyInterface.scala.html#22227" title="(sbt.Artifact*)sbt.ModuleID">artifacts</a>(<a href="#18835" title="=&gt; Iterable[sbt.Artifact]">artifacts</a>.<span title="=&gt; Seq[sbt.Artifact]">toSeq</span> : _*)
+
+	<span class="comment">/** This is the default name for artifacts (such as jars) without any version string.*/</span>
+	<span class="keyword">def</span> <a title="=&gt; String" id="18833">artifactID</a> = <a href="#18831" title="=&gt; String">moduleID</a>
+	<span class="comment">/** This is the default name for artifacts (such as jars) including the version string.*/</span>
+	<span class="keyword">def</span> <a title="=&gt; java.lang.String" id="18834">artifactBaseName</a> = <a href="#18833" title="=&gt; String">artifactID</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot;-&quot;)" class="string">&quot;-&quot;</span> <span title="(Any)java.lang.String">+</span> <a href="Project.scala.html#14828" title="=&gt; sbt.Version">version</a>.<span title="()java.lang.String">toString</span>
+	<span class="keyword">def</span> <a title="=&gt; Iterable[sbt.Artifact]" id="18835">artifacts</a>: <span title="Iterable[sbt.Artifact]">Iterable</span>[Artifact]
+
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="18836">managedDependencyPath</a>: <a href="Path.scala.html#10200" title="sbt.Path">Path</a>
+	<span class="comment">/** The managed classpath for the given configuration.  This can be overridden to add jars from other configurations
+	* so that the Ivy 'extends' mechanism is not required.  That way, the jars are only copied to one configuration.*/</span>
+	<span class="keyword">def</span> <a title="(sbt.Configuration)sbt.PathFinder" id="18837">managedClasspath</a>(<a title="sbt.Configuration" id="19002">config</a>: <a href="../IvyInterface.scala.html#11658" title="sbt.Configuration">Configuration</a>): <a href="Path.scala.html#8784" title="sbt.PathFinder">PathFinder</a> = <a href="#18838" title="(sbt.Configuration)sbt.PathFinder">configurationClasspath</a>(<a href="#19002" title="sbt.Configuration">config</a>)
+	<span class="comment">/** All dependencies in the given configuration. */</span>
+	<span class="keyword">final</span> <span class="keyword">def</span> <a title="(sbt.Configuration)sbt.PathFinder" id="18838">configurationClasspath</a>(<a title="sbt.Configuration" id="19037">config</a>: <a href="../IvyInterface.scala.html#11658" title="sbt.Configuration">Configuration</a>): <a href="Path.scala.html#8784" title="sbt.PathFinder">PathFinder</a> = <a href="Project.scala.html#14919" title="(sbt.PathFinder,sbt.FileFilter)sbt.PathFinder">descendents</a>(<a href="#18839" title="(sbt.Configuration)sbt.Path">configurationPath</a>(<a href="#19037" title="sbt.Configuration">config</a>), <a href="#14925" title="=&gt; sbt.FileFilter">classpathFilter</a>)
+
+	<span class="comment">/** The base path to which dependencies in configuration 'config' are downloaded.*/</span>
+	<span class="keyword">def</span> <a title="(sbt.Configuration)sbt.Path" id="18839">configurationPath</a>(<a title="sbt.Configuration" id="22900">config</a>: <a href="../IvyInterface.scala.html#11658" title="sbt.Configuration">Configuration</a>): <a href="Path.scala.html#10200" title="sbt.Path">Path</a> = <a href="#18836" title="=&gt; sbt.Path">managedDependencyPath</a> <a href="Path.scala.html#18070" title="(String)sbt.Path">/</a> <a href="#22900" title="sbt.Configuration">config</a>.<a href="../IvyInterface.scala.html#15419" title="()String">toString</a>
+
+	<span class="keyword">import</span> StringUtilities.nonEmpty
+	<span class="keyword">implicit</span> <span class="keyword">def</span> <a title="implicit sbt.ManagedProject.toGroupID : (String)sbt.GroupID" id="18841">toGroupID</a>(<a title="String" id="22906">groupID</a>: <span title="String">String</span>): <a href="#8580" title="sbt.GroupID">GroupID</a> =
+	{
+		<a href="#14790" title="(String,String)Unit">nonEmpty</a>(<a href="#22906" title="String">groupID</a>, <span title="java.lang.String(&quot;Group ID&quot;)" class="string">&quot;Group ID&quot;</span>)
+		<span title="sbt.GroupID" class="keyword">new</span> <a href="#8580" title="sbt.GroupID">GroupID</a>(<a href="#22906" title="String">groupID</a>, <a href="Project.scala.html#14893" title="=&gt; String">buildScalaVersion</a>)
+	}
+	<span class="keyword">implicit</span> <span class="keyword">def</span> <a title="implicit sbt.ManagedProject.toRepositoryName : (String)sbt.RepositoryName" id="18842">toRepositoryName</a>(<a title="String" id="22924">name</a>: <span title="String">String</span>): <a href="#7194" title="sbt.RepositoryName">RepositoryName</a> =
+	{
+		<a href="#14790" title="(String,String)Unit">nonEmpty</a>(<a href="#22924" title="String">name</a>, <span title="java.lang.String(&quot;Repository name&quot;)" class="string">&quot;Repository name&quot;</span>)
+		<span title="sbt.RepositoryName" class="keyword">new</span> <a href="#7194" title="sbt.RepositoryName">RepositoryName</a>(<a href="#22924" title="String">name</a>)
+	}
+	<span class="keyword">implicit</span> <span class="keyword">def</span> <a title="implicit sbt.ManagedProject.moduleIDConfigurable : (sbt.ModuleID)sbt.ModuleIDConfigurable" id="18843">moduleIDConfigurable</a>(<a title="sbt.ModuleID" id="22930">m</a>: <a href="../IvyInterface.scala.html#11352" title="sbt.ModuleID">ModuleID</a>): <a href="#10584" title="sbt.ModuleIDConfigurable">ModuleIDConfigurable</a> =
+	{
+		<span title="(Boolean,Any)Unit">require</span>(<a href="#22930" title="sbt.ModuleID">m</a>.<a href="../IvyInterface.scala.html#22210" title="=&gt; Option[String]">configurations</a>.<a title="=&gt; Boolean" id="19227">isEmpty</a>, <span title="java.lang.String(&quot;Configurations already specified for module &quot;)" class="string">&quot;Configurations already specified for module &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#22930" title="sbt.ModuleID">m</a>)
+		<span title="sbt.ModuleIDConfigurable" class="keyword">new</span> <a href="#10584" title="sbt.ModuleIDConfigurable">ModuleIDConfigurable</a>(<a href="#22930" title="sbt.ModuleID">m</a>)
+	}
+
+	<span class="comment">/** Creates a new configuration with the given name.*/</span>
+	<span class="keyword">def</span> <a title="(String)sbt.Configuration" id="18844">config</a>(<a title="String" id="22944">name</a>: <span title="String">String</span>) = <a href="../IvyInterface.scala.html#15413" title="(String)sbt.Configuration" class="keyword">new</a> <a href="../IvyInterface.scala.html#11658" title="sbt.Configuration">Configuration</a>(<a href="#22944" title="String">name</a>)
+}
+<span class="comment">/** This class groups required configuration for the deliver and publish tasks. */</span>
+<span class="keyword">trait</span> <a title="trait PublishConfiguration extends java.lang.Object with NotNull" id="9636">PublishConfiguration</a> <span class="keyword">extends</span> <span title="NotNull">NotNull</span>
+{
+	<span class="comment">/** The name of the resolver to which publishing should be done.*/</span>
+	<span class="keyword">def</span> <a title="=&gt; String" id="19863">resolverName</a>: <span title="String">String</span>
+	<span class="comment">/** The Ivy pattern used to determine the delivered Ivy file location.  An example is
+	* (outputPath / &quot;[artifact]-[revision].[ext]&quot;).relativePath. */</span>
+	<span class="keyword">def</span> <a title="=&gt; String" id="19864">deliveredPattern</a>: <span title="String">String</span>
+	<span class="comment">/** Ivy patterns used to find artifacts for publishing.  An example pattern is
+	* (outputPath / &quot;[artifact]-[revision].[ext]&quot;).relativePath */</span>
+	<span class="keyword">def</span> <a title="=&gt; Iterable[String]" id="19865">srcArtifactPatterns</a>: <span title="Iterable[String]">Iterable</span>[String]
+	<span class="comment">/** Additional dependencies to include for delivering/publishing only.  These are typically dependencies on
+	* subprojects. */</span>
+	<span class="keyword">def</span> <a title="=&gt; Iterable[sbt.ModuleID]" id="19866">extraDependencies</a>: <span title="Iterable[sbt.ModuleID]">Iterable</span>[ModuleID]
+	<span class="comment">/** The status to use when delivering or publishing.  This might be &quot;release&quot; or &quot;integration&quot; or another valid Ivy status. */</span>
+	<span class="keyword">def</span> <a title="=&gt; String" id="19867">status</a>: <span title="String">String</span>
+	<span class="comment">/**  The configurations to include in the publish/deliver action: specify none for all configurations. */</span>
+	<span class="keyword">def</span> <a title="=&gt; Option[Iterable[sbt.Configuration]]" id="19868">configurations</a>: <span title="Option[Iterable[sbt.Configuration]]">Option</span>[Iterable[Configuration]]
+	<span class="comment">/** True if the Ivy file should be published. */</span>
+	<span class="keyword">def</span> <a title="=&gt; Boolean" id="19869">publishIvy</a>: <span title="Boolean">Boolean</span>
+}
+<span class="keyword">object</span> <a title="object sbt.ManagedStyle" id="6403">ManagedStyle</a> <span class="keyword">extends</span> <a title="Enumeration" id="19922">Enumeration</a>
+{
+	<span class="keyword">val</span> <a title="sbt.ManagedStyle.Value" id="22125">Maven</a>, <a title="sbt.ManagedStyle.Value" id="22127">Ivy</a>, <a title="sbt.ManagedStyle.Value" id="22129">Auto</a> = <span title="=&gt; sbt.ManagedStyle.Value">Value</span>
+}
+<span class="keyword">import</span> ManagedStyle.{Auto, Ivy, Maven, Value =&gt; ManagedType}
+<span class="keyword">trait</span> <a title="trait BasicManagedProject extends java.lang.Object with sbt.ManagedProject with sbt.ReflectiveManagedProject with sbt.BasicDependencyPaths with ScalaObject" id="8874">BasicManagedProject</a> <span class="keyword">extends</span> <a href="#11826" title="sbt.ManagedProject">ManagedProject</a> <span class="keyword">with</span> <a href="#7401" title="sbt.ReflectiveManagedProject">ReflectiveManagedProject</a> <span class="keyword">with</span> <a href="#7347" title="sbt.BasicDependencyPaths">BasicDependencyPaths</a>
+{
+	<span class="keyword">def</span> <a title="=&gt; sbt.UpdateConfiguration" id="18846">ivyUpdateConfiguration</a> =  <span title="sbt.UpdateConfiguration" class="keyword">new</span> <a href="../IvyActions.scala.html#8016" title="sbt.UpdateConfiguration">UpdateConfiguration</a>(<a href="#18976" title="=&gt; sbt.Path">managedDependencyPath</a>.<a href="Path.scala.html#18076" title="=&gt; java.io.File">asFile</a>, <a href="#18870" title="=&gt; java.lang.String">outputPattern</a>, <span title="Boolean(true)" class="keyword">true</span><span class="comment">/*sync*/</span>, <a href="#18847" title="=&gt; sbt.UpdateLogging.Value">ivyUpdateLogging</a>)
+	<span class="keyword">def</span> <a title="=&gt; sbt.UpdateLogging.Value" id="18847">ivyUpdateLogging</a> = <a href="../IvyActions.scala.html#9574" title="object sbt.UpdateLogging">UpdateLogging</a>.<a href="../IvyActions.scala.html#20033" title="=&gt; sbt.UpdateLogging.Value">DownloadOnly</a>
+	<span class="keyword">def</span> <a title="=&gt; Boolean" id="18848">ivyLocalOnly</a>: <span title="Boolean">Boolean</span> = <a href="Project.scala.html#14889" title="=&gt; BasicManagedProject.this.Property[Boolean]">offline</a>.<a href="Environment.scala.html#19155" title="=&gt; Boolean">value</a>
+
+	<span class="keyword">def</span> <a title="=&gt; Seq[sbt.Resolver]" id="18849">ivyRepositories</a>: <span title="Seq[sbt.Resolver]">Seq</span>[Resolver] =
+	{
+		<span class="keyword">val</span> <a title="Seq[sbt.Resolver]" id="23007">repos</a> = <a href="#18959" title="=&gt; Set[sbt.Resolver]">repositories</a>.<span title="=&gt; Seq[sbt.Resolver]">toSeq</span>
+		<span title="Seq[sbt.Resolver]" class="keyword">if</span>(<a href="#23007" title="Seq[sbt.Resolver]">repos</a>.<span title="=&gt; Boolean">isEmpty</span>) <span title="object Nil">Nil</span> <span class="keyword">else</span> <a href="../IvyInterface.scala.html#11182" title="object sbt.Resolver">Resolver</a>.<a href="../IvyInterface.scala.html#15031" title="(Seq[sbt.Resolver])Seq[sbt.Resolver]">withDefaultResolvers</a>(<a href="#23007" title="Seq[sbt.Resolver]">repos</a>)
+	}
+	<span class="keyword">def</span> <a title="=&gt; Seq[sbt.Resolver]" id="18850">otherRepositories</a>: <span title="Seq[sbt.Resolver]">Seq</span>[Resolver] = <a href="#18893" title="=&gt; Option[sbt.Resolver]">defaultPublishRepository</a>.<a title="=&gt; List[sbt.Resolver]" id="19243">toList</a>
+	<span class="keyword">def</span> <a title="=&gt; Boolean" id="18851">ivyValidate</a> = <span title="Boolean(true)" class="keyword">true</span>
+	<span class="keyword">def</span> <a title="=&gt; Option[sbt.IvyScala]" id="18852">ivyScala</a>: <span title="Option[sbt.IvyScala]">Option</span>[IvyScala] = <span title="(sbt.IvyScala)Some[sbt.IvyScala]">Some</span>(<span title="sbt.IvyScala" class="keyword">new</span> <a href="../IvyScala.scala.html#7296" title="sbt.IvyScala">IvyScala</a>(<a href="Project.scala.html#14893" title="=&gt; String">buildScalaVersion</a>, <a href="#18892" title="=&gt; Iterable[sbt.Configuration]">checkScalaInConfigurations</a>, <a href="#18890" title="=&gt; Boolean">checkExplicitScalaDependencies</a>, <a href="#18891" title="=&gt; Boolean">filterScalaJars</a>))
+	<span class="keyword">def</span> <a title="=&gt; Option[sbt.Path]" id="18853">ivyCacheDirectory</a>: <span title="Option[sbt.Path]">Option</span>[Path] = <span title="object None">None</span>
+	
+	<span class="keyword">def</span> <a title="=&gt; sbt.IvyPaths" id="18854">ivyPaths</a>: <a href="../IvyConfigurations.scala.html#9606" title="sbt.IvyPaths">IvyPaths</a> = <span title="sbt.IvyPaths" class="keyword">new</span> <a href="../IvyConfigurations.scala.html#9606" title="sbt.IvyPaths">IvyPaths</a>(<a href="Project.scala.html#14826" title="=&gt; sbt.ProjectInfo">info</a>.<a href="ProjectInfo.scala.html#19183" title="=&gt; sbt.Path">projectPath</a>.<a href="Path.scala.html#18076" title="=&gt; java.io.File">asFile</a>, <a href="#18853" title="=&gt; Option[sbt.Path]">ivyCacheDirectory</a>.<span title="((sbt.Path) =&gt; java.io.File)Option[java.io.File]">map</span>(<a href="#23093" title="sbt.Path">_</a>.<a href="Path.scala.html#18076" title="=&gt; java.io.File">asFile</a>))
+	<span class="keyword">def</span> <a title="=&gt; sbt.InlineIvyConfiguration" id="18855">inlineIvyConfiguration</a> = <span title="sbt.InlineIvyConfiguration" class="keyword">new</span> <a href="../IvyConfigurations.scala.html#11268" title="sbt.InlineIvyConfiguration">InlineIvyConfiguration</a>(<a href="#18854" title="=&gt; sbt.IvyPaths">ivyPaths</a>, <a href="#18849" title="=&gt; Seq[sbt.Resolver]">ivyRepositories</a>.<a title="=&gt; Seq[sbt.Resolver]" id="16765">toSeq</a>, <a href="#18850" title="=&gt; Seq[sbt.Resolver]">otherRepositories</a>, <a href="#18961" title="=&gt; Set[sbt.ModuleConfiguration]">moduleConfigurations</a>.<span title="=&gt; Seq[sbt.ModuleConfiguration]">toSeq</span>, <a href="#18848" title="=&gt; Boolean">ivyLocalOnly</a>, <span title="(xsbti.GlobalLock)Some[xsbti.GlobalLock]">Some</span>(<a href="Project.scala.html#14826" title="=&gt; sbt.ProjectInfo">info</a>.<a href="ProjectInfo.scala.html#19180" title="=&gt; xsbti.Launcher">launcher</a>.<a href="../xsbti/Launcher.java.html#23158" title="()xsbti.GlobalLock">globalLock</a>), <a href="Project.scala.html#14821" title="=&gt; sbt.Logger">log</a>)
+	<span class="keyword">def</span> <a title="=&gt; sbt.IvyConfiguration" id="18856">ivyConfiguration</a>: <a href="../IvyConfigurations.scala.html#11130" title="sbt.IvyConfiguration">IvyConfiguration</a> =
+	{
+		<span class="keyword">val</span> <a title="sbt.InlineIvyConfiguration" id="23160">in</a> = <a href="#18855" title="=&gt; sbt.InlineIvyConfiguration">inlineIvyConfiguration</a>
+		<span class="keyword">def</span> <a title="(sbt.IvyConfiguration)sbt.IvyConfiguration" id="23161">adapt</a>(<a title="sbt.IvyConfiguration" id="23163">c</a>: <a href="../IvyConfigurations.scala.html#11130" title="sbt.IvyConfiguration">IvyConfiguration</a>): <a href="../IvyConfigurations.scala.html#11130" title="sbt.IvyConfiguration">IvyConfiguration</a> = <a href="#23163" title="sbt.IvyConfiguration">c</a>.<a href="../IvyConfigurations.scala.html#20081" title="(java.io.File)c.This">withBase</a>(<a href="#23160" title="sbt.InlineIvyConfiguration">in</a>.<a href="../IvyConfigurations.scala.html#23119" title="=&gt; java.io.File">baseDirectory</a>)
+		<span class="keyword">def</span> <a title="(sbt.IvyConfiguration)(sbt.Project)sbt.IvyConfiguration" id="23162">parentIvyConfiguration</a>(<a title="sbt.IvyConfiguration" id="23168">default</a>: <a href="../IvyConfigurations.scala.html#11130" title="sbt.IvyConfiguration">IvyConfiguration</a>)(<a title="sbt.Project" id="23169">p</a>: <a href="Project.scala.html#7665" title="sbt.Project">Project</a>) = <a href="#23169" title="sbt.Project">p</a> <span title="sbt.IvyConfiguration" class="keyword">match</span> { <span title="sbt.IvyConfiguration" class="keyword">case</span> <a title="sbt.BasicManagedProject" id="23170">b</a>: <a href="#8874" title="sbt.BasicManagedProject">BasicManagedProject</a> =&gt; <a href="#23161" title="(sbt.IvyConfiguration)sbt.IvyConfiguration">adapt</a>(<a href="#23170" title="sbt.BasicManagedProject">b</a>.<a href="#18856" title="=&gt; sbt.IvyConfiguration">ivyConfiguration</a>); <span title="sbt.IvyConfiguration" class="keyword">case</span> _ =&gt; <a href="#23168" title="sbt.IvyConfiguration">default</a> }
+		<span title="sbt.IvyConfiguration" class="keyword">if</span>(<a href="#23160" title="sbt.InlineIvyConfiguration">in</a>.<a href="../IvyConfigurations.scala.html#23105" title="=&gt; Seq[sbt.Resolver]">resolvers</a>.<span title="=&gt; Boolean">isEmpty</span>)
+		{
+			 <span title="sbt.IvyConfiguration" class="keyword">if</span>(<a href="#23160" title="sbt.InlineIvyConfiguration">in</a>.<a href="../IvyConfigurations.scala.html#23109" title="=&gt; Seq[sbt.ModuleConfiguration]">moduleConfigurations</a>.<span title="=&gt; Boolean">isEmpty</span> <span title="(Boolean)Boolean">&amp;&amp;</span> <a href="#23160" title="sbt.InlineIvyConfiguration">in</a>.<a href="../IvyConfigurations.scala.html#23107" title="=&gt; Seq[sbt.Resolver]">otherResolvers</a>.<span title="=&gt; Boolean">isEmpty</span>)
+			 {
+				<a href="../IvyConfigurations.scala.html#23172" title="(sbt.IvyPaths,Option[xsbti.GlobalLock],Boolean,sbt.IvyLogger)sbt.IvyConfiguration">IvyConfiguration</a>(<a href="#23160" title="sbt.InlineIvyConfiguration">in</a>.<a href="../IvyConfigurations.scala.html#23103" title="=&gt; sbt.IvyPaths">paths</a>, <a href="#23160" title="sbt.InlineIvyConfiguration">in</a>.<a href="../IvyConfigurations.scala.html#23113" title="=&gt; Option[xsbti.GlobalLock]">lock</a>, <a href="#23160" title="sbt.InlineIvyConfiguration">in</a>.<a href="../IvyConfigurations.scala.html#23111" title="=&gt; Boolean">localOnly</a>, <a href="#23160" title="sbt.InlineIvyConfiguration">in</a>.<a href="../IvyConfigurations.scala.html#23115" title="=&gt; sbt.IvyLogger">log</a>) <span title="sbt.IvyConfiguration" class="keyword">match</span>
+				{
+					<span title="sbt.ExternalIvyConfiguration" class="keyword">case</span> <a title="sbt.ExternalIvyConfiguration" id="23179">e</a>: <a href="../IvyConfigurations.scala.html#8361" title="sbt.ExternalIvyConfiguration">ExternalIvyConfiguration</a> =&gt; <a href="#23179" title="sbt.ExternalIvyConfiguration">e</a>
+					<span title="sbt.IvyConfiguration" class="keyword">case</span> <a title="sbt.IvyConfiguration" id="23195">i</a> =&gt; <a href="Project.scala.html#14826" title="=&gt; sbt.ProjectInfo">info</a>.<a href="ProjectInfo.scala.html#19171" title="=&gt; Option[sbt.Project]">parent</a> <span title="((sbt.Project) =&gt; sbt.IvyConfiguration)Option[sbt.IvyConfiguration]">map</span>(<a href="#23162" title="(sbt.IvyConfiguration)(sbt.Project)sbt.IvyConfiguration">parentIvyConfiguration</a>(<a href="#23195" title="sbt.IvyConfiguration">i</a>)) <span title="(=&gt; sbt.IvyConfiguration)sbt.IvyConfiguration">getOrElse</span>(<a href="#23195" title="sbt.IvyConfiguration">i</a>)
+				}
+			}
+			<span class="keyword">else</span>
+				<a href="#23160" title="sbt.InlineIvyConfiguration">in</a>.<a href="../IvyConfigurations.scala.html#23121" title="(Seq[sbt.Resolver])sbt.InlineIvyConfiguration">changeResolvers</a>(<a href="../IvyInterface.scala.html#11182" title="object sbt.Resolver">Resolver</a>.<a href="../IvyInterface.scala.html#15031" title="(Seq[sbt.Resolver])Seq[sbt.Resolver]">withDefaultResolvers</a>(<span title="object Nil">Nil</span>))
+		}
+		<span class="keyword">else</span>
+			<a href="#23160" title="sbt.InlineIvyConfiguration">in</a>
+	}
+	
+	<span class="keyword">def</span> <a title="=&gt; sbt.ModuleSettings" id="18857">moduleSettings</a>: <a href="../IvyConfigurations.scala.html#7836" title="sbt.ModuleSettings">ModuleSettings</a> = <a href="#18865" title="=&gt; sbt.ModuleSettings">defaultModuleSettings</a>
+	<span class="keyword">def</span> <a title="(sbt.Path)sbt.IvyFileConfiguration" id="18858">byIvyFile</a>(<a title="sbt.Path" id="23209">path</a>: <a href="Path.scala.html#10200" title="sbt.Path">Path</a>): <a href="../IvyConfigurations.scala.html#11274" title="sbt.IvyFileConfiguration">IvyFileConfiguration</a> = <span title="sbt.IvyFileConfiguration" class="keyword">new</span> <a href="../IvyConfigurations.scala.html#11274" title="sbt.IvyFileConfiguration">IvyFileConfiguration</a>(<a href="#23209" title="sbt.Path">path</a>.<a href="Path.scala.html#18076" title="=&gt; java.io.File">asFile</a>, <a href="#18852" title="=&gt; Option[sbt.IvyScala]">ivyScala</a>, <a href="#18851" title="=&gt; Boolean">ivyValidate</a>)
+	<span class="keyword">def</span> <a title="(sbt.Path)sbt.PomConfiguration" id="18859">byPom</a>(<a title="sbt.Path" id="23224">path</a>: <a href="Path.scala.html#10200" title="sbt.Path">Path</a>): <a href="../IvyConfigurations.scala.html#6381" title="sbt.PomConfiguration">PomConfiguration</a> = <span title="sbt.PomConfiguration" class="keyword">new</span> <a href="../IvyConfigurations.scala.html#6381" title="sbt.PomConfiguration">PomConfiguration</a>(<a href="#23224" title="sbt.Path">path</a>.<a href="Path.scala.html#18076" title="=&gt; java.io.File">asFile</a>, <a href="#18852" title="=&gt; Option[sbt.IvyScala]">ivyScala</a>, <a href="#18851" title="=&gt; Boolean">ivyValidate</a>)
+	<span class="comment">/** The settings that represent inline declarations.  The default settings combines the information
+	* from 'ivyXML', 'projectID', 'repositories', ivyConfigurations, defaultConfiguration,
+	* ivyScala, and 'libraryDependencies' and does not typically need to be be overridden. */</span>
+	<span class="keyword">def</span> <a title="=&gt; sbt.InlineConfiguration" id="18860">inlineSettings</a> = <span title="sbt.InlineConfiguration" class="keyword">new</span> <a href="../IvyConfigurations.scala.html#8925" title="sbt.InlineConfiguration">InlineConfiguration</a>(<a href="#18832" title="=&gt; sbt.ModuleID">projectID</a>, <a href="#18861" title="=&gt; scala.collection.immutable.Set[sbt.ModuleID]">withCompat</a>, <a href="#18871" title="=&gt; scala.xml.NodeSeq">ivyXML</a>, <a href="#18873" title="=&gt; Iterable[sbt.Configuration]">ivyConfigurations</a>, <a href="#18876" title="=&gt; Option[sbt.Configuration]">defaultConfiguration</a>, <a href="#18852" title="=&gt; Option[sbt.IvyScala]">ivyScala</a>, <a href="#18851" title="=&gt; Boolean">ivyValidate</a>)
+	<span class="comment">/** Library dependencies with extra dependencies for compatibility*/</span>
+	<span class="keyword">private</span> <span class="keyword">def</span> <a title="=&gt; scala.collection.immutable.Set[sbt.ModuleID]" id="18861">withCompat</a> =
+	{
+		<span class="keyword">val</span> <a title="Set[sbt.ModuleID]" id="23274">deps</a> = <a href="#18965" title="=&gt; Set[sbt.ModuleID]">libraryDependencies</a>
+		<a href="#23274" title="Set[sbt.ModuleID]">deps</a> <span title="(Iterable[sbt.ModuleID])scala.collection.immutable.Set[sbt.ModuleID]">++</span> <a href="#18862" title="(Set[sbt.ModuleID])Collection[sbt.ModuleID] with (sbt.ModuleID with Int) =&gt; Boolean">compatExtra</a>(<a href="#23274" title="Set[sbt.ModuleID]">deps</a>)
+	}
+	<span class="comment">/** Determines extra libraries needed for compatibility.  Currently, this is the compatibility test framework. */</span>
+	<span class="keyword">private</span> <span class="keyword">def</span> <a title="(Set[sbt.ModuleID])Collection[sbt.ModuleID] with (sbt.ModuleID with Int) =&gt; Boolean" id="18862">compatExtra</a>(<a title="Set[sbt.ModuleID]" id="23383">deps</a>: <span title="Set[sbt.ModuleID]">Set</span>[ModuleID]) =
+		<span title="&lt;refinement&gt; extends Collection[sbt.ModuleID] with (sbt.ModuleID with Int) =&gt; Boolean" class="keyword">if</span>(<a href="Project.scala.html#14894" title="=&gt; Boolean">isScala27</a> <span title="(Boolean)Boolean">&amp;&amp;</span> <a href="#23383" title="Set[sbt.ModuleID]">deps</a>.<a title="((sbt.ModuleID) =&gt; Boolean)Boolean" id="16283">exists</a>(<a href="#18863" title="(sbt.ModuleID)Boolean">requiresCompat</a>)) { <a href="Project.scala.html#14821" title="=&gt; sbt.Logger">log</a>.<a href="Logger.scala.html#19733" title="(=&gt; String)Unit">debug</a>(<span title="java.lang.String(&quot;Using compatibility implementation of test interface.&quot;)" class="string">&quot;Using compatibility implementation of test interface.&quot;</span>); <a href="#18864" title="=&gt; scala.collection.immutable.Set[sbt.ModuleID]">compatTestFramework</a> } <span class="keyword">else</span> <span title="object Nil">Nil</span>
+	<span class="comment">/** True if the given dependency requires the compatibility test framework. */</span>
+	<span class="keyword">private</span> <span class="keyword">def</span> <a title="(sbt.ModuleID)Boolean" id="18863">requiresCompat</a>(<a title="sbt.ModuleID" id="24137">m</a>: <a href="../IvyInterface.scala.html#11352" title="sbt.ModuleID">ModuleID</a>) =
+	{
+		<span class="keyword">def</span> <a title="(String,String)Boolean" id="24139">nameMatches</a>(<a title="String" id="24140">name</a>: <span title="String">String</span>, <a title="String" id="24141">id</a>: <span title="String">String</span>) = <a href="#24140" title="String">name</a> <span title="(AnyRef)Boolean">==</span> <a href="#24141" title="String">id</a> <span title="(Boolean)Boolean">||</span> <a href="#24140" title="String">name</a>.<span title="(java.lang.String)Boolean">startsWith</span>(<a href="#24141" title="String">id</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot;_2.7.&quot;)" class="string">&quot;_2.7.&quot;</span>)
+		
+		(<a href="#24139" title="(String,String)Boolean">nameMatches</a>(<a href="#24137" title="sbt.ModuleID">m</a>.<a href="../IvyInterface.scala.html#22206" title="=&gt; String">name</a>, <span title="java.lang.String(&quot;scalacheck&quot;)" class="string">&quot;scalacheck&quot;</span>) <span title="(Boolean)Boolean">&amp;&amp;</span> <span title="(java.lang.String*)scala.collection.immutable.Set[java.lang.String]">Set</span>(<span title="java.lang.String(&quot;1.5&quot;)" class="string">&quot;1.5&quot;</span>, <span title="java.lang.String(&quot;1.6&quot;)" class="string">&quot;1.6&quot;</span>).<span title="(java.lang.String)Boolean">contains</span>(<a href="#24137" title="sbt.ModuleID">m</a>.<a href="../IvyInterface.scala.html#22208" title="=&gt; String">revision</a>)) <span title="(Boolean)Boolean">||</span>
+		(<a href="#24139" title="(String,String)Boolean">nameMatches</a>(<a href="#24137" title="sbt.ModuleID">m</a>.<a href="../IvyInterface.scala.html#22206" title="=&gt; String">name</a>, <span title="java.lang.String(&quot;specs&quot;)" class="string">&quot;specs&quot;</span>) <span title="(Boolean)Boolean">&amp;&amp;</span> <span title="(java.lang.String*)scala.collection.immutable.Set[java.lang.String]">Set</span>(<span title="java.lang.String(&quot;1.6.0&quot;)" class="string">&quot;1.6.0&quot;</span>, <span title="java.lang.String(&quot;1.6.1&quot;)" class="string">&quot;1.6.1&quot;</span>).<span title="(java.lang.String)Boolean">contains</span>(<a href="#24137" title="sbt.ModuleID">m</a>.<a href="../IvyInterface.scala.html#22208" title="=&gt; String">revision</a>)) <span title="(Boolean)Boolean">||</span>
+		(<a href="#24139" title="(String,String)Boolean">nameMatches</a>(<a href="#24137" title="sbt.ModuleID">m</a>.<a href="../IvyInterface.scala.html#22206" title="=&gt; String">name</a>,  <span title="java.lang.String(&quot;scalatest&quot;)" class="string">&quot;scalatest&quot;</span>) <span title="(Boolean)Boolean">&amp;&amp;</span> <a href="#24137" title="sbt.ModuleID">m</a>.<a href="../IvyInterface.scala.html#22208" title="=&gt; String">revision</a> <span title="(AnyRef)Boolean">==</span> <span title="java.lang.String(&quot;1.0&quot;)" class="string">&quot;1.0&quot;</span>)
+	}
+	<span class="comment">/** Extra dependencies to add if a dependency on an older test framework (one released before the uniform test interface) is declared.
+	* This is the compatibility test framework by default.*/</span>
+	<span class="keyword">def</span> <a title="=&gt; scala.collection.immutable.Set[sbt.ModuleID]" id="18864">compatTestFramework</a> = <span title="(sbt.ModuleID*)scala.collection.immutable.Set[sbt.ModuleID]">Set</span>(<a href="#18841" title="implicit sbt.ManagedProject.toGroupID : (String)sbt.GroupID" class="string">&quot;org.scala-tools.sbt&quot;</a> <a href="#22913" title="(String)sbt.GroupArtifactID">%%</a> <span title="java.lang.String(&quot;test-compat&quot;)" class="string">&quot;test-compat&quot;</span> <a href="#18843" title="implicit sbt.ManagedProject.moduleIDConfigurable : (sbt.ModuleID)sbt.ModuleIDConfigurable">%</a> <span title="java.lang.String(&quot;0.4.1&quot;)" class="string">&quot;0.4.1&quot;</span> <a href="#22934" title="(String)sbt.ModuleID">%</a> <span title="java.lang.String(&quot;test&quot;)" class="string">&quot;test&quot;</span>)
+	
+	<span class="keyword">def</span> <a title="=&gt; sbt.ModuleSettings" id="18865">defaultModuleSettings</a>: <a href="../IvyConfigurations.scala.html#7836" title="sbt.ModuleSettings">ModuleSettings</a> =
+	{
+		<span class="keyword">val</span> <a title="sbt.InlineConfiguration" id="24245">in</a> = <a href="#18860" title="=&gt; sbt.InlineConfiguration">inlineSettings</a>
+		<span title="sbt.ModuleSettings" class="keyword">if</span>(<a href="#24245" title="sbt.InlineConfiguration">in</a>.<a href="../IvyConfigurations.scala.html#23254" title="=&gt; Iterable[sbt.Configuration]">configurations</a>.<span title="=&gt; Boolean">isEmpty</span>)
+		{
+			<span title="sbt.ModuleSettings" class="keyword">if</span>(<a href="#24245" title="sbt.InlineConfiguration">in</a>.<a href="../IvyConfigurations.scala.html#23250" title="=&gt; Iterable[sbt.ModuleID]">dependencies</a>.<span title="=&gt; Boolean">isEmpty</span> <span title="(Boolean)Boolean">&amp;&amp;</span> <a href="#24245" title="sbt.InlineConfiguration">in</a>.<a href="../IvyConfigurations.scala.html#23252" title="=&gt; scala.xml.NodeSeq">ivyXML</a>.<span title="=&gt; Boolean">isEmpty</span> <span title="(Boolean)Boolean">&amp;&amp;</span> (<a href="#24245" title="sbt.InlineConfiguration">in</a>.<a href="../IvyConfigurations.scala.html#23248" title="=&gt; sbt.ModuleID">module</a>.<a href="../IvyInterface.scala.html#22216" title="=&gt; Seq[sbt.Artifact]">explicitArtifacts</a>.<a title="=&gt; Int" id="16732">size</a> <a title="(Int)Boolean" id="3092">&lt;=</a> <span title="Int(1)" class="int">1</span>) <span title="(Boolean)Boolean">&amp;&amp;</span> <a href="#24245" title="sbt.InlineConfiguration">in</a>.<a href="../IvyConfigurations.scala.html#23254" title="=&gt; Iterable[sbt.Configuration]">configurations</a>.<span title="=&gt; Boolean">isEmpty</span>)
+				<a href="#18866" title="=&gt; &lt;refinement&gt; extends sbt.ModuleSettings with ScalaObject">externalSettings</a>
+			<span class="keyword">else</span> <span title="sbt.ModuleSettings" class="keyword">if</span>(<a href="#18878" title="=&gt; Boolean">useDefaultConfigurations</a>)
+				<a href="#24245" title="sbt.InlineConfiguration">in</a> <a href="../IvyConfigurations.scala.html#23263" title="(Iterable[sbt.Configuration])sbt.InlineConfiguration">withConfigurations</a> ( <a href="../IvyInterface.scala.html#9343" title="object sbt.Configurations">Configurations</a>.<a href="../IvyInterface.scala.html#19007" title="=&gt; List[sbt.Configuration]">defaultMavenConfigurations</a> )
+			<span class="keyword">else</span>
+				<a href="#24245" title="sbt.InlineConfiguration">in</a>
+		}
+		<span class="keyword">else</span>
+			<a href="#24245" title="sbt.InlineConfiguration">in</a>
+	}
+	<span class="keyword">def</span> <a title="=&gt; &lt;refinement&gt; extends sbt.ModuleSettings with ScalaObject" id="18866">externalSettings</a> = <a href="../IvyConfigurations.scala.html#24250" title="(Option[sbt.IvyScala],Boolean,=&gt; sbt.ModuleID)(java.io.File,sbt.IvyLogger)sbt.ModuleSettings with ScalaObject{def noScala: sbt.ModuleSettings with ScalaObject}">ModuleSettings</a>(<a href="#18852" title="=&gt; Option[sbt.IvyScala]">ivyScala</a>, <a href="#18851" title="=&gt; Boolean">ivyValidate</a>, <a href="#18832" title="=&gt; sbt.ModuleID">projectID</a>)(<a href="Project.scala.html#14826" title="=&gt; sbt.ProjectInfo">info</a>.<a href="ProjectInfo.scala.html#19183" title="=&gt; sbt.Path">projectPath</a>.<a href="Path.scala.html#18076" title="=&gt; java.io.File">asFile</a>, <a href="Project.scala.html#14821" title="=&gt; sbt.Logger">log</a>)
+	
+	<span class="keyword">def</span> <a title="=&gt; sbt.IvySbt" id="18867">ivySbt</a>: <a href="../Ivy.scala.html#7770" title="sbt.IvySbt">IvySbt</a> = <span title="sbt.IvySbt" class="keyword">new</span> <a href="../Ivy.scala.html#7770" title="sbt.IvySbt">IvySbt</a>(<a href="#18856" title="=&gt; sbt.IvyConfiguration">ivyConfiguration</a>)
+	<span class="keyword">def</span> <a title="=&gt; sbt.IvySbt#Module" id="18868">ivyModule</a>: IvySbt#<a href="../Ivy.scala.html#19850" title="sbt.IvySbt#Module">Module</a> = <a href="#18869" title="(sbt.ModuleSettings)sbt.IvySbt#Module">newIvyModule</a>(<a href="#18857" title="=&gt; sbt.ModuleSettings">moduleSettings</a>)
+	<span class="keyword">def</span> <a title="(sbt.ModuleSettings)sbt.IvySbt#Module" id="18869">newIvyModule</a>(<a title="sbt.ModuleSettings" id="24481">moduleSettings</a>: <a href="../IvyConfigurations.scala.html#7836" title="sbt.ModuleSettings">ModuleSettings</a>): IvySbt#<a href="../Ivy.scala.html#19850" title="sbt.IvySbt#Module">Module</a> =
+	{
+		<span class="keyword">val</span> <a title="sbt.IvySbt" id="24488">i</a> = <a href="#18867" title="=&gt; sbt.IvySbt">ivySbt</a>
+		<span title="i.Module" class="keyword">new</span> <a href="#24488" title="sbt.IvySbt">i</a>.<a href="../Ivy.scala.html#19850" title="i.Module">Module</a>(<a href="#24481" title="sbt.ModuleSettings">moduleSettings</a>)
+	}
+	
+
+	<span class="comment">/** The pattern for Ivy to use when retrieving dependencies into the local project.  Classpath management
+	* depends on the first directory being [conf] and the extension being [ext].*/</span>
+	<span class="keyword">def</span> <a title="=&gt; java.lang.String" id="18870">outputPattern</a> = <span title="java.lang.String(&quot;[conf]/[artifact](-[revision])(-[classifier]).[ext]&quot;)" class="string">&quot;[conf]/[artifact](-[revision])(-[classifier]).[ext]&quot;</span>
+	<span class="comment">/** Override this to specify the publications, configurations, and/or dependencies sections of an Ivy file.
+	* See http://code.google.com/p/simple-build-tool/wiki/LibraryManagement for details.*/</span>
+	<span class="keyword">def</span> <a title="=&gt; scala.xml.NodeSeq" id="18871">ivyXML</a>: <span title="scala.xml.NodeSeq">NodeSeq</span> = <span title="object scala.xml.NodeSeq">NodeSeq</span>.<span title="=&gt; &lt;refinement&gt; extends scala.xml.NodeSeq">Empty</span>
+	<span class="keyword">def</span> <a title="=&gt; scala.xml.NodeSeq" id="18872">pomExtra</a>: <span title="scala.xml.NodeSeq">NodeSeq</span> = <span title="object scala.xml.NodeSeq">NodeSeq</span>.<span title="=&gt; &lt;refinement&gt; extends scala.xml.NodeSeq">Empty</span>
+
+	<span class="keyword">override</span> <span class="keyword">def</span> <a title="=&gt; Iterable[sbt.Configuration]" id="18873">ivyConfigurations</a>: <span title="Iterable[sbt.Configuration]">Iterable</span>[Configuration] =
+	{
+		<span class="keyword">val</span> <a title="Iterable[sbt.Configuration]" id="24491">reflective</a> = <span class="keyword">super</span>.<a href="#18968" title="=&gt; Iterable[sbt.Configuration]">ivyConfigurations</a>
+		<span class="keyword">val</span> <a title="List[sbt.Configuration]" id="24492">extra</a> = <a href="#18874" title="=&gt; List[sbt.Configuration]">extraDefaultConfigurations</a>
+		<span title="Iterable[sbt.Configuration]" class="keyword">if</span>(<a href="#18878" title="=&gt; Boolean">useDefaultConfigurations</a>)
+		{
+			<span title="Iterable[sbt.Configuration]" class="keyword">if</span>(<a href="#24491" title="Iterable[sbt.Configuration]">reflective</a>.<span title="=&gt; Boolean">isEmpty</span> <span title="(Boolean)Boolean">&amp;&amp;</span> <a href="#24492" title="List[sbt.Configuration]">extra</a>.<span title="=&gt; Boolean">isEmpty</span>)
+				<span title="object Nil">Nil</span>
+			<span class="keyword">else</span>
+				<a href="../IvyInterface.scala.html#9343" title="object sbt.Configurations">Configurations</a>.<a href="../IvyInterface.scala.html#19036" title="(Iterable[sbt.Configuration])scala.collection.immutable.Set[sbt.Configuration]">removeDuplicates</a>(<a href="../IvyInterface.scala.html#9343" title="object sbt.Configurations">Configurations</a>.<a href="../IvyInterface.scala.html#19007" title="=&gt; List[sbt.Configuration]">defaultMavenConfigurations</a> <span title="(Iterable[sbt.Configuration])List[sbt.Configuration]">++</span> <a href="#24491" title="Iterable[sbt.Configuration]">reflective</a> <span title="(Iterable[sbt.Configuration])List[sbt.Configuration]">++</span> <a href="#24492" title="List[sbt.Configuration]">extra</a>)
+		}
+		<span class="keyword">else</span>
+			<a href="#24491" title="Iterable[sbt.Configuration]">reflective</a> <span title="(Iterable[sbt.Configuration])Collection[sbt.Configuration]">++</span> <a href="#24492" title="List[sbt.Configuration]">extra</a>
+	}
+	<span class="keyword">def</span> <a title="=&gt; List[sbt.Configuration]" id="18874">extraDefaultConfigurations</a>: <a title="List[sbt.Configuration]" id="495">List</a>[Configuration] = <span title="object Nil">Nil</span>
+	<span class="keyword">def</span> <a title="=&gt; Boolean" id="18875">useIntegrationTestConfiguration</a> = <span title="Boolean(false)" class="keyword">false</span>
+	<span class="keyword">def</span> <a title="=&gt; Option[sbt.Configuration]" id="18876">defaultConfiguration</a>: <span title="Option[sbt.Configuration]">Option</span>[Configuration] = <span title="(sbt.Configuration)Some[sbt.Configuration]">Some</span>(<a href="../IvyInterface.scala.html#9343" title="object sbt.Configurations">Configurations</a>.<a href="../IvyInterface.scala.html#19034" title="(Boolean)sbt.Configuration">DefaultConfiguration</a>(<a href="#18878" title="=&gt; Boolean">useDefaultConfigurations</a>))
+	<span class="keyword">def</span> <a title="=&gt; Boolean" id="18877">useMavenConfigurations</a> = <span title="Boolean(true)" class="keyword">true</span> <span class="comment">// TODO: deprecate after going through a minor version series to verify that this works ok</span>
+	<span class="keyword">def</span> <a title="=&gt; Boolean" id="18878">useDefaultConfigurations</a> = <a href="#18877" title="=&gt; Boolean">useMavenConfigurations</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.ManagedStyle.Value" id="18879">managedStyle</a>: <span title="sbt.ManagedStyle.Value">ManagedType</span> =
+		<a href="Project.scala.html#14826" title="=&gt; sbt.ProjectInfo">info</a>.<a href="ProjectInfo.scala.html#19171" title="=&gt; Option[sbt.Project]">parent</a> <span title="sbt.ManagedStyle.Value" class="keyword">match</span>
+		{
+			<span title="sbt.ManagedStyle.Value" class="keyword">case</span> Some(<a title="sbt.BasicManagedProject" id="24601">m</a>: <a href="#8874" title="sbt.BasicManagedProject">BasicManagedProject</a>) =&gt; <a href="#24601" title="sbt.BasicManagedProject">m</a>.<a href="#18879" title="=&gt; sbt.ManagedStyle.Value">managedStyle</a>
+			<span title="sbt.ManagedStyle.Value" class="keyword">case</span> _ =&gt; <a href="#22129" title="=&gt; sbt.ManagedStyle.Value">Auto</a>
+		}
+	<span class="keyword">protected</span> <span class="keyword">implicit</span> <span class="keyword">final</span> <span class="keyword">val</span> <a title="sbt.Patterns" id="18880">defaultPatterns</a>: <a href="../IvyInterface.scala.html#10932" title="sbt.Patterns">Patterns</a> =
+	{
+		<a href="#18879" title="=&gt; sbt.ManagedStyle.Value">managedStyle</a> <span title="sbt.Patterns" class="keyword">match</span>
+		{
+			<span title="sbt.Patterns" class="keyword">case</span> <a href="#22125" title="=&gt; sbt.ManagedStyle.Value">Maven</a> =&gt; <a href="../IvyInterface.scala.html#11182" title="object sbt.Resolver">Resolver</a>.<a href="../IvyInterface.scala.html#15053" title="=&gt; sbt.Patterns">mavenStylePatterns</a>
+			<span title="sbt.Patterns" class="keyword">case</span> <a href="#22127" title="=&gt; sbt.ManagedStyle.Value">Ivy</a> =&gt; <a href="../IvyInterface.scala.html#11182" title="object sbt.Resolver">Resolver</a>.<a href="../IvyInterface.scala.html#15054" title="=&gt; sbt.Patterns">ivyStylePatterns</a>
+			<span title="sbt.Patterns" class="keyword">case</span> <a href="#22129" title="=&gt; sbt.ManagedStyle.Value">Auto</a> =&gt; <a href="../IvyInterface.scala.html#11182" title="object sbt.Resolver">Resolver</a>.<a href="../IvyInterface.scala.html#15055" title="=&gt; sbt.Patterns">defaultPatterns</a>
+		}
+	}
+	
+	<span class="keyword">def</span> <a title="=&gt; sbt.ModuleSettings" id="18882">updateModuleSettings</a> = <a href="#18857" title="=&gt; sbt.ModuleSettings">moduleSettings</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.IvySbt#Module" id="18883">updateIvyModule</a> = <a href="#18869" title="(sbt.ModuleSettings)sbt.IvySbt#Module">newIvyModule</a>(<a href="#18882" title="=&gt; sbt.ModuleSettings">updateModuleSettings</a>)
+	<span class="keyword">def</span> <a title="=&gt; sbt.ModuleSettings" id="18884">deliverModuleSettings</a> = <a href="#18857" title="=&gt; sbt.ModuleSettings">moduleSettings</a>.<a href="../IvyConfigurations.scala.html#23207" title="=&gt; sbt.ModuleSettings">noScala</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.IvySbt#Module" id="18885">deliverIvyModule</a> = <a href="#18869" title="(sbt.ModuleSettings)sbt.IvySbt#Module">newIvyModule</a>(<a href="#18884" title="=&gt; sbt.ModuleSettings">deliverModuleSettings</a>)
+	<span class="keyword">def</span> <a title="=&gt; sbt.ModuleSettings" id="18886">publishModuleSettings</a> = <a href="#18884" title="=&gt; sbt.ModuleSettings">deliverModuleSettings</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.IvySbt#Module" id="18887">publishIvyModule</a> = <a href="#18869" title="(sbt.ModuleSettings)sbt.IvySbt#Module">newIvyModule</a>(<a href="#18886" title="=&gt; sbt.ModuleSettings">publishModuleSettings</a>)
+	<span class="comment">/** True if the 'provided' configuration should be included on the 'compile' classpath.  The default value is true.*/</span>
+	<span class="keyword">def</span> <a title="=&gt; Boolean" id="18888">includeProvidedWithCompile</a> = <span title="Boolean(true)" class="keyword">true</span>
+	<span class="comment">/** True if the default implicit extensions should be used when determining classpaths.  The default value is true. */</span>
+	<span class="keyword">def</span> <a title="=&gt; Boolean" id="18889">defaultConfigurationExtensions</a> = <span title="Boolean(true)" class="keyword">true</span>
+	<span class="comment">/** If true, verify that explicit dependencies on Scala libraries use the same version as scala.version. */</span>
+	<span class="keyword">def</span> <a title="=&gt; Boolean" id="18890">checkExplicitScalaDependencies</a> = <span title="Boolean(true)" class="keyword">true</span>
+	<span class="comment">/** If true, filter dependencies on scala-library and scala-compiler. This is true by default to avoid conflicts with
+	* the jars provided by sbt.  You can set this to false to download these jars.  Overriding checkScalaInConfigurations might
+	* be more appropriate, however.*/</span>
+	<span class="keyword">def</span> <a title="=&gt; Boolean" id="18891">filterScalaJars</a> = <span title="Boolean(true)" class="keyword">true</span>
+	<span class="comment">/** The configurations to check/filter.*/</span>
+	<span class="keyword">def</span> <a title="=&gt; Iterable[sbt.Configuration]" id="18892">checkScalaInConfigurations</a>: <span title="Iterable[sbt.Configuration]">Iterable</span>[Configuration] = <a href="#18873" title="=&gt; Iterable[sbt.Configuration]">ivyConfigurations</a>
+	<span class="keyword">def</span> <a title="=&gt; Option[sbt.Resolver]" id="18893">defaultPublishRepository</a>: <span title="Option[sbt.Resolver]">Option</span>[Resolver] =
+	{
+		<a href="#18960" title="=&gt; scala.collection.Map[String,sbt.Resolver]">reflectiveRepositories</a>.<span title="(String)Option[sbt.Resolver]">get</span>(<a href="#14799" title="=&gt; java.lang.String">PublishToName</a>) <a title="(=&gt; Option[sbt.Resolver])Option[sbt.Resolver]" id="19240">orElse</a>
+		<a href="Project.scala.html#14826" title="=&gt; sbt.ProjectInfo">info</a>.<a href="ProjectInfo.scala.html#19171" title="=&gt; Option[sbt.Project]">parent</a>.<a title="((sbt.Project) =&gt; Option[sbt.Resolver])Option[sbt.Resolver]" id="19236">flatMap</a>
+			<a href="#24654" title="Option[sbt.Resolver]">{</a>
+				<span title="Option[sbt.Resolver]" class="keyword">case</span> <a title="sbt.BasicManagedProject" id="24655">managed</a>: <a href="#8874" title="sbt.BasicManagedProject">BasicManagedProject</a> =&gt; <a href="#24655" title="sbt.BasicManagedProject">managed</a>.<a href="#18893" title="=&gt; Option[sbt.Resolver]">defaultPublishRepository</a>
+				<span title="None.type" class="keyword">case</span> _ =&gt; <span title="object None">None</span>
+			}
+	}
+	<span class="comment">/** Includes the Provided configuration on the Compile classpath, the Compile configuration on the Runtime classpath,
+	* and Compile and Runtime on the Test classpath.  Including Provided can be disabled by setting
+	* includeProvidedWithCompile to false.  Including Compile and Runtime can be disabled by setting
+	* defaultConfigurationExtensions to false.*/</span>
+	<span class="keyword">override</span> <span class="keyword">def</span> <a title="(sbt.Configuration)sbt.PathFinder" id="18894">managedClasspath</a>(<a title="sbt.Configuration" id="19000">config</a>: <a href="../IvyInterface.scala.html#11658" title="sbt.Configuration">Configuration</a>) =
+	{
+		<span class="keyword">import</span> Configurations.{Compile, CompilerPlugin, Default, Provided, Runtime, Test}
+		<span class="keyword">val</span> <a title="sbt.PathFinder" id="19004">baseClasspath</a> = <a href="#18838" title="(sbt.Configuration)sbt.PathFinder">configurationClasspath</a>(<a href="#19000" title="sbt.Configuration">config</a>)
+		<a href="#19000" title="sbt.Configuration">config</a> <span title="sbt.PathFinder" class="keyword">match</span>
+		{
+			<span title="sbt.PathFinder" class="keyword">case</span> <a href="../IvyInterface.scala.html#19010" title="=&gt; sbt.Configuration">Compile</a> =&gt;
+				<span class="keyword">val</span> <a title="sbt.PathFinder" id="19047">baseCompileClasspath</a> = <a href="#19004" title="sbt.PathFinder">baseClasspath</a> <a href="Path.scala.html#16180" title="(sbt.PathFinder)sbt.PathFinder">+++</a> <a href="#18894" title="(sbt.Configuration)sbt.PathFinder">managedClasspath</a>(<a href="../IvyInterface.scala.html#19008" title="=&gt; sbt.Configuration">Default</a>)
+				<span title="sbt.PathFinder" class="keyword">if</span>(<a href="#18888" title="=&gt; Boolean">includeProvidedWithCompile</a>)
+					<a href="#19047" title="sbt.PathFinder">baseCompileClasspath</a> <a href="Path.scala.html#16180" title="(sbt.PathFinder)sbt.PathFinder">+++</a> <a href="#18894" title="(sbt.Configuration)sbt.PathFinder">managedClasspath</a>(<a href="../IvyInterface.scala.html#19014" title="=&gt; sbt.Configuration">Provided</a>)
+				<span class="keyword">else</span>
+					<a href="#19047" title="sbt.PathFinder">baseCompileClasspath</a>
+			<span title="sbt.PathFinder" class="keyword">case</span> <a href="../IvyInterface.scala.html#19018" title="=&gt; sbt.Configuration">Runtime</a> <span class="keyword">if</span> <a href="#18889" title="=&gt; Boolean">defaultConfigurationExtensions</a> =&gt; <a href="#19004" title="sbt.PathFinder">baseClasspath</a> <a href="Path.scala.html#16180" title="(sbt.PathFinder)sbt.PathFinder">+++</a> <a href="#18894" title="(sbt.Configuration)sbt.PathFinder">managedClasspath</a>(<a href="../IvyInterface.scala.html#19010" title="=&gt; sbt.Configuration">Compile</a>)
+			<span title="sbt.PathFinder" class="keyword">case</span> <a href="../IvyInterface.scala.html#19020" title="=&gt; sbt.Configuration">Test</a> <span class="keyword">if</span> <a href="#18889" title="=&gt; Boolean">defaultConfigurationExtensions</a> =&gt; <a href="#19004" title="sbt.PathFinder">baseClasspath</a> <a href="Path.scala.html#16180" title="(sbt.PathFinder)sbt.PathFinder">+++</a> <a href="#18894" title="(sbt.Configuration)sbt.PathFinder">managedClasspath</a>(<a href="../IvyInterface.scala.html#19018" title="=&gt; sbt.Configuration">Runtime</a>)
+			<span title="sbt.PathFinder" class="keyword">case</span> _ =&gt; <a href="#19004" title="sbt.PathFinder">baseClasspath</a>
+		}
+	}
+
+	<span class="keyword">protected</span> <span class="keyword">def</span> <a title="=&gt; BasicManagedProject.this.Task" id="18895">updateAction</a> = <a href="#18937" title="(=&gt; sbt.IvySbt#Module,=&gt; sbt.UpdateConfiguration)BasicManagedProject.this.Task">updateTask</a>(<a href="#18883" title="=&gt; sbt.IvySbt#Module">updateIvyModule</a>, <a href="#18846" title="=&gt; sbt.UpdateConfiguration">ivyUpdateConfiguration</a>) <a href="TaskManager.scala.html#19291" title="(String)BasicManagedProject.this.Task">describedAs</a> <a href="#14793" title="=&gt; java.lang.String">UpdateDescription</a>
+	<span class="keyword">protected</span> <span class="keyword">def</span> <a title="=&gt; BasicManagedProject.this.Task" id="18896">cleanLibAction</a> = <a href="#18944" title="(sbt.Path)BasicManagedProject.this.Task">cleanLibTask</a>(<a href="#18976" title="=&gt; sbt.Path">managedDependencyPath</a>) <a href="TaskManager.scala.html#19291" title="(String)BasicManagedProject.this.Task">describedAs</a> <a href="#14795" title="=&gt; java.lang.String">CleanLibDescription</a>
+	<span class="keyword">protected</span> <span class="keyword">def</span> <a title="=&gt; BasicManagedProject.this.Task" id="18897">cleanCacheAction</a> = <a href="#18943" title="(=&gt; sbt.IvySbt)BasicManagedProject.this.Task">cleanCacheTask</a>(<a href="#18867" title="=&gt; sbt.IvySbt">ivySbt</a>) <a href="TaskManager.scala.html#19291" title="(String)BasicManagedProject.this.Task">describedAs</a> <a href="#14797" title="=&gt; java.lang.String">CleanCacheDescription</a>
+
+	<span class="keyword">protected</span> <span class="keyword">def</span> <a title="=&gt; Iterable[sbt.ModuleID]" id="18898">deliverProjectDependencies</a>: <span title="Iterable[sbt.ModuleID]">Iterable</span>[ModuleID] =
+	{
+		<span class="keyword">val</span> <a title="scala.collection.mutable.ListBuffer[sbt.ModuleID]" id="24671">interDependencies</a> = <span title="scala.collection.mutable.ListBuffer[sbt.ModuleID]" class="keyword">new</span> scala.collection.mutable.<a title="scala.collection.mutable.ListBuffer[sbt.ModuleID]" id="15774">ListBuffer</a>[ModuleID]
+		<a href="Dag.scala.html#14929" title="=&gt; Iterable[sbt.Project]">dependencies</a>.<span title="((sbt.Project) =&gt; Unit)Unit">foreach</span>(<a title="sbt.Project" id="24706">dep</a> =&gt; <a href="#24706" title="sbt.Project">dep</a> <span title="Unit" class="keyword">match</span> { <span title="Unit" class="keyword">case</span> <a title="sbt.ManagedProject" id="24707">mp</a>: <a href="#11826" title="sbt.ManagedProject">ManagedProject</a> =&gt; <a href="#24671" title="scala.collection.mutable.ListBuffer[sbt.ModuleID]">interDependencies</a> <a title="(sbt.ModuleID)Unit" id="24684">+=</a> <a href="#24707" title="sbt.ManagedProject">mp</a>.<a href="#18832" title="=&gt; sbt.ModuleID">projectID</a>; <span title="Unit" class="keyword">case</span> _ =&gt; <span title="Unit">(</span>) })
+		<span title="Unit" class="keyword">if</span>(<a href="#18891" title="=&gt; Boolean">filterScalaJars</a>)
+			<a href="#24671" title="scala.collection.mutable.ListBuffer[sbt.ModuleID]">interDependencies</a> <a title="(Iterable[sbt.ModuleID])Unit" id="18724">++=</a> <a href="#18902" title="=&gt; Iterable[sbt.ModuleID]">deliverScalaDependencies</a>
+		<a href="#24671" title="scala.collection.mutable.ListBuffer[sbt.ModuleID]">interDependencies</a>.<a title="=&gt; List[sbt.ModuleID]" id="24688">readOnly</a>
+	}
+	<span class="keyword">def</span> <a title="(sbt.MavenRepository)Boolean" id="18899">pomIncludeRepository</a>(<a title="sbt.MavenRepository" id="24711">repo</a>: <a href="../IvyInterface.scala.html#8460" title="sbt.MavenRepository">MavenRepository</a>): <span title="Boolean">Boolean</span> = <span title="=&gt; Boolean">!</span><a href="#24711" title="sbt.MavenRepository">repo</a>.<a href="../IvyInterface.scala.html#20583" title="=&gt; String">root</a>.<span title="(java.lang.String)Boolean">startsWith</span>(<span title="java.lang.String(&quot;file:&quot;)" class="string">&quot;file:&quot;</span>)
+	<span class="keyword">def</span> <a title="(scala.xml.Node)scala.xml.Node" id="18900">pomPostProcess</a>(<a title="scala.xml.Node" id="24713">pom</a>: <span title="scala.xml.Node">Node</span>): <span title="scala.xml.Node">Node</span> = <a href="#24713" title="scala.xml.Node">pom</a>
+
+	<span class="keyword">def</span> <a title="=&gt; sbt.MakePomConfiguration" id="18901">makePomConfiguration</a> = <span title="sbt.MakePomConfiguration" class="keyword">new</span> <a href="../IvyActions.scala.html#11796" title="sbt.MakePomConfiguration">MakePomConfiguration</a>(<a href="#18898" title="=&gt; Iterable[sbt.ModuleID]">deliverProjectDependencies</a>, <span title="object None">None</span>, <a href="#18872" title="=&gt; scala.xml.NodeSeq">pomExtra</a>, <a href="#18900" title="(scala.xml.Node)scala.xml.Node">pomPostProcess</a>, <a href="#18899" title="(sbt.MavenRepository)Boolean">pomIncludeRepository</a>)
+	<span class="keyword">protected</span> <span class="keyword">def</span> <a title="=&gt; Iterable[sbt.ModuleID]" id="18902">deliverScalaDependencies</a>: <span title="Iterable[sbt.ModuleID]">Iterable</span>[ModuleID] = <span title="object Nil">Nil</span>
+	<span class="keyword">protected</span> <span class="keyword">def</span> <a title="=&gt; BasicManagedProject.this.Task" id="18903">makePomAction</a> = <a href="#18941" title="(=&gt; sbt.IvySbt#Module,=&gt; sbt.MakePomConfiguration,=&gt; sbt.Path)BasicManagedProject.this.Task">makePomTask</a>(<a href="#18885" title="=&gt; sbt.IvySbt#Module">deliverIvyModule</a>, <a href="#18901" title="=&gt; sbt.MakePomConfiguration">makePomConfiguration</a>, <a href="#18978" title="=&gt; sbt.Path">pomPath</a>)
+	<span class="keyword">protected</span> <span class="keyword">def</span> <a title="=&gt; BasicManagedProject.this.Task" id="18904">deliverLocalAction</a> = <a href="#18939" title="(=&gt; sbt.IvySbt#Module,=&gt; sbt.PublishConfiguration,=&gt; sbt.UpdateLogging.Value)BasicManagedProject.this.Task">deliverTask</a>(<a href="#18885" title="=&gt; sbt.IvySbt#Module">deliverIvyModule</a>, <a href="#18906" title="=&gt; BasicManagedProject.this.DefaultPublishConfiguration">publishLocalConfiguration</a>, <a href="#18847" title="=&gt; sbt.UpdateLogging.Value">ivyUpdateLogging</a>)
+	<span class="keyword">protected</span> <span class="keyword">def</span> <a title="=&gt; BasicManagedProject.this.Task" id="18905">publishLocalAction</a> =
+	{
+		<span class="keyword">val</span> <a title="List[BasicManagedProject.this.Task]" id="24767">dependencies</a> = <a href="#18924" title="=&gt; BasicManagedProject.this.Task">deliverLocal</a> <a href="#24768" title="(BasicManagedProject.this.Task)List[BasicManagedProject.this.Task]">::</a> <a href="#18909" title="=&gt; List[BasicManagedProject.this.Task]">publishPomDepends</a>
+		<a href="#18938" title="(=&gt; sbt.IvySbt#Module,=&gt; sbt.PublishConfiguration)BasicManagedProject.this.Task">publishTask</a>(<a href="#18887" title="=&gt; sbt.IvySbt#Module">publishIvyModule</a>, <a href="#18906" title="=&gt; BasicManagedProject.this.DefaultPublishConfiguration">publishLocalConfiguration</a>) <a href="TaskManager.scala.html#19289" title="(BasicManagedProject.this.ManagedTask*)BasicManagedProject.this.Task">dependsOn</a>(<a href="#24767" title="List[BasicManagedProject.this.Task]">dependencies</a> : _*)
+	}
+	<span class="keyword">protected</span> <span class="keyword">def</span> <a title="=&gt; BasicManagedProject.this.DefaultPublishConfiguration" id="18906">publishLocalConfiguration</a> = <span title="BasicManagedProject.this.DefaultPublishConfiguration" class="keyword">new</span> <a href="#18911" title="BasicManagedProject.this.DefaultPublishConfiguration">DefaultPublishConfiguration</a>(<span title="java.lang.String(&quot;local&quot;)" class="string">&quot;local&quot;</span>, <span title="java.lang.String(&quot;release&quot;)" class="string">&quot;release&quot;</span>, <span title="Boolean(true)" class="keyword">true</span>)
+	<span class="keyword">protected</span> <span class="keyword">def</span> <a title="=&gt; BasicManagedProject.this.Task" id="18907">deliverAction</a> = <a href="#18939" title="(=&gt; sbt.IvySbt#Module,=&gt; sbt.PublishConfiguration,=&gt; sbt.UpdateLogging.Value)BasicManagedProject.this.Task">deliverTask</a>(<a href="#18885" title="=&gt; sbt.IvySbt#Module">deliverIvyModule</a>, <a href="#18910" title="=&gt; BasicManagedProject.this.DefaultPublishConfiguration">publishConfiguration</a>, <a href="#18847" title="=&gt; sbt.UpdateLogging.Value">ivyUpdateLogging</a>)
+	<span class="keyword">protected</span> <span class="keyword">def</span> <a title="=&gt; BasicManagedProject.this.Task" id="18908">publishAction</a> =
+	{
+		<span class="keyword">val</span> <a title="List[BasicManagedProject.this.Task]" id="24807">dependencies</a> = <a href="#18928" title="=&gt; BasicManagedProject.this.Task">deliver</a> <a href="#24808" title="(BasicManagedProject.this.Task)List[BasicManagedProject.this.Task]">::</a> <a href="#18909" title="=&gt; List[BasicManagedProject.this.Task]">publishPomDepends</a>
+		<a href="#18938" title="(=&gt; sbt.IvySbt#Module,=&gt; sbt.PublishConfiguration)BasicManagedProject.this.Task">publishTask</a>(<a href="#18887" title="=&gt; sbt.IvySbt#Module">publishIvyModule</a>, <a href="#18910" title="=&gt; BasicManagedProject.this.DefaultPublishConfiguration">publishConfiguration</a>) <a href="TaskManager.scala.html#19289" title="(BasicManagedProject.this.ManagedTask*)BasicManagedProject.this.Task">dependsOn</a>(<a href="#24807" title="List[BasicManagedProject.this.Task]">dependencies</a> : _*)
+	}
+	<span class="keyword">private</span> <span class="keyword">def</span> <a title="=&gt; List[BasicManagedProject.this.Task]" id="18909">publishPomDepends</a> = <span title="List[BasicManagedProject.this.Task]" class="keyword">if</span>(<a href="#18879" title="=&gt; sbt.ManagedStyle.Value">managedStyle</a> <span title="(AnyRef)Boolean">==</span> <a href="#22125" title="=&gt; sbt.ManagedStyle.Value">Maven</a>) <a href="#18918" title="=&gt; BasicManagedProject.this.Task">makePom</a> <a href="#24773" title="(BasicManagedProject.this.Task)List[BasicManagedProject.this.Task]">::</a> <span title="object Nil">Nil</span> <span class="keyword">else</span> <span title="object Nil">Nil</span>
+	<span class="keyword">protected</span> <span class="keyword">def</span> <a title="=&gt; BasicManagedProject.this.DefaultPublishConfiguration" id="18910">publishConfiguration</a> =
+	{
+		<span class="keyword">val</span> <a title="sbt.Resolver" id="24797">repository</a> = <a href="#18893" title="=&gt; Option[sbt.Resolver]">defaultPublishRepository</a>.<span title="(=&gt; sbt.Resolver)sbt.Resolver">getOrElse</span>(<span title="(String)Nothing">error</span>(<span title="java.lang.String(&quot;Repository to publish to not specified.&quot;)" class="string">&quot;Repository to publish to not specified.&quot;</span>))
+		<span class="keyword">val</span> <a title="Boolean" id="24798">publishIvy</a> = <a href="#18879" title="=&gt; sbt.ManagedStyle.Value">managedStyle</a> <a title="(AnyRef)Boolean" id="5738">!=</a> <a href="#22125" title="=&gt; sbt.ManagedStyle.Value">Maven</a>
+		<a href="#24745" title="(sbt.Resolver,String,Boolean)BasicManagedProject.this.DefaultPublishConfiguration" class="keyword">new</a> <a href="#18911" title="BasicManagedProject.this.DefaultPublishConfiguration">DefaultPublishConfiguration</a>(<a href="#24797" title="sbt.Resolver">repository</a>, <span title="java.lang.String(&quot;release&quot;)" class="string">&quot;release&quot;</span>, <a href="#24798" title="Boolean">publishIvy</a>)
+	}
+	<span class="keyword">protected</span> <span class="keyword">class</span> <a title="class DefaultPublishConfiguration extends java.lang.Object with sbt.PublishConfiguration with ScalaObject" id="18911">DefaultPublishConfiguration</a>(<span class="keyword">val</span> <a title="String" id="24761">resolverName</a>: <span title="String">String</span>, <span class="keyword">val</span> <a title="String" id="24762">status</a>: <span title="String">String</span>, <span class="keyword">val</span> <a title="Boolean" id="24763">publishIvy</a>: <span title="Boolean">Boolean</span>) <span class="keyword">extends</span> <a href="#9636" title="sbt.PublishConfiguration">PublishConfiguration</a>
+	{
+		<span class="keyword">def</span> <a title="(sbt.Resolver,String,Boolean)BasicManagedProject.this.DefaultPublishConfiguration" id="24745" class="keyword">this</a>(<a title="sbt.Resolver" id="24758">resolver</a>: <a href="../IvyInterface.scala.html#11181" title="sbt.Resolver">Resolver</a>, <a title="String" id="24759">status</a>: <span title="String">String</span>, <a title="Boolean" id="24760">publishIvy</a>: <span title="Boolean">Boolean</span>) = <a href="#18911" title="DefaultPublishConfiguration.this.type" class="keyword">this</a>(<a href="#24758" title="sbt.Resolver">resolver</a>.<a href="../IvyInterface.scala.html#20578" title="=&gt; String">name</a>, <a href="#24759" title="String">status</a>, <a href="#24760" title="Boolean">publishIvy</a>)
+		<span class="keyword">def</span> <a title="(String,String)BasicManagedProject.this.DefaultPublishConfiguration" id="24746" class="keyword">this</a>(<a title="String" id="24756">resolverName</a>: <span title="String">String</span>, <a title="String" id="24757">status</a>: <span title="String">String</span>) = <a href="#18911" title="DefaultPublishConfiguration.this.type" class="keyword">this</a>(<a href="#24756" title="String">resolverName</a>, <a href="#24757" title="String">status</a>, <span title="Boolean(true)" class="keyword">true</span>)
+		<span class="keyword">def</span> <a title="(sbt.Resolver,String)BasicManagedProject.this.DefaultPublishConfiguration" id="24747" class="keyword">this</a>(<a title="sbt.Resolver" id="24754">resolver</a>: <a href="../IvyInterface.scala.html#11181" title="sbt.Resolver">Resolver</a>, <a title="String" id="24755">status</a>: <span title="String">String</span>) = <a href="#24746" title="(String,String)BasicManagedProject.this.DefaultPublishConfiguration" class="keyword">this</a>(<a href="#24754" title="sbt.Resolver">resolver</a>.<a href="../IvyInterface.scala.html#20578" title="=&gt; String">name</a>, <a href="#24755" title="String">status</a>)
+
+		<span class="keyword">protected</span> <span class="keyword">def</span> <a title="=&gt; sbt.Path" id="24748">deliveredPathPattern</a> = <a href="Project.scala.html#14871" title="=&gt; sbt.Path">outputPath</a> <a href="Path.scala.html#18070" title="(String)sbt.Path">/</a> <span title="java.lang.String(&quot;[artifact]-[revision](-[classifier]).[ext]&quot;)" class="string">&quot;[artifact]-[revision](-[classifier]).[ext]&quot;</span>
+		<span class="keyword">def</span> <a title="=&gt; String" id="24749">deliveredPattern</a> = <a href="#24748" title="=&gt; sbt.Path">deliveredPathPattern</a>.<a href="Path.scala.html#18078" title="=&gt; String">relativePath</a>
+		<span class="keyword">def</span> <a title="=&gt; Iterable[String]" id="24750">srcArtifactPatterns</a>: <span title="Iterable[String]">Iterable</span>[String] =
+		{
+			<span class="keyword">val</span> <a title="List[sbt.Path]" id="24835">pathPatterns</a> =
+				(<a href="Project.scala.html#14871" title="=&gt; sbt.Path">outputPath</a> <a href="Path.scala.html#18070" title="(String)sbt.Path">/</a> <span title="java.lang.String(&quot;[artifact]-[revision]-[type](-[classifier]).[ext]&quot;)" class="string">&quot;[artifact]-[revision]-[type](-[classifier]).[ext]&quot;</span>) <a href="#24836" title="(sbt.Path)List[sbt.Path]">::</a>
+				(<a href="Project.scala.html#14871" title="=&gt; sbt.Path">outputPath</a> <a href="Path.scala.html#18070" title="(String)sbt.Path">/</a> <span title="java.lang.String(&quot;[artifact]-[revision](-[classifier]).[ext]&quot;)" class="string">&quot;[artifact]-[revision](-[classifier]).[ext]&quot;</span>) <a href="#24838" title="(sbt.Path)List[sbt.Path]">::</a>
+				<span title="object Nil">Nil</span>
+			<a href="#24835" title="List[sbt.Path]">pathPatterns</a>.<a title="((sbt.Path) =&gt; String)List[String]" id="17963">map</a>(<a href="#24846" title="sbt.Path">_</a>.<a href="Path.scala.html#18078" title="=&gt; String">relativePath</a>)
+		}
+		<span class="keyword">def</span> <a title="=&gt; Iterable[sbt.ModuleID]" id="24751">extraDependencies</a>: <span title="Iterable[sbt.ModuleID]">Iterable</span>[ModuleID] = <a href="#18898" title="=&gt; Iterable[sbt.ModuleID]">deliverProjectDependencies</a>
+		<span class="comment">/**  The configurations to include in the publish/deliver action: specify none for all public configurations. */</span>
+		<span class="keyword">def</span> <a title="=&gt; Option[Iterable[sbt.Configuration]]" id="24752">configurations</a>: <span title="Option[Iterable[sbt.Configuration]]">Option</span>[Iterable[Configuration]] = <span title="object None">None</span>
+	}
+
+	<span class="keyword">def</span> <a title="=&gt; Seq[BasicManagedProject.this.ManagedTask]" id="18912">packageToPublishActions</a>: <span title="Seq[BasicManagedProject.this.ManagedTask]">Seq</span>[ManagedTask] = <span title="object Nil">Nil</span>
+
+	<span class="keyword">private</span>[<span class="keyword">this</span>] <span class="keyword">def</span> <a title="[T]((sbt.BasicManagedProject) =&gt; T)List[T]" id="18913">depMap</a>[<a title="&gt;: Nothing &lt;: Any" id="18915">T</a>](<a title="(sbt.BasicManagedProject) =&gt; T" id="24849">f</a>: BasicManagedProject =&gt; T) =
+		<a href="Dag.scala.html#14930" title="=&gt; List[sbt.Project]">topologicalSort</a>.<a title="(Int)List[sbt.Project]" id="17956">dropRight</a>(<span title="Int(1)" class="int">1</span>).<span title="((sbt.Project) =&gt; Iterable[T])List[T]">flatMap</span> <a href="#24854" title="List[T]">{</a> <span title="List[T]" class="keyword">case</span> <a title="sbt.BasicManagedProject" id="24855">m</a>: <a href="#8874" title="sbt.BasicManagedProject">BasicManagedProject</a> =&gt; <a href="#24849" title="(sbt.BasicManagedProject)T" id="16544">f</a>(<a href="#24855" title="sbt.BasicManagedProject">m</a>) <a href="#24856" title="(T)List[T]">::</a> <span title="object Nil">Nil</span>; <span title="Nil.type" class="keyword">case</span> _ =&gt; <span title="object Nil">Nil</span> }
+
+	<span class="keyword">lazy</span> <span class="keyword">val</span> <a title="BasicManagedProject.this.Task" id="18917">update</a> = <a href="#18895" title="=&gt; BasicManagedProject.this.Task">updateAction</a>
+	<span class="keyword">lazy</span> <span class="keyword">val</span> <a title="BasicManagedProject.this.Task" id="18919">makePom</a> = <a href="#18903" title="=&gt; BasicManagedProject.this.Task">makePomAction</a> <a href="TaskManager.scala.html#19289" title="(BasicManagedProject.this.ManagedTask*)BasicManagedProject.this.Task">dependsOn</a>(<a href="#18912" title="=&gt; Seq[BasicManagedProject.this.ManagedTask]">packageToPublishActions</a> : _*)
+	<span class="keyword">lazy</span> <span class="keyword">val</span> <a title="BasicManagedProject.this.Task" id="18921">cleanLib</a> = <a href="#18896" title="=&gt; BasicManagedProject.this.Task">cleanLibAction</a>
+	<span class="keyword">lazy</span> <span class="keyword">val</span> <a title="BasicManagedProject.this.Task" id="18923">cleanCache</a> = <a href="#18897" title="=&gt; BasicManagedProject.this.Task">cleanCacheAction</a>
+	<span class="comment">// deliver must run after its dependencies' `publish` so that the artifacts produced by the dependencies can be resolved</span>
+	<span class="comment">//  (deliver requires a resolve first)</span>
+	<span class="keyword">lazy</span> <span class="keyword">val</span> <a title="BasicManagedProject.this.Task" id="18925">deliverLocal</a>: <a href="TaskManager.scala.html#14812" title="BasicManagedProject.this.Task">Task</a> = <a href="#18904" title="=&gt; BasicManagedProject.this.Task">deliverLocalAction</a> <a href="TaskManager.scala.html#19289" title="(BasicManagedProject.this.ManagedTask*)BasicManagedProject.this.Task">dependsOn</a>((<a href="#18913" title="((sbt.BasicManagedProject) =&gt; sbt.BasicManagedProject#Task)List[sbt.BasicManagedProject#Task]">depMap</a>(<a href="#24861" title="sbt.BasicManagedProject">_</a>.<a href="#18926" title="=&gt; x$9.Task">publishLocal</a>) <span title="(Iterable[BasicManagedProject.this.ManagedTask])List[BasicManagedProject.this.ManagedTask]">++</span> <a href="#18912" title="=&gt; Seq[BasicManagedProject.this.ManagedTask]">packageToPublishActions</a>) : _*)
+	<span class="keyword">lazy</span> <span class="keyword">val</span> <a title="BasicManagedProject.this.Task" id="18927">publishLocal</a>: <a href="TaskManager.scala.html#14812" title="BasicManagedProject.this.Task">Task</a> = <a href="#18905" title="=&gt; BasicManagedProject.this.Task">publishLocalAction</a>
+	<span class="keyword">lazy</span> <span class="keyword">val</span> <a title="BasicManagedProject.this.Task" id="18929">deliver</a>: <a href="TaskManager.scala.html#14812" title="BasicManagedProject.this.Task">Task</a> = <a href="#18907" title="=&gt; BasicManagedProject.this.Task">deliverAction</a> <a href="TaskManager.scala.html#19289" title="(BasicManagedProject.this.ManagedTask*)BasicManagedProject.this.Task">dependsOn</a>((<a href="#18913" title="((sbt.BasicManagedProject) =&gt; sbt.BasicManagedProject#Task)List[sbt.BasicManagedProject#Task]">depMap</a>(<a href="#24878" title="sbt.BasicManagedProject">_</a>.<a href="#18930" title="=&gt; x$10.Task">publish</a>) <span title="(Iterable[BasicManagedProject.this.ManagedTask])List[BasicManagedProject.this.ManagedTask]">++</span> <a href="#18912" title="=&gt; Seq[BasicManagedProject.this.ManagedTask]">packageToPublishActions</a>)  : _*)
+	<span class="keyword">lazy</span> <span class="keyword">val</span> <a title="BasicManagedProject.this.Task" id="18931">publish</a>: <a href="TaskManager.scala.html#14812" title="BasicManagedProject.this.Task">Task</a> = <a href="#18908" title="=&gt; BasicManagedProject.this.Task">publishAction</a>
+}
+
+<span class="keyword">object</span> <a title="object sbt.BasicManagedProject" id="8875">BasicManagedProject</a>
+{
+	<span class="keyword">val</span> <a title="java.lang.String" id="14793">UpdateDescription</a> =
+		<span title="java.lang.String(&quot;Resolves and retrieves automatically managed dependencies.&quot;)" class="string">&quot;Resolves and retrieves automatically managed dependencies.&quot;</span>
+	<span class="keyword">val</span> <a title="java.lang.String" id="14795">CleanLibDescription</a> =
+		<span title="java.lang.String(&quot;Deletes the managed library directory.&quot;)" class="string">&quot;Deletes the managed library directory.&quot;</span>
+	<span class="keyword">val</span> <a title="java.lang.String" id="14797">CleanCacheDescription</a> =
+		<span title="java.lang.String(&quot;Deletes the cache of artifacts downloaded for automatically managed dependencies.&quot;)" class="string">&quot;Deletes the cache of artifacts downloaded for automatically managed dependencies.&quot;</span>
+
+	<span class="keyword">val</span> <a title="java.lang.String" id="14799">PublishToName</a> = <span title="java.lang.String(&quot;publish-to&quot;)" class="string">&quot;publish-to&quot;</span>
+	<span class="keyword">val</span> <a title="java.lang.String" id="14801">RetrieveFromName</a> = <span title="java.lang.String(&quot;retrieve-from&quot;)" class="string">&quot;retrieve-from&quot;</span>
+}
+
+<span class="keyword">class</span> <a title="class DefaultInstallProject extends java.lang.Object with sbt.InstallProject with sbt.MavenStyleScalaPaths with sbt.BasicDependencyProject with ScalaObject" id="11382">DefaultInstallProject</a>(<span class="keyword">val</span> <a title="sbt.ProjectInfo" id="25011">info</a>: <a href="ProjectInfo.scala.html#6756" title="sbt.ProjectInfo">ProjectInfo</a>) <span class="keyword">extends</span> <a href="#9237" title="sbt.InstallProject">InstallProject</a> <span class="keyword">with</span> <a href="ProjectPaths.scala.html#9462" title="sbt.MavenStyleScalaPaths">MavenStyleScalaPaths</a> <span class="keyword">with</span> <a href="#11127" title="sbt.BasicDependencyProject">BasicDependencyProject</a>
+{
+	<span class="keyword">def</span> <a title="(sbt.Configuration)sbt.PathFinder" id="24901">fullUnmanagedClasspath</a>(<a title="sbt.Configuration" id="25012">config</a>: <a href="../IvyInterface.scala.html#11658" title="sbt.Configuration">Configuration</a>) = <a href="#18981" title="=&gt; sbt.PathFinder">unmanagedClasspath</a>
+	<span class="keyword">def</span> <a title="=&gt; Iterable[sbt.Project]" id="24902">dependencies</a> = <a href="#25011" title="=&gt; sbt.ProjectInfo">info</a>.<a href="ProjectInfo.scala.html#19169" title="=&gt; Iterable[sbt.Project]">dependencies</a>
+}
+<span class="keyword">trait</span> <a title="trait InstallProject extends java.lang.Object with sbt.BasicManagedProject with ScalaObject" id="9237">InstallProject</a> <span class="keyword">extends</span> <a href="#8874" title="sbt.BasicManagedProject">BasicManagedProject</a>
+{
+	<span class="keyword">def</span> <a title="=&gt; sbt.ModuleSettings" id="24891">installModuleSettings</a>: <a href="../IvyConfigurations.scala.html#7836" title="sbt.ModuleSettings">ModuleSettings</a> = <a href="#18857" title="=&gt; sbt.ModuleSettings">moduleSettings</a>.<a href="../IvyConfigurations.scala.html#23207" title="=&gt; sbt.ModuleSettings">noScala</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.IvySbt#Module" id="24892">installIvyModule</a>: IvySbt#<a href="../Ivy.scala.html#19850" title="sbt.IvySbt#Module">Module</a> = <a href="#18869" title="(sbt.ModuleSettings)sbt.IvySbt#Module">newIvyModule</a>(<a href="#24891" title="=&gt; sbt.ModuleSettings">installModuleSettings</a>)
+	
+	<span class="keyword">lazy</span> <span class="keyword">val</span> <a title="InstallProject.this.Task" id="24894">install</a> = <a href="#18942" title="(sbt.IvySbt#Module,sbt.Resolver,sbt.Resolver)InstallProject.this.Task">installTask</a>(<a href="#24892" title="=&gt; sbt.IvySbt#Module">installIvyModule</a>, <a href="#24896" title="=&gt; sbt.Resolver">fromResolver</a>, <a href="#24895" title="=&gt; sbt.Resolver">toResolver</a>)
+	<span class="keyword">def</span> <a title="=&gt; sbt.Resolver" id="24895">toResolver</a> = <a href="#18960" title="=&gt; scala.collection.Map[String,sbt.Resolver]">reflectiveRepositories</a>.<span title="(String)Option[sbt.Resolver]">get</span>(<a href="#14799" title="=&gt; java.lang.String">PublishToName</a>).<span title="(=&gt; sbt.Resolver)sbt.Resolver">getOrElse</span>(<span title="(String)Nothing">error</span>(<span title="java.lang.String(&quot;No repository to publish to was specified&quot;)" class="string">&quot;No repository to publish to was specified&quot;</span>))
+	<span class="keyword">def</span> <a title="=&gt; sbt.Resolver" id="24896">fromResolver</a> = <a href="#18960" title="=&gt; scala.collection.Map[String,sbt.Resolver]">reflectiveRepositories</a>.<span title="(String)Option[sbt.Resolver]">get</span>(<a href="#14801" title="=&gt; java.lang.String">RetrieveFromName</a>).<span title="(=&gt; sbt.Resolver)sbt.Resolver">getOrElse</span>(<span title="(String)Nothing">error</span>(<span title="java.lang.String(&quot;No repository to retrieve from was specified&quot;)" class="string">&quot;No repository to retrieve from was specified&quot;</span>))
+}
+
+<span class="keyword">trait</span> <a title="trait BasicDependencyPaths extends java.lang.Object with sbt.ManagedProject with ScalaObject" id="7347">BasicDependencyPaths</a> <span class="keyword">extends</span> <a href="#11826" title="sbt.ManagedProject">ManagedProject</a>
+{
+	<span class="keyword">import</span> BasicDependencyPaths._
+	<span class="keyword">def</span> <a title="=&gt; java.lang.String" id="18972">dependencyDirectoryName</a> = <a href="#22991" title="=&gt; java.lang.String">DefaultDependencyDirectoryName</a>
+	<span class="keyword">def</span> <a title="=&gt; java.lang.String" id="18973">managedDirectoryName</a> = <a href="#22987" title="=&gt; java.lang.String">DefaultManagedDirectoryName</a>
+	<span class="keyword">def</span> <a title="=&gt; java.lang.String" id="18974">pomName</a> = <a href="#18834" title="=&gt; java.lang.String">artifactBaseName</a> <span title="(Any)java.lang.String">+</span> <a href="#22993" title="=&gt; java.lang.String">PomExtension</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="18975">dependencyPath</a> = <a href="Project.scala.html#14854" title="implicit sbt.Project.path : (String)sbt.Path">path</a>(<a href="#18972" title="=&gt; java.lang.String">dependencyDirectoryName</a>)
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="18976">managedDependencyPath</a> = <a href="Project.scala.html#14910" title="(sbt.Path)sbt.Path">crossPath</a>(<a href="#18977" title="=&gt; sbt.Path">managedDependencyRootPath</a>)
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="18977">managedDependencyRootPath</a>: <a href="Path.scala.html#10200" title="sbt.Path">Path</a> = <a href="Project.scala.html#14854" title="implicit sbt.Project.path : (String)sbt.Path">managedDirectoryName</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="18978">pomPath</a> = <a href="Project.scala.html#14871" title="=&gt; sbt.Path">outputPath</a> <a href="Path.scala.html#18070" title="(String)sbt.Path">/</a> <a href="#18974" title="=&gt; java.lang.String">pomName</a>
+}
+<span class="keyword">object</span> <a title="object sbt.BasicDependencyPaths" id="7348">BasicDependencyPaths</a>
+{
+	<span class="keyword">val</span> <a title="java.lang.String" id="22987">DefaultManagedDirectoryName</a> = <span title="java.lang.String(&quot;lib_managed&quot;)" class="string">&quot;lib_managed&quot;</span>
+	<span class="keyword">val</span> <a title="java.lang.String" id="22989">DefaultManagedSourceDirectoryName</a> = <span title="java.lang.String(&quot;src_managed&quot;)" class="string">&quot;src_managed&quot;</span>
+	<span class="keyword">val</span> <a title="java.lang.String" id="22991">DefaultDependencyDirectoryName</a> = <span title="java.lang.String(&quot;lib&quot;)" class="string">&quot;lib&quot;</span>
+	<span class="keyword">val</span> <a title="java.lang.String" id="22993">PomExtension</a> = <span title="java.lang.String(&quot;.pom&quot;)" class="string">&quot;.pom&quot;</span>
+}
+
+<span class="keyword">object</span> <a title="object sbt.StringUtilities" id="6802">StringUtilities</a>
+{
+	<span class="keyword">def</span> <a title="(String)java.lang.String" id="14789">normalize</a>(<a title="String" id="22122">s</a>: <span title="String">String</span>) = <a href="#22122" title="String">s</a>.<a title="()java.lang.String" id="5812">toLowerCase</a>.<a title="(java.lang.String,java.lang.String)java.lang.String" id="5807">replaceAll</a>(<span title="java.lang.String(&quot;\s+&quot;)" class="string">&quot;&quot;&quot;\s+&quot;&quot;&quot;</span>, <span title="java.lang.String(&quot;-&quot;)" class="string">&quot;-&quot;</span>)
+	<span class="keyword">def</span> <a title="(String,String)Unit" id="14790">nonEmpty</a>(<a title="String" id="22915">s</a>: <span title="String">String</span>, <a title="String" id="22916">label</a>: <span title="String">String</span>)
+	{
+		<span title="(Boolean,Any)Unit">require</span>(<a href="#22915" title="String">s</a>.<a title="()java.lang.String" id="5815">trim</a>.<a title="()Int" id="5766">length</a> <a title="(Int)Boolean" id="3093">&gt;</a> <span title="Int(0)" class="int">0</span>, <a href="#22916" title="String">label</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot; cannot be empty.&quot;)" class="string">&quot; cannot be empty.&quot;</span>)
+	}
+	<span class="keyword">def</span> <a title="(String)java.lang.String" id="14791">appendable</a>(<a title="String" id="22183">s</a>: <span title="String">String</span>) = <span title="java.lang.String" class="keyword">if</span>(<a href="#22183" title="implicit scala.Predef.stringWrapper : (String)scala.runtime.RichString">s</a>.<span title="=&gt; Boolean">isEmpty</span>) <span title="java.lang.String(&quot;&quot;)" class="string">&quot;&quot;</span> <span class="keyword">else</span> <span title="java.lang.String(&quot;_&quot;)" class="string">&quot;_&quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#22183" title="String">s</a>
+}
+<span class="keyword">final</span> <span class="keyword">class</span> <a title="class GroupID extends java.lang.Object with NotNull with ScalaObject" id="8580">GroupID</a> <span class="keyword">private</span>[sbt] (<a title="String" id="22917">groupID</a>: <span title="String">String</span>, <a title="String" id="22918">scalaVersion</a>: <span title="String">String</span>) <span class="keyword">extends</span> <span title="NotNull">NotNull</span>
+{
+	<span class="keyword">def</span> <a title="(String)sbt.GroupArtifactID" id="22912">%</a> (<a title="String" id="25057">artifactID</a>: <span title="String">String</span>) = <a href="#22914" title="(String)sbt.GroupArtifactID">groupArtifact</a>(<a href="#25057" title="String">artifactID</a>)
+	<span class="keyword">def</span> <a title="(String)sbt.GroupArtifactID" id="22913">%%</a> (<a title="String" id="24175">artifactID</a>: <span title="String">String</span>) =
+	{
+		<span title="(Boolean,Any)Unit">require</span>(<span title="=&gt; Boolean">!</span><a href="#22918" title="implicit scala.Predef.stringWrapper : (String)scala.runtime.RichString">scalaVersion</a>.<span title="=&gt; Boolean">isEmpty</span>, <span title="java.lang.String(&quot;Cannot use %% when the sbt launcher is not used.&quot;)" class="string">&quot;Cannot use %% when the sbt launcher is not used.&quot;</span>)
+		<a href="#22914" title="(String)sbt.GroupArtifactID">groupArtifact</a>(<a href="#24175" title="String">artifactID</a> <span title="(Any)java.lang.String">+</span> <a href="#14791" title="(String)java.lang.String">appendable</a>(<a href="#22918" title="String">scalaVersion</a>))
+	}
+	<span class="keyword">private</span> <span class="keyword">def</span> <a title="(String)sbt.GroupArtifactID" id="22914">groupArtifact</a>(<a title="String" id="24191">artifactID</a>: <span title="String">String</span>) =
+	{
+		<a href="#14790" title="(String,String)Unit">nonEmpty</a>(<a href="#24191" title="String">artifactID</a>, <span title="java.lang.String(&quot;Artifact ID&quot;)" class="string">&quot;Artifact ID&quot;</span>)
+		<span title="sbt.GroupArtifactID" class="keyword">new</span> <a href="#6825" title="sbt.GroupArtifactID">GroupArtifactID</a>(<a href="#22917" title="String">groupID</a>, <a href="#24191" title="String">artifactID</a>)
+	}
+}
+<span class="keyword">final</span> <span class="keyword">class</span> <a title="class GroupArtifactID extends java.lang.Object with NotNull with ScalaObject" id="6825">GroupArtifactID</a> <span class="keyword">private</span>[sbt] (<a title="String" id="24199">groupID</a>: <span title="String">String</span>, <a title="String" id="24200">artifactID</a>: <span title="String">String</span>) <span class="keyword">extends</span> <span title="NotNull">NotNull</span>
+{
+	<span class="keyword">def</span> <a title="(String)sbt.ModuleID" id="24198">%</a> (<a title="String" id="24202">revision</a>: <span title="String">String</span>): <a href="../IvyInterface.scala.html#11352" title="sbt.ModuleID">ModuleID</a> =
+	{
+		<a href="#14790" title="(String,String)Unit">nonEmpty</a>(<a href="#24202" title="String">revision</a>, <span title="java.lang.String(&quot;Revision&quot;)" class="string">&quot;Revision&quot;</span>)
+		<a href="../IvyInterface.scala.html#22237" title="(String,String,String,Option[String])sbt.ModuleID">ModuleID</a>(<a href="#24199" title="String">groupID</a>, <a href="#24200" title="String">artifactID</a>, <a href="#24202" title="String">revision</a>, <span title="object None">None</span>)
+	}
+}
+<span class="keyword">final</span> <span class="keyword">class</span> <a title="class ModuleIDConfigurable extends java.lang.Object with NotNull with ScalaObject" id="10584">ModuleIDConfigurable</a> <span class="keyword">private</span>[sbt] (<a title="sbt.ModuleID" id="22943">moduleID</a>: <a href="../IvyInterface.scala.html#11352" title="sbt.ModuleID">ModuleID</a>) <span class="keyword">extends</span> <span title="NotNull">NotNull</span>
+{
+	<span class="keyword">def</span> <a title="(String)sbt.ModuleID" id="22934">%</a> (<a title="String" id="24206">configurations</a>: <span title="String">String</span>): <a href="../IvyInterface.scala.html#11352" title="sbt.ModuleID">ModuleID</a> =
+	{
+		<a href="#14790" title="(String,String)Unit">nonEmpty</a>(<a href="#24206" title="String">configurations</a>, <span title="java.lang.String(&quot;Configurations&quot;)" class="string">&quot;Configurations&quot;</span>)
+		<span class="keyword">import</span> moduleID._
+		<a href="../IvyInterface.scala.html#22237" title="(String,String,String,Option[String])sbt.ModuleID">ModuleID</a>(<a href="../IvyInterface.scala.html#22204" title="=&gt; String">organization</a>, <a href="../IvyInterface.scala.html#22206" title="=&gt; String">name</a>, <a href="../IvyInterface.scala.html#22208" title="=&gt; String">revision</a>, <span title="(String)Some[String]">Some</span>(<a href="#24206" title="String">configurations</a>))
+	}
+}
+<span class="keyword">final</span> <span class="keyword">class</span> <a title="class RepositoryName extends java.lang.Object with NotNull with ScalaObject" id="7194">RepositoryName</a> <span class="keyword">private</span>[sbt] (<a title="String" id="22929">name</a>: <span title="String">String</span>) <span class="keyword">extends</span> <span title="NotNull">NotNull</span>
+{
+	<span class="keyword">def</span> <a title="(String)sbt.MavenRepository" id="22928">at</a> (<a title="String" id="25076">location</a>: <span title="String">String</span>) =
+	{
+		<a href="#14790" title="(String,String)Unit">nonEmpty</a>(<a href="#25076" title="String">location</a>, <span title="java.lang.String(&quot;Repository location&quot;)" class="string">&quot;Repository location&quot;</span>)
+		<span title="sbt.MavenRepository" class="keyword">new</span> <a href="../IvyInterface.scala.html#8460" title="sbt.MavenRepository">MavenRepository</a>(<a href="#22929" title="String">name</a>, <a href="#25076" title="String">location</a>)
+	}
+}
+
+<span class="keyword">import</span> scala.collection.{Map, mutable}
+<span class="comment">/** A Project that determines its tasks by reflectively finding all vals with a type
+* that conforms to Task.*/</span>
+<span class="keyword">trait</span> <a title="trait ReflectiveTasks extends java.lang.Object with sbt.Project with ScalaObject" id="11166">ReflectiveTasks</a> <span class="keyword">extends</span> <a href="Project.scala.html#7665" title="sbt.Project">Project</a>
+{
+	<span class="keyword">def</span> <a title="=&gt; scala.collection.Map[String,ReflectiveTasks.this.ManagedTask]" id="18949">tasks</a>: <span title="scala.collection.Map[String,ReflectiveTasks.this.ManagedTask]">Map</span>[String, ManagedTask] = <a href="#18950" title="=&gt; scala.collection.Map[String,ReflectiveTasks.this.Task]">reflectiveTaskMappings</a>
+	<span class="keyword">def</span> <a title="=&gt; scala.collection.Map[String,ReflectiveTasks.this.Task]" id="18950">reflectiveTaskMappings</a> : <span title="scala.collection.Map[String,ReflectiveTasks.this.Task]">Map</span>[String, Task] = <a href="#7087" title="object sbt.Reflective">Reflective</a>.<a href="#25085" title="(AnyRef)(implicit scala.reflect.Manifest[ReflectiveTasks.this.Task])scala.collection.Map[String,ReflectiveTasks.this.Task]">reflectiveMappings</a>[<a href="TaskManager.scala.html#14812" title="ReflectiveTasks.this.Task">Task</a>](<a href="#11166" title="sbt.ReflectiveTasks" class="keyword">this</a>)
+}
+<span class="comment">/** A Project that determines its method tasks by reflectively finding all vals with a type
+* that conforms to MethodTask.*/</span>
+<span class="keyword">trait</span> <a title="trait ReflectiveMethods extends java.lang.Object with sbt.Project with ScalaObject" id="8517">ReflectiveMethods</a> <span class="keyword">extends</span> <a href="Project.scala.html#7665" title="sbt.Project">Project</a>
+{
+	<span class="keyword">def</span> <a title="=&gt; scala.collection.Map[String,ReflectiveMethods.this.MethodTask]" id="18952">methods</a>: <span title="scala.collection.Map[String,ReflectiveMethods.this.MethodTask]">Map</span>[String, MethodTask] = <a href="#18953" title="=&gt; scala.collection.Map[String,ReflectiveMethods.this.MethodTask]">reflectiveMethodMappings</a>
+	<span class="keyword">def</span> <a title="=&gt; scala.collection.Map[String,ReflectiveMethods.this.MethodTask]" id="18953">reflectiveMethodMappings</a> : <span title="scala.collection.Map[String,ReflectiveMethods.this.MethodTask]">Map</span>[String, MethodTask] = <a href="#7087" title="object sbt.Reflective">Reflective</a>.<a href="#25085" title="(AnyRef)(implicit scala.reflect.Manifest[ReflectiveMethods.this.MethodTask])scala.collection.Map[String,ReflectiveMethods.this.MethodTask]">reflectiveMappings</a>[<a href="TaskManager.scala.html#14811" title="ReflectiveMethods.this.MethodTask">MethodTask</a>](<a href="#8517" title="sbt.ReflectiveMethods" class="keyword">this</a>)
+}
+<span class="comment">/** A Project that determines its dependencies on other projects by reflectively
+* finding all vals with a type that conforms to Project.*/</span>
+<span class="keyword">trait</span> <a title="trait ReflectiveModules extends java.lang.Object with sbt.Project with ScalaObject" id="7113">ReflectiveModules</a> <span class="keyword">extends</span> <a href="Project.scala.html#7665" title="sbt.Project">Project</a>
+{
+	<span class="keyword">override</span> <span class="keyword">def</span> <a title="=&gt; scala.collection.Map[String,sbt.Project]" id="18946">subProjects</a>: <span title="scala.collection.Map[String,sbt.Project]">Map</span>[String, Project] = <a href="#18947" title="=&gt; scala.collection.Map[String,sbt.Project]">reflectiveModuleMappings</a>
+	<span class="keyword">def</span> <a title="=&gt; scala.collection.Map[String,sbt.Project]" id="18947">reflectiveModuleMappings</a> : <span title="scala.collection.Map[String,sbt.Project]">Map</span>[String, Project] = <a href="#7087" title="object sbt.Reflective">Reflective</a>.<a href="#25085" title="(AnyRef)(implicit scala.reflect.Manifest[sbt.Project])scala.collection.Map[String,sbt.Project]">reflectiveMappings</a>[<a href="Project.scala.html#7665" title="sbt.Project">Project</a>](<a href="#7113" title="sbt.ReflectiveModules" class="keyword">this</a>)
+}
+<span class="comment">/** A Project that determines its dependencies on other projects by reflectively
+* finding all vals with a type that conforms to Project and determines its tasks
+* by reflectively finding all vals with a type that conforms to Task.*/</span>
+<span class="keyword">trait</span> <a title="trait ReflectiveProject extends java.lang.Object with sbt.ReflectiveModules with sbt.ReflectiveTasks with sbt.ReflectiveMethods" id="6468">ReflectiveProject</a> <span class="keyword">extends</span> <a href="#7113" title="sbt.ReflectiveModules">ReflectiveModules</a> <span class="keyword">with</span> <a href="#11166" title="sbt.ReflectiveTasks">ReflectiveTasks</a> <span class="keyword">with</span> <a href="#8517" title="sbt.ReflectiveMethods">ReflectiveMethods</a>
+
+<span class="comment">/** This Project subclass is used to contain other projects as dependencies.*/</span>
+<span class="keyword">class</span> <a title="class ParentProject extends java.lang.Object with sbt.BasicDependencyProject with sbt.Cleanable with ScalaObject" id="8574">ParentProject</a>(<span class="keyword">val</span> <a title="sbt.ProjectInfo" id="25164">info</a>: <a href="ProjectInfo.scala.html#6756" title="sbt.ProjectInfo">ProjectInfo</a>) <span class="keyword">extends</span> <a href="#11127" title="sbt.BasicDependencyProject">BasicDependencyProject</a> <span class="keyword">with</span> <a href="ScalaProject.scala.html#7911" title="sbt.Cleanable">Cleanable</a>
+{
+	<span class="keyword">def</span> <a title="=&gt; Iterable[sbt.Project]" id="25147">dependencies</a>: <span title="Iterable[sbt.Project]">Iterable</span>[Project] = <a href="#25164" title="=&gt; sbt.ProjectInfo">info</a>.<a href="ProjectInfo.scala.html#19169" title="=&gt; Iterable[sbt.Project]">dependencies</a> <span title="(Iterable[sbt.Project])Collection[sbt.Project]">++</span> <a href="#18946" title="=&gt; scala.collection.Map[String,sbt.Project]">subProjects</a>.<span title="=&gt; Iterator[sbt.Project]">values</span>.<span title="=&gt; List[sbt.Project]">toList</span>
+	<span class="comment">/** The directories to which a project writes are listed here and is used
+	* to check a project and its dependencies for collisions.*/</span>
+	<span class="keyword">override</span> <span class="keyword">def</span> <a title="=&gt; List[sbt.Path]" id="25148">outputDirectories</a> = <a href="#18976" title="=&gt; sbt.Path">managedDependencyPath</a> <a href="#25171" title="(sbt.Path)List[sbt.Path]">::</a> <a href="Project.scala.html#14871" title="=&gt; sbt.Path">outputPath</a> <a href="#25172" title="(sbt.Path)List[sbt.Path]">::</a> <span title="object Nil">Nil</span>
+	<span class="keyword">def</span> <a title="(sbt.Configuration)sbt.PathFinder" id="25149">fullUnmanagedClasspath</a>(<a title="sbt.Configuration" id="25177">config</a>: <a href="../IvyInterface.scala.html#11658" title="sbt.Configuration">Configuration</a>) = <a href="#18981" title="=&gt; sbt.PathFinder">unmanagedClasspath</a>
+}
+
+<span class="keyword">object</span> <a title="object sbt.Reflective" id="7087">Reflective</a>
+{
+	<span class="keyword">def</span> <a title="[T](AnyRef)(implicit scala.reflect.Manifest[T])scala.collection.Map[String,T]" id="25085">reflectiveMappings</a>[<a title="&gt;: Nothing &lt;: Any" id="25087">T</a>](<a title="AnyRef" id="25088">obj</a>: <a title="AnyRef" id="1962">AnyRef</a>)(<span class="keyword">implicit</span> <a title="scala.reflect.Manifest[T]" id="25089">m</a>: scala.reflect.<a title="scala.reflect.Manifest[T]" id="2659">Manifest</a>[T]): <span title="scala.collection.Map[String,T]">Map</span>[String, T] =
+	{
+		<span class="keyword">val</span> <a title="scala.collection.mutable.HashMap[String,T]" id="25180">mappings</a> = <span title="scala.collection.mutable.HashMap[String,T]" class="keyword">new</span> mutable.<a title="scala.collection.mutable.HashMap[String,T]" id="15927">HashMap</a>[String, T]
+		<span class="keyword">for</span> (<a href="#25246" title="(((String, T)) =&gt; Unit)Unit" id="16275">(</a><a title="String" id="25252">name</a>, <a title="T" id="25253">value</a>) &lt;- <a href="ReflectUtilities.scala.html#9802" title="object sbt.ReflectUtilities">ReflectUtilities</a>.<a href="ReflectUtilities.scala.html#25240" title="(AnyRef)(implicit scala.reflect.Manifest[T])scala.collection.Map[String,T]">allVals</a>[<a href="#25087" title="T">T</a>](<a href="#25088" title="AnyRef">obj</a>))
+			<a href="#25180" title="scala.collection.mutable.HashMap[String,T]">mappings</a>(<a href="ReflectUtilities.scala.html#9802" title="object sbt.ReflectUtilities">ReflectUtilities</a>.<a href="ReflectUtilities.scala.html#25234" title="(String,Char)String">transformCamelCase</a>(<a href="#25252" title="String">name</a>, <span title="Char('-')" class="char">'-'</span>)) = <a href="#25253" title="T">value</a>
+		<a href="#25180" title="scala.collection.mutable.HashMap[String,T]">mappings</a>
+	}
+}
+
+<span class="comment">/** A Project that determines its library dependencies by reflectively finding all vals with a type
+* that conforms to ModuleID.*/</span>
+<span class="keyword">trait</span> <a title="trait ReflectiveLibraryDependencies extends java.lang.Object with sbt.ManagedProject with ScalaObject" id="10650">ReflectiveLibraryDependencies</a> <span class="keyword">extends</span> <a href="#11826" title="sbt.ManagedProject">ManagedProject</a>
+{
+	<span class="keyword">def</span> <a title="=&gt; Iterable[sbt.ModuleID]" id="18964">excludeIDs</a>: <span title="Iterable[sbt.ModuleID]">Iterable</span>[ModuleID] = <a href="#18832" title="=&gt; sbt.ModuleID">projectID</a> <a href="#25371" title="(sbt.ModuleID)List[sbt.ModuleID]">::</a> <span title="object Nil">Nil</span>
+	<span class="comment">/** Defines the library dependencies of this project.  By default, this finds vals of type ModuleID defined on the project.
+	* This can be overridden to directly provide dependencies */</span>
+	<span class="keyword">def</span> <a title="=&gt; Set[sbt.ModuleID]" id="18965">libraryDependencies</a>: <span title="Set[sbt.ModuleID]">Set</span>[ModuleID] = <a href="#18966" title="=&gt; Set[sbt.ModuleID]">reflectiveLibraryDependencies</a>
+	<span class="keyword">def</span> <a title="=&gt; Set[sbt.ModuleID]" id="18966">reflectiveLibraryDependencies</a> : <span title="Set[sbt.ModuleID]">Set</span>[ModuleID] = <span title="(sbt.ModuleID*)scala.collection.immutable.Set[sbt.ModuleID]">Set</span>[<a href="../IvyInterface.scala.html#11352" title="sbt.ModuleID">ModuleID</a>](<a href="#7087" title="object sbt.Reflective">Reflective</a>.<a href="#25085" title="(AnyRef)(implicit scala.reflect.Manifest[sbt.ModuleID])scala.collection.Map[String,sbt.ModuleID]">reflectiveMappings</a>[<a href="../IvyInterface.scala.html#11352" title="sbt.ModuleID">ModuleID</a>](<a href="#10650" title="sbt.ReflectiveLibraryDependencies" class="keyword">this</a>).<span title="=&gt; Iterator[sbt.ModuleID]">values</span>.<span title="=&gt; List[sbt.ModuleID]">toList</span>: _*) <a title="(Iterable[sbt.ModuleID])scala.collection.immutable.Set[sbt.ModuleID]" id="23022">--</a> <a href="#18964" title="=&gt; Iterable[sbt.ModuleID]">excludeIDs</a>
+}
+
+<span class="keyword">trait</span> <a title="trait ReflectiveConfigurations extends java.lang.Object with sbt.Project with ScalaObject" id="7617">ReflectiveConfigurations</a> <span class="keyword">extends</span> <a href="Project.scala.html#7665" title="sbt.Project">Project</a>
+{
+	<span class="keyword">def</span> <a title="=&gt; Iterable[sbt.Configuration]" id="18968">ivyConfigurations</a>: <span title="Iterable[sbt.Configuration]">Iterable</span>[Configuration] = <a href="#18969" title="=&gt; Set[sbt.Configuration]">reflectiveIvyConfigurations</a>
+	<span class="keyword">def</span> <a title="=&gt; Set[sbt.Configuration]" id="18969">reflectiveIvyConfigurations</a>: <span title="Set[sbt.Configuration]">Set</span>[Configuration] = <a href="../IvyInterface.scala.html#9343" title="object sbt.Configurations">Configurations</a>.<a href="../IvyInterface.scala.html#19036" title="(Iterable[sbt.Configuration])scala.collection.immutable.Set[sbt.Configuration]">removeDuplicates</a>(<a href="#7087" title="object sbt.Reflective">Reflective</a>.<a href="#25085" title="(AnyRef)(implicit scala.reflect.Manifest[sbt.Configuration])scala.collection.Map[String,sbt.Configuration]">reflectiveMappings</a>[<a href="../IvyInterface.scala.html#11658" title="sbt.Configuration">Configuration</a>](<a href="#7617" title="sbt.ReflectiveConfigurations" class="keyword">this</a>).<span title="=&gt; Iterator[sbt.Configuration]">values</span>.<span title="=&gt; List[sbt.Configuration]">toList</span>)
+}
+<span class="keyword">trait</span> <a title="trait ReflectiveArtifacts extends java.lang.Object with sbt.ManagedProject with ScalaObject" id="9027">ReflectiveArtifacts</a> <span class="keyword">extends</span> <a href="#11826" title="sbt.ManagedProject">ManagedProject</a>
+{
+	<span class="keyword">def</span> <a title="=&gt; sbt.ManagedStyle.Value" id="18955">managedStyle</a>: <span title="sbt.ManagedStyle.Value">ManagedType</span>
+	<span class="keyword">def</span> <a title="=&gt; Set[sbt.Artifact]" id="18956">artifacts</a>: <span title="Set[sbt.Artifact]">Set</span>[Artifact] =
+	{
+		<span class="keyword">val</span> <a title="Set[sbt.Artifact]" id="25388">reflective</a> = <a href="#18957" title="=&gt; Set[sbt.Artifact]">reflectiveArtifacts</a>
+		<a href="#18955" title="=&gt; sbt.ManagedStyle.Value">managedStyle</a> <span title="Set[sbt.Artifact]" class="keyword">match</span>
+		{
+			<span title="scala.collection.immutable.Set[sbt.Artifact]" class="keyword">case</span> <a href="#22125" title="=&gt; sbt.ManagedStyle.Value">Maven</a> =&gt; <a href="#25388" title="Set[sbt.Artifact]">reflective</a> <span title="(Iterable[sbt.Artifact])scala.collection.immutable.Set[sbt.Artifact]">++</span> <span title="(sbt.Artifact*)List[sbt.Artifact]">List</span>(<a href="../IvyInterface.scala.html#20086" title="(String,String,String)sbt.Artifact">Artifact</a>(<a href="#18833" title="=&gt; String">artifactID</a>, <span title="java.lang.String(&quot;pom&quot;)" class="string">&quot;pom&quot;</span>, <span title="java.lang.String(&quot;pom&quot;)" class="string">&quot;pom&quot;</span>))
+			<span title="Set[sbt.Artifact]" class="keyword">case</span> <a href="#22127" title="=&gt; sbt.ManagedStyle.Value">Ivy</a> =&gt; <a href="#25388" title="Set[sbt.Artifact]">reflective</a>
+			<span title="Set[sbt.Artifact]" class="keyword">case</span> <a href="#22129" title="=&gt; sbt.ManagedStyle.Value">Auto</a> =&gt; <a href="#25388" title="Set[sbt.Artifact]">reflective</a>
+		}
+	}
+	<span class="keyword">def</span> <a title="=&gt; Set[sbt.Artifact]" id="18957">reflectiveArtifacts</a>: <span title="Set[sbt.Artifact]">Set</span>[Artifact] = <span title="(sbt.Artifact*)scala.collection.immutable.Set[sbt.Artifact]">Set</span>(<a href="#7087" title="object sbt.Reflective">Reflective</a>.<a href="#25085" title="(AnyRef)(implicit scala.reflect.Manifest[sbt.Artifact])scala.collection.Map[String,sbt.Artifact]">reflectiveMappings</a>[<a href="../IvyInterface.scala.html#7458" title="sbt.Artifact">Artifact</a>](<a href="#9027" title="sbt.ReflectiveArtifacts" class="keyword">this</a>).<span title="=&gt; Iterator[sbt.Artifact]">values</span>.<span title="=&gt; List[sbt.Artifact]">toList</span>: _*)
+}
+<span class="comment">/** A Project that determines its library dependencies by reflectively finding all vals with a type
+* that conforms to ModuleID.*/</span>
+<span class="keyword">trait</span> <a title="trait ReflectiveRepositories extends java.lang.Object with sbt.Project with ScalaObject" id="6780">ReflectiveRepositories</a> <span class="keyword">extends</span> <a href="Project.scala.html#7665" title="sbt.Project">Project</a>
+{
+	<span class="keyword">def</span> <a title="=&gt; Set[sbt.Resolver]" id="18959">repositories</a>: <span title="Set[sbt.Resolver]">Set</span>[Resolver] =
+	{
+		<span class="keyword">val</span> <a title="scala.collection.immutable.Set[sbt.Resolver]" id="25484">reflective</a> = <span title="(sbt.Resolver*)scala.collection.immutable.Set[sbt.Resolver]">Set</span>[<a href="../IvyInterface.scala.html#11181" title="sbt.Resolver">Resolver</a>]() <span title="(Iterable[sbt.Resolver])scala.collection.immutable.Set[sbt.Resolver]">++</span> <a href="#18960" title="=&gt; scala.collection.Map[String,sbt.Resolver]">reflectiveRepositories</a>.<a title="=&gt; List[(String, sbt.Resolver)]" id="16304">toList</a>.<span title="(((String, sbt.Resolver)) =&gt; Iterable[sbt.Resolver])List[sbt.Resolver]">flatMap</span> <a href="#25494" title="List[sbt.Resolver]">{</a>  <span title="Nil.type" class="keyword">case</span> (<a href="#14799" title="=&gt; java.lang.String">PublishToName</a>, _) =&gt; <span title="object Nil">Nil</span>; <span title="List[sbt.Resolver]" class="keyword">case</span> (_, <a title="sbt.Resolver" id="25495">value</a>) =&gt; <span title="(sbt.Resolver*)List[sbt.Resolver]">List</span>(<a href="#25495" title="sbt.Resolver">value</a>) }
+		<a href="Project.scala.html#14826" title="=&gt; sbt.ProjectInfo">info</a>.<a href="ProjectInfo.scala.html#19171" title="=&gt; Option[sbt.Project]">parent</a> <span title="Set[sbt.Resolver]" class="keyword">match</span>
+		{
+			<span title="scala.collection.immutable.Set[sbt.Resolver]" class="keyword">case</span> Some(<a title="sbt.ReflectiveRepositories" id="25502">p</a>: <a href="#6780" title="sbt.ReflectiveRepositories">ReflectiveRepositories</a>) =&gt; <a href="#25502" title="sbt.ReflectiveRepositories">p</a>.<a href="#18959" title="=&gt; Set[sbt.Resolver]">repositories</a> <span title="(Iterable[sbt.Resolver])scala.collection.immutable.Set[sbt.Resolver]">++</span> <a href="#25484" title="scala.collection.immutable.Set[sbt.Resolver]">reflective</a>
+			<span title="scala.collection.immutable.Set[sbt.Resolver]" class="keyword">case</span> <span title="object None">None</span> =&gt; <a href="#25484" title="scala.collection.immutable.Set[sbt.Resolver]">reflective</a>
+		}
+	}
+	<span class="keyword">def</span> <a title="=&gt; scala.collection.Map[String,sbt.Resolver]" id="18960">reflectiveRepositories</a>: <span title="scala.collection.Map[String,sbt.Resolver]">Map</span>[String, Resolver] = <a href="#7087" title="object sbt.Reflective">Reflective</a>.<a href="#25085" title="(AnyRef)(implicit scala.reflect.Manifest[sbt.Resolver])scala.collection.Map[String,sbt.Resolver]">reflectiveMappings</a>[<a href="../IvyInterface.scala.html#11181" title="sbt.Resolver">Resolver</a>](<a href="#6780" title="sbt.ReflectiveRepositories" class="keyword">this</a>)
+
+	<span class="keyword">def</span> <a title="=&gt; Set[sbt.ModuleConfiguration]" id="18961">moduleConfigurations</a>: <span title="Set[sbt.ModuleConfiguration]">Set</span>[ModuleConfiguration] =
+	{
+		<span class="keyword">val</span> <a title="scala.collection.immutable.Set[sbt.ModuleConfiguration]" id="25522">reflective</a> = <span title="(sbt.ModuleConfiguration*)scala.collection.immutable.Set[sbt.ModuleConfiguration]">Set</span>[<a href="../IvyInterface.scala.html#10722" title="sbt.ModuleConfiguration">ModuleConfiguration</a>](<a href="#18962" title="=&gt; scala.collection.Map[String,sbt.ModuleConfiguration]">reflectiveModuleConfigurations</a>.<span title="=&gt; Iterator[sbt.ModuleConfiguration]">values</span>.<span title="=&gt; List[sbt.ModuleConfiguration]">toList</span>: _*)
+		<a href="Project.scala.html#14826" title="=&gt; sbt.ProjectInfo">info</a>.<a href="ProjectInfo.scala.html#19171" title="=&gt; Option[sbt.Project]">parent</a> <span title="Set[sbt.ModuleConfiguration]" class="keyword">match</span>
+		{
+			<span title="scala.collection.immutable.Set[sbt.ModuleConfiguration]" class="keyword">case</span> Some(<a title="sbt.ReflectiveRepositories" id="25537">p</a>: <a href="#6780" title="sbt.ReflectiveRepositories">ReflectiveRepositories</a>) =&gt; <a href="#25537" title="sbt.ReflectiveRepositories">p</a>.<a href="#18961" title="=&gt; Set[sbt.ModuleConfiguration]">moduleConfigurations</a> <span title="(Iterable[sbt.ModuleConfiguration])scala.collection.immutable.Set[sbt.ModuleConfiguration]">++</span> <a href="#25522" title="scala.collection.immutable.Set[sbt.ModuleConfiguration]">reflective</a>
+			<span title="scala.collection.immutable.Set[sbt.ModuleConfiguration]" class="keyword">case</span> <span title="object None">None</span> =&gt; <a href="#25522" title="scala.collection.immutable.Set[sbt.ModuleConfiguration]">reflective</a>
+		}
+	}
+	<span class="keyword">def</span> <a title="=&gt; scala.collection.Map[String,sbt.ModuleConfiguration]" id="18962">reflectiveModuleConfigurations</a>: <span title="scala.collection.Map[String,sbt.ModuleConfiguration]">Map</span>[String, ModuleConfiguration] = <a href="#7087" title="object sbt.Reflective">Reflective</a>.<a href="#25085" title="(AnyRef)(implicit scala.reflect.Manifest[sbt.ModuleConfiguration])scala.collection.Map[String,sbt.ModuleConfiguration]">reflectiveMappings</a>[<a href="../IvyInterface.scala.html#10722" title="sbt.ModuleConfiguration">ModuleConfiguration</a>](<a href="#6780" title="sbt.ReflectiveRepositories" class="keyword">this</a>)
+}
+
+<span class="keyword">trait</span> <a title="trait ReflectiveManagedProject extends java.lang.Object with sbt.ReflectiveProject with sbt.ReflectiveArtifacts with sbt.ReflectiveRepositories with sbt.ReflectiveLibraryDependencies with sbt.ReflectiveConfigurations" id="7401">ReflectiveManagedProject</a> <span class="keyword">extends</span> <a href="#6468" title="sbt.ReflectiveProject">ReflectiveProject</a> <span class="keyword">with</span> <a href="#9027" title="sbt.ReflectiveArtifacts">ReflectiveArtifacts</a> <span class="keyword">with</span> <a href="#6780" title="sbt.ReflectiveRepositories">ReflectiveRepositories</a> <span class="keyword">with</span> <a href="#10650" title="sbt.ReflectiveLibraryDependencies">ReflectiveLibraryDependencies</a> <span class="keyword">with</span> <a href="#7617" title="sbt.ReflectiveConfigurations">ReflectiveConfigurations</a>
+        </pre>
+    </body>
+</html>

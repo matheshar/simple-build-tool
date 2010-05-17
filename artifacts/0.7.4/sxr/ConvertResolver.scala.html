@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+			<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" ></meta>
+        <title>ConvertResolver.scala</title>
+        <script type="text/javascript" src="jquery-all.js"></script>
+        <script type="text/javascript" src="linked.js"></script>
+        <link rel="stylesheet" type="text/css" href="style.css" title="Style"></link>
+    </head>
+    <body>
+        <pre>
+<span class="comment">/* sbt -- Simple Build Tool
+ * Copyright 2008, 2009, 2010 Mark Harrah
+ */</span>
+<span class="keyword">package</span> sbt
+
+<span class="keyword">import</span> org.apache.ivy.{core,plugins}
+<span class="keyword">import</span> core.module.id.ModuleRevisionId
+<span class="keyword">import</span> plugins.resolver.{ChainResolver, DependencyResolver, IBiblioResolver}
+<span class="keyword">import</span> plugins.resolver.{AbstractPatternsBasedResolver, AbstractSshBasedResolver, FileSystemResolver, SFTPResolver, SshResolver, URLResolver}
+
+<span class="keyword">private</span> <span class="keyword">object</span> <a title="object sbt.ConvertResolver" id="9307">ConvertResolver</a>
+{
+	<span class="comment">/** Converts the given sbt resolver into an Ivy resolver..*/</span>
+	<span class="keyword">def</span> <a title="(sbt.Resolver)org.apache.ivy.plugins.resolver.RepositoryResolver" id="31162">apply</a>(<a title="sbt.Resolver" id="31168">r</a>: <a href="IvyInterface.scala.html#11181" title="sbt.Resolver">Resolver</a>) =
+	{
+		<a href="#31168" title="sbt.Resolver">r</a> <span title="org.apache.ivy.plugins.resolver.RepositoryResolver" class="keyword">match</span>
+		{
+			<span title="org.apache.ivy.plugins.resolver.IBiblioResolver" class="keyword">case</span> <a title="sbt.MavenRepository" id="31170">repo</a>: <a href="IvyInterface.scala.html#8460" title="sbt.MavenRepository">MavenRepository</a> =&gt;
+			{
+				<span class="keyword">val</span> <a title="org.apache.ivy.plugins.resolver.IBiblioResolver" id="31171">resolver</a> = <span title="org.apache.ivy.plugins.resolver.IBiblioResolver" class="keyword">new</span> <span title="org.apache.ivy.plugins.resolver.IBiblioResolver">IBiblioResolver</span>
+				<a href="#31163" title="(org.apache.ivy.plugins.resolver.IBiblioResolver,String,String)Unit">initializeMavenStyle</a>(<a href="#31171" title="org.apache.ivy.plugins.resolver.IBiblioResolver">resolver</a>, <a href="#31170" title="sbt.MavenRepository">repo</a>.<a href="IvyInterface.scala.html#20581" title="=&gt; String">name</a>, <a href="#31170" title="sbt.MavenRepository">repo</a>.<a href="IvyInterface.scala.html#20583" title="=&gt; String">root</a>)
+				<a href="#31171" title="org.apache.ivy.plugins.resolver.IBiblioResolver">resolver</a>
+			}
+			<span title="org.apache.ivy.plugins.resolver.IBiblioResolver" class="keyword">case</span> <a href="IvyInterface.scala.html#11371" title="object sbt.JavaNet1Repository">JavaNet1Repository</a> =&gt;
+			{
+				<span class="comment">// Thanks to Matthias Pfau for posting how to use the Maven 1 repository on java.net with Ivy:</span>
+				<span class="comment">// http://www.nabble.com/Using-gradle-Ivy-with-special-maven-repositories-td23775489.html</span>
+				<span class="keyword">val</span> <a title="org.apache.ivy.plugins.resolver.IBiblioResolver" id="31452">resolver</a> = <a title="template $anon extends org.apache.ivy.plugins.resolver.IBiblioResolver" id="31453" class="keyword">new</a> <span title="org.apache.ivy.plugins.resolver.IBiblioResolver">IBiblioResolver</span> { <span class="keyword">override</span> <span class="keyword">def</span> <a title="(org.apache.ivy.core.module.id.ModuleRevisionId)org.apache.ivy.core.module.id.ModuleRevisionId" id="31455">convertM2IdForResourceSearch</a>(<a title="org.apache.ivy.core.module.id.ModuleRevisionId" id="31457">mrid</a>: <a title="org.apache.ivy.core.module.id.ModuleRevisionId" id="19529">ModuleRevisionId</a>) = <a href="#31457" title="org.apache.ivy.core.module.id.ModuleRevisionId">mrid</a> }
+				<a href="#31163" title="(org.apache.ivy.plugins.resolver.IBiblioResolver,String,String)Unit">initializeMavenStyle</a>(<a href="#31452" title="org.apache.ivy.plugins.resolver.IBiblioResolver">resolver</a>, <a href="IvyInterface.scala.html#11371" title="object sbt.JavaNet1Repository">JavaNet1Repository</a>.<a href="IvyInterface.scala.html#31451" title="=&gt; java.lang.String">name</a>, <span title="java.lang.String(&quot;http://download.java.net/maven/1/&quot;)" class="string">&quot;http://download.java.net/maven/1/&quot;</span>)
+				<a href="#31452" title="org.apache.ivy.plugins.resolver.IBiblioResolver">resolver</a>.<a title="(java.lang.String)Unit" id="31182">setPattern</a>(<span title="java.lang.String(&quot;[organisation]/[ext]s/[module]-[revision](-[classifier]).[ext]&quot;)" class="string">&quot;[organisation]/[ext]s/[module]-[revision](-[classifier]).[ext]&quot;</span>)
+				<a href="#31452" title="org.apache.ivy.plugins.resolver.IBiblioResolver">resolver</a>
+			}
+			<span title="org.apache.ivy.plugins.resolver.SshResolver" class="keyword">case</span> <a title="sbt.SshRepository" id="31508">repo</a>: <a href="IvyInterface.scala.html#9018" title="sbt.SshRepository">SshRepository</a> =&gt;
+			{
+				<span class="keyword">val</span> <a title="org.apache.ivy.plugins.resolver.SshResolver" id="31545">resolver</a> = <span title="org.apache.ivy.plugins.resolver.SshResolver" class="keyword">new</span> <a title="org.apache.ivy.plugins.resolver.SshResolver" id="15171">SshResolver</a>
+				<a href="#31164" title="(org.apache.ivy.plugins.resolver.AbstractSshBasedResolver,sbt.SshBasedRepository)Unit">initializeSSHResolver</a>(<a href="#31545" title="org.apache.ivy.plugins.resolver.SshResolver">resolver</a>, <a href="#31508" title="sbt.SshRepository">repo</a>)
+				<a href="#31508" title="sbt.SshRepository">repo</a>.<a href="IvyInterface.scala.html#31537" title="=&gt; Option[String]">publishPermissions</a>.<span title="((String) =&gt; Unit)Unit">foreach</span>(<a title="String" id="31566">perm</a> =&gt; <a href="#31545" title="org.apache.ivy.plugins.resolver.SshResolver">resolver</a>.<a title="(java.lang.String)Unit" id="31547">setPublishPermissions</a>(<a href="#31566" title="String">perm</a>))
+				<a href="#31545" title="org.apache.ivy.plugins.resolver.SshResolver">resolver</a>
+			}
+			<span title="org.apache.ivy.plugins.resolver.SFTPResolver" class="keyword">case</span> <a title="sbt.SftpRepository" id="31567">repo</a>: <a href="IvyInterface.scala.html#8802" title="sbt.SftpRepository">SftpRepository</a> =&gt;
+			{
+				<span class="keyword">val</span> <a title="org.apache.ivy.plugins.resolver.SFTPResolver" id="31581">resolver</a> = <span title="org.apache.ivy.plugins.resolver.SFTPResolver" class="keyword">new</span> <a title="org.apache.ivy.plugins.resolver.SFTPResolver" id="15156">SFTPResolver</a>
+				<a href="#31164" title="(org.apache.ivy.plugins.resolver.AbstractSshBasedResolver,sbt.SshBasedRepository)Unit">initializeSSHResolver</a>(<a href="#31581" title="org.apache.ivy.plugins.resolver.SFTPResolver">resolver</a>, <a href="#31567" title="sbt.SftpRepository">repo</a>)
+				<a href="#31581" title="org.apache.ivy.plugins.resolver.SFTPResolver">resolver</a>
+			}
+			<span title="org.apache.ivy.plugins.resolver.FileSystemResolver" class="keyword">case</span> <a title="sbt.FileRepository" id="31597">repo</a>: <a href="IvyInterface.scala.html#11850" title="sbt.FileRepository">FileRepository</a> =&gt;
+			{
+				<span class="keyword">val</span> <a title="org.apache.ivy.plugins.resolver.FileSystemResolver" id="31613">resolver</a> = <span title="org.apache.ivy.plugins.resolver.FileSystemResolver" class="keyword">new</span> <a title="org.apache.ivy.plugins.resolver.FileSystemResolver" id="15150">FileSystemResolver</a>
+				<a href="#31613" title="org.apache.ivy.plugins.resolver.FileSystemResolver">resolver</a>.<span title="(java.lang.String)Unit">setName</span>(<a href="#31597" title="sbt.FileRepository">repo</a>.<a href="IvyInterface.scala.html#31601" title="=&gt; String">name</a>)
+				<a href="#31166" title="(org.apache.ivy.plugins.resolver.AbstractPatternsBasedResolver,sbt.Patterns)Unit">initializePatterns</a>(<a href="#31613" title="org.apache.ivy.plugins.resolver.FileSystemResolver">resolver</a>, <a href="#31597" title="sbt.FileRepository">repo</a>.<a href="IvyInterface.scala.html#31605" title="=&gt; sbt.Patterns">patterns</a>)
+				<span class="keyword">import</span> repo.configuration.{isLocal, isTransactional}
+				<a href="#31613" title="org.apache.ivy.plugins.resolver.FileSystemResolver">resolver</a>.<a title="(Boolean)Unit" id="31618">setLocal</a>(<a href="IvyInterface.scala.html#31639" title="=&gt; Boolean">isLocal</a>)
+				<a href="IvyInterface.scala.html#31641" title="=&gt; Option[Boolean]">isTransactional</a>.<span title="((Boolean) =&gt; Unit)Unit">foreach</span>(<a title="Boolean" id="31648">value</a> =&gt; <a href="#31613" title="org.apache.ivy.plugins.resolver.FileSystemResolver">resolver</a>.<a title="(java.lang.String)Unit" id="31628">setTransactional</a>(<a href="#31648" title="Boolean">value</a>.<a title="()java.lang.String" id="3448">toString</a>))
+				<a href="#31613" title="org.apache.ivy.plugins.resolver.FileSystemResolver">resolver</a>
+			}
+			<span title="org.apache.ivy.plugins.resolver.URLResolver" class="keyword">case</span> <a title="sbt.URLRepository" id="31649">repo</a>: <a href="IvyInterface.scala.html#8697" title="sbt.URLRepository">URLRepository</a> =&gt;
+			{
+				<span class="keyword">val</span> <a title="org.apache.ivy.plugins.resolver.URLResolver" id="31659">resolver</a> = <span title="org.apache.ivy.plugins.resolver.URLResolver" class="keyword">new</span> <a title="org.apache.ivy.plugins.resolver.URLResolver" id="15192">URLResolver</a>
+				<a href="#31659" title="org.apache.ivy.plugins.resolver.URLResolver">resolver</a>.<span title="(java.lang.String)Unit">setName</span>(<a href="#31649" title="sbt.URLRepository">repo</a>.<a href="IvyInterface.scala.html#31652" title="=&gt; String">name</a>)
+				<a href="#31166" title="(org.apache.ivy.plugins.resolver.AbstractPatternsBasedResolver,sbt.Patterns)Unit">initializePatterns</a>(<a href="#31659" title="org.apache.ivy.plugins.resolver.URLResolver">resolver</a>, <a href="#31649" title="sbt.URLRepository">repo</a>.<a href="IvyInterface.scala.html#31654" title="=&gt; sbt.Patterns">patterns</a>)
+				<a href="#31659" title="org.apache.ivy.plugins.resolver.URLResolver">resolver</a>
+			}
+		}
+	}
+	<span class="keyword">private</span> <span class="keyword">def</span> <a title="(org.apache.ivy.plugins.resolver.IBiblioResolver,String,String)Unit" id="31163">initializeMavenStyle</a>(<a title="org.apache.ivy.plugins.resolver.IBiblioResolver" id="31447">resolver</a>: <span title="org.apache.ivy.plugins.resolver.IBiblioResolver">IBiblioResolver</span>, <a title="String" id="31448">name</a>: <span title="String">String</span>, <a title="String" id="31449">root</a>: <span title="String">String</span>)
+	{
+		<a href="#31447" title="org.apache.ivy.plugins.resolver.IBiblioResolver">resolver</a>.<span title="(java.lang.String)Unit">setName</span>(<a href="#31448" title="String">name</a>)
+		<a href="#31447" title="org.apache.ivy.plugins.resolver.IBiblioResolver">resolver</a>.<a title="(Boolean)Unit" id="31178">setM2compatible</a>(<span title="Boolean(true)" class="keyword">true</span>)
+		<a href="#31447" title="org.apache.ivy.plugins.resolver.IBiblioResolver">resolver</a>.<a title="(java.lang.String)Unit" id="31184">setRoot</a>(<a href="#31449" title="String">root</a>)
+	}
+	<span class="keyword">private</span> <span class="keyword">def</span> <a title="(org.apache.ivy.plugins.resolver.AbstractSshBasedResolver,sbt.SshBasedRepository)Unit" id="31164">initializeSSHResolver</a>(<a title="org.apache.ivy.plugins.resolver.AbstractSshBasedResolver" id="31563">resolver</a>: <span title="org.apache.ivy.plugins.resolver.AbstractSshBasedResolver">AbstractSshBasedResolver</span>, <a title="sbt.SshBasedRepository" id="31564">repo</a>: <a href="IvyInterface.scala.html#6963" title="sbt.SshBasedRepository">SshBasedRepository</a>)
+	{
+		<a href="#31563" title="org.apache.ivy.plugins.resolver.AbstractSshBasedResolver">resolver</a>.<span title="(java.lang.String)Unit">setName</span>(<a href="#31564" title="sbt.SshBasedRepository">repo</a>.<a href="IvyInterface.scala.html#20578" title="=&gt; String">name</a>)
+		<a href="#31563" title="org.apache.ivy.plugins.resolver.AbstractSshBasedResolver">resolver</a>.<a title="(java.io.File)Unit" id="31555">setPassfile</a>(<span title="Null(null)" class="keyword">null</span>)
+		<a href="#31166" title="(org.apache.ivy.plugins.resolver.AbstractPatternsBasedResolver,sbt.Patterns)Unit">initializePatterns</a>(<a href="#31563" title="org.apache.ivy.plugins.resolver.AbstractSshBasedResolver">resolver</a>, <a href="#31564" title="sbt.SshBasedRepository">repo</a>.<a href="IvyInterface.scala.html#31512" title="=&gt; sbt.Patterns">patterns</a>)
+		<a href="#31165" title="(org.apache.ivy.plugins.resolver.AbstractSshBasedResolver,sbt.RepositoryHelpers.SshConnection)Unit">initializeConnection</a>(<a href="#31563" title="org.apache.ivy.plugins.resolver.AbstractSshBasedResolver">resolver</a>, <a href="#31564" title="sbt.SshBasedRepository">repo</a>.<a href="IvyInterface.scala.html#31520" title="=&gt; sbt.RepositoryHelpers.SshConnection">connection</a>)
+	}
+	<span class="keyword">private</span> <span class="keyword">def</span> <a title="(org.apache.ivy.plugins.resolver.AbstractSshBasedResolver,sbt.RepositoryHelpers.SshConnection)Unit" id="31165">initializeConnection</a>(<a title="org.apache.ivy.plugins.resolver.AbstractSshBasedResolver" id="31692">resolver</a>: <span title="org.apache.ivy.plugins.resolver.AbstractSshBasedResolver">AbstractSshBasedResolver</span>, <a title="sbt.RepositoryHelpers.SshConnection" id="31693">connection</a>: RepositoryHelpers.<a href="IvyInterface.scala.html#15067" title="sbt.RepositoryHelpers.SshConnection">SshConnection</a>)
+	{
+		<span class="keyword">import</span> resolver._
+		<span class="keyword">import</span> connection._
+		<a href="IvyInterface.scala.html#31700" title="=&gt; Option[String]">hostname</a>.<span title="((String) =&gt; Unit)Unit">foreach</span>(<a href="#31692" title="(java.lang.String)Unit" id="31560">setHost</a>)
+		<a href="IvyInterface.scala.html#31702" title="=&gt; Option[Int]">port</a>.<span title="((Int) =&gt; Unit)Unit">foreach</span>(<a href="#31692" title="(Int)Unit" id="31561">setPort</a>)
+		<a href="IvyInterface.scala.html#31698" title="=&gt; Option[sbt.RepositoryHelpers.SshAuthentication]">authentication</a> <span title="((sbt.RepositoryHelpers.SshAuthentication) =&gt; Unit)Unit">foreach</span>
+			<a href="#31713" title="Unit">{</a>
+				<span title="Unit" class="keyword">case</span> RepositoryHelpers.PasswordAuthentication(<a title="String" id="31731">user</a>, <a title="Option[String]" id="31732">password</a>) =&gt;
+					<a href="#31692" title="(java.lang.String)Unit">setUser</a>(<a href="#31731" title="String">user</a>)
+					<a href="#31732" title="Option[String]">password</a>.<span title="((String) =&gt; Unit)Unit">foreach</span>(<a href="#31692" title="(java.lang.String)Unit" id="31557">setUserPassword</a>)
+				<span title="Unit" class="keyword">case</span> RepositoryHelpers.KeyFileAuthentication(<a title="String" id="31765">user</a>, <a title="java.io.File" id="31766">file</a>, <a title="Option[String]" id="31767">password</a>) =&gt;
+					<a href="#31692" title="(java.io.File)Unit" id="31554">setKeyFile</a>(<a href="#31766" title="java.io.File">file</a>)
+					<a href="#31767" title="Option[String]">password</a>.<span title="((String) =&gt; Unit)Unit">foreach</span>(<a href="#31692" title="(java.lang.String)Unit" id="31558">setKeyFilePassword</a>)
+					<a href="#31692" title="(java.lang.String)Unit">setUser</a>(<a href="#31765" title="String">user</a>)
+			}
+	}
+	<span class="keyword">private</span> <span class="keyword">def</span> <a title="(org.apache.ivy.plugins.resolver.AbstractPatternsBasedResolver,sbt.Patterns)Unit" id="31166">initializePatterns</a>(<a title="org.apache.ivy.plugins.resolver.AbstractPatternsBasedResolver" id="31634">resolver</a>: <a title="org.apache.ivy.plugins.resolver.AbstractPatternsBasedResolver" id="15189">AbstractPatternsBasedResolver</a>, <a title="sbt.Patterns" id="31635">patterns</a>: <a href="IvyInterface.scala.html#10932" title="sbt.Patterns">Patterns</a>)
+	{
+		<a href="#31634" title="org.apache.ivy.plugins.resolver.AbstractPatternsBasedResolver">resolver</a>.<a title="(Boolean)Unit" id="31278">setM2compatible</a>(<a href="#31635" title="sbt.Patterns">patterns</a>.<a href="IvyInterface.scala.html#24168" title="=&gt; Boolean">isMavenCompatible</a>)
+		<a href="#31635" title="sbt.Patterns">patterns</a>.<a href="IvyInterface.scala.html#24164" title="=&gt; Seq[String]">ivyPatterns</a>.<span title="((String) =&gt; Unit)Unit">foreach</span>(<a href="#31634" title="org.apache.ivy.plugins.resolver.AbstractPatternsBasedResolver">resolver</a>.<a href="#31771" title="(java.lang.String)Unit" id="31268">addIvyPattern</a>)
+		<a href="#31635" title="sbt.Patterns">patterns</a>.<a href="IvyInterface.scala.html#24166" title="=&gt; Seq[String]">artifactPatterns</a>.<span title="((String) =&gt; Unit)Unit">foreach</span>(<a href="#31634" title="org.apache.ivy.plugins.resolver.AbstractPatternsBasedResolver">resolver</a>.<a href="#31773" title="(java.lang.String)Unit" id="31269">addArtifactPattern</a>)
+	}
+}
+
+        </pre>
+    </body>
+</html>

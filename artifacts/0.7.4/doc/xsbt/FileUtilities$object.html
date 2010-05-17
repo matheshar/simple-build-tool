@@ -1,0 +1,1102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head><title>object FileUtilities in xsbt</title>
+        <meta http-equiv="content-type" content="text/html; charset=UTF8"></meta><meta content="scaladoc (version 2.7.7.final)" name="generator"></meta><link href="../style.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../script.js"></script>
+        </head>
+        <body onload="init()">
+        <table summary="" class="navigation">
+        <tr>
+          <td class="navigation-links" valign="top">
+            <!-- <table><tr></tr></table> -->
+          </td>
+          <td align="right" valign="top" style="white-space:nowrap;" rowspan="2">
+            <div class="doctitle-larger">Simple Build Tool 0.7.4 API</div>
+          </td>
+        </tr>
+        <tr><td></td></tr>
+      </table>
+        
+      <div class="entity">
+        <a href="../xsbt$package.html" target="_self">xsbt</a>
+        <br></br>
+        <span class="entity">object  FileUtilities</span>
+      </div><hr></hr>
+      <div class="source">
+        [source: <a href="" class="xsbt/FileUtilities"><code>xsbt/FileUtilities.scala</code></a>]
+      </div><hr></hr>
+      <a name="FileUtilities"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>object</code>
+        <em>FileUtilities</em>
+      </dt>
+      <dd><code> extends </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a></dd>
+    </dl>
+      
+
+<table summary="" cellpadding="3" class="member">
+      <tr><td class="title" colspan="2">Value Summary</td></tr>
+      <tr>
+      <td class="modifiers" valign="top"> 
+        <code> val</code>
+      </td>
+      <td class="signature">
+        <em><a href="../xsbt/FileUtilities$object.html#temporaryDirectory" target="_self">temporaryDirectory</a></em>
+         : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>
+        
+        
+      </td>
+    </tr>
+      </table>
+<table summary="" cellpadding="3" class="member">
+      <tr><td class="title" colspan="2">Method Summary</td></tr>
+      <tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../xsbt/FileUtilities$object.html#asFile%28java.net.URL%29" target="_self">asFile</a></em>
+        (<em>url</em> : <a href="" target="contentFrame" class="java/net/URL">java.net.URL</a>) : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>
+        
+        <div>Converts the given URL to a File.  If the URL is for an entry in a jar, the File for the jar is returned.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../xsbt/FileUtilities$object.html#assertDirectories%28java.io.File*%29" target="_self">assertDirectories</a></em>
+        (<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>*) : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../xsbt/FileUtilities$object.html#assertDirectory%28java.io.File%29" target="_self">assertDirectory</a></em>
+        (<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>) : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../xsbt/FileUtilities$object.html#classLocation%28scala.reflect.Manifest%5BT%5D%29" target="_self">classLocation</a></em>
+        [<em>T</em>](<code>implicit </code><em>mf</em> : <a href="" target="contentFrame" class="scala/reflect/Manifest">scala.reflect.Manifest</a>[<a href="../xsbt/FileUtilities$object.html#classLocation%28scala.reflect.Manifest%5BT%5D%29#T" target="_self">T</a>]) : <a href="" target="contentFrame" class="java/net/URL">java.net.URL</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../xsbt/FileUtilities$object.html#classLocation%28Class%5B_%5D%29" target="_self">classLocation</a></em>
+        (<em>cl</em> : <a href="" target="contentFrame" class="java/lang/Class">java.lang.Class</a>[<a href="http://www.scala-lang.org/docu/files/api/scala/Any.html" target="_self">Any</a>]) : <a href="" target="contentFrame" class="java/net/URL">java.net.URL</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../xsbt/FileUtilities$object.html#classLocationFile%28Class%5B_%5D%29" target="_self">classLocationFile</a></em>
+        (<em>cl</em> : <a href="" target="contentFrame" class="java/lang/Class">java.lang.Class</a>[<a href="http://www.scala-lang.org/docu/files/api/scala/Any.html" target="_self">Any</a>]) : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../xsbt/FileUtilities$object.html#classLocationFile%28scala.reflect.Manifest%5BT%5D%29" target="_self">classLocationFile</a></em>
+        [<em>T</em>](<code>implicit </code><em>mf</em> : <a href="" target="contentFrame" class="scala/reflect/Manifest">scala.reflect.Manifest</a>[<a href="../xsbt/FileUtilities$object.html#classLocationFile%28scala.reflect.Manifest%5BT%5D%29#T" target="_self">T</a>]) : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../xsbt/FileUtilities$object.html#copy%28Iterable%5B%28java.io.File%2Cjava.io.File%29%5D%29" target="_self">copy</a></em>
+        (<em>sources</em> : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[(<a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <a href="" target="contentFrame" class="java/io/File">java.io.File</a>)]) : <a href="" target="contentFrame" class="scala/collection/immutable/Set">scala.collection.immutable.Set</a>[<a href="" target="contentFrame" class="java/io/File">java.io.File</a>]
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../xsbt/FileUtilities$object.html#copyFile%28java.io.File%2Cjava.io.File%29" target="_self">copyFile</a></em>
+        (<em>sourceFile</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>targetFile</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>) : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../xsbt/FileUtilities$object.html#createDirectories%28Iterable%5Bjava.io.File%5D%29" target="_self">createDirectories</a></em>
+        (<em>dirs</em> : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="" target="contentFrame" class="java/io/File">java.io.File</a>]) : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../xsbt/FileUtilities$object.html#createDirectory%28java.io.File%29" target="_self">createDirectory</a></em>
+        (<em>dir</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>) : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../xsbt/FileUtilities$object.html#createTemporaryDirectory" target="_self">createTemporaryDirectory</a></em>
+         : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../xsbt/FileUtilities$object.html#defaultCharset" target="_self">defaultCharset</a></em>
+         : <a href="" target="contentFrame" class="java/nio/charset/Charset">java.nio.charset.Charset</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../xsbt/FileUtilities$object.html#delete%28Iterable%5Bjava.io.File%5D%29" target="_self">delete</a></em>
+        (<em>files</em> : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="" target="contentFrame" class="java/io/File">java.io.File</a>]) : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../xsbt/FileUtilities$object.html#delete%28java.io.File%29" target="_self">delete</a></em>
+        (<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>) : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../xsbt/FileUtilities$object.html#jar%28Iterable%5B%28java.io.File%2CString%29%5D%2Cjava.io.File%2Cjava.util.jar.Manifest%29" target="_self">jar</a></em>
+        (<em>sources</em> : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[(<a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>)], <em>outputJar</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>manifest</em> : <a href="" target="contentFrame" class="java/util/jar/Manifest">java.util.jar.Manifest</a>) : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+        
+        <div>Creates a jar file.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../xsbt/FileUtilities$object.html#listFiles%28java.io.FileFilter%29" target="_self">listFiles</a></em>
+        (<em>filter</em> : <a href="" target="contentFrame" class="java/io/FileFilter">java.io.FileFilter</a>)(<em>dir</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>) : <a href="" target="contentFrame" class="scala/Array">scala.Array</a>[<a href="" target="contentFrame" class="java/io/File">java.io.File</a>]
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../xsbt/FileUtilities$object.html#listFiles%28java.io.File%2Cjava.io.FileFilter%29" target="_self">listFiles</a></em>
+        (<em>dir</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>filter</em> : <a href="" target="contentFrame" class="java/io/FileFilter">java.io.FileFilter</a>) : <a href="" target="contentFrame" class="scala/Array">scala.Array</a>[<a href="" target="contentFrame" class="java/io/File">java.io.File</a>]
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../xsbt/FileUtilities$object.html#listFiles%28java.io.File%29" target="_self">listFiles</a></em>
+        (<em>dir</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>) : <a href="" target="contentFrame" class="scala/Array">scala.Array</a>[<a href="" target="contentFrame" class="java/io/File">java.io.File</a>]
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../xsbt/FileUtilities$object.html#pathSplit%28String%29" target="_self">pathSplit</a></em>
+        (<em>s</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>) : <a href="" target="contentFrame" class="scala/Array">scala.Array</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+        
+        <div>Splits a String around path separator characters.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../xsbt/FileUtilities$object.html#read%28java.io.File%29" target="_self">read</a></em>
+        (<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>) : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../xsbt/FileUtilities$object.html#read%28java.io.InputStream%2Cjava.nio.charset.Charset%29" target="_self">read</a></em>
+        (<em>in</em> : <a href="" target="contentFrame" class="java/io/InputStream">java.io.InputStream</a>, <em>charset</em> : <a href="" target="contentFrame" class="java/nio/charset/Charset">java.nio.charset.Charset</a>) : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+        
+        <div>doesn't close the InputStream</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../xsbt/FileUtilities$object.html#read%28java.io.InputStream%29" target="_self">read</a></em>
+        (<em>in</em> : <a href="" target="contentFrame" class="java/io/InputStream">java.io.InputStream</a>) : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+        
+        <div>doesn't close the InputStream</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../xsbt/FileUtilities$object.html#read%28java.io.File%2Cjava.nio.charset.Charset%29" target="_self">read</a></em>
+        (<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>charset</em> : <a href="" target="contentFrame" class="java/nio/charset/Charset">java.nio.charset.Charset</a>) : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../xsbt/FileUtilities$object.html#readBytes%28java.io.InputStream%29" target="_self">readBytes</a></em>
+        (<em>in</em> : <a href="" target="contentFrame" class="java/io/InputStream">java.io.InputStream</a>) : <a href="" target="contentFrame" class="scala/Array">scala.Array</a>[<a href="http://www.scala-lang.org/docu/files/api/scala/Byte.html" target="_self">Byte</a>]
+        
+        <div>doesn't close the InputStream</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../xsbt/FileUtilities$object.html#readBytes%28java.io.File%29" target="_self">readBytes</a></em>
+        (<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>) : <a href="" target="contentFrame" class="scala/Array">scala.Array</a>[<a href="http://www.scala-lang.org/docu/files/api/scala/Byte.html" target="_self">Byte</a>]
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../xsbt/FileUtilities$object.html#readLines%28java.io.File%2Cjava.nio.charset.Charset%29" target="_self">readLines</a></em>
+        (<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>charset</em> : <a href="" target="contentFrame" class="java/nio/charset/Charset">java.nio.charset.Charset</a>) : <a href="" target="contentFrame" class="scala/List">scala.List</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../xsbt/FileUtilities$object.html#readLines%28java.io.File%29" target="_self">readLines</a></em>
+        (<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>) : <a href="" target="contentFrame" class="scala/List">scala.List</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../xsbt/FileUtilities$object.html#relativize%28java.io.File%2Cjava.io.File%29" target="_self">relativize</a></em>
+        (<em>base</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../xsbt/FileUtilities$object.html#split%28String%29" target="_self">split</a></em>
+        (<em>name</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>) : (<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>)
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../xsbt/FileUtilities$object.html#toFile%28java.net.URL%29" target="_self">toFile</a></em>
+        (<em>url</em> : <a href="" target="contentFrame" class="java/net/URL">java.net.URL</a>) : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../xsbt/FileUtilities$object.html#touch%28java.io.File%29" target="_self">touch</a></em>
+        (<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>) : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+        
+        <div>Creates a file at the given location.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../xsbt/FileUtilities$object.html#touch%28Iterable%5Bjava.io.File%5D%29" target="_self">touch</a></em>
+        (<em>files</em> : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="" target="contentFrame" class="java/io/File">java.io.File</a>]) : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../xsbt/FileUtilities$object.html#transfer%28java.io.InputStream%2Cjava.io.OutputStream%29" target="_self">transfer</a></em>
+        (<em>in</em> : <a href="" target="contentFrame" class="java/io/InputStream">java.io.InputStream</a>, <em>out</em> : <a href="" target="contentFrame" class="java/io/OutputStream">java.io.OutputStream</a>) : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+        
+        <div>Copies all bytes from the given input stream to the given output stream.
+ Neither stream is closed.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../xsbt/FileUtilities$object.html#transferAndClose%28java.io.InputStream%2Cjava.io.OutputStream%29" target="_self">transferAndClose</a></em>
+        (<em>in</em> : <a href="" target="contentFrame" class="java/io/InputStream">java.io.InputStream</a>, <em>out</em> : <a href="" target="contentFrame" class="java/io/OutputStream">java.io.OutputStream</a>) : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+        
+        <div>Copies all bytes from the given input stream to the given output stream.  The
+ input stream is closed after the method completes.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../xsbt/FileUtilities$object.html#unzip%28java.io.InputStream%2Cjava.io.File%2Cxsbt.NameFilter%29" target="_self">unzip</a></em>
+        (<em>from</em> : <a href="" target="contentFrame" class="java/io/InputStream">java.io.InputStream</a>, <em>toDirectory</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>filter</em> : <a href="../xsbt/NameFilter.html" target="_self">NameFilter</a>) : <a href="" target="contentFrame" class="scala/collection/immutable/Set">scala.collection.immutable.Set</a>[<a href="" target="contentFrame" class="java/io/File">java.io.File</a>]
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../xsbt/FileUtilities$object.html#unzip%28java.io.File%2Cjava.io.File%2Cxsbt.NameFilter%29" target="_self">unzip</a></em>
+        (<em>from</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>toDirectory</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>filter</em> : <a href="../xsbt/NameFilter.html" target="_self">NameFilter</a>) : <a href="" target="contentFrame" class="scala/collection/immutable/Set">scala.collection.immutable.Set</a>[<a href="" target="contentFrame" class="java/io/File">java.io.File</a>]
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../xsbt/FileUtilities$object.html#unzip%28java.io.File%2Cjava.io.File%29" target="_self">unzip</a></em>
+        (<em>from</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>toDirectory</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>) : <a href="" target="contentFrame" class="scala/collection/immutable/Set">scala.collection.immutable.Set</a>[<a href="" target="contentFrame" class="java/io/File">java.io.File</a>]
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../xsbt/FileUtilities$object.html#utf8" target="_self">utf8</a></em>
+         : <a href="" target="contentFrame" class="java/nio/charset/Charset">java.nio.charset.Charset</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../xsbt/FileUtilities$object.html#withTemporaryDirectory%28%28java.io.File%29%3D%3ET%29" target="_self">withTemporaryDirectory</a></em>
+        [<em>T</em>](<em>action</em> : (<a href="" target="contentFrame" class="java/io/File">java.io.File</a>) =&gt; <a href="../xsbt/FileUtilities$object.html#withTemporaryDirectory%28%28java.io.File%29%3D%3ET%29#T" target="_self">T</a>) : <a href="../xsbt/FileUtilities$object.html#withTemporaryDirectory%28%28java.io.File%29%3D%3ET%29#T" target="_self">T</a>
+        
+        <div>Creates a temporary directory and provides its location to the given function.  The directory
+ is deleted after the function returns.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../xsbt/FileUtilities$object.html#write%28java.io.File%2CString%2Cjava.nio.charset.Charset%2CBoolean%29" target="_self">write</a></em>
+        (<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>content</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <em>charset</em> : <a href="" target="contentFrame" class="java/nio/charset/Charset">java.nio.charset.Charset</a>, <em>append</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/Boolean.html" target="_self">Boolean</a>) : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../xsbt/FileUtilities$object.html#write%28java.io.File%2CString%2Cjava.nio.charset.Charset%29" target="_self">write</a></em>
+        (<em>toFile</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>content</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <em>charset</em> : <a href="" target="contentFrame" class="java/nio/charset/Charset">java.nio.charset.Charset</a>) : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../xsbt/FileUtilities$object.html#write%28java.io.File%2CString%29" target="_self">write</a></em>
+        (<em>toFile</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>content</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>) : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../xsbt/FileUtilities$object.html#writeCharset%28java.io.File%2CString%2Cjava.nio.charset.Charset%2CBoolean%29" target="_self">writeCharset</a></em>
+        [<em>T</em>](<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>content</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <em>charset</em> : <a href="" target="contentFrame" class="java/nio/charset/Charset">java.nio.charset.Charset</a>, <em>append</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/Boolean.html" target="_self">Boolean</a>)(<em>f</em> : (<a href="" target="contentFrame" class="java/io/BufferedWriter">java.io.BufferedWriter</a>) =&gt; <a href="../xsbt/FileUtilities$object.html#writeCharset%28java.io.File%2CString%2Cjava.nio.charset.Charset%2CBoolean%29#T" target="_self">T</a>) : <a href="../xsbt/FileUtilities$object.html#writeCharset%28java.io.File%2CString%2Cjava.nio.charset.Charset%2CBoolean%29#T" target="_self">T</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../xsbt/FileUtilities$object.html#writeLines%28java.io.File%2CSeq%5BString%5D%2Cjava.nio.charset.Charset%2CBoolean%29" target="_self">writeLines</a></em>
+        (<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>lines</em> : <a href="" target="contentFrame" class="scala/Seq">scala.Seq</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>], <em>charset</em> : <a href="" target="contentFrame" class="java/nio/charset/Charset">java.nio.charset.Charset</a>, <em>append</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/Boolean.html" target="_self">Boolean</a>) : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../xsbt/FileUtilities$object.html#writeLines%28java.io.File%2CSeq%5BString%5D%29" target="_self">writeLines</a></em>
+        (<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>lines</em> : <a href="" target="contentFrame" class="scala/Seq">scala.Seq</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]) : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../xsbt/FileUtilities$object.html#writeLines%28java.io.File%2CSeq%5BString%5D%2Cjava.nio.charset.Charset%29" target="_self">writeLines</a></em>
+        (<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>lines</em> : <a href="" target="contentFrame" class="scala/Seq">scala.Seq</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>], <em>charset</em> : <a href="" target="contentFrame" class="java/nio/charset/Charset">java.nio.charset.Charset</a>) : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../xsbt/FileUtilities$object.html#zip%28Iterable%5B%28java.io.File%2CString%29%5D%2Cjava.io.File%29" target="_self">zip</a></em>
+        (<em>sources</em> : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[(<a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>)], <em>outputZip</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>) : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+        
+        <div>Creates a zip file.</div>
+      </td>
+    </tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#getClass%28%29" target="_self">getClass</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#hashCode%28%29" target="_self">hashCode</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#equals%28Any%29" target="_self">equals</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#clone%28%29" target="_self">clone</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#toString%28%29" target="_self">toString</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#notify%28%29" target="_self">notify</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#notifyAll%28%29" target="_self">notifyAll</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#wait%28Long%29" target="_self">wait</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#wait%28Long%2CInt%29" target="_self">wait</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#wait%28%29" target="_self">wait</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#finalize%28%29" target="_self">finalize</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#%3D%3D%28AnyRef%29" target="_self">==</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#%21%3D%28AnyRef%29" target="_self">!=</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#eq%28AnyRef%29" target="_self">eq</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#ne%28AnyRef%29" target="_self">ne</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#synchronized%28T0%29" target="_self">synchronized</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html" target="_self">Any</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html#%3D%3D%28Any%29" target="_self">==</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html#%21%3D%28Any%29" target="_self">!=</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html#isInstanceOf" target="_self">isInstanceOf</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html#asInstanceOf" target="_self">asInstanceOf</a>
+        </td></tr>
+      </table>
+
+
+      
+
+<table summary="" cellpadding="3" class="member-detail">
+          <tr><td class="title">Value Details</td></tr>
+        </table><div><a name="temporaryDirectory"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>val</code>
+        <em>temporaryDirectory</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr></div>
+<table summary="" cellpadding="3" class="member-detail">
+          <tr><td class="title">Method Details</td></tr>
+        </table><div><a name="utf8"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>utf8</em> : <a href="" target="contentFrame" class="java/nio/charset/Charset">java.nio.charset.Charset</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="classLocation%28Class%5B_%5D%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>classLocation</em>(<em>cl</em> : <a href="" target="contentFrame" class="java/lang/Class">java.lang.Class</a>[<a href="http://www.scala-lang.org/docu/files/api/scala/Any.html" target="_self">Any</a>]) : <a href="" target="contentFrame" class="java/net/URL">java.net.URL</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="classLocationFile%28Class%5B_%5D%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>classLocationFile</em>(<em>cl</em> : <a href="" target="contentFrame" class="java/lang/Class">java.lang.Class</a>[<a href="http://www.scala-lang.org/docu/files/api/scala/Any.html" target="_self">Any</a>]) : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="classLocation%28scala.reflect.Manifest%5BT%5D%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>classLocation</em>[<em>T</em>](<code>implicit </code><em>mf</em> : <a href="" target="contentFrame" class="scala/reflect/Manifest">scala.reflect.Manifest</a>[<a href="../xsbt/FileUtilities$object.html#classLocation%28scala.reflect.Manifest%5BT%5D%29#T" target="_self">T</a>]) : <a href="" target="contentFrame" class="java/net/URL">java.net.URL</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="classLocationFile%28scala.reflect.Manifest%5BT%5D%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>classLocationFile</em>[<em>T</em>](<code>implicit </code><em>mf</em> : <a href="" target="contentFrame" class="scala/reflect/Manifest">scala.reflect.Manifest</a>[<a href="../xsbt/FileUtilities$object.html#classLocationFile%28scala.reflect.Manifest%5BT%5D%29#T" target="_self">T</a>]) : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="toFile%28java.net.URL%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>toFile</em>(<em>url</em> : <a href="" target="contentFrame" class="java/net/URL">java.net.URL</a>) : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="asFile%28java.net.URL%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>asFile</em>(<em>url</em> : <a href="" target="contentFrame" class="java/net/URL">java.net.URL</a>) : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Converts the given URL to a File.  If the URL is for an entry in a jar, the File for the jar is returned.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="assertDirectory%28java.io.File%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>assertDirectory</em>(<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>) : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="assertDirectories%28java.io.File*%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>assertDirectories</em>(<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>*) : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="split%28String%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>split</em>(<em>name</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>) : (<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>)
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="touch%28Iterable%5Bjava.io.File%5D%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>touch</em>(<em>files</em> : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="" target="contentFrame" class="java/io/File">java.io.File</a>]) : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="touch%28java.io.File%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>touch</em>(<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>) : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Creates a file at the given location.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="createDirectories%28Iterable%5Bjava.io.File%5D%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>createDirectories</em>(<em>dirs</em> : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="" target="contentFrame" class="java/io/File">java.io.File</a>]) : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="createDirectory%28java.io.File%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>createDirectory</em>(<em>dir</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>) : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="unzip%28java.io.File%2Cjava.io.File%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>unzip</em>(<em>from</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>toDirectory</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>) : <a href="" target="contentFrame" class="scala/collection/immutable/Set">scala.collection.immutable.Set</a>[<a href="" target="contentFrame" class="java/io/File">java.io.File</a>]
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="unzip%28java.io.File%2Cjava.io.File%2Cxsbt.NameFilter%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>unzip</em>(<em>from</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>toDirectory</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>filter</em> : <a href="../xsbt/NameFilter.html" target="_self">NameFilter</a>) : <a href="" target="contentFrame" class="scala/collection/immutable/Set">scala.collection.immutable.Set</a>[<a href="" target="contentFrame" class="java/io/File">java.io.File</a>]
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="unzip%28java.io.InputStream%2Cjava.io.File%2Cxsbt.NameFilter%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>unzip</em>(<em>from</em> : <a href="" target="contentFrame" class="java/io/InputStream">java.io.InputStream</a>, <em>toDirectory</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>filter</em> : <a href="../xsbt/NameFilter.html" target="_self">NameFilter</a>) : <a href="" target="contentFrame" class="scala/collection/immutable/Set">scala.collection.immutable.Set</a>[<a href="" target="contentFrame" class="java/io/File">java.io.File</a>]
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="transfer%28java.io.InputStream%2Cjava.io.OutputStream%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>transfer</em>(<em>in</em> : <a href="" target="contentFrame" class="java/io/InputStream">java.io.InputStream</a>, <em>out</em> : <a href="" target="contentFrame" class="java/io/OutputStream">java.io.OutputStream</a>) : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Copies all bytes from the given input stream to the given output stream.
+ Neither stream is closed.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="transferAndClose%28java.io.InputStream%2Cjava.io.OutputStream%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>transferAndClose</em>(<em>in</em> : <a href="" target="contentFrame" class="java/io/InputStream">java.io.InputStream</a>, <em>out</em> : <a href="" target="contentFrame" class="java/io/OutputStream">java.io.OutputStream</a>) : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Copies all bytes from the given input stream to the given output stream.  The
+ input stream is closed after the method completes.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="withTemporaryDirectory%28%28java.io.File%29%3D%3ET%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>withTemporaryDirectory</em>[<em>T</em>](<em>action</em> : (<a href="" target="contentFrame" class="java/io/File">java.io.File</a>) =&gt; <a href="../xsbt/FileUtilities$object.html#withTemporaryDirectory%28%28java.io.File%29%3D%3ET%29#T" target="_self">T</a>) : <a href="../xsbt/FileUtilities$object.html#withTemporaryDirectory%28%28java.io.File%29%3D%3ET%29#T" target="_self">T</a>
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Creates a temporary directory and provides its location to the given function.  The directory
+ is deleted after the function returns.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="createTemporaryDirectory"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>createTemporaryDirectory</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="delete%28Iterable%5Bjava.io.File%5D%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>delete</em>(<em>files</em> : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="" target="contentFrame" class="java/io/File">java.io.File</a>]) : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="delete%28java.io.File%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>delete</em>(<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>) : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="listFiles%28java.io.FileFilter%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>listFiles</em>(<em>filter</em> : <a href="" target="contentFrame" class="java/io/FileFilter">java.io.FileFilter</a>)(<em>dir</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>) : <a href="" target="contentFrame" class="scala/Array">scala.Array</a>[<a href="" target="contentFrame" class="java/io/File">java.io.File</a>]
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="listFiles%28java.io.File%2Cjava.io.FileFilter%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>listFiles</em>(<em>dir</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>filter</em> : <a href="" target="contentFrame" class="java/io/FileFilter">java.io.FileFilter</a>) : <a href="" target="contentFrame" class="scala/Array">scala.Array</a>[<a href="" target="contentFrame" class="java/io/File">java.io.File</a>]
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="listFiles%28java.io.File%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>listFiles</em>(<em>dir</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>) : <a href="" target="contentFrame" class="scala/Array">scala.Array</a>[<a href="" target="contentFrame" class="java/io/File">java.io.File</a>]
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="jar%28Iterable%5B%28java.io.File%2CString%29%5D%2Cjava.io.File%2Cjava.util.jar.Manifest%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>jar</em>(<em>sources</em> : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[(<a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>)], <em>outputJar</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>manifest</em> : <a href="" target="contentFrame" class="java/util/jar/Manifest">java.util.jar.Manifest</a>) : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Creates a jar file.</dd></dl>
+      <dl><dt style="margin:10px 0 0 20px;">
+        <b>Parameters</b></dt><dd><code>sources - </code>The files to include in the jar file paired with the entry name in the jar.</dd><dd><code>outputJar - </code>The file to write the jar to.</dd><dd><code>manifest - </code>The manifest for the jar.</dd></dl>
+    <hr></hr>
+<a name="zip%28Iterable%5B%28java.io.File%2CString%29%5D%2Cjava.io.File%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>zip</em>(<em>sources</em> : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[(<a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>)], <em>outputZip</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>) : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Creates a zip file.</dd></dl>
+      <dl><dt style="margin:10px 0 0 20px;">
+        <b>Parameters</b></dt><dd><code>sources - </code>The files to include in the zip file paired with the entry name in the zip.</dd><dd><code>outputZip - </code>The file to write the zip to.</dd></dl>
+    <hr></hr>
+<a name="relativize%28java.io.File%2Cjava.io.File%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>relativize</em>(<em>base</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="copy%28Iterable%5B%28java.io.File%2Cjava.io.File%29%5D%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>copy</em>(<em>sources</em> : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[(<a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <a href="" target="contentFrame" class="java/io/File">java.io.File</a>)]) : <a href="" target="contentFrame" class="scala/collection/immutable/Set">scala.collection.immutable.Set</a>[<a href="" target="contentFrame" class="java/io/File">java.io.File</a>]
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="copyFile%28java.io.File%2Cjava.io.File%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>copyFile</em>(<em>sourceFile</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>targetFile</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>) : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="defaultCharset"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>defaultCharset</em> : <a href="" target="contentFrame" class="java/nio/charset/Charset">java.nio.charset.Charset</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="write%28java.io.File%2CString%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>write</em>(<em>toFile</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>content</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>) : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="write%28java.io.File%2CString%2Cjava.nio.charset.Charset%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>write</em>(<em>toFile</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>content</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <em>charset</em> : <a href="" target="contentFrame" class="java/nio/charset/Charset">java.nio.charset.Charset</a>) : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="write%28java.io.File%2CString%2Cjava.nio.charset.Charset%2CBoolean%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>write</em>(<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>content</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <em>charset</em> : <a href="" target="contentFrame" class="java/nio/charset/Charset">java.nio.charset.Charset</a>, <em>append</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/Boolean.html" target="_self">Boolean</a>) : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="writeCharset%28java.io.File%2CString%2Cjava.nio.charset.Charset%2CBoolean%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>writeCharset</em>[<em>T</em>](<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>content</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <em>charset</em> : <a href="" target="contentFrame" class="java/nio/charset/Charset">java.nio.charset.Charset</a>, <em>append</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/Boolean.html" target="_self">Boolean</a>)(<em>f</em> : (<a href="" target="contentFrame" class="java/io/BufferedWriter">java.io.BufferedWriter</a>) =&gt; <a href="../xsbt/FileUtilities$object.html#writeCharset%28java.io.File%2CString%2Cjava.nio.charset.Charset%2CBoolean%29#T" target="_self">T</a>) : <a href="../xsbt/FileUtilities$object.html#writeCharset%28java.io.File%2CString%2Cjava.nio.charset.Charset%2CBoolean%29#T" target="_self">T</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="read%28java.io.File%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>read</em>(<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>) : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="read%28java.io.File%2Cjava.nio.charset.Charset%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>read</em>(<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>charset</em> : <a href="" target="contentFrame" class="java/nio/charset/Charset">java.nio.charset.Charset</a>) : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="read%28java.io.InputStream%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>read</em>(<em>in</em> : <a href="" target="contentFrame" class="java/io/InputStream">java.io.InputStream</a>) : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>doesn't close the InputStream</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="read%28java.io.InputStream%2Cjava.nio.charset.Charset%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>read</em>(<em>in</em> : <a href="" target="contentFrame" class="java/io/InputStream">java.io.InputStream</a>, <em>charset</em> : <a href="" target="contentFrame" class="java/nio/charset/Charset">java.nio.charset.Charset</a>) : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>doesn't close the InputStream</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="readBytes%28java.io.File%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>readBytes</em>(<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>) : <a href="" target="contentFrame" class="scala/Array">scala.Array</a>[<a href="http://www.scala-lang.org/docu/files/api/scala/Byte.html" target="_self">Byte</a>]
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="readBytes%28java.io.InputStream%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>readBytes</em>(<em>in</em> : <a href="" target="contentFrame" class="java/io/InputStream">java.io.InputStream</a>) : <a href="" target="contentFrame" class="scala/Array">scala.Array</a>[<a href="http://www.scala-lang.org/docu/files/api/scala/Byte.html" target="_self">Byte</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>doesn't close the InputStream</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="readLines%28java.io.File%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>readLines</em>(<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>) : <a href="" target="contentFrame" class="scala/List">scala.List</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="readLines%28java.io.File%2Cjava.nio.charset.Charset%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>readLines</em>(<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>charset</em> : <a href="" target="contentFrame" class="java/nio/charset/Charset">java.nio.charset.Charset</a>) : <a href="" target="contentFrame" class="scala/List">scala.List</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="writeLines%28java.io.File%2CSeq%5BString%5D%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>writeLines</em>(<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>lines</em> : <a href="" target="contentFrame" class="scala/Seq">scala.Seq</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]) : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="writeLines%28java.io.File%2CSeq%5BString%5D%2Cjava.nio.charset.Charset%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>writeLines</em>(<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>lines</em> : <a href="" target="contentFrame" class="scala/Seq">scala.Seq</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>], <em>charset</em> : <a href="" target="contentFrame" class="java/nio/charset/Charset">java.nio.charset.Charset</a>) : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="writeLines%28java.io.File%2CSeq%5BString%5D%2Cjava.nio.charset.Charset%2CBoolean%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>writeLines</em>(<em>file</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>, <em>lines</em> : <a href="" target="contentFrame" class="scala/Seq">scala.Seq</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>], <em>charset</em> : <a href="" target="contentFrame" class="java/nio/charset/Charset">java.nio.charset.Charset</a>, <em>append</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/Boolean.html" target="_self">Boolean</a>) : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="pathSplit%28String%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>pathSplit</em>(<em>s</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>) : <a href="" target="contentFrame" class="scala/Array">scala.Array</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Splits a String around path separator characters.</dd></dl>
+      <dl></dl>
+    <hr></hr></div>
+
+
+    <hr></hr>
+        <table summary="" class="navigation">
+        <tr>
+          <td class="navigation-links" valign="top">
+            <!-- <table><tr></tr></table> -->
+          </td>
+          <td align="right" valign="top" style="white-space:nowrap;" rowspan="2">
+            <div class="doctitle-larger">Simple Build Tool 0.7.4 API</div>
+          </td>
+        </tr>
+        <tr><td></td></tr>
+      </table>
+      </body>
+      </html>

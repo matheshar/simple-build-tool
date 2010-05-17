@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+			<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" ></meta>
+        <title>IvyConfigurations.scala</title>
+        <script type="text/javascript" src="jquery-all.js"></script>
+        <script type="text/javascript" src="linked.js"></script>
+        <link rel="stylesheet" type="text/css" href="style.css" title="Style"></link>
+    </head>
+    <body>
+        <pre>
+<span class="comment">/* sbt -- Simple Build Tool
+ * Copyright 2008, 2009, 2010  Mark Harrah
+ */</span>
+<span class="keyword">package</span> sbt
+
+<span class="keyword">import</span> java.io.File
+<span class="keyword">import</span> scala.xml.{Node, NodeSeq}
+
+<span class="keyword">final</span> <span class="keyword">class</span> <a title="class IvyPaths extends java.lang.Object with NotNull with ScalaObject" id="9606">IvyPaths</a>(<span class="keyword">val</span> <a title="java.io.File" id="23089">baseDirectory</a>: <span title="java.io.File">File</span>, <span class="keyword">val</span> <a title="Option[java.io.File]" id="23090">cacheDirectory</a>: <span title="Option[java.io.File]">Option</span>[File]) <span class="keyword">extends</span> <span title="NotNull">NotNull</span>
+{
+	<span class="keyword">def</span> <a title="(java.io.File)sbt.IvyPaths" id="23088">withBase</a>(<a title="java.io.File" id="47454">newBaseDirectory</a>: <span title="java.io.File">File</span>) = <span title="sbt.IvyPaths" class="keyword">new</span> <a href="#9606" title="sbt.IvyPaths">IvyPaths</a>(<a href="#47454" title="java.io.File">newBaseDirectory</a>, <a href="#23090" title="=&gt; Option[java.io.File]">cacheDirectory</a>)
+}
+<span class="keyword">sealed</span> <span class="keyword">trait</span> <a title="trait IvyConfiguration extends java.lang.Object with NotNull" id="11130">IvyConfiguration</a> <span class="keyword">extends</span> <span title="NotNull">NotNull</span>
+{
+	<span class="keyword">type</span> <a title="&gt;: Nothing &lt;: sbt.IvyConfiguration" id="20077">This</a> &lt;: IvyConfiguration
+	<span class="keyword">def</span> <a title="=&gt; Option[xsbti.GlobalLock]" id="20078">lock</a>: <span title="Option[xsbti.GlobalLock]">Option</span>[xsbti.GlobalLock]
+	<span class="keyword">def</span> <a title="=&gt; java.io.File" id="20079">baseDirectory</a>: <span title="java.io.File">File</span>
+	<span class="keyword">def</span> <a title="=&gt; sbt.IvyLogger" id="20080">log</a>: <a href="IvyLogger.scala.html#9921" title="sbt.IvyLogger">IvyLogger</a>
+	<span class="keyword">def</span> <a title="(java.io.File)IvyConfiguration.this.This" id="20081">withBase</a>(<a title="java.io.File" id="23164">newBaseDirectory</a>: <span title="java.io.File">File</span>): <a href="#20077" title="IvyConfiguration.this.This">This</a>
+}
+<span class="keyword">final</span> <span class="keyword">class</span> <a title="class InlineIvyConfiguration extends java.lang.Object with sbt.IvyConfiguration with ScalaObject" id="11268">InlineIvyConfiguration</a>(<span class="keyword">val</span> <a title="sbt.IvyPaths" id="23122">paths</a>: <a href="#9606" title="sbt.IvyPaths">IvyPaths</a>, <span class="keyword">val</span> <a title="Seq[sbt.Resolver]" id="23123">resolvers</a>: <span title="Seq[sbt.Resolver]">Seq</span>[Resolver], <span class="keyword">val</span> <a title="Seq[sbt.Resolver]" id="23124">otherResolvers</a>: <span title="Seq[sbt.Resolver]">Seq</span>[Resolver],
+	<span class="keyword">val</span> <a title="Seq[sbt.ModuleConfiguration]" id="23125">moduleConfigurations</a>: <span title="Seq[sbt.ModuleConfiguration]">Seq</span>[ModuleConfiguration], <span class="keyword">val</span> <a title="Boolean" id="23126">localOnly</a>: <span title="Boolean">Boolean</span>, <span class="keyword">val</span> <a title="Option[xsbti.GlobalLock]" id="23127">lock</a>: <span title="Option[xsbti.GlobalLock]">Option</span>[xsbti.GlobalLock],
+	<span class="keyword">val</span> <a title="sbt.IvyLogger" id="23128">log</a>: <a href="IvyLogger.scala.html#9921" title="sbt.IvyLogger">IvyLogger</a>) <span class="keyword">extends</span> <a href="#11130" title="sbt.IvyConfiguration">IvyConfiguration</a>
+{
+	<span class="keyword">type</span> <a title="sbt.InlineIvyConfiguration" id="23118">This</a> = <a href="#11268" title="sbt.InlineIvyConfiguration">InlineIvyConfiguration</a>
+	<span class="keyword">def</span> <a title="=&gt; java.io.File" id="23119">baseDirectory</a> = <a href="#23122" title="=&gt; sbt.IvyPaths">paths</a>.<a href="#23089" title="=&gt; java.io.File">baseDirectory</a>
+	<span class="keyword">def</span> <a title="(java.io.File)sbt.InlineIvyConfiguration" id="23120">withBase</a>(<a title="java.io.File" id="47465">newBase</a>: <span title="java.io.File">File</span>) = <span title="sbt.InlineIvyConfiguration" class="keyword">new</span> <a href="#11268" title="sbt.InlineIvyConfiguration">InlineIvyConfiguration</a>(<a href="#23122" title="=&gt; sbt.IvyPaths">paths</a>.<a href="#23088" title="(java.io.File)sbt.IvyPaths">withBase</a>(<a href="#47465" title="java.io.File">newBase</a>), <a href="#23123" title="=&gt; Seq[sbt.Resolver]">resolvers</a>, <a href="#23124" title="=&gt; Seq[sbt.Resolver]">otherResolvers</a>, <a href="#23125" title="=&gt; Seq[sbt.ModuleConfiguration]">moduleConfigurations</a>, <a href="#23126" title="=&gt; Boolean">localOnly</a>, <a href="#23127" title="=&gt; Option[xsbti.GlobalLock]">lock</a>, <a href="#23128" title="=&gt; sbt.IvyLogger">log</a>)
+	<span class="keyword">def</span> <a title="(Seq[sbt.Resolver])sbt.InlineIvyConfiguration" id="23121">changeResolvers</a>(<a title="Seq[sbt.Resolver]" id="23201">newResolvers</a>: <span title="Seq[sbt.Resolver]">Seq</span>[Resolver]) = <span title="sbt.InlineIvyConfiguration" class="keyword">new</span> <a href="#11268" title="sbt.InlineIvyConfiguration">InlineIvyConfiguration</a>(<a href="#23122" title="=&gt; sbt.IvyPaths">paths</a>, <a href="#23201" title="Seq[sbt.Resolver]">newResolvers</a>, <a href="#23124" title="=&gt; Seq[sbt.Resolver]">otherResolvers</a>, <a href="#23125" title="=&gt; Seq[sbt.ModuleConfiguration]">moduleConfigurations</a>, <a href="#23126" title="=&gt; Boolean">localOnly</a>, <a href="#23127" title="=&gt; Option[xsbti.GlobalLock]">lock</a>, <a href="#23128" title="=&gt; sbt.IvyLogger">log</a>)
+}
+<span class="keyword">final</span> <span class="keyword">class</span> <a title="class ExternalIvyConfiguration extends java.lang.Object with sbt.IvyConfiguration with ScalaObject" id="8361">ExternalIvyConfiguration</a>(<span class="keyword">val</span> <a title="java.io.File" id="47472">baseDirectory</a>: <span title="java.io.File">File</span>, <span class="keyword">val</span> <a title="java.io.File" id="47473">file</a>: <span title="java.io.File">File</span>, <span class="keyword">val</span> <a title="Option[xsbti.GlobalLock]" id="47474">lock</a>: <span title="Option[xsbti.GlobalLock]">Option</span>[xsbti.GlobalLock], <span class="keyword">val</span> <a title="sbt.IvyLogger" id="47475">log</a>: <a href="IvyLogger.scala.html#9921" title="sbt.IvyLogger">IvyLogger</a>) <span class="keyword">extends</span> <a href="#11130" title="sbt.IvyConfiguration">IvyConfiguration</a>
+{
+	<span class="keyword">type</span> <a title="sbt.ExternalIvyConfiguration" id="23193">This</a> = <a href="#8361" title="sbt.ExternalIvyConfiguration">ExternalIvyConfiguration</a>
+	<span class="keyword">def</span> <a title="(java.io.File)sbt.ExternalIvyConfiguration" id="23194">withBase</a>(<a title="java.io.File" id="47476">newBase</a>: <span title="java.io.File">File</span>) = <span title="sbt.ExternalIvyConfiguration" class="keyword">new</span> <a href="#8361" title="sbt.ExternalIvyConfiguration">ExternalIvyConfiguration</a>(<a href="#47476" title="java.io.File">newBase</a>, <a href="#47473" title="=&gt; java.io.File">file</a>, <a href="#47474" title="=&gt; Option[xsbti.GlobalLock]">lock</a>, <a href="#47475" title="=&gt; sbt.IvyLogger">log</a>)
+}
+
+<span class="keyword">object</span> <a title="object sbt.IvyConfiguration" id="11131">IvyConfiguration</a>
+{
+	<span class="comment">/** Called to configure Ivy when inline resolvers are not specified.
+	* This will configure Ivy with an 'ivy-settings.xml' file if there is one or else use default resolvers.*/</span>
+	<span class="keyword">def</span> <a title="(sbt.IvyPaths,Option[xsbti.GlobalLock],Boolean,sbt.IvyLogger)sbt.IvyConfiguration" id="23172">apply</a>(<a title="sbt.IvyPaths" id="23173">paths</a>: <a href="#9606" title="sbt.IvyPaths">IvyPaths</a>, <a title="Option[xsbti.GlobalLock]" id="23174">lock</a>: <span title="Option[xsbti.GlobalLock]">Option</span>[xsbti.GlobalLock], <a title="Boolean" id="23175">localOnly</a>: <span title="Boolean">Boolean</span>, <a title="sbt.IvyLogger" id="23176">log</a>: <a href="IvyLogger.scala.html#9921" title="sbt.IvyLogger">IvyLogger</a>): <a href="#11130" title="sbt.IvyConfiguration">IvyConfiguration</a> =
+	{
+		<a href="#23176" title="sbt.IvyLogger">log</a>.<a href="IvyLogger.scala.html#19750" title="(=&gt; String)Unit">debug</a>(<span title="java.lang.String(&quot;Autodetecting configuration.&quot;)" class="string">&quot;Autodetecting configuration.&quot;</span>)
+		<span class="keyword">val</span> <a title="java.io.File" id="47479">defaultIvyConfigFile</a> = <a href="Ivy.scala.html#7771" title="object sbt.IvySbt">IvySbt</a>.<a href="Ivy.scala.html#24266" title="(java.io.File)java.io.File">defaultIvyConfiguration</a>(<a href="#23173" title="sbt.IvyPaths">paths</a>.<a href="#23089" title="=&gt; java.io.File">baseDirectory</a>)
+		<span title="sbt.IvyConfiguration" class="keyword">if</span>(<a href="#47479" title="java.io.File">defaultIvyConfigFile</a>.<span title="()Boolean">canRead</span>)
+			<span title="sbt.ExternalIvyConfiguration" class="keyword">new</span> <a href="#8361" title="sbt.ExternalIvyConfiguration">ExternalIvyConfiguration</a>(<a href="#23173" title="sbt.IvyPaths">paths</a>.<a href="#23089" title="=&gt; java.io.File">baseDirectory</a>, <a href="#47479" title="java.io.File">defaultIvyConfigFile</a>, <a href="#23174" title="Option[xsbti.GlobalLock]">lock</a>, <a href="#23176" title="sbt.IvyLogger">log</a>)
+		<span class="keyword">else</span>
+			<span title="sbt.InlineIvyConfiguration" class="keyword">new</span> <a href="#11268" title="sbt.InlineIvyConfiguration">InlineIvyConfiguration</a>(<a href="#23173" title="sbt.IvyPaths">paths</a>, <a href="IvyInterface.scala.html#11182" title="object sbt.Resolver">Resolver</a>.<a href="IvyInterface.scala.html#15031" title="(Seq[sbt.Resolver])Seq[sbt.Resolver]">withDefaultResolvers</a>(<span title="object Nil">Nil</span>), <span title="object Nil">Nil</span>, <span title="object Nil">Nil</span>, <a href="#23175" title="Boolean">localOnly</a>, <a href="#23174" title="Option[xsbti.GlobalLock]">lock</a>, <a href="#23176" title="sbt.IvyLogger">log</a>)
+	}
+}
+
+<span class="keyword">sealed</span> <span class="keyword">trait</span> <a title="trait ModuleSettings extends java.lang.Object with NotNull" id="7836">ModuleSettings</a> <span class="keyword">extends</span> <span title="NotNull">NotNull</span>
+{
+	<span class="keyword">def</span> <a title="=&gt; Boolean" id="23205">validate</a>: <span title="Boolean">Boolean</span>
+	<span class="keyword">def</span> <a title="=&gt; Option[sbt.IvyScala]" id="23206">ivyScala</a>: <span title="Option[sbt.IvyScala]">Option</span>[IvyScala]
+	<span class="keyword">def</span> <a title="=&gt; sbt.ModuleSettings" id="23207">noScala</a>: <a href="#7836" title="sbt.ModuleSettings">ModuleSettings</a>
+}
+<span class="keyword">final</span> <span class="keyword">class</span> <a title="class IvyFileConfiguration extends java.lang.Object with sbt.ModuleSettings with ScalaObject" id="11274">IvyFileConfiguration</a>(<span class="keyword">val</span> <a title="java.io.File" id="23221">file</a>: <span title="java.io.File">File</span>, <span class="keyword">val</span> <a title="Option[sbt.IvyScala]" id="23222">ivyScala</a>: <span title="Option[sbt.IvyScala]">Option</span>[IvyScala], <span class="keyword">val</span> <a title="Boolean" id="23223">validate</a>: <span title="Boolean">Boolean</span>) <span class="keyword">extends</span> <a href="#7836" title="sbt.ModuleSettings">ModuleSettings</a>
+{
+	<span class="keyword">def</span> <a title="=&gt; sbt.IvyFileConfiguration" id="23220">noScala</a> = <span title="sbt.IvyFileConfiguration" class="keyword">new</span> <a href="#11274" title="sbt.IvyFileConfiguration">IvyFileConfiguration</a>(<a href="#23221" title="=&gt; java.io.File">file</a>, <span title="object None">None</span>, <a href="#23223" title="=&gt; Boolean">validate</a>)
+}
+<span class="keyword">final</span> <span class="keyword">class</span> <a title="class PomConfiguration extends java.lang.Object with sbt.ModuleSettings with ScalaObject" id="6381">PomConfiguration</a>(<span class="keyword">val</span> <a title="java.io.File" id="23236">file</a>: <span title="java.io.File">File</span>, <span class="keyword">val</span> <a title="Option[sbt.IvyScala]" id="23237">ivyScala</a>: <span title="Option[sbt.IvyScala]">Option</span>[IvyScala], <span class="keyword">val</span> <a title="Boolean" id="23238">validate</a>: <span title="Boolean">Boolean</span>) <span class="keyword">extends</span> <a href="#7836" title="sbt.ModuleSettings">ModuleSettings</a>
+{
+	<span class="keyword">def</span> <a title="=&gt; sbt.PomConfiguration" id="23235">noScala</a> = <span title="sbt.PomConfiguration" class="keyword">new</span> <a href="#6381" title="sbt.PomConfiguration">PomConfiguration</a>(<a href="#23236" title="=&gt; java.io.File">file</a>, <span title="object None">None</span>, <a href="#23238" title="=&gt; Boolean">validate</a>)
+}
+<span class="keyword">final</span> <span class="keyword">class</span> <a title="class InlineConfiguration extends java.lang.Object with sbt.ModuleSettings with ScalaObject" id="8925">InlineConfiguration</a>(<span class="keyword">val</span> <a title="sbt.ModuleID" id="23265">module</a>: <a href="IvyInterface.scala.html#11352" title="sbt.ModuleID">ModuleID</a>, <span class="keyword">val</span> <a title="Iterable[sbt.ModuleID]" id="23266">dependencies</a>: <span title="Iterable[sbt.ModuleID]">Iterable</span>[ModuleID], <span class="keyword">val</span> <a title="scala.xml.NodeSeq" id="23267">ivyXML</a>: <a title="scala.xml.NodeSeq" id="14650">NodeSeq</a>,
+	<span class="keyword">val</span> <a title="Iterable[sbt.Configuration]" id="23268">configurations</a>: <span title="Iterable[sbt.Configuration]">Iterable</span>[Configuration], <span class="keyword">val</span> <a title="Option[sbt.Configuration]" id="23269">defaultConfiguration</a>: <span title="Option[sbt.Configuration]">Option</span>[Configuration], <span class="keyword">val</span> <a title="Option[sbt.IvyScala]" id="23270">ivyScala</a>: <span title="Option[sbt.IvyScala]">Option</span>[IvyScala],
+	<span class="keyword">val</span> <a title="Boolean" id="23271">validate</a>: <span title="Boolean">Boolean</span>) <span class="keyword">extends</span> <a href="#7836" title="sbt.ModuleSettings">ModuleSettings</a>
+{
+	<span class="keyword">def</span> <a title="(Iterable[sbt.Configuration])sbt.InlineConfiguration" id="23263">withConfigurations</a>(<a title="Iterable[sbt.Configuration]" id="24444">configurations</a>: <span title="Iterable[sbt.Configuration]">Iterable</span>[Configuration]) = 
+		<span title="sbt.InlineConfiguration" class="keyword">new</span> <a href="#8925" title="sbt.InlineConfiguration">InlineConfiguration</a>(<a href="#23265" title="=&gt; sbt.ModuleID">module</a>, <a href="#23266" title="=&gt; Iterable[sbt.ModuleID]">dependencies</a>, <a href="#23267" title="=&gt; scala.xml.NodeSeq">ivyXML</a>, <a href="#24444" title="Iterable[sbt.Configuration]">configurations</a>, <a href="#23269" title="=&gt; Option[sbt.Configuration]">defaultConfiguration</a>, <a href="#23270" title="=&gt; Option[sbt.IvyScala]">ivyScala</a>, <a href="#23271" title="=&gt; Boolean">validate</a>)
+	<span class="keyword">def</span> <a title="=&gt; sbt.InlineConfiguration" id="23264">noScala</a> = <span title="sbt.InlineConfiguration" class="keyword">new</span> <a href="#8925" title="sbt.InlineConfiguration">InlineConfiguration</a>(<a href="#23265" title="=&gt; sbt.ModuleID">module</a>, <a href="#23266" title="=&gt; Iterable[sbt.ModuleID]">dependencies</a>, <a href="#23267" title="=&gt; scala.xml.NodeSeq">ivyXML</a>, <a href="#23268" title="=&gt; Iterable[sbt.Configuration]">configurations</a>, <a href="#23269" title="=&gt; Option[sbt.Configuration]">defaultConfiguration</a>, <span title="object None">None</span>, <a href="#23271" title="=&gt; Boolean">validate</a>)
+}
+<span class="keyword">final</span> <span class="keyword">class</span> <a title="class EmptyConfiguration extends java.lang.Object with sbt.ModuleSettings with ScalaObject" id="7221">EmptyConfiguration</a>(<span class="keyword">val</span> <a title="sbt.ModuleID" id="24410">module</a>: <a href="IvyInterface.scala.html#11352" title="sbt.ModuleID">ModuleID</a>, <span class="keyword">val</span> <a title="Option[sbt.IvyScala]" id="24411">ivyScala</a>: <span title="Option[sbt.IvyScala]">Option</span>[IvyScala], <span class="keyword">val</span> <a title="Boolean" id="24412">validate</a>: <span title="Boolean">Boolean</span>) <span class="keyword">extends</span> <a href="#7836" title="sbt.ModuleSettings">ModuleSettings</a>
+{
+	<span class="keyword">def</span> <a title="=&gt; sbt.EmptyConfiguration" id="24409">noScala</a> = <span title="sbt.EmptyConfiguration" class="keyword">new</span> <a href="#7221" title="sbt.EmptyConfiguration">EmptyConfiguration</a>(<a href="#24410" title="=&gt; sbt.ModuleID">module</a>, <span title="object None">None</span>, <a href="#24412" title="=&gt; Boolean">validate</a>)
+}
+<span class="keyword">object</span> <a title="object sbt.InlineConfiguration" id="8926">InlineConfiguration</a>
+{
+	<span class="keyword">def</span> <a title="(sbt.ModuleID,Iterable[sbt.ModuleID])sbt.InlineConfiguration" id="47521">apply</a>(<a title="sbt.ModuleID" id="47524">module</a>: <a href="IvyInterface.scala.html#11352" title="sbt.ModuleID">ModuleID</a>, <a title="Iterable[sbt.ModuleID]" id="47525">dependencies</a>: <span title="Iterable[sbt.ModuleID]">Iterable</span>[ModuleID]) =
+		<span title="sbt.InlineConfiguration" class="keyword">new</span> <a href="#8925" title="sbt.InlineConfiguration">InlineConfiguration</a>(<a href="#47524" title="sbt.ModuleID">module</a>, <a href="#47525" title="Iterable[sbt.ModuleID]">dependencies</a>, <a title="object scala.xml.NodeSeq" id="14651">NodeSeq</a>.<a title="=&gt; &lt;refinement&gt; extends scala.xml.NodeSeq" id="20052">Empty</a>, <span title="object Nil">Nil</span>, <span title="object None">None</span>, <span title="object None">None</span>, <span title="Boolean(false)" class="keyword">false</span>)
+	<span class="keyword">def</span> <a title="(Iterable[sbt.Configuration],Option[sbt.Configuration])Iterable[sbt.Configuration]" id="47522">configurations</a>(<a title="Iterable[sbt.Configuration]" id="47527">explicitConfigurations</a>: <span title="Iterable[sbt.Configuration]">Iterable</span>[Configuration], <a title="Option[sbt.Configuration]" id="47528">defaultConfiguration</a>: <span title="Option[sbt.Configuration]">Option</span>[Configuration]) =
+		<span title="Iterable[sbt.Configuration]" class="keyword">if</span>(<a href="#47527" title="Iterable[sbt.Configuration]">explicitConfigurations</a>.<a title="=&gt; Boolean" id="16315">isEmpty</a>)
+		{
+			<a href="#47528" title="Option[sbt.Configuration]">defaultConfiguration</a> <span title="List[sbt.Configuration]" class="keyword">match</span>
+			{
+				<span title="List[sbt.Configuration]" class="keyword">case</span> Some(<a href="IvyInterface.scala.html#9343" title="object sbt.Configurations">Configurations</a>.<a href="IvyInterface.scala.html#19032" title="=&gt; sbt.Configuration">DefaultIvyConfiguration</a>) =&gt; <a href="IvyInterface.scala.html#9343" title="object sbt.Configurations">Configurations</a>.<a href="IvyInterface.scala.html#19008" title="=&gt; sbt.Configuration">Default</a> <a href="#47530" title="(sbt.Configuration)List[sbt.Configuration]" id="17936">::</a> <span title="object Nil">Nil</span>
+				<span title="List[sbt.Configuration]" class="keyword">case</span> Some(<a href="IvyInterface.scala.html#9343" title="object sbt.Configurations">Configurations</a>.<a href="IvyInterface.scala.html#19030" title="=&gt; sbt.Configuration">DefaultMavenConfiguration</a>) =&gt; <a href="IvyInterface.scala.html#9343" title="object sbt.Configurations">Configurations</a>.<a href="IvyInterface.scala.html#19007" title="=&gt; List[sbt.Configuration]">defaultMavenConfigurations</a>
+				<span title="Nil.type" class="keyword">case</span> _ =&gt; <span title="object Nil">Nil</span>
+			}
+		}
+		<span class="keyword">else</span>
+			<a href="#47527" title="Iterable[sbt.Configuration]">explicitConfigurations</a>
+}
+<span class="keyword">object</span> <a title="object sbt.ModuleSettings" id="7837">ModuleSettings</a>
+{
+	<span class="keyword">def</span> <a title="(Option[sbt.IvyScala],Boolean,=&gt; sbt.ModuleID)(java.io.File,sbt.IvyLogger)sbt.ModuleSettings with ScalaObject{def noScala: sbt.ModuleSettings with ScalaObject}" id="24250">apply</a>(<a title="Option[sbt.IvyScala]" id="24251">ivyScala</a>: <span title="Option[sbt.IvyScala]">Option</span>[IvyScala], <a title="Boolean" id="24252">validate</a>: <span title="Boolean">Boolean</span>, <a title="=&gt; sbt.ModuleID" id="24253">module</a>: =&gt; ModuleID)(<a title="java.io.File" id="24254">baseDirectory</a>: <span title="java.io.File">File</span>, <a title="sbt.IvyLogger" id="24255">log</a>: <a href="IvyLogger.scala.html#9921" title="sbt.IvyLogger">IvyLogger</a>) =
+	{
+		<a href="#24255" title="sbt.IvyLogger">log</a>.<a href="IvyLogger.scala.html#19750" title="(=&gt; String)Unit">debug</a>(<span title="java.lang.String(&quot;Autodetecting dependencies.&quot;)" class="string">&quot;Autodetecting dependencies.&quot;</span>)
+		<span class="keyword">val</span> <a title="java.io.File" id="24257">defaultPOMFile</a> = <a href="Ivy.scala.html#7771" title="object sbt.IvySbt">IvySbt</a>.<a href="Ivy.scala.html#24267" title="(java.io.File)java.io.File">defaultPOM</a>(<a href="#24254" title="java.io.File">baseDirectory</a>)
+		<span title="&lt;refinement&gt; extends sbt.ModuleSettings with ScalaObject" class="keyword">if</span>(<a href="#24257" title="java.io.File">defaultPOMFile</a>.<span title="()Boolean">canRead</span>)
+			<span title="sbt.PomConfiguration" class="keyword">new</span> <a href="#6381" title="sbt.PomConfiguration">PomConfiguration</a>(<a href="#24257" title="java.io.File">defaultPOMFile</a>, <a href="#24251" title="Option[sbt.IvyScala]">ivyScala</a>, <a href="#24252" title="Boolean">validate</a>)
+		<span class="keyword">else</span>
+		{
+			<span class="keyword">val</span> <a title="java.io.File" id="24381">defaultIvy</a> = <a href="Ivy.scala.html#7771" title="object sbt.IvySbt">IvySbt</a>.<a href="Ivy.scala.html#24265" title="(java.io.File)java.io.File">defaultIvyFile</a>(<a href="#24254" title="java.io.File">baseDirectory</a>)
+			<span title="&lt;refinement&gt; extends sbt.ModuleSettings with ScalaObject" class="keyword">if</span>(<a href="#24381" title="java.io.File">defaultIvy</a>.<span title="()Boolean">canRead</span>)
+				<span title="sbt.IvyFileConfiguration" class="keyword">new</span> <a href="#11274" title="sbt.IvyFileConfiguration">IvyFileConfiguration</a>(<a href="#24381" title="java.io.File">defaultIvy</a>, <a href="#24251" title="Option[sbt.IvyScala]">ivyScala</a>, <a href="#24252" title="Boolean">validate</a>)
+			<span class="keyword">else</span>
+			{
+				<a href="#24255" title="sbt.IvyLogger">log</a>.<a href="IvyLogger.scala.html#19751" title="(=&gt; String)Unit">warn</a>(<span title="java.lang.String(&quot;No dependency configuration found, using defaults.&quot;)" class="string">&quot;No dependency configuration found, using defaults.&quot;</span>)
+				<span title="sbt.EmptyConfiguration" class="keyword">new</span> <a href="#7221" title="sbt.EmptyConfiguration">EmptyConfiguration</a>(<a href="#24253" title="=&gt; sbt.ModuleID">module</a>, <a href="#24251" title="Option[sbt.IvyScala]">ivyScala</a>, <a href="#24252" title="Boolean">validate</a>)
+			}
+		}
+	}
+}
+        </pre>
+    </body>
+</html>

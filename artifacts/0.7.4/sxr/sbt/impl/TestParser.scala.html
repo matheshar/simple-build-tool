@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+			<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" ></meta>
+        <title>sbt/impl/TestParser.scala</title>
+        <script type="text/javascript" src="../../jquery-all.js"></script>
+        <script type="text/javascript" src="../../linked.js"></script>
+        <link rel="stylesheet" type="text/css" href="../../style.css" title="Style"></link>
+    </head>
+    <body>
+        <pre>
+<span class="comment">/* sbt -- Simple Build Tool
+ * Copyright 2008, 2009 Mark Harrah
+ */</span>
+<span class="keyword">package</span> sbt
+
+<span class="comment">/* The following implements the simple syntax for storing test definitions.
+* The syntax is:
+*
+* definition := isModule? className typeSpecific
+* isModule := '&lt;module&gt;'
+* typeSpecific := annotated | subclass
+* 
+* subclass := subclassSeparator className
+* subclassSeparator := '&lt;&lt;'
+*
+* annotated := annotationSeparator annotationName
+* annotationSeparator := '@'
+*/</span>
+
+	<span class="keyword">import</span> scala.util.parsing.combinator._
+	<span class="keyword">import</span> org.scalatools.testing.{Fingerprint, AnnotatedFingerprint, TestFingerprint}
+	<span class="keyword">import</span> DiscoveredParser._
+
+<span class="keyword">sealed</span> <span class="keyword">abstract</span> <span class="keyword">class</span> <a title="class Discovered extends java.lang.Object with org.scalatools.testing.Fingerprint with NotNull with ScalaObject" id="7983">Discovered</a> <span class="keyword">extends</span> <a title="org.scalatools.testing.Fingerprint" id="26490">Fingerprint</a> <span class="keyword">with</span> <span title="NotNull">NotNull</span>
+{
+	<span class="comment">/** Whether a test is a module or a class*/</span>
+	<span class="keyword">def</span> <a title="=&gt; Boolean" id="29277">isModule</a>: <span title="Boolean">Boolean</span>
+	<span class="keyword">def</span> <a title="=&gt; String" id="29278">className</a>: <span title="String">String</span>
+	<span class="comment">// for TestFingerprint</span>
+	<span class="keyword">def</span> <a title="=&gt; String" id="29279">testClassName</a> = <a href="#29278" title="=&gt; String">className</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.TestDefinition" id="29280">toDefinition</a>: <a href="../TestFramework.scala.html#11646" title="sbt.TestDefinition">TestDefinition</a> = <span title="sbt.TestDefinition" class="keyword">new</span> <a href="../TestFramework.scala.html#11646" title="sbt.TestDefinition">TestDefinition</a>(<a href="#29278" title="=&gt; String">className</a>, <a href="#7983" title="sbt.Discovered" class="keyword">this</a>)
+}
+<span class="comment">/** Represents a class 'className' that has 'superClassName' as an ancestor.*/</span>
+<span class="keyword">final</span> <span class="keyword">case</span> <span class="keyword">class</span> <a title="class DiscoveredSubclass extends sbt.Discovered with org.scalatools.testing.TestFingerprint with ScalaObject with Product" id="40480">DiscoveredSubclass</a>(<a title="Boolean" id="41012">isModule</a>: <span title="Boolean">Boolean</span>, <a title="String" id="41013">className</a>: <span title="String">String</span>, <a title="String" id="41014">superClassName</a>: <span title="String">String</span>) <span class="keyword">extends</span> <a href="#7983" title="sbt.Discovered">Discovered</a> <span class="keyword">with</span> <a title="org.scalatools.testing.TestFingerprint" id="26508">TestFingerprint</a>
+{
+	<span class="keyword">override</span> <span class="keyword">def</span> <a title="()java.lang.String" id="40465">toString</a> =
+		(<span title="java.lang.String" class="keyword">if</span>(<a href="#41012" title="=&gt; Boolean">isModule</a>) <a href="#28865" title="=&gt; java.lang.String">IsModuleLiteral</a> <span class="keyword">else</span> <span title="java.lang.String(&quot;&quot;)" class="string">&quot;&quot;</span>) <span title="(Any)java.lang.String">+</span> <a href="#41013" title="=&gt; String">className</a> <span title="(Any)java.lang.String">+</span> <a href="#28867" title="=&gt; java.lang.String">SubSuperSeparator</a> <span title="(Any)java.lang.String">+</span> <a href="#41014" title="=&gt; String">superClassName</a>
+}
+<span class="comment">/** Represents an annotation on a method or class.*/</span>
+<span class="keyword">final</span> <span class="keyword">case</span> <span class="keyword">class</span> <a title="class DiscoveredAnnotated extends sbt.Discovered with org.scalatools.testing.AnnotatedFingerprint with ScalaObject with Product" id="40524">DiscoveredAnnotated</a>(<a title="Boolean" id="41018">isModule</a>: <span title="Boolean">Boolean</span>, <a title="String" id="41019">className</a>: <span title="String">String</span>, <a title="String" id="41020">annotationName</a>: <span title="String">String</span>) <span class="keyword">extends</span> <a href="#7983" title="sbt.Discovered">Discovered</a> <span class="keyword">with</span> <a title="org.scalatools.testing.AnnotatedFingerprint" id="26496">AnnotatedFingerprint</a>
+{
+	<span class="keyword">override</span> <span class="keyword">def</span> <a title="()java.lang.String" id="40509">toString</a> =
+		(<span title="java.lang.String" class="keyword">if</span>(<a href="#41018" title="=&gt; Boolean">isModule</a>) <a href="#28865" title="=&gt; java.lang.String">IsModuleLiteral</a> <span class="keyword">else</span> <span title="java.lang.String(&quot;&quot;)" class="string">&quot;&quot;</span>) <span title="(Any)java.lang.String">+</span> <a href="#41019" title="=&gt; String">className</a> <span title="(Any)java.lang.String">+</span> <a href="#28869" title="=&gt; java.lang.String">AnnotationSeparator</a> <span title="(Any)java.lang.String">+</span> <a href="#41020" title="=&gt; String">annotationName</a>
+}
+<span class="keyword">final</span> <span class="keyword">class</span> <a title="class DiscoveredParser extends java.lang.Object with scala.util.parsing.combinator.RegexParsers with NotNull with ScalaObject" id="9537">DiscoveredParser</a> <span class="keyword">extends</span> <a title="scala.util.parsing.combinator.RegexParsers" id="29237">RegexParsers</a> <span class="keyword">with</span> <span title="NotNull">NotNull</span>
+{
+	<span class="keyword">def</span> <a title="=&gt; DiscoveredParser.this.Parser[sbt.Discovered]" id="40568">definition</a>: <span title="DiscoveredParser.this.Parser[sbt.Discovered]">Parser</span>[Discovered] =
+		( <a href="#40569" title="=&gt; DiscoveredParser.this.Parser[Boolean]">isModule</a> <span title="(=&gt; DiscoveredParser.this.Parser[String])DiscoveredParser.this.Parser[DiscoveredParser.this.~[Boolean,String]]">~!</span> <a href="#40570" title="=&gt; DiscoveredParser.this.Parser[String]">className</a> <span title="(=&gt; DiscoveredParser.this.Parser[String])DiscoveredParser.this.Parser[DiscoveredParser.this.~[DiscoveredParser.this.~[Boolean,String],String]]">~!</span> (<a href="#9537" title="implicit scala.util.parsing.combinator.RegexParsers.literal : (String)DiscoveredParser.this.Parser[String]">SubSuperSeparator</a> <a title="(=&gt; DiscoveredParser.this.Parser[String])DiscoveredParser.this.Parser[String]" id="40722">|</a> <a href="#9537" title="implicit scala.util.parsing.combinator.RegexParsers.literal : (String)DiscoveredParser.this.Parser[String]">AnnotationSeparator</a>) <span title="(=&gt; DiscoveredParser.this.Parser[String])DiscoveredParser.this.Parser[DiscoveredParser.this.~[DiscoveredParser.this.~[DiscoveredParser.this.~[Boolean,String],String],String]]">~!</span> <a href="#40570" title="=&gt; DiscoveredParser.this.Parser[String]">className</a> ) <span title="((DiscoveredParser.this.~[DiscoveredParser.this.~[DiscoveredParser.this.~[Boolean,String],String],String]) =&gt; sbt.Discovered)DiscoveredParser.this.Parser[sbt.Discovered]">^^</span> <a href="#41008" title="sbt.Discovered">{</a>
+			<span title="sbt.DiscoveredSubclass" class="keyword">case</span> <a title="Boolean" id="41009">module</a> ~ <a title="String" id="41010">name</a> ~ <a href="#28867" title="=&gt; java.lang.String">SubSuperSeparator</a> ~ <a title="String" id="41011">superName</a> =&gt; <a href="#40480" title="(Boolean,String,String)sbt.DiscoveredSubclass">DiscoveredSubclass</a>(<a href="#41009" title="Boolean">module</a>, <a href="#41010" title="String">name</a>.<span title="()java.lang.String">trim</span>, <a href="#41011" title="String">superName</a>.<span title="()java.lang.String">trim</span>)
+			<span title="sbt.DiscoveredAnnotated" class="keyword">case</span> <a title="Boolean" id="41015">module</a> ~ <a title="String" id="41016">name</a> ~ <a href="#28869" title="=&gt; java.lang.String">AnnotationSeparator</a> ~ <a title="String" id="41017">annotation</a> =&gt; <a href="#40524" title="(Boolean,String,String)sbt.DiscoveredAnnotated">DiscoveredAnnotated</a>(<a href="#41015" title="Boolean">module</a>, <a href="#41016" title="String">name</a>.<span title="()java.lang.String">trim</span>, <a href="#41017" title="String">annotation</a>.<span title="()java.lang.String">trim</span>)
+		}
+
+	<span class="keyword">def</span> <a title="=&gt; DiscoveredParser.this.Parser[Boolean]" id="40569">isModule</a>: <span title="DiscoveredParser.this.Parser[Boolean]">Parser</span>[Boolean] = (<a href="#9537" title="implicit scala.util.parsing.combinator.RegexParsers.literal : (String)DiscoveredParser.this.Parser[String]">IsModuleLiteral</a><a title="=&gt; DiscoveredParser.this.Parser[Option[String]]" id="40742">?</a>) <span title="((Option[String]) =&gt; Boolean)DiscoveredParser.this.Parser[Boolean]">^^</span> (<a href="#41027" title="Option[String]">_</a>.<a title="=&gt; Boolean" id="19228">isDefined</a>)
+	<span class="keyword">def</span> <a title="=&gt; DiscoveredParser.this.Parser[String]" id="40570">className</a>: <span title="DiscoveredParser.this.Parser[String]">Parser</span>[String] = <a href="#28871" title="implicit scala.Predef.stringWrapper : (String)scala.runtime.RichString" id="787">ClassNameRegexString</a>.<a href="#9537" title="implicit scala.util.parsing.combinator.RegexParsers.regex : (scala.util.matching.Regex)DiscoveredParser.this.Parser[String]" id="17236">r</a>
+	
+	<span class="keyword">def</span> <a title="(String)Either[String,sbt.Discovered]" id="40571">parse</a>(<a title="String" id="41032">definitionString</a>: <span title="String">String</span>): <span title="Either[String,sbt.Discovered]">Either</span>[String, Discovered] =
+	{
+		<span class="keyword">def</span> <a title="(String)Left[java.lang.String,Nothing]" id="41033">parseError</a>(<a title="String" id="41034">msg</a>: <span title="String">String</span>) = <a title="(java.lang.String)Left[java.lang.String,Nothing]" id="1171">Left</a>(<span title="java.lang.String(&quot;Could not parse discovered definition '&quot;)" class="string">&quot;Could not parse discovered definition '&quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#41032" title="String">definitionString</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot;': &quot;)" class="string">&quot;': &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#41034" title="String">msg</a>)
+		<a href="#9537" title="(DiscoveredParser.this.Parser[sbt.Discovered],java.lang.CharSequence)DiscoveredParser.this.ParseResult[sbt.Discovered]" id="40563">parseAll</a>(<a href="#40568" title="=&gt; DiscoveredParser.this.Parser[sbt.Discovered]">definition</a>, <a href="#41032" title="String">definitionString</a>) <span title="Either[String,sbt.Discovered]" class="keyword">match</span>
+		{
+			<span title="Right[Nothing,sbt.Discovered]" class="keyword">case</span> Success(<a title="sbt.Discovered" id="41045">result</a>, <a title="DiscoveredParser.this.Input" id="41046">next</a>) =&gt; <a title="(sbt.Discovered)Right[Nothing,sbt.Discovered]" id="490">Right</a>(<a href="#41045" title="sbt.Discovered">result</a>)
+			<span title="Left[java.lang.String,Nothing]" class="keyword">case</span> <a title="DiscoveredParser.this.NoSuccess" id="41049">err</a>: <a title="DiscoveredParser.this.NoSuccess" id="40594">NoSuccess</a> =&gt; <a href="#41033" title="(String)Left[java.lang.String,Nothing]">parseError</a>(<a href="#41049" title="DiscoveredParser.this.NoSuccess">err</a>.<a title="=&gt; String" id="40619">msg</a>)
+		}
+	}
+}
+<span class="keyword">object</span> <a title="object sbt.DiscoveredParser" id="9538">DiscoveredParser</a>
+{
+	<span class="keyword">val</span> <a title="java.lang.String" id="28865">IsModuleLiteral</a> = <span title="java.lang.String(&quot;&lt;module&gt;&quot;)" class="string">&quot;&lt;module&gt;&quot;</span>
+	<span class="keyword">val</span> <a title="java.lang.String" id="28867">SubSuperSeparator</a> = <span title="java.lang.String(&quot;&lt;&lt;&quot;)" class="string">&quot;&lt;&lt;&quot;</span>
+	<span class="keyword">val</span> <a title="java.lang.String" id="28869">AnnotationSeparator</a> = <span title="java.lang.String(&quot;@&quot;)" class="string">&quot;@&quot;</span>
+	<span class="keyword">val</span> <a title="java.lang.String" id="28871">ClassNameRegexString</a> = <span title="java.lang.String(&quot;[^@&lt;]+&quot;)" class="string">&quot;&quot;&quot;[^@&lt;]+&quot;&quot;&quot;</span>
+	<span class="keyword">def</span> <a title="(String)Either[String,sbt.Discovered]" id="28873">parse</a>(<a title="String" id="41051">definitionString</a>: <span title="String">String</span>): <span title="Either[String,sbt.Discovered]">Either</span>[String, Discovered] = (<span title="sbt.DiscoveredParser" class="keyword">new</span> <a href="#9537" title="sbt.DiscoveredParser">DiscoveredParser</a>).<a href="#40571" title="(String)Either[String,sbt.Discovered]">parse</a>(<a href="#41051" title="String">definitionString</a>)
+}
+        </pre>
+    </body>
+</html>
