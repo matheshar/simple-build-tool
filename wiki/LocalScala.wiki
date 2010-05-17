@@ -25,7 +25,7 @@ Include it in `build.scala.versions`:
 {{{
 $ cat project/build.properties
 ...
-build.scala.versions=2.8.0.Beta1 2.8.0-local 2.7.7
+build.scala.versions=2.8.0.RC2 2.8.0-local 2.7.7
 ...
 }}}
 

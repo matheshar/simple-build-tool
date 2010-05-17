@@ -1,6 +1,6 @@
-=== 0.7.3 to 0.7.4 (unreleased) ===
+=== 0.7.3 to 0.7.4 ===
  * prefix continuous compilation with run number for better feedback when logging level is 'warn'
- * Added `pomRepositoryFilter(repo: MavenRepository): Boolean` that can be overridden to exclude local repositories by default
+ * Added `pomIncludeRepository(repo: MavenRepository): Boolean` that can be overridden to exclude local repositories by default
  * Added `pomPostProcess(pom: Node): Node` to make advanced manipulation of the default pom easier (`pomExtra` already covers basic cases)
  * Added `reset` command to reset !JLine terminal.  This needs to be run after suspending and then resuming sbt.
  * Installer plugin is now a proper subproject of sbt.
@@ -19,7 +19,8 @@
  * Make `scaladocTask` a `fileTask` so that it runs only when `index.html` is older than some input source.
  * Made it easier to create default `test-*` tasks with different options
  * Sort input source files for consistency, addressing scalac's issues with source file ordering. 
- * Derive Java source file from name of class file when no `SourceFile` attribute is present in the class file.  Improves tracking when `-g:none` option is used. 
+ * Derive Java source file from name of class file when no `SourceFile` attribute is present in the class file.  Improves tracking when `-g:none` option is used.
+ * Fix `FileUtilities.unzip` to be tail-recursive again.
 
 === 0.7.2 to 0.7.3 ===
  * Fixed issue with scala.library.jar not being on javac's classpath

@@ -31,17 +31,17 @@ You can run an action for multiple versions of Scala by prefixing the action wit
 {{{
 > ++2.7.7 console-quick
 [info] Building project test 1.0 against Scala 2.7.7
-[info]    using TestProject with sbt 0.7.3 and Scala 2.7.7
+[info]    using TestProject with sbt 0.7.4 and Scala 2.7.7
 ...
 Welcome to Scala version 2.7.7.final (Java HotSpot(TM) Server VM, Java 1.6.0).
 ...
 scala>
 ...
-> ++2.8.0.Beta1 console-quick
-[info] Building project test 1.0 against Scala 2.8.0.Beta1
-[info]    using TestProject with sbt 0.7.3 and Scala 2.7.7
+> ++2.8.0.RC2 console-quick
+[info] Building project test 1.0 against Scala 2.8.0.RC2
+[info]    using TestProject with sbt 0.7.4 and Scala 2.7.7
 ...
-Welcome to Scala version 2.8.0.Beta1-prerelease (Java HotSpot(TM) Server VM, Java 1.6.0).
+Welcome to Scala version 2.8.0.RC2 (Java HotSpot(TM) Server VM, Java 1.6.0).
 ...
 scala>
 }}}
@@ -55,6 +55,8 @@ scala>
   Deletes the cache of downloaded artifacts and metadata for automatically managed dependencies for this user.
  * `clean-lib`
   Deletes the managed library directory for this project (`lib_managed`).
+ * `clean-plugins`
+  Deletes retrieved plugins for this project.  It should generally be followed by `reload`.  This is useful for developing plugins.
  * `compile`
   Compiles the main sources (in the `src/main/scala` directory).
  * `console`
@@ -172,3 +174,23 @@ scala>
   Temporarily changes the version of Scala building the project and executes the provided command.  `<command>` is optional.  The specified version of Scala is used until sbt exits or `++` is run again.  `<version>` does not need to be listed in the `build.scala.versions` property, but it must be defined in `localScala` or be available in a repository.
  * `; A ; B`
   Execute A and if it succeeds, run B.  Note that the leading semicolon is required.
+ * `*`
+  Processor management commands.  See [Processors] for details.
+
+== History Commands ==
+ * `!`
+  Show history command help.
+ * `!!`
+  Execute the previous command again.
+ * `!:`
+  Show all previous commands.
+ * `!:n`
+  Show the last n commands.
+  * `!n`
+  Execute the command with index `n`, as shown by the `!:` command.
+  * `!-n`
+  Execute the nth command before this one.
+  * `!string`
+  Execute the most recent command starting with 'string'
+  * `!?string`
+  Execute the most recent command containing 'string'

@@ -54,9 +54,8 @@ A common need is to publish source and doc artifacts.  The declarations would lo
   override def packageSrcJar= defaultJarPath("-sources.jar")
 
   // define the artifacts
-  // in 0.7.4, this will be Artifact.sources(artifactID) and Artifact.javadoc(artifactID)
-  val sourceArtifact = Artifact(artifactID, "src", "jar", "sources")
-  val docsArtifact = Artifact(artifactID, "doc", "jar", "javadoc")
+  val sourceArtifact = Artifact.sources(artifactID)
+  val docsArtifact = Artifact.javadoc(artifactID)
 }}}
 See [Publishing] for the full details on publishing sources and docs.
 

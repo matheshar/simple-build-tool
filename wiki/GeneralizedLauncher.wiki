@@ -36,11 +36,12 @@ The configuration file is line-based, read as UTF-8 encoded, and defined by the 
 {{{
 configuration ::= scala app repositories boot log app-properties
   scala ::= '[' 'scala' ']' nl version nl classifiers nl
-  app ::= '[' 'app' ']' nl org nl name nl version nl components nl class nl cross-versioned nl resources nl
+  app ::= '[' 'app' ']' nl org nl name nl version nl components nl class nl cross-versioned nl resources nl classifiers nl
   repositories ::= '[' 'repositories' ']' nl (repository nl)*
   boot ::= '[' 'boot' ']' nl directory nl bootProperties nl search nl promptCreate nl promptFill nl quickOption nl
   log ::= '[' 'log' ']' nl logLevel nl
   app-properties ::= '[' 'app-properties' ']' nl property*
+  ivy ::= '[' 'ivy' ']' nl cacheDirectory
 
     directory ::= 'directory' ':' path
     bootProperties ::= 'properties' ':' path
@@ -56,6 +57,7 @@ configuration ::= scala app repositories boot log app-properties
         fixedVersion ::= text
 
     classifiers ::= 'classifiers' ':' text (',' text)*
+    cacheDirectory ::= 'cache-directory' ':' path
 
     org ::= 'org' ':' text
     name ::= 'name' ':' text
@@ -81,8 +83,8 @@ configuration ::= scala app repositories boot log app-properties
 The default configuration file for sbt looks like:
 {{{
 [scala]
-  version: read(def.scala.version)
-# classifiers: sources
+  version: 2.7.7
+# classifiers: sources, javadocs
 
 [app]
   org: org.scala-tools.sbt
@@ -91,6 +93,7 @@ The default configuration file for sbt looks like:
   class: sbt.xMain
   components: xsbti
   cross-versioned: true
+# classifiers: sources, javadocs
 
 [repositories]
   local
@@ -116,12 +119,15 @@ The default configuration file for sbt looks like:
  project.version: quick=set(1.0), new=prompt(Version)[1.0], fill=prompt(Version)[1.0]
  def.scala.version: quick=set(2.7.7), new=set(2.7.7), fill=set(2.7.7)
  build.scala.versions: quick=set(2.7.7), new=prompt(Scala version)[2.7.7], fill=prompt(Scala version)[2.7.7]
- sbt.version: quick=set(0.7.3), new=prompt(sbt version)[0.7.3], fill=prompt(sbt version)[0.7.3]
+ sbt.version: quick=set(0.7.4), new=prompt(sbt version)[0.7.4], fill=prompt(sbt version)[0.7.4]
  project.scratch: quick=set(true)
  project.initialize: quick=set(true), new=set(true)
+
+#[ivy]
+#  cache-directory: /home/user/.ivy2/cache
 }}}
 
-The `scala.version` property specifies the version of Scala used to run the application.  If specified, the `scala.classifiers`property defines classifers such as 'sources' of extra Scala artifacts to retrieve.  The `app.org`, `app.name`, and `app.version` properties specify the organization, module ID, and version of the application, respectively.  These are used to resolve and retrieve the application from the repositories listed in `[repositories]`.  If `app.cross-versioned` is true, the resolved module ID is `{app.name+'_'+scala.version}`.  The paths given in `app.resources` are added to the application's classpath.  If the path is relative, it is resolved against the application's working directory.
+The `scala.version` property specifies the version of Scala used to run the application.  If specified, the `scala.classifiers`property defines classifers, such as 'sources', of extra Scala artifacts to retrieve.  The `app.org`, `app.name`, and `app.version` properties specify the organization, module ID, and version of the application, respectively.  These are used to resolve and retrieve the application from the repositories listed in `[repositories]`.  If `app.cross-versioned` is true, the resolved module ID is `{app.name+'_'+scala.version}`.  The paths given in `app.resources` are added to the application's classpath.  If the path is relative, it is resolved against the application's working directory.  If specified, the app.classifiers`property defines classifers, like 'sources', of extra artifacts to retrieve for the application.
 
 Jars are retrieved to the directory given by `boot.directory`.  You can make this an absolute path to be shared by all sbt instances on the machine.  You might see messages like:
 {{{
@@ -132,6 +138,8 @@ if multiple versions access it simultaneously.
 The `boot.properties` property specifies the location of the properties file to use if `app.version` or `scala.version` is specified as `read`.  The `prompt-create`, `prompt-fill`, and `quick-option` properties together with the property definitions in `[app.properties]` can be used to initialize the `boot.properties` file.
 
 The app.class property specifies the name of the entry point to the application.  An application entry point must be a public class with a no-argument constructor that implements `xsbti.AppMain`.  The `AppMain` interface specifies the entry method signature 'run'.  The run method is passed an instance of AppConfiguration, which provides access to the startup environment.  `AppConfiguration` also provides an interface to retrieve other versions of Scala or other applications.  Finally, the return type of the run method is `xsbti.MainResult`, which has two subtypes: `xsbti.Reboot` and `xsbti.Exit`.  To exit with a specific code, return an instance of `xsbti.Exit` with the requested code.  To restart the application, return an instance of Reboot.  You can change some aspects of the configuration with a reboot, such as the version of Scala, the application ID, and the arguments.
+
+The `ivy.cache-directory` property provides an alternative location for the Ivy cache used by the launcher.  This does not set the Ivy cache for the application.
 
 == Execution ==
 
@@ -154,7 +162,7 @@ The main class for the application is then instantiated.  It must be a public cl
 
 This section shows how to make an application that is launched by this launcher.  First, declare a dependency on the launcher-interface.  Do not declare a dependency on the launcher itself.  The launcher interface consists strictly of Java interfaces in order to avoid binary incompatibility between the version of Scala used to compile the launcher and the version used to compile your application.  The launcher interface class will be provided by the launcher, so it is only a compile-time dependency.  If you are building with sbt, your dependency definition would be:
 {{{
-  val launchInterface = "org.scala-tools.sbt" % "launcher-interface" % "0.7.3" % "provided"
+  val launchInterface = "org.scala-tools.sbt" % "launcher-interface" % "0.7.4" % "provided"
 }}}
 Make the entry point to your class implement 'xsbti.AppMain'.  An example that uses some of the information:
 {{{
@@ -193,7 +201,7 @@ Next, define a configuration file for the launcher.  For the above class, it mig
 [app]
   org: org.scala-tools.sbt
   name: xsbt-test
-  version: 0.7.3
+  version: 0.7.4
   class: xsbt.test.Main
   cross-versioned: true
 [repositories]

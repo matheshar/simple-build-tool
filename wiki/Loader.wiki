@@ -15,7 +15,7 @@ This has changed with `sbt` 0.3.8.  The distributed jar is no longer the main `s
 When a new version of `sbt` is released, you only have to do:
 
 {{{
-> set sbt.version 0.7.4
+> set sbt.version 0.7.5
 > reload
 }}}
 
@@ -25,7 +25,7 @@ The loader enables building against multiple versions of Scala.  To use this fea
 
 {{{
 $ sbt
-> set build.scala.versions 2.7.7 2.8.0.Beta1 2.7.2
+> set build.scala.versions 2.7.7 2.8.0.RC2 2.7.2
 > reload
 > +compile
 }}}
@@ -54,7 +54,7 @@ If you use custom output directories or you redefine paths, you will want to wra
   java -Xmx512M -jar sbt-launcher.jar "$@"
 }}}
  This means Scala doesn't have to be installed already.
- # Run `sbt` in an existing project and you will be prompted for the versions of Scala and `sbt` to use.  Currently, Scala versions 2.7.2 and later and sbt 0.7.0, 0.7.1, 0.7.2, and 0.7.3 are available options.  The `sbt` launcher will download the proper version of Scala and the requested version of the `sbt` builder and put them in project/boot.
+ # Run `sbt` in an existing project and you will be prompted for the versions of Scala and `sbt` to use.  Currently, Scala versions 2.7.2 and later and sbt 0.7.0, 0.7.1, 0.7.2, 0.7.3, and 0.7.4 are available options.  The `sbt` launcher will download the proper version of Scala and the requested version of the `sbt` builder and put them in project/boot.
  # The launcher will use these downloaded jars to build your project.
  # Proceed using `sbt`.
 

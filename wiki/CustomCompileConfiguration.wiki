@@ -34,7 +34,7 @@ class SchemaCompileConfig extends BaseCompileConfig	{
 	def outputDirectory = schemaCompilePath
 	def classpath = schemaClasspath
 	def analysisPath = schemaAnalysisPath
-	def testDefinitionClassNames: Iterable[String] = List("com.example.MyMarkerClass")
+	def fingerprints = Fingerprints(List("com.example.MyMarkerClass"), List("com.example.MarkerAnnotation"))
 	def javaOptions = javaOptionsAsString(javaCompileOptions)
 }
 

@@ -60,7 +60,7 @@ Download Jetty and its dependencies and put them in a directory, say `'jetty-lib
 {{{
 class WebappBuild(info: ProjectInfo) extends DefaultWebProject(info)
 {
-  override def jettyClasspath = "jetty-libs" * "*.jar"
+  override def jettyClasspath = path("jetty-libs") * "*.jar"
 }
 }}}
 

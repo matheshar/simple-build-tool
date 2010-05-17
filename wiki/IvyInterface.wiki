@@ -1,7 +1,7 @@
 This page describes how to use sbt's Ivy interface directly.  This interface is new in 0.7.  The source code can be found in the [http://github.com/harrah/xsbt/tree/master/ivy/ Ivy project of xsbt].  The Ivy interface is published to the `databinder.net` repository (Ivy metadata only).  You can use it in an `sbt` project like:
 
 {{{
-val sbtIvy = "org.scala-tools.sbt" %% "ivy" % "0.7.3"
+val sbtIvy = "org.scala-tools.sbt" %% "ivy" % "0.7.4"
 val dbRepo = Resolver.url("technically.us", new URL("http://databinder.net/repo/"))(Resolver.ivyStylePatterns)
 }}}
 
@@ -35,12 +35,14 @@ The constructor signature for inline configuration is:
   InlineIvyConfiguration(
     paths: IvyPaths,
     resolvers: Seq[Resolver],
+    otherResolvers: Seq[Resolver],
     moduleConfigurations: Seq[ModuleConfiguration],
+    localOnly: Boolean,
     lock: Option[xsbti.GlobalLock],
     log: IvyLogger )
 }}}
 
-Resolvers are described on the [Resolvers] page.  [ModuleConfiguration]s are not currently documented, but are used to configure resolvers on a per-module basis.  `Nil` is an acceptable argument for this parameter.  `lock` and `log` are as described at the beginning of the section.
+Resolvers are described on the [Resolvers] page.  `otherResolvers` are resolvers that don't go in the default resolver chain.  [ModuleConfiguration]s are not currently documented, but are used to configure resolvers on a per-module basis.  `Nil` is an acceptable argument for this parameter.  `localOnly` should be true to achieve an offline mode.  It won't check for newer versions of dynamic revisions.  `lock` and `log` are as described at the beginning of the section.
 
 An instance of `IvyPaths` configures two common, important paths for Ivy: the base directory and the cache directory.  The base directory is the directory against which all relative paths are resolved.  The cache directory is where all cached information, such as downloaded module descriptors and artifacts for dependencies, is placed.
 
@@ -77,7 +79,7 @@ A very basic inline configuration that reuses information from the project:
    // use the repositories defined in the project
   val resolvers = repositories
 
-  val inline = new InlineIvyConfiguration(paths, resolvers, Nil, Some(info.launcher.globalLock), log)
+  val inline = new InlineIvyConfiguration(paths, resolvers, Nil, Nil, false, Some(info.launcher.globalLock), log)
 }}}
 
 A more advanced inline configuration:
@@ -88,7 +90,7 @@ A more advanced inline configuration:
   // define a repository and use the usual repositories (the local Ivy, central Maven, and Scala Tools repositories)
   val resolvers = Resolver.withDefaultResolvers( Seq("technically.us" at "http://technically.us/repo/") )
 
-  val inline = new InlineIvyConfiguration(paths, resolvers, Nil, log)
+  val inline = new InlineIvyConfiguration(paths, resolvers, Nil, Nil, None, log)
 }}}
 
 An external configuration:

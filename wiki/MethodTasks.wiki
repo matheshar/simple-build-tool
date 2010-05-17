@@ -49,3 +49,5 @@ You can provide strings for basic tab completion for method tasks using the `com
 
 
 The argument to `completeWith` is call-by-name and is re-evaluated after a command is run.
+
+In a multi-project setting, method tasks can only be run from the project they are defined on.

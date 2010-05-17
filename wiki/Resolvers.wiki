@@ -82,12 +82,12 @@ To use password authentication:
 {{{
   val sshRepo = Resolver.ssh("my-ssh-repo", "example.org") as("user", "password")
 }}}
-or to be prompted for the password (will be in 0.7.4):
+or to be prompted for the password:
 {{{
   val sshRepo = Resolver.ssh("my-ssh-repo", "example.org") as("user")
 }}}
 
-To use key authentication (will be in 0.7.4):
+To use key authentication:
 {{{
   val keyFile: File = ...
   val sshRepo = Resolver.ssh("my-ssh-repo", "example.org") as("user", keyFile, "keyFilePassword")

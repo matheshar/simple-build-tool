@@ -65,14 +65,14 @@ Method `compileOptions` specifies additional options for task `compile` to pass 
   * `DisableWarnings`
   * `target(t: Target.Value)`   (accepts values of the `Target` enumeration: `Java1_5`, `Java1_4`, `Msil`)
   * `MaxCompileErrors(max: Int)`   Specifies the maximum number of compiler errors to show.  The default value is 100.
-  * `CompileOption(option: String)`   (for arbitrary options).  Example:
+  * `compileOptions(options: String*)`   (for arbitrary options).  Example:
 {{{
   override def compileOptions = super.compileOptions ++
-     Seq("-encoding", "utf8").map(x => CompileOption(x))
+     compileOptions("-encoding", "utf8")
 }}}
 
 Method `javaCompileOptions` specifies the options passed to the Java compiler by the `compile` task.  There is a similar method `testJavaCompileOptions` for `test-compile`.  Currently, all options are specified by:
-  * `JavaCompileOption(option: String)`
+  * `javaCompileOptions(option: String*)`
 
 == Run Options ==
 
@@ -160,7 +160,7 @@ by specifying the following in your project definition:
   override def testResourcesPath = "test-resources"
 }}}
 
-The paths directly used by the default actions are listed below.  Other paths are only used to build up these paths.  If redefined, care should be taken to keep these paths distinct.
+The paths directly used by the default actions are listed below.  Other paths are only used to build up these paths.  If redefined, care should be taken to keep these paths distinct from each other.
  * `dependencyPath`- This is the location of manually managed jars.
  * `managedDependencyPath` - This is the location that automatic dependency management puts downloaded artifacts.  When executed, the `clean-lib` action removes this directory.
  * `mainScalaSourcePath` - The path to Scala sources comprising the project.

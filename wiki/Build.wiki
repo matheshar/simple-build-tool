@@ -8,7 +8,7 @@ Test support was separated out to work across a [http://github.com/harrah/test-i
 
 == Instructions ==
 
-The latest `sbt` release (0.7.3) is used to build.  From scratch, building `sbt` locally looks like:
+The latest `sbt` release (0.7.4) is used to build.  From scratch, building `sbt` locally looks like:
 {{{
 $ git clone git://github.com/harrah/xsbt.git
 $ cd xsbt
@@ -18,4 +18,4 @@ The launcher jar created by the `proguard` action is located at `xsbt/target/sbt
 
 == Usage ==
 
-Set the `sbt.version` in the project you want to use this in to be `0.7.4-SNAPSHOT`.  If you rebuild sbt, you'll need to remove `project/boot` for that project because `sbt` does not recheck a version once it is retrieved to a project.
+Set the `sbt.version` in the project you want to use this in to be `0.7.5-SNAPSHOT`.  If you rebuild sbt, you'll need to remove `project/boot` for that project because `sbt` does not recheck a version once it is retrieved to a project.
