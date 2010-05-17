@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+			<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" ></meta>
+        <title>sbt/LineReader.scala</title>
+        <script type="text/javascript" src="../jquery-all.js"></script>
+        <script type="text/javascript" src="../linked.js"></script>
+        <link rel="stylesheet" type="text/css" href="../style.css" title="Style"></link>
+    </head>
+    <body>
+        <pre>
+<span class="comment">/* sbt -- Simple Build Tool
+ * Copyright 2008, 2009  Mark Harrah
+ */</span>
+<span class="keyword">package</span> sbt
+
+<span class="keyword">trait</span> <a title="trait LineReader extends java.lang.Object with NotNull" id="8427">LineReader</a> <span class="keyword">extends</span> <span title="NotNull">NotNull</span>
+{
+	<span class="keyword">def</span> <a title="(String)Option[String]" id="43842">readLine</a>(<a title="String" id="43852">prompt</a>: <span title="String">String</span>): <span title="Option[String]">Option</span>[String]
+}
+<span class="keyword">class</span> <a title="class Completors extends java.lang.Object with NotNull with ScalaObject" id="9057">Completors</a>(<span class="keyword">val</span> <a title="String" id="84192">projectAction</a>: <span title="String">String</span>, <a title="=&gt; Iterable[String]" id="84193">projectNames0</a>: =&gt; Iterable[String],
+	<span class="keyword">val</span> <a title="Iterable[String]" id="84194">generalCommands</a>: <span title="Iterable[String]">Iterable</span>[String], <span class="keyword">val</span> <a title="Iterable[String]" id="84195">propertyActions</a>: <span title="Iterable[String]">Iterable</span>[String],
+	<span class="keyword">val</span> <a title="String" id="84196">specificPrefix</a>: <span title="String">String</span>, <a title="=&gt; Iterable[String]" id="84197">scalaVersions0</a>: =&gt; Iterable[String],
+	<span class="keyword">val</span> <a title="Iterable[String]" id="84198">prefixes</a>: <span title="Iterable[String]">Iterable</span>[String], <span class="keyword">val</span> <a title="Iterable[String]" id="84199">taskNames</a>: <span title="Iterable[String]">Iterable</span>[String],
+	<a title="=&gt; Iterable[String]" id="84200">propertyNames0</a>: =&gt; Iterable[String], <span class="keyword">val</span> <a title="sbt.ExtraCompletions" id="84201">extra</a>: <a href="#10287" title="sbt.ExtraCompletions">ExtraCompletions</a>) <span class="keyword">extends</span> <span title="NotNull">NotNull</span>
+{
+	<span class="keyword">lazy</span> <span class="keyword">val</span> <a title="Iterable[String]" id="84187">scalaVersions</a> = <a href="#84197" title="=&gt; Iterable[String]">scalaVersions0</a>
+	<span class="keyword">lazy</span> <span class="keyword">val</span> <a title="Iterable[String]" id="84189">propertyNames</a> = <a href="#84200" title="=&gt; Iterable[String]">propertyNames0</a>
+	<span class="keyword">lazy</span> <span class="keyword">val</span> <a title="Iterable[String]" id="84191">projectNames</a> = <a href="#84193" title="=&gt; Iterable[String]">projectNames0</a>
+}
+
+<span class="keyword">trait</span> <a title="trait ExtraCompletions extends java.lang.Object with NotNull" id="10287">ExtraCompletions</a> <span class="keyword">extends</span> <span title="NotNull">NotNull</span>
+{
+	<span class="keyword">def</span> <a title="=&gt; Iterable[String]" id="84135">names</a>: <span title="Iterable[String]">Iterable</span>[String]
+	<span class="keyword">def</span> <a title="(String)Iterable[String]" id="84136">completions</a>(<a title="String" id="84147">name</a>: <span title="String">String</span>): <span title="Iterable[String]">Iterable</span>[String]
+}
+
+
+<span class="keyword">import</span> jline.{Completor, ConsoleReader}
+<span class="keyword">abstract</span> <span class="keyword">class</span> <a title="class JLine extends java.lang.Object with sbt.LineReader with ScalaObject" id="6876">JLine</a> <span class="keyword">extends</span> <a href="#8427" title="sbt.LineReader">LineReader</a>
+{
+	<span class="keyword">protected</span>[<span class="keyword">this</span>] <span class="keyword">val</span> <a title="=&gt; jline.ConsoleReader" id="43844">reader</a>: <span title="jline.ConsoleReader">ConsoleReader</span>
+	<span class="keyword">def</span> <a title="(String)Option[java.lang.String]" id="43845">readLine</a>(<a title="String" id="43850">prompt</a>: <span title="String">String</span>) = <a href="#6877" title="object sbt.JLine">JLine</a>.<a href="#43965" title="(=&gt; Option[java.lang.String])Option[java.lang.String]">withJLine</a> { <a href="#43846" title="(String)Option[java.lang.String]">unsynchronizedReadLine</a>(<a href="#43850" title="String">prompt</a>) }
+	<span class="keyword">private</span>[<span class="keyword">this</span>] <span class="keyword">def</span> <a title="(String)Option[java.lang.String]" id="43846">unsynchronizedReadLine</a>(<a title="String" id="43974">prompt</a>: <span title="String">String</span>) =
+		<a href="#43844" title="=&gt; jline.ConsoleReader">reader</a>.<a title="(java.lang.String)java.lang.String" id="44840">readLine</a>(<a href="#43974" title="String">prompt</a>) <span title="Option[java.lang.String]" class="keyword">match</span>
+		{
+			<span title="None.type" class="keyword">case</span> <span title="Null(null)" class="keyword">null</span> =&gt; <a title="object None" id="505">None</a>
+			<span title="Some[java.lang.String]" class="keyword">case</span> <a title="java.lang.String" id="44951">x</a> =&gt; <a title="(java.lang.String)Some[java.lang.String]" id="286">Some</a>(<a href="#44951" title="java.lang.String">x</a>.<span title="()java.lang.String">trim</span>)
+		}
+}
+<span class="keyword">private</span> <span class="keyword">object</span> <a title="object sbt.JLine" id="6877">JLine</a>
+{
+	<span class="keyword">def</span> <a title="=&gt; jline.Terminal" id="43959">terminal</a> = jline.<span title="object jline.Terminal">Terminal</span>.<a title="()jline.Terminal" id="69450">getTerminal</a>
+	<span class="keyword">def</span> <a title="()Unit" id="43960">resetTerminal</a>() = <a href="#43961" title="((jline.Terminal) =&gt; Unit)Unit">withTerminal</a> { <a title="jline.Terminal" id="83749">_</a> =&gt; jline.<span title="object jline.Terminal">Terminal</span>.<a title="()Unit" id="69451">resetTerminal</a> }
+	<span class="keyword">private</span> <span class="keyword">def</span> <a title="[T]((jline.Terminal) =&gt; T)T" id="43961">withTerminal</a>[<a title="&gt;: Nothing &lt;: Any" id="43963">T</a>](<a title="(jline.Terminal) =&gt; T" id="83746">f</a>: jline.Terminal =&gt; T): <a href="#43963" title="T">T</a> =
+		<span title="(T)T">synchronized</span>
+		{
+			<span class="keyword">val</span> <a title="jline.Terminal" id="85458">t</a> = <a href="#43959" title="=&gt; jline.Terminal">terminal</a>
+			<a href="#85458" title="jline.Terminal">t</a>.<span title="(T)T">synchronized</span> { <a href="#83746" title="(jline.Terminal)T" id="16544">f</a>(<a href="#85458" title="jline.Terminal">t</a>) }
+		}
+	<span class="keyword">def</span> <a title="()jline.ConsoleReader" id="43964">createReader</a>() =
+		<a href="#43961" title="((jline.Terminal) =&gt; jline.ConsoleReader)jline.ConsoleReader">withTerminal</a> { <a title="jline.Terminal" id="85463">t</a> =&gt;
+			<span class="keyword">val</span> <a title="jline.ConsoleReader" id="85464">cr</a> = <span title="jline.ConsoleReader" class="keyword">new</span> <span title="jline.ConsoleReader">ConsoleReader</span>
+			<a href="#85463" title="jline.Terminal">t</a>.<span title="()Unit">enableEcho</span>()
+			<a href="#85464" title="jline.ConsoleReader">cr</a>.<span title="(Boolean)Unit">setBellEnabled</span>(<span title="Boolean(false)" class="keyword">false</span>)
+			<a href="#85464" title="jline.ConsoleReader">cr</a>
+		}
+	<span class="keyword">def</span> <a title="[T](=&gt; T)T" id="43965">withJLine</a>[<a title="&gt;: Nothing &lt;: Any" id="43967">T</a>](<a title="=&gt; T" id="43972">action</a>: =&gt; T): <a href="#43967" title="T">T</a> =
+		<a href="#43961" title="((jline.Terminal) =&gt; T)T">withTerminal</a> { <a title="jline.Terminal" id="85468">t</a> =&gt;
+			<a href="#85468" title="jline.Terminal">t</a>.<a title="()Unit" id="69465">disableEcho</a>()
+			<span class="keyword">try</span> { <a href="#43972" title="=&gt; T">action</a> }
+			<span class="keyword">finally</span> { <a href="#85468" title="jline.Terminal">t</a>.<span title="()Unit">enableEcho</span>() }
+		}
+	<span class="keyword">private</span>[sbt] <span class="keyword">def</span> <a title="(jline.ConsoleReader,Option[sbt.Path],sbt.Logger)Unit" id="43968">initializeHistory</a>(<a title="jline.ConsoleReader" id="85469">cr</a>: <span title="jline.ConsoleReader">ConsoleReader</span>, <a title="Option[sbt.Path]" id="85470">historyPath</a>: <span title="Option[sbt.Path]">Option</span>[Path], <a title="sbt.Logger" id="85471">log</a>: <a href="Logger.scala.html#11865" title="sbt.Logger">Logger</a>): <a title="Unit" id="2114">Unit</a> =
+		<span class="keyword">for</span>(<a title="((sbt.Path) =&gt; Unit)Unit" id="85473">historyLocation</a> &lt;- <a href="#85470" title="Option[sbt.Path]">historyPath</a>)
+		{
+			<span class="keyword">val</span> <a title="java.io.File" id="85474">historyFile</a> = <a href="#85473" title="sbt.Path">historyLocation</a>.<a href="Path.scala.html#18076" title="=&gt; java.io.File">asFile</a>
+			<a href="Control.scala.html#11878" title="object sbt.Control">Control</a>.<a href="Control.scala.html#25769" title="(sbt.Logger)(=&gt; Unit)Unit">trapAndLog</a>(<a href="#85471" title="sbt.Logger">log</a>)
+			{
+				<a href="#85474" title="java.io.File">historyFile</a>.<a title="()java.io.File" id="16221">getParentFile</a>.<a title="()Boolean" id="16247">mkdirs</a>()
+				<span class="keyword">val</span> <a title="jline.History" id="85475">history</a> = <a href="#85469" title="jline.ConsoleReader">cr</a>.<a title="()jline.History" id="44872">getHistory</a>
+				<a href="#85475" title="jline.History">history</a>.<a title="(Int)Unit" id="85487">setMaxSize</a>(<a href="#43970" title="=&gt; Int">MaxHistorySize</a>)
+				<a href="#85475" title="jline.History">history</a>.<a title="(java.io.File)Unit" id="85478">setHistoryFile</a>(<a href="#85474" title="java.io.File">historyFile</a>)
+			}
+		}
+	<span class="keyword">def</span> <a title="(Option[sbt.Path],sbt.Logger)sbt.SimpleReader" id="43969">simple</a>(<a title="Option[sbt.Path]" id="85499">historyPath</a>: <span title="Option[sbt.Path]">Option</span>[Path], <a title="sbt.Logger" id="85500">log</a>: <a href="Logger.scala.html#11865" title="sbt.Logger">Logger</a>): <a href="#7974" title="sbt.SimpleReader">SimpleReader</a> = <span title="sbt.SimpleReader" class="keyword">new</span> <a href="#7974" title="sbt.SimpleReader">SimpleReader</a>(<a href="#85499" title="Option[sbt.Path]">historyPath</a>, <a href="#85500" title="sbt.Logger">log</a>)
+	<span class="keyword">val</span> <a title="Int" id="43970">MaxHistorySize</a> = <span title="Int(500)" class="int">500</span>
+}
+<span class="keyword">class</span> <a title="class SimpleReader extends sbt.JLine with ScalaObject" id="7974">SimpleReader</a> <span class="keyword">private</span>[sbt] (<a title="Option[sbt.Path]" id="85508">historyPath</a>: <span title="Option[sbt.Path]">Option</span>[Path], <a title="sbt.Logger" id="85509">log</a>: <a href="Logger.scala.html#11865" title="sbt.Logger">Logger</a>) <span class="keyword">extends</span> <a href="#6876" title="sbt.JLine">JLine</a>
+{
+	<span class="keyword">protected</span>[<span class="keyword">this</span>] <span class="keyword">val</span> <a title="jline.ConsoleReader" id="85506">reader</a> = <a href="#6877" title="object sbt.JLine">JLine</a>.<a href="#43964" title="()jline.ConsoleReader">createReader</a>()
+	<a href="#6877" title="object sbt.JLine">JLine</a>.<a href="#43968" title="(jline.ConsoleReader,Option[sbt.Path],sbt.Logger)Unit">initializeHistory</a>(<a href="#85506" title="=&gt; jline.ConsoleReader">reader</a>, <a href="#85508" title="Option[sbt.Path]">historyPath</a>, <a href="#85509" title="sbt.Logger">log</a>)
+}
+<span class="keyword">object</span> <a title="object sbt.SimpleReader" id="7975">SimpleReader</a> <span class="keyword">extends</span> <a href="#6876" title="sbt.JLine">JLine</a>
+{
+	<span class="keyword">protected</span>[<span class="keyword">this</span>] <span class="keyword">val</span> <a title="jline.ConsoleReader" id="43848">reader</a> = <a href="#6877" title="object sbt.JLine">JLine</a>.<a href="#43964" title="()jline.ConsoleReader">createReader</a>()
+}
+<span class="keyword">private</span>[sbt] <span class="keyword">final</span> <span class="keyword">class</span> <a title="class LazyJLineReader extends sbt.JLine with ScalaObject" id="6705">LazyJLineReader</a>(<a title="Option[sbt.Path]" id="84213">historyPath</a>: <span title="Option[sbt.Path]">Option</span>[Path], <a title="=&gt; jline.Completor" id="84214">completor</a>: =&gt; Completor, <a title="sbt.Logger" id="84215">log</a>: <a href="Logger.scala.html#11865" title="sbt.Logger">Logger</a>) <span class="keyword">extends</span> <a href="#6876" title="sbt.JLine">JLine</a>
+{
+	<span class="keyword">protected</span>[<span class="keyword">this</span>] <span class="keyword">val</span> <a title="jline.ConsoleReader" id="84211">reader</a> =
+	{
+		<span class="keyword">val</span> <a title="jline.ConsoleReader" id="85518">cr</a> = <span title="jline.ConsoleReader" class="keyword">new</span> <span title="jline.ConsoleReader">ConsoleReader</span>
+		<a href="#85518" title="jline.ConsoleReader">cr</a>.<span title="(Boolean)Unit">setBellEnabled</span>(<span title="Boolean(false)" class="keyword">false</span>)
+		<a href="#6877" title="object sbt.JLine">JLine</a>.<a href="#43968" title="(jline.ConsoleReader,Option[sbt.Path],sbt.Logger)Unit">initializeHistory</a>(<a href="#85518" title="jline.ConsoleReader">cr</a>, <a href="#84213" title="Option[sbt.Path]">historyPath</a>, <a href="#84215" title="sbt.Logger">log</a>)
+		<a href="#85518" title="jline.ConsoleReader">cr</a>.<a title="(jline.Completor)Boolean" id="44850">addCompletor</a>(<span title="sbt.LazyCompletor" class="keyword">new</span> <a href="#11823" title="sbt.LazyCompletor">LazyCompletor</a>(<a href="#84214" title="=&gt; jline.Completor">completor</a>))
+		<a href="#85518" title="jline.ConsoleReader">cr</a>
+	}
+}
+<span class="keyword">object</span> <a title="object sbt.MainCompletor" id="7396">MainCompletor</a>
+{
+		<span class="keyword">import</span> jline.{ArgumentCompletor, MultiCompletor, NullCompletor, SimpleCompletor}
+
+	<span class="keyword">def</span> <a title="(sbt.Completors)jline.Completor" id="84220">apply</a>(<a title="sbt.Completors" id="84230">completors</a>: <a href="#9057" title="sbt.Completors">Completors</a>): <span title="jline.Completor">Completor</span> =
+	{
+			<span class="keyword">import</span> completors._
+			<span class="keyword">import</span> scala.collection.immutable.TreeSet
+
+		<span class="keyword">val</span> <a title="jline.SimpleCompletor" id="85530">generalCompletor</a> = <a href="#84224" title="(Iterable[String])jline.SimpleCompletor">simpleCompletor</a>(<a href="#84194" title="=&gt; Iterable[String]">generalCommands</a>)
+		<span class="keyword">val</span> <a title="jline.ArgumentCompletor" id="85531">projectCompletor</a> = <a href="#84225" title="(Iterable[String],=&gt; Iterable[String])jline.ArgumentCompletor">simpleArgumentCompletor</a>(<a href="#84192" title="=&gt; String">projectAction</a> <a href="#85657" title="(String)List[String]">::</a> <span title="object Nil">Nil</span>, <a href="#84190" title="=&gt; Iterable[String]">projectNames</a>)
+
+		<span class="keyword">def</span> <a title="(Iterable[String])jline.ArgumentCompletor" id="85532">propertyCompletor</a>(<a title="Iterable[String]" id="85660">propertyNames</a>: <span title="Iterable[String]">Iterable</span>[String]) =
+			<a href="#84225" title="(Iterable[String],=&gt; Iterable[String])jline.ArgumentCompletor">simpleArgumentCompletor</a>(<a href="#84195" title="=&gt; Iterable[String]">propertyActions</a>, <a href="#85660" title="Iterable[String]">propertyNames</a>)
+		<span class="keyword">def</span> <a title="(jline.Completor)jline.ArgumentCompletor" id="85533">prefixedCompletor</a>(<a title="jline.Completor" id="85661">baseCompletor</a>: <span title="jline.Completor">Completor</span>) =
+			<a href="#84226" title="(jline.Completor,jline.Completor)jline.ArgumentCompletor">singleArgumentCompletor</a>(<a href="#84224" title="(Iterable[String])jline.SimpleCompletor">simpleCompletor</a>(<a href="#84198" title="=&gt; Iterable[String]">prefixes</a>), <a href="#85661" title="jline.Completor">baseCompletor</a>)
+		<span class="keyword">def</span> <a title="(jline.Completor)jline.ArgumentCompletor" id="85534">specificCompletor</a>(<a title="jline.Completor" id="85662">baseCompletor</a>: <span title="jline.Completor">Completor</span>) =
+		{
+			<span class="keyword">val</span> <a title="jline.SimpleCompletor" id="85663">specific</a> = <a href="#84224" title="(Iterable[String])jline.SimpleCompletor">simpleCompletor</a>(<a href="#84196" title="=&gt; String">specificPrefix</a> <a href="#85664" title="(String)List[String]">::</a> <span title="object Nil">Nil</span>) <span class="comment">// TODO</span>
+			<a href="#84228" title="(Array[jline.Completor])jline.ArgumentCompletor">argumentCompletor</a>( <span title="(jline.Completor*)Array[jline.Completor]">Array</span>( <a href="#85663" title="jline.SimpleCompletor">specific</a>, <a href="#84223" title="(=&gt; Iterable[String])sbt.LazyCompletor">lazySimpleCompletor</a>(<a href="#84186" title="=&gt; Iterable[String]">scalaVersions</a>), <a href="#85662" title="jline.Completor">baseCompletor</a> ) )
+		}
+		<span class="keyword">def</span> <a title="(String)jline.ArgumentCompletor" id="85535">extraCompletor</a>(<a title="String" id="85838">name</a>: <span title="String">String</span>) =
+			<a href="#84227" title="(jline.Completor,jline.Completor)jline.ArgumentCompletor">repeatedArgumentCompletor</a>(<a href="#84224" title="(Iterable[String])jline.SimpleCompletor">simpleCompletor</a>(<a href="#85838" title="String">name</a> <a href="#86008" title="(String)List[String]">::</a> <span title="object Nil">Nil</span>), <a href="#84223" title="(=&gt; Iterable[String])sbt.LazyCompletor">lazySimpleCompletor</a>(<a href="#84201" title="=&gt; sbt.ExtraCompletions">extra</a>.<a href="#84136" title="(String)Iterable[String]">completions</a>(<a href="#85838" title="String">name</a>)))
+		<span class="keyword">val</span> <a title="jline.SimpleCompletor" id="85536">taskCompletor</a> = <a href="#84224" title="(Iterable[String])jline.SimpleCompletor">simpleCompletor</a>(<a href="#86018" title="(String*)(implicit (String) =&gt; Ordered[String])scala.collection.immutable.SortedSet[String]" id="787">TreeSet</a>(<a href="#84199" title="=&gt; Iterable[String]">taskNames</a>.<a title="=&gt; Seq[String]" id="16305">toSeq</a> : _*))
+		<span class="keyword">val</span> <a title="Iterable[jline.ArgumentCompletor]" id="85537">extraCompletors</a> = <a href="#84201" title="=&gt; sbt.ExtraCompletions">extra</a>.<a href="#84135" title="=&gt; Iterable[String]">names</a>.<a title="((String) =&gt; jline.ArgumentCompletor)Iterable[jline.ArgumentCompletor]" id="16271">map</a>(<a href="#85535" title="(String)jline.ArgumentCompletor">extraCompletor</a>)
+		<span class="keyword">val</span> <a title="List[jline.Completor]" id="85538">baseCompletors</a> = <a href="#85530" title="jline.SimpleCompletor">generalCompletor</a> <a href="#86022" title="(jline.Completor)List[jline.Completor]">::</a> <a href="#85531" title="jline.ArgumentCompletor">projectCompletor</a> <a href="#86023" title="(jline.Completor)List[jline.Completor]">::</a> <a href="#85536" title="jline.SimpleCompletor">taskCompletor</a> <a href="#86024" title="(jline.Completor)List[jline.Completor]">::</a> <a href="#85532" title="(Iterable[String])jline.ArgumentCompletor">propertyCompletor</a>(<a href="#84188" title="=&gt; Iterable[String]">propertyNames</a>) <a href="#86025" title="(jline.ArgumentCompletor)List[jline.ArgumentCompletor]">::</a> <a href="#85537" title="Iterable[jline.ArgumentCompletor]">extraCompletors</a>.<span title="=&gt; List[jline.ArgumentCompletor]">toList</span>
+		<span class="keyword">val</span> <a title="jline.MultiCompletor" id="85539">baseCompletor</a> = <a title="(Array[jline.Completor])jline.MultiCompletor" id="86050" class="keyword">new</a> <span title="jline.MultiCompletor">MultiCompletor</span>(<a href="#85538" title="List[jline.Completor]">baseCompletors</a>.<span title="Array[jline.Completor]">toArray</span>)
+
+		<span class="keyword">val</span> <a title="jline.MultiCompletor" id="85540">completor</a> = <span title="jline.MultiCompletor" class="keyword">new</span> <span title="jline.MultiCompletor">MultiCompletor</span>()
+		<span class="comment">//TODO: baseCompletor for prefixedCompletor should only be taskCompletor ++ extraCompletors</span>
+		<a href="#85540" title="jline.MultiCompletor">completor</a>.<a title="(Array[jline.Completor])Unit" id="86053">setCompletors</a>( <span title="(jline.Completor*)Array[jline.Completor]">Array</span>(<a href="#85539" title="jline.MultiCompletor">baseCompletor</a>, <a href="#85533" title="(jline.Completor)jline.ArgumentCompletor">prefixedCompletor</a>(<a href="#85539" title="jline.MultiCompletor">baseCompletor</a>), <a href="#85534" title="(jline.Completor)jline.ArgumentCompletor">specificCompletor</a>(<a href="#85539" title="jline.MultiCompletor">baseCompletor</a>)) )
+		<a href="#85540" title="jline.MultiCompletor">completor</a>
+	}
+	<span class="comment">/** Used for a single argument so that the argument can have spaces in it.*/</span>
+	<span class="keyword">object</span> <a title="object sbt.MainCompletor.SingleArgumentDelimiter" id="84221">SingleArgumentDelimiter</a> <span class="keyword">extends</span> <a title="object jline.ArgumentCompletor" id="43947">ArgumentCompletor</a>.<a title="jline.ArgumentCompletor.AbstractArgumentDelimiter" id="85593">AbstractArgumentDelimiter</a>
+	{
+		<span class="keyword">def</span> <a title="(String,Int)Boolean" id="85654">isDelimiterChar</a>(<a title="String" id="86237">buffer</a>: <span title="String">String</span>, <a title="Int" id="86238">pos</a>: <span title="Int">Int</span>) =
+			(<a href="#86237" title="String">buffer</a>.<a title="(Int)Char" id="5767">charAt</a>(<a href="#86238" title="Int">pos</a>) <a title="(Char)Boolean" id="2966">==</a> <span title="Char(' ')" class="char">' '</span>) <a title="(Boolean)Boolean" id="2699">&amp;&amp;</a> <a href="#86237" title="String">buffer</a>.<a title="(Int,Int)java.lang.String" id="5800">substring</a>(<span title="Int(0)" class="int">0</span>, <a href="#86238" title="Int">pos</a>).<span title="()java.lang.String">trim</span>.<a title="(Int)Int" id="5789">indexOf</a>(<span title="Int(32)" class="char">' '</span>) <a title="(Int)Boolean" id="3089">==</a> -<span title="Int(-1)" class="int">1</span>
+	}
+
+	<span class="keyword">private</span> <span class="keyword">def</span> <a title="(=&gt; Iterable[String])sbt.LazyCompletor" id="84223">lazySimpleCompletor</a>(<a title="=&gt; Iterable[String]" id="85655">completions</a>: =&gt; Iterable[String]) = <span title="sbt.LazyCompletor" class="keyword">new</span> <a href="#11823" title="sbt.LazyCompletor">LazyCompletor</a>(<a href="#84224" title="(Iterable[String])jline.SimpleCompletor">simpleCompletor</a>(<a href="#85655" title="=&gt; Iterable[String]">completions</a>))
+	<span class="keyword">private</span> <span class="keyword">def</span> <a title="(Iterable[String])jline.SimpleCompletor" id="84224">simpleCompletor</a>(<a title="Iterable[String]" id="85541">completions</a>: <span title="Iterable[String]">Iterable</span>[String]) = <a title="(Array[java.lang.String])jline.SimpleCompletor" id="85553" class="keyword">new</a> <a title="jline.SimpleCompletor" id="43901">SimpleCompletor</a>(<a href="#85541" title="Iterable[String]">completions</a>.<span title="=&gt; List[String]">toList</span>.<span title="Array[String]">toArray</span>)
+	<span class="keyword">private</span> <span class="keyword">def</span> <a title="(Iterable[String],=&gt; Iterable[String])jline.ArgumentCompletor" id="84225">simpleArgumentCompletor</a>(<a title="Iterable[String]" id="85574">first</a>: <span title="Iterable[String]">Iterable</span>[String], <a title="=&gt; Iterable[String]" id="85575">second</a>: =&gt; Iterable[String]) =
+		<a href="#84226" title="(jline.Completor,jline.Completor)jline.ArgumentCompletor">singleArgumentCompletor</a>(<a href="#84224" title="(Iterable[String])jline.SimpleCompletor">simpleCompletor</a>(<a href="#85574" title="Iterable[String]">first</a>), <a href="#84223" title="(=&gt; Iterable[String])sbt.LazyCompletor">lazySimpleCompletor</a>(<a href="#85575" title="=&gt; Iterable[String]">second</a>))
+	<span class="keyword">private</span> <span class="keyword">def</span> <a title="(jline.Completor,jline.Completor)jline.ArgumentCompletor" id="84226">singleArgumentCompletor</a>(<a title="jline.Completor" id="85577">first</a>: <span title="jline.Completor">Completor</span>, <a title="jline.Completor" id="85578">second</a>: <span title="jline.Completor">Completor</span>) =
+	{
+		<span class="keyword">val</span> <a title="Array[jline.Completor]" id="85580">completors</a> = <span title="(jline.Completor*)Array[jline.Completor]">Array</span>(<a href="#85577" title="jline.Completor">first</a>, <a href="#85578" title="jline.Completor">second</a>, <span title="jline.NullCompletor" class="keyword">new</span> <a title="jline.NullCompletor" id="43859">NullCompletor</a>)
+		<a href="#84229" title="(jline.ArgumentCompletor)jline.ArgumentCompletor">strict</a>(  <a title="(Array[jline.Completor],jline.ArgumentCompletor.ArgumentDelimiter)jline.ArgumentCompletor" id="85613" class="keyword">new</a> <span title="jline.ArgumentCompletor">ArgumentCompletor</span>(<a href="#85580" title="Array[jline.Completor]">completors</a>, <a href="#84221" title="object sbt.MainCompletor.SingleArgumentDelimiter">SingleArgumentDelimiter</a>) )
+	}
+	<span class="keyword">private</span> <span class="keyword">def</span> <a title="(jline.Completor,jline.Completor)jline.ArgumentCompletor" id="84227">repeatedArgumentCompletor</a>(<a title="jline.Completor" id="85839">first</a>: <span title="jline.Completor">Completor</span>, <a title="jline.Completor" id="85840">repeat</a>: <span title="jline.Completor">Completor</span>) = <a href="#84228" title="(Array[jline.Completor])jline.ArgumentCompletor">argumentCompletor</a>(<span title="(jline.Completor*)Array[jline.Completor]">Array</span>(<a href="#85839" title="jline.Completor">first</a>, <a href="#85840" title="jline.Completor">repeat</a>))
+	<span class="keyword">private</span> <span class="keyword">def</span> <a title="(Array[jline.Completor])jline.ArgumentCompletor" id="84228">argumentCompletor</a>(<a title="Array[jline.Completor]" id="85667">args</a>: <a title="Array[jline.Completor]" id="1032">Array</a>[Completor]) = <a href="#84229" title="(jline.ArgumentCompletor)jline.ArgumentCompletor">strict</a>(<a title="(Array[jline.Completor])jline.ArgumentCompletor" id="85611" class="keyword">new</a> <span title="jline.ArgumentCompletor">ArgumentCompletor</span>(<a href="#85667" title="Array[jline.Completor]">args</a>))
+		
+	<span class="keyword">private</span> <span class="keyword">def</span> <a title="(jline.ArgumentCompletor)jline.ArgumentCompletor" id="84229">strict</a>(<a title="jline.ArgumentCompletor" id="85591">c</a>: <span title="jline.ArgumentCompletor">ArgumentCompletor</span>) = { <a href="#85591" title="jline.ArgumentCompletor">c</a>.<a title="(Boolean)Unit" id="85614">setStrict</a>(<span title="Boolean(true)" class="keyword">true</span>); <a href="#85591" title="jline.ArgumentCompletor">c</a> }
+}
+<span class="keyword">private</span> <span class="keyword">class</span> <a title="class LazyCompletor extends java.lang.Object with jline.Completor with ScalaObject" id="11823">LazyCompletor</a>(<a title="=&gt; jline.Completor" id="85526">delegate0</a>: =&gt; Completor) <span class="keyword">extends</span> <span title="jline.Completor">Completor</span>
+{
+	<span class="keyword">private</span> <span class="keyword">lazy</span> <span class="keyword">val</span> <a title="jline.Completor" id="85524">delegate</a> = <a href="#85526" title="=&gt; jline.Completor">delegate0</a>
+	<span class="keyword">def</span> <a title="(String,Int,java.util.List[_])Int" id="85525">complete</a>(<a title="String" id="86259">buffer</a>: <span title="String">String</span>, <a title="Int" id="86260">cursor</a>: <span title="Int">Int</span>, <a title="java.util.List[_]" id="86261">candidates</a>: <a title="java.util.List[_]" id="5355">java</a>.util.List[_]): <span title="Int">Int</span> =
+		<a href="#85523" title="=&gt; jline.Completor">delegate</a>.<a title="(java.lang.String,Int,java.util.List[_])Int" id="84217">complete</a>(<a href="#86259" title="String">buffer</a>, <a href="#86260" title="Int">cursor</a>, <a href="#86261" title="java.util.List[_]">candidates</a>)
+}
+        </pre>
+    </body>
+</html>

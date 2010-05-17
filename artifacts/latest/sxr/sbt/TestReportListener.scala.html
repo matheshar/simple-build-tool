@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+			<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" ></meta>
+        <title>sbt/TestReportListener.scala</title>
+        <script type="text/javascript" src="../jquery-all.js"></script>
+        <script type="text/javascript" src="../linked.js"></script>
+        <link rel="stylesheet" type="text/css" href="../style.css" title="Style"></link>
+    </head>
+    <body>
+        <pre>
+<span class="comment">/* sbt -- Simple Build Tool
+ * Copyright 2008, 2009  Steven Blundy, Mark Harrah
+ */</span>
+
+<span class="keyword">package</span> sbt
+
+	<span class="keyword">import</span> org.scalatools.testing.{Logger =&gt; TLogger, Event =&gt; TEvent, Result =&gt; TResult}
+
+<span class="keyword">trait</span> <a title="trait TestReportListener extends java.lang.Object with ScalaObject" id="6735">TestReportListener</a>
+{
+	<span class="comment">/** called for each class or equivalent grouping */</span>
+  <span class="keyword">def</span> <a title="(String)Unit" id="32561">startGroup</a>(<a title="String" id="32632">name</a>: <span title="String">String</span>)
+	<span class="comment">/** called for each test method or equivalent */</span>
+  <span class="keyword">def</span> <a title="(sbt.TestEvent)Unit" id="32562">testEvent</a>(<a title="sbt.TestEvent" id="32628">event</a>: <a href="#9387" title="sbt.TestEvent">TestEvent</a>)
+	<span class="comment">/** called if there was an error during test */</span>
+  <span class="keyword">def</span> <a title="(String,Throwable)Unit" id="32563">endGroup</a>(<a title="String" id="32641">name</a>: <span title="String">String</span>, <a title="Throwable" id="32642">t</a>: <span title="Throwable">Throwable</span>)
+	<span class="comment">/** called if test completed */</span>
+  <span class="keyword">def</span> <a title="(String,sbt.Result.Value)Unit" id="32564">endGroup</a>(<a title="String" id="32639">name</a>: <span title="String">String</span>, <a title="sbt.Result.Value" id="32640">result</a>: Result.<span title="sbt.Result.Value">Value</span>)
+  <span class="comment">/** Used by the test framework for logging test results*/</span>
+  <span class="keyword">def</span> <a title="=&gt; Option[org.scalatools.testing.Logger]" id="32565">contentLogger</a>: <span title="Option[org.scalatools.testing.Logger]">Option</span>[TLogger] = <a title="object None" id="505">None</a>
+}
+
+<span class="keyword">trait</span> <a title="trait TestsListener extends java.lang.Object with sbt.TestReportListener" id="9189">TestsListener</a> <span class="keyword">extends</span> <a href="#6735" title="sbt.TestReportListener">TestReportListener</a>
+{
+	<span class="comment">/** called once, at beginning. */</span>
+  <span class="keyword">def</span> <a title="=&gt; Unit" id="32768">doInit</a>
+	<span class="comment">/** called once, at end. */</span>
+  <span class="keyword">def</span> <a title="(sbt.Result.Value)Unit" id="32769">doComplete</a>(<a title="sbt.Result.Value" id="33151">finalResult</a>: Result.<span title="sbt.Result.Value">Value</span>)
+}
+
+<span class="keyword">abstract</span> <span class="keyword">class</span> <a title="class TestEvent extends java.lang.Object with NotNull with ScalaObject" id="9387">TestEvent</a> <span class="keyword">extends</span> <a title="NotNull" id="189">NotNull</a>
+{
+	<span class="keyword">def</span> <a title="=&gt; Option[sbt.Result.Value]" id="32623">result</a>: <span title="Option[sbt.Result.Value]">Option</span>[Result.Value]
+	<span class="keyword">def</span> <a title="=&gt; Seq[org.scalatools.testing.Event]" id="32624">detail</a>: <span title="Seq[org.scalatools.testing.Event]">Seq</span>[TEvent] = <a title="object Nil" id="310">Nil</a>
+}
+<span class="keyword">object</span> <a title="object sbt.TestEvent" id="9388">TestEvent</a>
+{
+	<span class="keyword">def</span> <a title="(Seq[org.scalatools.testing.Event])sbt.TestEvent" id="32620">apply</a>(<a title="Seq[org.scalatools.testing.Event]" id="32621">events</a>: <span title="Seq[org.scalatools.testing.Event]">Seq</span>[TEvent]): <a href="#9387" title="sbt.TestEvent">TestEvent</a> =
+	{
+		<span class="keyword">val</span> <a title="sbt.Result.Value" id="67025">overallResult</a> = (<a href="TestFramework.scala.html#11677" title="object sbt.Result">Result</a>.<a href="TestFramework.scala.html#32442" title="=&gt; sbt.Result.Value">Passed</a> <a href="#67026" title="(sbt.Result.Value)((sbt.Result.Value, org.scalatools.testing.Event) =&gt; sbt.Result.Value)sbt.Result.Value" id="16292">/:</a> <a href="#32621" title="Seq[org.scalatools.testing.Event]">events</a>) { (<a title="sbt.Result.Value" id="67029">sum</a>, <a title="org.scalatools.testing.Event" id="67030">event</a>) =&gt;
+			<span class="keyword">val</span> <a title="org.scalatools.testing.Result" id="67031">result</a> = <a href="#67030" title="org.scalatools.testing.Event">event</a>.<span title="()org.scalatools.testing.Result">result</span>
+			<span title="sbt.Result.Value" class="keyword">if</span>(<a href="#67029" title="sbt.Result.Value">sum</a> <span title="(AnyRef)Boolean">==</span> <a href="TestFramework.scala.html#11677" title="object sbt.Result">Result</a>.<a href="TestFramework.scala.html#32440" title="=&gt; sbt.Result.Value">Error</a> <span title="(Boolean)Boolean">||</span> <a href="#67031" title="org.scalatools.testing.Result">result</a> <span title="(AnyRef)Boolean">==</span> TResult.<span title="org.scalatools.testing.Result(value Error)">Error</span>) <a href="TestFramework.scala.html#11677" title="object sbt.Result">Result</a>.<a href="TestFramework.scala.html#32440" title="=&gt; sbt.Result.Value">Error</a>
+			<span class="keyword">else</span> <span title="sbt.Result.Value" class="keyword">if</span>(<a href="#67029" title="sbt.Result.Value">sum</a> <span title="(AnyRef)Boolean">==</span> <a href="TestFramework.scala.html#11677" title="object sbt.Result">Result</a>.<a href="TestFramework.scala.html#32444" title="=&gt; sbt.Result.Value">Failed</a> <span title="(Boolean)Boolean">||</span> <a href="#67031" title="org.scalatools.testing.Result">result</a> <span title="(AnyRef)Boolean">==</span> TResult.<span title="org.scalatools.testing.Result(value Failure)">Failure</span>) <a href="TestFramework.scala.html#11677" title="object sbt.Result">Result</a>.<a href="TestFramework.scala.html#32444" title="=&gt; sbt.Result.Value">Failed</a>
+			<span class="keyword">else</span> <a href="TestFramework.scala.html#11677" title="object sbt.Result">Result</a>.<a href="TestFramework.scala.html#32442" title="=&gt; sbt.Result.Value">Passed</a>
+		}
+		<a title="template $anon extends sbt.TestEvent" id="67060" class="keyword">new</a> <a href="#9387" title="sbt.TestEvent">TestEvent</a> {
+			<span class="keyword">val</span> <a title="Some[sbt.Result.Value]" id="67062">result</a> = <span title="(sbt.Result.Value)Some[sbt.Result.Value]">Some</span>(<a href="#67025" title="sbt.Result.Value">overallResult</a>)
+			<span class="keyword">override</span> <span class="keyword">val</span> <a title="Seq[org.scalatools.testing.Event]" id="67064">detail</a> = <a href="#32621" title="Seq[org.scalatools.testing.Event]">events</a>
+		}
+	}
+}
+
+<span class="keyword">object</span> <a title="object sbt.TestLogger" id="10849">TestLogger</a>
+{
+	<span class="keyword">def</span> <a title="(sbt.Logger)sbt.TestLogger" id="67069">apply</a>(<a title="sbt.Logger" id="67072">logger</a>: sbt.<a href="Logger.scala.html#11865" title="sbt.Logger">Logger</a>): <a href="#10848" title="sbt.TestLogger">TestLogger</a> = <span title="sbt.TestLogger" class="keyword">new</span> <a href="#10848" title="sbt.TestLogger">TestLogger</a>(<a href="#67070" title="(sbt.Logger)org.scalatools.testing.Logger">wrap</a>(<a href="#67072" title="sbt.Logger">logger</a>))
+	<span class="keyword">def</span> <a title="(sbt.Logger)org.scalatools.testing.Logger" id="67070">wrap</a>(<a title="sbt.Logger" id="67098">logger</a>: sbt.<a href="Logger.scala.html#11865" title="sbt.Logger">Logger</a>): <span title="org.scalatools.testing.Logger">TLogger</span> =
+		<a title="template $anon extends java.lang.Object with org.scalatools.testing.Logger" id="67099" class="keyword">new</a> <span title="org.scalatools.testing.Logger">TLogger</span>
+		{
+			<span class="keyword">def</span> <a title="(String)Unit" id="67101">error</a>(<a title="String" id="67110">s</a>: <span title="String">String</span>) = <a href="#67106" title="(sbt.Level.Value,String)Unit">log</a>(<a href="Logger.scala.html#8281" title="object sbt.Level">Level</a>.<a href="Logger.scala.html#28798" title="=&gt; sbt.Level.Value">Error</a>, <a href="#67110" title="String">s</a>)
+			<span class="keyword">def</span> <a title="(String)Unit" id="67102">warn</a>(<a title="String" id="67138">s</a>: <span title="String">String</span>) = <a href="#67106" title="(sbt.Level.Value,String)Unit">log</a>(<a href="Logger.scala.html#8281" title="object sbt.Level">Level</a>.<a href="Logger.scala.html#28796" title="=&gt; sbt.Level.Value">Warn</a>, <a href="#67138" title="String">s</a>)
+			<span class="keyword">def</span> <a title="(String)Unit" id="67103">info</a>(<a title="String" id="67140">s</a>: <span title="String">String</span>) = <a href="#67106" title="(sbt.Level.Value,String)Unit">log</a>(<a href="Logger.scala.html#8281" title="object sbt.Level">Level</a>.<a href="Logger.scala.html#28794" title="=&gt; sbt.Level.Value">Info</a>, <a href="#67140" title="String">s</a>)
+			<span class="keyword">def</span> <a title="(String)Unit" id="67104">debug</a>(<a title="String" id="67142">s</a>: <span title="String">String</span>) = <a href="#67106" title="(sbt.Level.Value,String)Unit">log</a>(<a href="Logger.scala.html#8281" title="object sbt.Level">Level</a>.<a href="Logger.scala.html#28792" title="=&gt; sbt.Level.Value">Debug</a>, <a href="#67142" title="String">s</a>)
+			<span class="keyword">def</span> <a title="(Throwable)Unit" id="67105">trace</a>(<a title="Throwable" id="67144">t</a>: <span title="Throwable">Throwable</span>) = <a href="#67098" title="sbt.Logger">logger</a>.<a href="Logger.scala.html#19731" title="(=&gt; Throwable)Unit">trace</a>(<a href="#67144" title="Throwable">t</a>)
+			<span class="keyword">private</span> <span class="keyword">def</span> <a title="(sbt.Level.Value,String)Unit" id="67106">log</a>(<a title="sbt.Level.Value" id="67112">level</a>: Level.<span title="sbt.Level.Value">Value</span>, <a title="String" id="67113">s</a>: <span title="String">String</span>) = <a href="#67098" title="sbt.Logger">logger</a>.<a href="Logger.scala.html#19738" title="(sbt.Level.Value,=&gt; String)Unit">log</a>(<a href="#67112" title="sbt.Level.Value">level</a>, <a href="#67113" title="String">s</a>)
+			<span class="keyword">def</span> <a title="()Boolean" id="67107">ansiCodesSupported</a>() = <a href="#67098" title="sbt.Logger">logger</a>.<a href="Logger.scala.html#19729" title="=&gt; Boolean">ansiCodesSupported</a>
+		}
+}
+<span class="keyword">class</span> <a title="class TestLogger extends java.lang.Object with sbt.TestsListener with ScalaObject" id="10848">TestLogger</a>(<span class="keyword">val</span> <a title="org.scalatools.testing.Logger" id="67097">log</a>: <span title="org.scalatools.testing.Logger">TLogger</span>) <span class="keyword">extends</span> <a href="#9189" title="sbt.TestsListener">TestsListener</a>
+{
+	<span class="keyword">protected</span> <span class="keyword">var</span> <a title="Int" id="67152">skipped</a>, <a title="Int" id="67153">errors</a>, <a title="Int" id="67154">passed</a>, <a title="Int" id="67155">failures</a> = <span title="Int(0)" class="int">0</span>
+	
+	<span class="keyword">def</span> <a title="(String)Unit" id="67089">startGroup</a>(<a title="String" id="67156">name</a>: <span title="String">String</span>) <span title="Unit">{</span>}
+	<span class="keyword">def</span> <a title="(sbt.TestEvent)Unit" id="67090">testEvent</a>(<a title="sbt.TestEvent" id="67157">event</a>: <a href="#9387" title="sbt.TestEvent">TestEvent</a>): <span title="Unit">Unit</span> = <a href="#67157" title="sbt.TestEvent">event</a>.<a href="#32624" title="=&gt; Seq[org.scalatools.testing.Event]">detail</a>.<a title="((org.scalatools.testing.Event) =&gt; Unit)Unit" id="16281">foreach</a>(<a href="#67093" title="(org.scalatools.testing.Event)Unit">count</a>)
+	<span class="keyword">def</span> <a title="(String,Throwable)Unit" id="67091">endGroup</a>(<a title="String" id="67161">name</a>: <span title="String">String</span>, <a title="Throwable" id="67162">t</a>: <span title="Throwable">Throwable</span>)
+	{
+		<a href="#67097" title="=&gt; org.scalatools.testing.Logger">log</a>.<a title="(java.lang.Throwable)Unit" id="32555">trace</a>(<a href="#67162" title="Throwable">t</a>)
+		<a href="#67097" title="=&gt; org.scalatools.testing.Logger">log</a>.<span title="(java.lang.String)Unit">error</span>(<span title="java.lang.String(&quot;Could not run test &quot;)" class="string">&quot;Could not run test &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#67161" title="String">name</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot;: &quot;)" class="string">&quot;: &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#67162" title="Throwable">t</a>.<a title="()java.lang.String" id="17831">toString</a>)
+	}
+	<span class="keyword">def</span> <a title="(String,sbt.Result.Value)Unit" id="67092">endGroup</a>(<a title="String" id="67163">name</a>: <span title="String">String</span>, <a title="sbt.Result.Value" id="67164">result</a>: Result.<span title="sbt.Result.Value">Value</span>) <span title="Unit">{</span>}
+	<span class="keyword">protected</span> <span class="keyword">def</span> <a title="(org.scalatools.testing.Event)Unit" id="67093">count</a>(<a title="org.scalatools.testing.Event" id="67158">event</a>: <a title="org.scalatools.testing.Event" id="26499">TEvent</a>): <span title="Unit">Unit</span> =
+	{
+		<a href="#67158" title="org.scalatools.testing.Event">event</a>.<span title="()org.scalatools.testing.Result">result</span> <span title="Unit" class="keyword">match</span>
+		{
+			<span title="Unit" class="keyword">case</span> TResult.<span title="org.scalatools.testing.Result(value Error)">Error</span> =&gt; <a href="#67153" title="(Int)Unit">errors</a> <span title="(Int)Int">+=</span><span title="Int(1)" class="int">1</span>
+			<span title="Unit" class="keyword">case</span> TResult.<span title="org.scalatools.testing.Result(value Success)">Success</span> =&gt; <a href="#67154" title="(Int)Unit">passed</a> <span title="(Int)Int">+=</span><span title="Int(1)" class="int">1</span> 
+			<span title="Unit" class="keyword">case</span> TResult.<span title="org.scalatools.testing.Result(value Failure)">Failure</span> =&gt; <a href="#67155" title="(Int)Unit">failures</a> <span title="(Int)Int">+=</span><span title="Int(1)" class="int">1</span> 
+			<span title="Unit" class="keyword">case</span> TResult.<span title="org.scalatools.testing.Result(value Skipped)">Skipped</span> =&gt; <a href="#67152" title="(Int)Unit">skipped</a> <span title="(Int)Int">+=</span> <span title="Int(1)" class="int">1</span>
+		}
+	}
+	<span class="keyword">def</span> <a title="=&gt; Unit" id="67094">doInit</a>
+	{
+		<a href="#67155" title="(Int)Unit">failures</a> = <span title="Int(0)" class="int">0</span>
+		<a href="#67153" title="(Int)Unit">errors</a> = <span title="Int(0)" class="int">0</span>
+		<a href="#67154" title="(Int)Unit">passed</a> = <span title="Int(0)" class="int">0</span>
+		<a href="#67152" title="(Int)Unit">skipped</a> = <span title="Int(0)" class="int">0</span>
+	}
+		<span class="comment">/** called once, at end. */</span>
+	<span class="keyword">def</span> <a title="(sbt.Result.Value)Unit" id="67095">doComplete</a>(<a title="sbt.Result.Value" id="67254">finalResult</a>: Result.<span title="sbt.Result.Value">Value</span>): <span title="Unit">Unit</span> =
+	{
+		<span class="keyword">val</span> <a title="Int" id="67255">totalCount</a> = <a href="#67155" title="=&gt; Int">failures</a> <span title="(Int)Int">+</span> <a href="#67153" title="=&gt; Int">errors</a> <span title="(Int)Int">+</span> <a href="#67152" title="=&gt; Int">skipped</a> <span title="(Int)Int">+</span> <a href="#67154" title="=&gt; Int">passed</a>
+		<span class="keyword">val</span> <a title="java.lang.String" id="67256">postfix</a> = <span title="java.lang.String(&quot;: Total &quot;)" class="string">&quot;: Total &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#67255" title="Int">totalCount</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot;, Failed &quot;)" class="string">&quot;, Failed &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#67155" title="=&gt; Int">failures</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot;, Errors &quot;)" class="string">&quot;, Errors &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#67153" title="=&gt; Int">errors</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot;, Passed &quot;)" class="string">&quot;, Passed &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#67154" title="=&gt; Int">passed</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot;, Skipped &quot;)" class="string">&quot;, Skipped &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#67152" title="=&gt; Int">skipped</a>
+		<a href="#67254" title="sbt.Result.Value">finalResult</a> <span title="Unit" class="keyword">match</span>
+		{
+			<span title="Unit" class="keyword">case</span> <a href="TestFramework.scala.html#11677" title="object sbt.Result">Result</a>.<a href="TestFramework.scala.html#32440" title="=&gt; sbt.Result.Value">Error</a> =&gt; <a href="#67097" title="=&gt; org.scalatools.testing.Logger">log</a>.<span title="(java.lang.String)Unit">error</span>(<span title="java.lang.String(&quot;Error&quot;)" class="string">&quot;Error&quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#67256" title="java.lang.String">postfix</a>)
+			<span title="Unit" class="keyword">case</span> <a href="TestFramework.scala.html#11677" title="object sbt.Result">Result</a>.<a href="TestFramework.scala.html#32442" title="=&gt; sbt.Result.Value">Passed</a> =&gt; <a href="#67097" title="=&gt; org.scalatools.testing.Logger">log</a>.<a title="(java.lang.String)Unit" id="32553">info</a>(<span title="java.lang.String(&quot;Passed: &quot;)" class="string">&quot;Passed: &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#67256" title="java.lang.String">postfix</a>)
+			<span title="Unit" class="keyword">case</span> <a href="TestFramework.scala.html#11677" title="object sbt.Result">Result</a>.<a href="TestFramework.scala.html#32444" title="=&gt; sbt.Result.Value">Failed</a> =&gt; <a href="#67097" title="=&gt; org.scalatools.testing.Logger">log</a>.<span title="(java.lang.String)Unit">error</span>(<span title="java.lang.String(&quot;Failed: &quot;)" class="string">&quot;Failed: &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#67256" title="java.lang.String">postfix</a>)
+		}
+	}
+	<span class="keyword">override</span> <span class="keyword">def</span> <a title="=&gt; Option[org.scalatools.testing.Logger]" id="67096">contentLogger</a>: <span title="Option[org.scalatools.testing.Logger]">Option</span>[TLogger] = <span title="(org.scalatools.testing.Logger)Some[org.scalatools.testing.Logger]">Some</span>(<a href="#67097" title="=&gt; org.scalatools.testing.Logger">log</a>)
+}
+
+        </pre>
+    </body>
+</html>

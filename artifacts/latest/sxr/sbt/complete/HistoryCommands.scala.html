@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+			<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" ></meta>
+        <title>sbt/complete/HistoryCommands.scala</title>
+        <script type="text/javascript" src="../../jquery-all.js"></script>
+        <script type="text/javascript" src="../../linked.js"></script>
+        <link rel="stylesheet" type="text/css" href="../../style.css" title="Style"></link>
+    </head>
+    <body>
+        <pre>
+<span class="keyword">package</span> sbt.complete
+
+<span class="keyword">object</span> <a title="object sbt.complete.HistoryCommands" id="13526">HistoryCommands</a>
+{
+	<span class="keyword">val</span> <a title="java.lang.String" id="83126">Start</a> = <span title="java.lang.String(&quot;!&quot;)" class="string">&quot;!&quot;</span>
+	<span class="comment">// second characters</span>
+	<span class="keyword">val</span> <a title="java.lang.String" id="83128">Contains</a> = <span title="java.lang.String(&quot;?&quot;)" class="string">&quot;?&quot;</span>
+	<span class="keyword">val</span> <a title="java.lang.String" id="83130">Last</a> = <span title="java.lang.String(&quot;!&quot;)" class="string">&quot;!&quot;</span>
+	<span class="keyword">val</span> <a title="java.lang.String" id="83132">ListCommands</a> = <span title="java.lang.String(&quot;:&quot;)" class="string">&quot;:&quot;</span>
+
+	<span class="keyword">def</span> <a title="=&gt; java.lang.String" id="83134">ContainsFull</a> = <a href="#83142" title="(String)java.lang.String">h</a>(<a href="#83128" title="=&gt; java.lang.String">Contains</a>)
+	<span class="keyword">def</span> <a title="=&gt; java.lang.String" id="83135">LastFull</a> = <a href="#83142" title="(String)java.lang.String">h</a>(<a href="#83130" title="=&gt; java.lang.String">Last</a>)
+	<span class="keyword">def</span> <a title="=&gt; java.lang.String" id="83136">ListFull</a> = <a href="#83142" title="(String)java.lang.String">h</a>(<a href="#83132" title="=&gt; java.lang.String">ListCommands</a>)
+
+	<span class="keyword">def</span> <a title="=&gt; java.lang.String" id="83137">ListN</a> = <a href="#83136" title="=&gt; java.lang.String">ListFull</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot;n&quot;)" class="string">&quot;n&quot;</span>
+	<span class="keyword">def</span> <a title="=&gt; java.lang.String" id="83138">ContainsString</a> = <a href="#83134" title="=&gt; java.lang.String">ContainsFull</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot;string&quot;)" class="string">&quot;string&quot;</span>
+	<span class="keyword">def</span> <a title="=&gt; java.lang.String" id="83139">StartsWithString</a> = <a href="#83126" title="=&gt; java.lang.String">Start</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot;string&quot;)" class="string">&quot;string&quot;</span>
+	<span class="keyword">def</span> <a title="=&gt; java.lang.String" id="83140">Previous</a> = <a href="#83126" title="=&gt; java.lang.String">Start</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot;-n&quot;)" class="string">&quot;-n&quot;</span>
+	<span class="keyword">def</span> <a title="=&gt; java.lang.String" id="83141">Nth</a> = <a href="#83126" title="=&gt; java.lang.String">Start</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot;n&quot;)" class="string">&quot;n&quot;</span>
+	
+	<span class="keyword">private</span> <span class="keyword">def</span> <a title="(String)java.lang.String" id="83142">h</a>(<a title="String" id="83152">s</a>: <span title="String">String</span>) = <a href="#83126" title="=&gt; java.lang.String">Start</a> <span title="(Any)java.lang.String">+</span> <a href="#83152" title="String">s</a>
+	<span class="keyword">def</span> <a title="=&gt; Seq[java.lang.String]" id="83143">plainCommands</a> = <span title="(java.lang.String*)Seq[java.lang.String]">Seq</span>(<a href="#83136" title="=&gt; java.lang.String">ListFull</a>, <a href="#83126" title="=&gt; java.lang.String">Start</a>, <a href="#83135" title="=&gt; java.lang.String">LastFull</a>, <a href="#83134" title="=&gt; java.lang.String">ContainsFull</a>)
+
+	<span class="keyword">def</span> <a title="=&gt; Seq[(java.lang.String, java.lang.String)]" id="83144">descriptions</a> = <span title="((java.lang.String, java.lang.String)*)Seq[(java.lang.String, java.lang.String)]">Seq</span>(
+		<a href="#83135" title="(java.lang.String)ArrowAssoc[java.lang.String]">LastFull</a> <span title="(java.lang.String)(java.lang.String, java.lang.String)">-&gt;</span> <span title="java.lang.String(&quot;Execute the last command again&quot;)" class="string">&quot;Execute the last command again&quot;</span>,
+		<a href="#83136" title="(java.lang.String)ArrowAssoc[java.lang.String]">ListFull</a> <span title="(java.lang.String)(java.lang.String, java.lang.String)">-&gt;</span> <span title="java.lang.String(&quot;Show all previous commands&quot;)" class="string">&quot;Show all previous commands&quot;</span>,
+		<a href="#83137" title="(java.lang.String)ArrowAssoc[java.lang.String]">ListN</a> <span title="(java.lang.String)(java.lang.String, java.lang.String)">-&gt;</span> <span title="java.lang.String(&quot;Show the last n commands&quot;)" class="string">&quot;Show the last n commands&quot;</span>,
+		<a href="#83141" title="(java.lang.String)ArrowAssoc[java.lang.String]">Nth</a> <span title="(java.lang.String)(java.lang.String, java.lang.String)">-&gt;</span> (<span title="java.lang.String(&quot;Execute the command with index n, as shown by the &quot;)" class="string">&quot;Execute the command with index n, as shown by the &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#83136" title="=&gt; java.lang.String">ListFull</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot; command&quot;)" class="string">&quot; command&quot;</span>),
+		<a href="#83140" title="(java.lang.String)ArrowAssoc[java.lang.String]">Previous</a> <span title="(java.lang.String)(java.lang.String, java.lang.String)">-&gt;</span> <span title="java.lang.String(&quot;Execute the nth command before this one&quot;)" class="string">&quot;Execute the nth command before this one&quot;</span>,
+		<a href="#83139" title="(java.lang.String)ArrowAssoc[java.lang.String]">StartsWithString</a> <span title="(java.lang.String)(java.lang.String, java.lang.String)">-&gt;</span> <span title="java.lang.String(&quot;Execute the most recent command starting with 'string'&quot;)" class="string">&quot;Execute the most recent command starting with 'string'&quot;</span>,
+		<a href="#83138" title="(java.lang.String)ArrowAssoc[java.lang.String]">ContainsString</a> <span title="(java.lang.String)(java.lang.String, java.lang.String)">-&gt;</span> <span title="java.lang.String(&quot;Execute the most recent command containing 'string'&quot;)" class="string">&quot;Execute the most recent command containing 'string'&quot;</span>
+	)
+	<span class="keyword">def</span> <a title="(sbt.Logger)Unit" id="83145">printHelp</a>(<a title="sbt.Logger" id="83252">log</a>: <a href="../Logger.scala.html#11865" title="sbt.Logger">Logger</a>): <span title="Unit">Unit</span> =
+		<span title="(Any)Unit">println</span>(<span title="java.lang.String(&quot;History commands:\012   &quot;)" class="string">&quot;History commands:\n   &quot;</span> <span title="(Any)java.lang.String">+</span> (<a href="#83144" title="=&gt; Seq[(java.lang.String, java.lang.String)]">descriptions</a>.<a title="(((java.lang.String, java.lang.String)) =&gt; java.lang.String)Seq[java.lang.String]" id="16749">map</a><a href="#83257" title="java.lang.String">{</a> <span title="java.lang.String" class="keyword">case</span> <a id="1">(</a><a title="java.lang.String" id="83258">c</a>,<a title="java.lang.String" id="83259">d</a>) =&gt; <a href="#83258" title="java.lang.String">c</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot;    &quot;)" class="string">&quot;    &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#83259" title="java.lang.String">d</a>}).<a title="(String)String" id="16308">mkString</a>(<span title="java.lang.String(&quot;\012   &quot;)" class="string">&quot;\n   &quot;</span>))
+
+	<span class="keyword">def</span> <a title="(String,Option[sbt.Path],Int,sbt.Logger)Option[List[String]]" id="83146">apply</a>(<a title="String" id="83261">s</a>: <span title="String">String</span>, <a title="Option[sbt.Path]" id="83262">historyPath</a>: <span title="Option[sbt.Path]">Option</span>[Path], <a title="Int" id="83263">maxLines</a>: <span title="Int">Int</span>, <a title="sbt.Logger" id="83264">log</a>: <a href="../Logger.scala.html#11865" title="sbt.Logger">Logger</a>): <span title="Option[List[String]]">Option</span>[List[String]] =
+		<span title="Option[List[String]]" class="keyword">if</span>(<a href="#83261" title="implicit scala.Predef.stringWrapper : (String)scala.runtime.RichString" id="6224">s</a>.<span title="=&gt; Boolean">isEmpty</span>)
+		{
+			<a href="#83145" title="(sbt.Logger)Unit">printHelp</a>(<a href="#83264" title="sbt.Logger">log</a>)
+			<span title="(object Nil)Some[object Nil]">Some</span>(<span title="object Nil">Nil</span>)
+		}
+		<span class="keyword">else</span>
+		{
+			<span class="keyword">val</span> <a title="Array[String]" id="83274">lines</a> = <a href="#83262" title="Option[sbt.Path]">historyPath</a>.<span title="=&gt; List[sbt.Path]">toList</span>.<a title="((sbt.Path) =&gt; Iterable[String])List[String]" id="17984">flatMap</a>(<a title="sbt.Path" id="83278">h</a> =&gt; xsbt.<a href="../../FileUtilities.scala.html#12138" title="object xsbt.FileUtilities">FileUtilities</a>.<a href="../../FileUtilities.scala.html#32106" title="(java.io.File)List[String]">readLines</a>(<a href="#83278" title="sbt.Path">h</a>.<a href="../Path.scala.html#18076" title="=&gt; java.io.File">asFile</a>) ).<a title="Array[String]" id="16763">toArray</a>
+			<span title="Option[List[String]]" class="keyword">if</span>(<a href="#83274" title="Array[String]">lines</a>.<span title="=&gt; Boolean">isEmpty</span>)
+			{
+				<a href="#83264" title="sbt.Logger">log</a>.<a href="../Logger.scala.html#19735" title="(=&gt; String)Unit">warn</a>(<span title="java.lang.String(&quot;No history&quot;)" class="string">&quot;No history&quot;</span>)
+				<a title="object None" id="505">None</a>
+			}
+			<span class="keyword">else</span>
+			{
+				<span class="keyword">val</span> <a title="sbt.complete.History" id="83286">history</a> = complete.<a href="History.scala.html#56703" title="(Seq[String],sbt.Logger)sbt.complete.History">History</a>(<a href="#83274" title="Array[String]">lines</a>, <a href="#83264" title="sbt.Logger">log</a>)
+				<span title="Option[List[String]]" class="keyword">if</span>(<a href="#83261" title="String">s</a>.<span title="(java.lang.String)Boolean">startsWith</span>(<a href="#83132" title="=&gt; java.lang.String">ListCommands</a>))
+				{
+					<span class="keyword">val</span> <a title="java.lang.String" id="83288">rest</a> = <a href="#83261" title="String">s</a>.<span title="(Int)java.lang.String">substring</span>(<a href="#83132" title="=&gt; java.lang.String">ListCommands</a>.<span title="()Int">length</span>)
+					<span class="keyword">val</span> <a title="Int" id="83289">show</a> = complete.<a href="History.scala.html#13529" title="object sbt.complete.History">History</a>.<a href="History.scala.html#56704" title="(String)Option[Int]">number</a>(<a href="#83288" title="java.lang.String">rest</a>).<a title="(=&gt; Int)Int" id="19232">getOrElse</a>(<a href="#83274" title="Array[String]">lines</a>.<span title="=&gt; Int">length</span>)
+					<a href="#83147" title="(sbt.complete.History,Int,Int)Unit">printHistory</a>(<a href="#83286" title="sbt.complete.History">history</a>, <a href="#83263" title="Int">maxLines</a>, <a href="#83289" title="Int">show</a>)
+					<span title="(object Nil)Some[object Nil]">Some</span>(<span title="object Nil">Nil</span>)
+				}
+				<span class="keyword">else</span> {
+					<span class="keyword">val</span> <a title="Option[String]" id="83297">command</a> = <a href="#83148" title="(sbt.complete.History,String,sbt.Logger)Option[String]">historyCommand</a>(<a href="#83286" title="sbt.complete.History">history</a>, <a href="#83261" title="String">s</a>, <a href="#83264" title="sbt.Logger">log</a>)
+					<a href="#83297" title="Option[String]">command</a>.<span title="((String) =&gt; Unit)Unit">foreach</span>(<a href="#83274" title="Array[String]">lines</a>(<a href="#83274" title="Array[String]">lines</a>.<span title="=&gt; Int">length</span> <a title="(Int)Int" id="3096">-</a> <span title="Int(1)" class="int">1</span>) = <a href="#83302" title="String">_</a>)
+					<a href="#83262" title="Option[sbt.Path]">historyPath</a> <span title="((sbt.Path) =&gt; Unit)Unit">foreach</span> { <a title="sbt.Path" id="83318">h</a> =&gt; xsbt.<a href="../../FileUtilities.scala.html#12138" title="object xsbt.FileUtilities">FileUtilities</a>.<a href="../../FileUtilities.scala.html#32108" title="(java.io.File,Seq[String])Unit">writeLines</a>(<a href="#83318" title="sbt.Path">h</a>.<a href="../Path.scala.html#18076" title="=&gt; java.io.File">asFile</a>, <a href="#83274" title="Array[String]">lines</a>) }
+					<span title="(List[String])Some[List[String]]">Some</span>(<a href="#83297" title="Option[String]">command</a>.<span title="=&gt; List[String]">toList</span>)
+				}
+			}
+		}
+	<span class="keyword">def</span> <a title="(sbt.complete.History,Int,Int)Unit" id="83147">printHistory</a>(<a title="sbt.complete.History" id="83293">history</a>: complete.<a href="History.scala.html#13528" title="sbt.complete.History">History</a>, <a title="Int" id="83294">historySize</a>: <span title="Int">Int</span>, <a title="Int" id="83295">show</a>: <span title="Int">Int</span>): <span title="Unit">Unit</span> = <a href="#83293" title="sbt.complete.History">history</a>.<a href="History.scala.html#56722" title="(Int,Int)Seq[String]">list</a>(<a href="#83294" title="Int">historySize</a>, <a href="#83295" title="Int">show</a>).<a title="((String) =&gt; Unit)Unit" id="16281">foreach</a>(<a href="#83323" title="(Any)Unit">println</a>)
+	<span class="keyword">def</span> <a title="(sbt.complete.History,String,sbt.Logger)Option[String]" id="83148">historyCommand</a>(<a title="sbt.complete.History" id="83298">history</a>: complete.<a href="History.scala.html#13528" title="sbt.complete.History">History</a>, <a title="String" id="83299">s</a>: <span title="String">String</span>, <a title="sbt.Logger" id="83300">log</a>: <a href="../Logger.scala.html#11865" title="sbt.Logger">Logger</a>): <span title="Option[String]">Option</span>[String] =
+	{
+		<span title="Option[String]" class="keyword">if</span>(<a href="#83299" title="String">s</a> <a title="(AnyRef)Boolean" id="3457">==</a> <a href="#83130" title="=&gt; java.lang.String">Last</a>)
+			<a href="#83298" title="sbt.complete.History">history</a> <a href="History.scala.html#56713" title="=&gt; Option[String]">!!</a>
+		<span class="keyword">else</span> <span title="Option[String]" class="keyword">if</span>(<a href="#83299" title="String">s</a>.<span title="(java.lang.String)Boolean">startsWith</span>(<a href="#83128" title="=&gt; java.lang.String">Contains</a>))
+			<a href="#83298" title="sbt.complete.History">history</a> <a href="History.scala.html#56718" title="(String)Option[String]">!?</a> <a href="#83299" title="String">s</a>.<span title="(Int)java.lang.String">substring</span>(<a href="#83128" title="=&gt; java.lang.String">Contains</a>.<span title="()Int">length</span>)
+		<span class="keyword">else</span>
+			<a href="#83298" title="sbt.complete.History">history</a> <a href="History.scala.html#56716" title="(String)Option[String]">!</a> <a href="#83299" title="String">s</a>
+	}
+}
+        </pre>
+    </body>
+</html>

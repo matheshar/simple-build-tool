@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+			<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" ></meta>
+        <title>ErrorHandling.scala</title>
+        <script type="text/javascript" src="jquery-all.js"></script>
+        <script type="text/javascript" src="linked.js"></script>
+        <link rel="stylesheet" type="text/css" href="style.css" title="Style"></link>
+    </head>
+    <body>
+        <pre>
+<span class="comment">/* sbt -- Simple Build Tool
+ * Copyright 2009  Mark Harrah
+ */</span>
+<span class="keyword">package</span> xsbt
+
+<span class="keyword">object</span> <a title="object xsbt.ErrorHandling" id="12675">ErrorHandling</a>
+{
+	<span class="keyword">def</span> <a title="[T](=&gt; String)(=&gt; T)T" id="32117">translate</a>[<a title="&gt;: Nothing &lt;: Any" id="32119">T</a>](<a title="=&gt; String" id="36870">msg</a>: =&gt; String)(<a title="=&gt; T" id="36871">f</a>: =&gt; T) =
+		<span class="keyword">try</span> { <a href="#36871" title="=&gt; T">f</a> }
+		<span class="keyword">catch</span> { <span title="Nothing" class="keyword">case</span> <a title="java.lang.Throwable" id="36873">e</a> =&gt; <span title="Nothing" class="keyword">throw</span> <span title="xsbt.TranslatedException" class="keyword">new</span> <a href="#12599" title="xsbt.TranslatedException">TranslatedException</a>(<a href="#36870" title="=&gt; String">msg</a> <a title="(Any)java.lang.String" id="5747">+</a> <a href="#36873" title="java.lang.Throwable">e</a>.<a title="()java.lang.String" id="17831">toString</a>, <a href="#36873" title="java.lang.Throwable">e</a>) }
+	<span class="keyword">def</span> <a title="[T](=&gt; T)Either[Throwable,T]" id="32120">wideConvert</a>[<a title="&gt;: Nothing &lt;: Any" id="32122">T</a>](<a title="=&gt; T" id="38483">f</a>: =&gt; T): <span title="Either[Throwable,T]">Either</span>[Throwable, T] =
+		<span class="keyword">try</span> { <span title="(T)Right[Nothing,T]">Right</span>(<a href="#38483" title="=&gt; T">f</a>) }
+		<span class="keyword">catch</span> { <span title="Left[java.lang.Throwable,Nothing]" class="keyword">case</span> <a title="java.lang.Throwable" id="38486">e</a> =&gt; <span title="(java.lang.Throwable)Left[java.lang.Throwable,Nothing]">Left</span>(<a href="#38486" title="java.lang.Throwable">e</a>) } <span class="comment">// TODO: restrict type of e</span>
+	<span class="keyword">def</span> <a title="[T](=&gt; T)Either[Exception,T]" id="32123">convert</a>[<a title="&gt;: Nothing &lt;: Any" id="32125">T</a>](<a title="=&gt; T" id="38489">f</a>: =&gt; T): <span title="Either[Exception,T]">Either</span>[Exception, T] =
+		<span class="keyword">try</span> { <span title="(T)Right[Nothing,T]">Right</span>(<a href="#38489" title="=&gt; T">f</a>) }
+		<span class="keyword">catch</span> { <span title="Left[Exception,Nothing]" class="keyword">case</span> <a title="Exception" id="38492">e</a>: <a title="Exception" id="2076">Exception</a> =&gt; <span title="(Exception)Left[Exception,Nothing]">Left</span>(<a href="#38492" title="Exception">e</a>) }
+}
+<span class="keyword">final</span> <span class="keyword">class</span> <a title="class TranslatedException extends java.lang.RuntimeException with ScalaObject" id="12599">TranslatedException</a> <span class="keyword">private</span>[xsbt](<a title="String" id="36880">msg</a>: <a title="String" id="1806">String</a>, <a title="Throwable" id="36881">cause</a>: <a title="Throwable" id="2088">Throwable</a>) <span class="keyword">extends</span> <a title="java.lang.RuntimeException" id="19701">RuntimeException</a>(<a href="#36880" title="String">msg</a>, <a href="#36881" title="Throwable">cause</a>)
+{
+	<span class="keyword">override</span> <span class="keyword">def</span> <a title="()String" id="36879">toString</a> = <a href="#36880" title="String">msg</a>
+}
+        </pre>
+    </body>
+</html>

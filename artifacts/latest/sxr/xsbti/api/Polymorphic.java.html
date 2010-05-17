@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+			<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" ></meta>
+        <title>xsbti/api/Polymorphic.java</title>
+        <script type="text/javascript" src="../../jquery-all.js"></script>
+        <script type="text/javascript" src="../../linked.js"></script>
+        <link rel="stylesheet" type="text/css" href="../../style.css" title="Style"></link>
+    </head>
+    <body>
+        <pre>
+<span class="keyword">package</span> xsbti.api;
+
+<span class="keyword">import</span> java.util.Arrays;
+<span class="keyword">import</span> java.util.List;
+public <span class="keyword">class</span> <a id="5964">Polymorphic</a> <span class="keyword">extends</span> Type 
+{
+	public Polymorphic(Type baseType, TypeParameter[] parameters)
+	{
+		<span class="keyword">this</span>.baseType = baseType;
+		<span class="keyword">this</span>.parameters = parameters;
+	}
+	<span class="keyword">private</span> <span class="keyword">final</span> Type baseType;
+	<span class="keyword">private</span> <span class="keyword">final</span> TypeParameter[] parameters;
+	public <span class="keyword">final</span> Type baseType()
+	{
+		<span class="keyword">return</span> baseType;
+	}
+	public <span class="keyword">final</span> TypeParameter[] parameters()
+	{
+		<span class="keyword">return</span> parameters;
+	}
+	public String toString()
+	{
+		<span class="keyword">return</span> <span class="string">&quot;Polymorphic(&quot;</span> + <span class="string">&quot;baseType: &quot;</span> + baseType() + <span class="string">&quot;, &quot;</span> + <span class="string">&quot;parameters: &quot;</span> + Arrays.toString(parameters())+ <span class="string">&quot;)&quot;</span>;
+	}
+}
+
+        </pre>
+    </body>
+</html>
