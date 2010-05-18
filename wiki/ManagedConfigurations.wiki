@@ -2,7 +2,7 @@
 
 == Introduction ==
 
-Ivy configurations are a useful feature for your build when you use managed dependencies.  They are essentially named sets of dependencies.  You can read the [http://ant.apache.org/ivy/history/2.0.0/tutorial/conf.html full Ivy documentation] for details.  Their use in `sbt` is described on this page.
+Ivy configurations are a useful feature for your build when you use managed dependencies.  They are essentially named sets of dependencies.  You can read the [http://ant.apache.org/ivy/history/2.1.0/tutorial/conf.html full Ivy documentation] for details.  Their use in `sbt` is described on this page.
 
 == Usage ==
 
