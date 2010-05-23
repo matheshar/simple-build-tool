@@ -1,4 +1,4 @@
-=== 0.7.4 to 0.7.5 ===
+=== 0.7.4 to 0.7.5 (unreleased) ===
  * Joonas's update to work with Jetty 7.1 logging API changes.
  * Provide application and boot classpaths to tests and 'run'ning code according to http://gist.github.com/404272
 
