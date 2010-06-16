@@ -25,6 +25,9 @@ java -Xmx512M %jlineopt% -jar ...
 
 = Vim =
 
+See [http://github.com/MarcWeber/vim-addon-sbt]
+
+Alternatively:
 In Vim, you can add the following to your `.vimrc` file to support building via `:make` and navigating to errors and warnings:
 
 {{{
