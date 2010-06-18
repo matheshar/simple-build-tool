@@ -1,0 +1,39 @@
+= Introduction =
+
+The size of the sbt launcher jar went up a lot after migrating it from 2.7.7 to 2.8.0.RC3.  The increase was from 0.9MB to 1.2MB.  There were several reasons:
+ * The increase in size from moving the Scala signatures to annotations
+ * Array construction in 2.8 requires manifests and thus brings in new classes from `scala.reflect`
+ * !StringBuilder now uses !RichInt, which brings in new classes from `scala.math`
+ * Some reorganization in the Scala library generally made the old !ProGuard configuration for sbt less optimal.
+
+Previously, the sbt build only made use of the minifying feature of !ProGuard.  The obfuscation and optimization phases were disabled with these options:
+{{{
+  -dontoptimize
+  -dontobfuscate
+}}}
+To eliminate the 300kB increase between 2.7 and 2.8, the sbt build now enables these phases, as explained below.
+
+= Obfuscation =
+
+The obfuscation phase shortens names and can substantially decrease the size of a jar.  However, stack traces become less usable and so sbt did not use it.  The obfuscation phase is also responsible for stripping attributes/annotations, though.  This aspect is especially useful for Scala.  Scala signatures are stored in the class file as annotations.  It is possible to configure the !ProGuard obfuscation phase to preserve names but still remove attributes.  The !ProGuard configuration lines for this look like:
+{{{
+ -keep,allowoptimization,allowshrinking class * { *; }",
+ -keepattributes SourceFile,LineNumberTable
+}}}
+
+This disables renaming and keeps the source name and lines numbers for meaningful stack traces.  This prevents renaming but still strips attributes/annotations.  If you need
+to preserve certain annotations or other attributes, you can append them to `-keepattributes`.  See the [http://proguard.sourceforge.net/manual/usage.html#obfuscationoptions ProGuard documentation] for details.
+
+Enabling this phase reduced the size of the launcher jar by about 200kB.
+
+= Optimization =
+
+The optimization phase is also useful, although each optimization pass increases the time it takes for !ProGuard to run.  Enabling optimization reduced the size of the launcher another 100kB.  It is especially good for reducing the size of the extra classes brought in by !RichInt and references from the `scala` package object.  For example, the `$scope` val would normally pull in XML classes and `val`s that exist only for source compatibility pull in their respective classes.  The !ProGuard optimization options used by sbt are:
+{{{
+ -optimizationpasses 2
+ -optimizations !code/allocation/variable
+}}}
+
+More passes increase processing time, but you might get a larger size decrease
+or a performance increase.  Three passes did not reduce the size any more than
+two did for the launcher.  The second line disables an optimization that caused a runtime error (with !ProGuard 4.4).
