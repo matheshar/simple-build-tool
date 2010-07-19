@@ -1,134 +1,19 @@
 = Lift Example =
 
-This page provides an example of building a [http://liftweb.net Lift] web application.
-See also [http://www.assembla.com/wiki/show/liftweb/Using_SBT Lift's sbt documentation].
+This page used to provide an example of building a [http://liftweb.net Lift] web application.
 
-== Get the example ==
-
-Get the [http://liftweb.net/docs/getting_started/mod_master.html Lift example] using Maven and change to the new directory.
+Now, just see [http://github.com/lift/lift_sbt_prototype].
 
 {{{
-$ mvn archetype:create -U \
- -DarchetypeGroupId=net.liftweb \
- -DarchetypeArtifactId=lift-archetype-basic \
- -DarchetypeVersion=1.0 \
- -DremoteRepositories=http://scala-tools.org/repo-releases \
- -DgroupId=net.liftweb.hello -DartifactId=hello-lift
-
-$ cd hello-lift
-}}}
-
-== Setup the `sbt` project ==
-
-Run `sbt` and provide the project name and version:
-
-{{{
+$ git clone git://github.com/lift/lift_sbt_prototype
+$ cd lift_sbt_prototype
 $ sbt
-Project does not exist, create new project? (y/N) : y
-Name: Hello Lift
-Organization: net.liftweb.hello
-Version [1.0]: 1.0
-Scala version [2.7.7]: 2.7.3
-sbt version [0.7.4]:
-...
-[success] Successfully initialized directory structure.
-[info] Building project Hello Lift 1.0 using sbt.DefaultProject
-[info] No actions specified, interactive session started. Execute 'help' for more information.
->
-}}}
-
-== Create the custom project configuration ==
-
-Use the following project definition (put it in `project/build/HelloLiftProject.scala`) to enable the web application features and declare dependencies.  Afterwards, run `reload` so that `sbt` reloads the project definition.
-
-{{{
-import sbt._
-
-class HelloLiftProject(info: ProjectInfo) extends DefaultWebProject(info)
-{
-  val lift = "net.liftweb" % "lift-core" % "1.0" % "compile"
-  val jetty6 = "org.mortbay.jetty" % "jetty" % "6.1.14" % "test"
-  val servlet = "javax.servlet" % "servlet-api" % "2.5" % "provided"
-  val derby = "org.apache.derby" % "derby" % "10.2.2.0" % "runtime"
-  val junit = "junit" % "junit" % "3.8.1" % "test"
-
-  // required because Ivy doesn't pull repositories from poms
-  val smackRepo = "m2-repository-smack" at "http://maven.reucon.com/public"
-}
-}}}
-
-Run `reload` to use the new project definition:
-{{{
-> reload
-}}}
-
-== Get the dependencies ==
-
-`sbt` does not resolve dependencies unless explicitly requested, so run `update`:
-{{{
 > update
-}}}
-
-== Try it out ==
-
-Now, start the webapp:
-{{{
+...
 > jetty-run
+...
 }}}
 
 and browse to http://localhost:8080.
 
-Stop the webapp when you are done:
-{{{
-> jetty-stop
-}}}
-
-To create a war file, run the `package` action.  `DefaultWebProject` redefines `package` to create a war instead of a jar.
-
-{{{
-> package
-}}}
-
-For more details on web application support in `sbt`, see [WebApplications Web Applications].
-
-== Using Lift 2.0 snapshots ==
-
-Lift 2.0 snapshots seem to be the recommended version for any new Lift development. Three modifications in the above procedure are needed to do so.
-
-=== Create a 2.0 snapshot project ===
-
-To create a 2.0 snapshot, run the following:
-
-{{{
-$ mvn archetype:generate -U \
-   -DarchetypeGroupId=net.liftweb \
-   -DarchetypeArtifactId=lift-archetype-basic \
-   -DarchetypeVersion=2.0-SNAPSHOT \
-   -DarchetypeRepository=http://scala-tools.org/repo-snapshots \
-   -DremoteRepositories=http://scala-tools.org/repo-snapshots \
-   -DgroupId=net.liftweb.hello -DartifactId=hello-lift
-}}}
-
-=== Define the project ===
-
-Three modifications must be made to the above project definition. First add the following line before the definition of the "lift" val:
-
-{{{
-  val snapshots = ScalaToolsSnapshots
-}}}
-
-Then change:
-
-{{{
-  val lift = "net.liftweb" % "lift-core" % "1.0" % "compile"
-}}}
-
-to:
-
-{{{
-  val lift = "net.liftweb" % "lift-core" % "2.0-SNAPSHOT" % "compile"
-}}}
-
-Finally, add the following to ensure that all new dependencies are fetched:
-
-  val nexusRepo = "nexus" at "https://nexus.griddynamics.net/nexus/content/groups/public"
+See also [http://www.assembla.com/wiki/show/liftweb/Using_SBT Lift's sbt documentation].
