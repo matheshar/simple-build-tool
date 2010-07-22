@@ -14,7 +14,7 @@ A common cause is forgetting to run `update`.  See the documentation on [Classpa
 <dd>*Corrupted download of sbt or Scala*</dd>
 <dt>Solution</dt>
 <dd>Restart sbt after deleting:
- * `~/.m2`
+ * `~/.m2/repository`
  * `~/.ivy2/cache`
  * `project/boot`
 </dd>
