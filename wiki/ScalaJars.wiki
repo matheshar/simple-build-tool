@@ -37,5 +37,5 @@ To completely disable all filtering of dependencies, set
 }}}
 
 == Access to Scala Jars and Dependencies ==
- * The `ScalaInstance` corresponding to the version of Scala currently building your project is obtained by the `buildScalaInstance` method.  The `libraryJar` and `compilerJar` methods of a `ScalaInstance` provide the locations of the jars for the Scala version it represents.
+ * The `ScalaInstance` corresponding to the version of Scala currently building your project is obtained by the `buildScalaInstance` method.  The `libraryJar` and `compilerJar` methods of a `ScalaInstance` provide the locations of the jars for the Scala version it represents.  There are also the convenience methods `buildCompilerJar` and `buildLibraryJar` defined on `Project`.
  * Two methods on a project definition, `mainDependencies` and `testDependencies`, provide an analysis of the external dependencies (jars) of your code as determined during compilation.  Because it relies on information determined during compilation, the information is only valid when compilation is up to date.  These methods return an instance of `LibraryDependencies`.  Read the [http://simple-build-tool.googlecode.com/svn/artifacts/latest/api/sbt/LibraryDependencies.html API Documentation] for more information.
