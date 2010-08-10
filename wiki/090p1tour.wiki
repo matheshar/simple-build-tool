@@ -1,0 +1,241 @@
+<wiki:toc max_depth="2" />
+
+= Introduction =
+
+This is intended as a guided tour through some of the ideas being explored in 0.9.
+
+= Setup =
+
+First, grab [http://github.com/harrah/xsbt/] and switch to the 0.9 branch:
+{{{
+$ git clone git://github.com/harrah/xsbt.git
+$ cd xsbt
+$ git checkout 0.9
+}}}
+
+Now, build the 0.9 launcher and project (using sbt 0.7.4):
+{{{
+$ sbt
+> update
+> project Launcher
+> proguard
+> project Alternative Compiler Test
+> publish-local
+}}}
+
+Copy your `~/bin/sbt` script to `~/bin/xsbt` and change it to use the launcher in `target/scala_2.8.0/`.
+
+Now, create a new directory somewhere, say `~/test` and setup a scratch project.
+{{{
+$ mkdir test
+$ cd test
+$ xsbt
+...? s
+}}}
+
+= Basics =
+
+The interface is different from what you are used to in 0.7.4 due to this being an early preview for the curious.
+
+Try some commands:
+{{{
+$ xsbt help
+...
+$ xsbt 'help alias'
+...
+$ xsbt 'alias h=help' h
+...
+$ xsbt shell
+> alias
+> alias $%=reload
+> alias h=help
+> alias
+        h = help
+        $% = reload
+> alias $%
+        $% = reload
+> alias h=
+> alias
+        $% = reload
+> $%
+> alias
+}}}
+
+This is all done so far without a project object.  The usual Project hierarchy does not exist at this point.  More on this later...
+
+= sbtrc =
+
+sbt 0.7.4 already has `'< file'` for reading commands from a file.  What 0.9.x adds is reading from `~/.sbtrc` and `./.sbtrc` on startup.  So, create `~/.sbtrc` and add some commands to it:
+{{{
+alias h=help
+h <
+iflast shell
+}}}
+
+The last command sets up interactive mode if the user has not provided any commands on the command line.
+Otherwise, the commands provided on the command line are run and then sbt exits.
+If you want to always enter interactive mode, you can either manually append `shell` to the arguments you provide on the command line or replace `iflast` with `append`.
+`append shell` adds the `shell` command after all pending commands.
+
+With the above `~/.sbtrc`, startup looks like:
+{{{
+$ xsbt
+
+< file1 file2 ...
+        Reads the lines ...
+
+>
+}}}
+
+= Compile/Discover =
+
+The next two commands we'll look at are `compile` and `discover`.  First, a warning: command parsing is rough.  Invalid options are usually ignored and path parsing might not do what you expect.
+
+== Compile ==
+
+Create two source files `B.scala` and `C.scala`:
+{{{
+case class B(i: Int) {
+  def y = C.x - 1
+}
+
+@deprecated object C {
+   def x = 3
+}
+}}}
+
+Compile them using:
+{{{
+$ xsbt
+> compile -src *.scala
+}}}
+(see 'help compile' for details)
+
+Then, modify C.x to be
+{{{
+  def x = 6
+}}}
+and recompile.
+
+In sbt 0.7.4, this would cause both `B.scala` and `C.scala` to be recompiled.  With the new incremental compilation in 0.9.x, `C.scala` is recompiled, the result is analyzed, and it is seen that only the implementation of `C.x` changed, not its signature.  Therefore, the transitive dependencies of `C.scala` do not need to be recompiled.  This will mainly help larger projects and multi-project builds.  It does nothing to speed up initial compilation and can even be slower when signatures do change because it does multiple compilation runs in this case.
+
+You can change `C.x` to be:
+{{{
+  def x = "6"
+}}}
+
+and see that `B.scala` is properly recompiled with the expected error message.  (Lots of incremental compilation debugging information can be turned on by adding `-Dxsbt.inc.debug=true` to the startup script.)
+
+== Discover ==
+
+Additionally, `compile` sets the `Analysis` of the compiled code to be the current "project" object.  You can then run `discover`, a command available after a successful `compile` that finds subclasses and annotated classes.  See `help discover` for details, but here are some examples:
+{{{
+> discover -annot scala.deprecated
+...
+> discover -sub scala.Product
+...
+}}}
+
+The Analysis object represents the full API of the compiled classes and is persisted to disk.  This means, for example, that the process of discovering tests will be done separately from compilation just like `discover` runs separate from `compile`.  You can inspect the API of compiled classes by writing a `Command` that operates on `sbt.inc.Analysis`.  Later, when tasks are ready, you will be able to do this by writing a normal task.
+
+= Defining Commands =
+
+Next, we'll look at defining a `Command`.
+In sbt 0.7.4 you can define plugins and processors.
+These require a full project for each `Processor` or plugin and have to be published somewhere.
+sbt 0.9.x has a more lightweight, low-level concept that is not attached to the Project hierarchy called a `Command`:
+  `Command` is basically a function: `State => Option[Apply]`
+    where `Apply` provides `Help` and a function `Input => Option[State]`
+
+`State` contains the currently declared `Command`s, commands queued for execution, the current "project definition", and some other state.
+`Input` contains both the full input line and the line broken into a command name and arguments.
+
+The idea is that a command might apply only to some project types.  If it doesn't apply, None is returned by the `State => Option[Apply]` function.
+Otherwise, an `Apply` instance is returned, which then processes the `Input` command.
+If the command doesn't select that particular `Command`, `None` is returned.
+`Apply.simple` handles this for the simple, common case of fixed command names.
+
+== Command Example ==
+
+As an example, make a file `~/.sbt/commands/HelloWorld.scala`:
+{{{
+class HelloWorld extends ReflectedCommands
+{
+	val hw = Command.simple(
+		"hello", /* command name */
+		("hello x", briefHelp) /* (usage, description) */
+		briefHelp /* Detailed help.  Here, just use the brief help. */
+		) { (in: Input, s: State) =>
+		
+			println("Hello " + in.arguments)
+		
+			// no changes to the state.  We could have added new commands to run, loaded new Commands, changed the current project definition, ...
+			s
+		}
+	
+	private def briefHelp = "Says hello to the name provided on the command line."
+}
+}}}
+
+== Build and Load Commands ==
+
+There is a command `load-commands` that builds and loads commands (replace `~` with your home directory):
+{{{
+> load-commands -src ~/.sbt/commands/*.scala
+...
+> hello World
+...
+}}}
+
+Add this command to your `~/.sbtrc` and the commands will be built and loaded on startup and on calls to `reload`.
+
+All internal sbt commands in 0.9.x are implemented as `Command`s.
+There are two distinguished commands that run at startup, however.  These are `add-default-commands` and `initialize`.
+sbt initially does not know about any commands, so `add-default-commands` registers built-in commands.
+`initialize` reads commands from `~/.sbtrc` and `./.sbtrc` if they exist.
+
+== Load Projects ==
+
+`load-commands` has a relative, `load`, which does something similar for "project definitions".
+I have been quoting "project definitions" because at the basic level, a "project definition" is any object.
+Commands select the state they apply to by pattern matching on the current project definition.
+We can define a command that operates on history by requiring a project definition to implement a simple interface to provide the history path:
+
+trait HistoryEnabled {
+	def historyPath: Option[Path]
+}
+
+To demonstrate this, make ./project/a/Test.scala:
+{{{
+import sbt._
+import Path._
+class Test extends HistoryEnabled {
+        def historyPath = Some(cwd / "target" / ".history")
+        def cwd = new java.io.File(".")
+}
+}}}
+
+and run:
+{{{
+> load -src project/a/*.scala -name Test
+...
+> !
+...
+> !:
+...
+}}}
+
+Note that we can load any type as the "project definition", as we have done here and with the 'compile' command.  A standard sbt interface would make this type `Project`.
+
+== Conclusion ==
+
+You can see that commands are really intended to build an interface to configuring sbt.  Many people configure a build, quite a few people write plugins, fewer people write processors, and even fewer write commands.  Perhaps I will be the only one to ever use them; however, hopefully you can see that they enable interesting things.  I believe commands fill an open slot on the spectrum of using and extending sbt.  From convention to customization:
+ # use sbt defaults/conventions/built-in tasks, no project definition
+ # configure by creating Project definition in project/build
+ # distribute/reuse project definition code using plugins
+ # add commands using Processors, which use the standard Project hierarchy
+ # build an interface to the sbt core using Commands, possibly different than the Project hierarchy 
+ # use sbt libraries outside of sbt
+ # use/customize the launcher to run an arbitrary application
+
+The usual sbt interface is 1-4.  The idea is to put these on top of 5, which itself is built on 6 and 7.
