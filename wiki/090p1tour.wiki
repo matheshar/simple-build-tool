@@ -19,7 +19,7 @@ $ sbt
 > update
 > project Launcher
 > proguard
-> project Alternative Compiler Test
+> project Alternate Compiler Test
 > publish-local
 }}}
 
