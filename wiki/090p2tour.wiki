@@ -6,13 +6,23 @@ I believe the model behind tasks to be simple, but powerful.  Once you understan
 
 = Setup =
 
-You can follow along by setting up a project as in [090p1tour], having your project definition extend `SingleProject` (a trait for testing out tasks), and using these imports:
+You can follow along by setting up a project as in [090p1tour], having your project definition extend `SingleProject` (a trait for testing out tasks) and import from `sbt` and `sbt.std`:
 {{{
 import sbt._
 import std._
+
+class TaskTest extends SingleProject
+{
+  ...
+}
 }}}
 
-Remember to run the appropriate 'load' after each change for it to take effect.
+Remember to run the appropriate 'load' after each change for it to take effect.  If you have put your project definition in `project/build`:
+{{{
+> load -src project/build/*.scala -name TaskTest
+}}}
+
+All of the task examples are available at [http://gist.github.com/556888].
 
 = Basics =
 
@@ -24,7 +34,13 @@ Remember to run the appropriate 'load' after each change for it to take effect.
   lazy val three: Task[Int] =
     task { 3 }
 }}}
-Note: the explicit type annotations in the examples are not necessary unless otherwise indicated.
+Note: the explicit type annotations in the examples are not necessary unless otherwise indicated.  You can see the result of a task by running it with the `show` task.  For example:
+{{{
+> show hello three
+Hi!
+hello: ()
+three: 3
+}}}
 
 To declare a dependency on another task, use `dependsOn`.  For example:
 {{{
@@ -96,7 +112,7 @@ To chain tasks and ignore their outputs, use `&&` or `||`.  For `&&`, if `a` fai
   lazy val allB: Task[Unit] = fail && hello
 }}}
 
-For `a || b`, if `a` fails, the result of `a || b` is that of `b`.  If `a` succeeds, the result is that of `a` and `b` is not run.
+For `a || b`, if `a` fails, the result of `a || b` is that of `b`.  If `a` succeeds, the result is that of `a` and `b` is not run.  Each of following returns `4`.
 {{{
   lazy val orA: Task[Int] = fail || four
   lazy val orB: Task[Int] = four || fail
@@ -178,9 +194,16 @@ As a final note on cross-building, it is done at construction time.  This places
  * For #2, you can return a task cross-built against `Number` or a non-cross-built task because `number` is cross-built for `Number`.
  * For #3, you can only return a task that is not cross-built against anything because `hello` is not cross-built.
 
-=== Notes ===
- # You might notice that they give rise to a monad.
- # These are related to `liftA2`, `liftA3`, ...  This usage is preferred to nested flatMaps (as in for comprehensions) because no ordering is imposed on the inputs and so they can be executed in parallel.  I am considering renaming `flatMap` to `bind` to prevent accidental serial execution by using for comprehensions.  It is three characters shorter as well.
+= Next part =
+
+ * Streams: a task I/O and logging system
+ * Integration with processes: piping and redirection between tasks and processes
+ * Controlling multi-project aggregation
+ * Access to command line input
+
+= Notes =
+ # You might notice that they give rise to a monad.  See also [code.google.com/p/scalaz/ scalaz]'s [http://scalaz.googlecode.com/svn/continuous/latest/browse.sxr/scalaz/concurrent/Promise.scala.html Promise].
+ # These are related to `liftA2`, `liftA3`, ...  This usage is preferred to nested flatMaps (as in for comprehensions) because no ordering is imposed on the inputs and so they can be executed in parallel.
  # This is a rough edge.  Sorry.
  # http://lampsvn.epfl.ch/trac/scala/ticket/2712
  # Suggestions for better names welcome.
