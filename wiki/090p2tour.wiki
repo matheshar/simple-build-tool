@@ -202,7 +202,7 @@ As a final note on cross-building, it is done at construction time.  This places
  * Access to command line input
 
 = Notes =
- # You might notice that they give rise to a monad.  See also [code.google.com/p/scalaz/ scalaz]'s [http://scalaz.googlecode.com/svn/continuous/latest/browse.sxr/scalaz/concurrent/Promise.scala.html Promise].
+ # You might notice that they give rise to a monad.  See also [http://code.google.com/p/scalaz/ scalaz]'s [http://scalaz.googlecode.com/svn/continuous/latest/browse.sxr/scalaz/concurrent/Promise.scala.html Promise].
  # These are related to `liftA2`, `liftA3`, ...  This usage is preferred to nested flatMaps (as in for comprehensions) because no ordering is imposed on the inputs and so they can be executed in parallel.
  # This is a rough edge.  Sorry.
  # http://lampsvn.epfl.ch/trac/scala/ticket/2712
