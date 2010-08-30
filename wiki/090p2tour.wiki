@@ -6,16 +6,13 @@ I believe the model behind tasks to be simple, but powerful.  Once you understan
 
 = Setup =
 
-You can follow along by setting up a project as in [090p1tour], having your project definition extend `SingleProject`, and adding these imports:
+You can follow along by setting up a project as in [090p1tour], having your project definition extend `SingleProject` (a trait for testing out tasks), and using these imports:
 {{{
-mport sbt._
+import sbt._
 import std._
-import TaskExtra._
-import Process._
-import Types._
 }}}
 
-SingleProject is a trait for testing out tasks.  The imports will get cleaned up so that `import sbt._` is all you need (it's only a preview!).  Remember to do a 'load' after each change.  You can then run tasks as in previous versions of sbt (specify their name and any arguments).
+Remember to run the appropriate 'load' after each change for it to take effect.
 
 = Basics =
 
