@@ -75,7 +75,7 @@ This means "create a new Task that takes the results of `three` and `four` and m
 }}}
 Because of this, the compiler cannot infer the type parameters for the standard function literal.  These implicit conversions are available for arity 2 and 3.  For arbitrary arity or if you want type inference for the mapping function, you need to use the heterogenous list approach.
 
-There are also methods to apply a function across a sequence in parallel, to wait until a sequence of tasks completes, or to reduce the resulting values.
+There are also methods to apply a function across a sequence in parallel, to combine the results of a sequence of tasks, or to reduce the results of a sequence of tasks.
 {{{
   lazy val forkReduce: Task[Int] = (0 to 1000).fork( _ * 3).reduce { _ + _ }
   lazy val forkJoin: Task[Seq[Int]] = (0 to 1000).fork(_ * 3).join
@@ -202,7 +202,7 @@ As a final note on cross-building, it is done at construction time.  This places
  * Access to command line input
 
 = Notes =
- # You might notice that they give rise to a monad.  See also [http://code.google.com/p/scalaz/ scalaz]'s [http://scalaz.googlecode.com/svn/continuous/latest/browse.sxr/scalaz/concurrent/Promise.scala.html Promise].
+ # You might notice that they give rise to a monad.  See also [http://code.google.com/p/scalaz/ scalaz]'s [http://scalaz.googlecode.com/svn/continuous/latest/browse.sxr/scalaz/example/concurrent/Fibs.scala.html Promise].
  # These are related to `liftA2`, `liftA3`, ...  This usage is preferred to nested flatMaps (as in for comprehensions) because no ordering is imposed on the inputs and so they can be executed in parallel.
  # This is a rough edge.  Sorry.
  # http://lampsvn.epfl.ch/trac/scala/ticket/2712
