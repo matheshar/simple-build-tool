@@ -4,14 +4,14 @@ There is some special support for using compiler plugins.  You can mixin the `Au
 
 To use a compiler plugin, you either put it in your unmanaged library directory (`lib`) or add it as managed dependency in the `plugin` configuration.  `compilerPlugin` is a convenience method for specifying `plugin` as the configuration for a dependency:
 {{{
-   val sxr = compilerPlugin("org.scala-tools.sxr" %% "sxr" % "0.2.4")
+   val sxr = compilerPlugin("org.scala-tools.sxr" %% "sxr" % "0.2.6")
 }}}
 
 Alternatively, you can use inline Ivy XML:
 {{{
    override def ivyXML =
       <dependencies>
-         <dependency org="org.scala-tools.sxr" name="sxr" rev="0.2.4" conf="plugin->default(compile)"/>
+         <dependency org="org.scala-tools.sxr" name="sxr" rev="0.2.6" conf="plugin->default(compile)"/>
       </dependencies>
 }}}
 
@@ -28,7 +28,7 @@ The `compile` and `test-compile` actions will use any compiler plugins found in 
 You can still specify compiler plugins manually.  For example:
 
 {{{
-  override def compileOptions = CompileOption("-Xplugin:<path-to-sxr>/sxr-0.2.4.jar") :: super.compileOptions.toList
+  override def compileOptions = CompileOption("-Xplugin:<path-to-sxr>/sxr-0.2.6.jar") :: super.compileOptions.toList
 }}}
 
 == Continuations Plugin Example ==
@@ -39,7 +39,7 @@ import sbt._
 
 class ContinuationsExample(info: ProjectInfo) extends DefaultProject(info) with AutoCompilerPlugins
 {
-  val cont = compilerPlugin("org.scala-lang.plugins" % "continuations" % "2.8.0.RC2")
+  val cont = compilerPlugin("org.scala-lang.plugins" % "continuations" % "2.8.0")
   override def compileOptions = super.compileOptions ++ compileOptions("-P:continuations:enable")
 }
 }}}
