@@ -22,7 +22,7 @@ The following examples demonstrate forking the `run` action and changing the wor
   override def fork =
     forkRun(
       Some(new File("different-working-directory")),
-      forkRun("-Xmx8G" :: Nil)
+      "-Xmx8G" :: Nil
     )
 }}}
 
