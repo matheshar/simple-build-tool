@@ -224,6 +224,8 @@ This final section will highlight the refined semantics of project dependencies.
 import sbt._
 class AggDemo(val info: ProjectInfo) extends DefaultProject
 {
+	override def name = "root"
+
 	// declare an execution dependency on 'sub'
 	val sub = project("sub", "Sub", new Sub(_))
 
@@ -247,7 +249,7 @@ Hello Sub 1
 Hello 1
 > hiPlain
 Hello 2
-> project sub
+> project Sub
 > hiPlain
 Hello Sub 2
 }}}
