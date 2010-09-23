@@ -196,19 +196,23 @@ The fix is to resolve A's dependencies with the information that B is a dependen
 import sbt._
 class DepDemo(val info: ProjectInfo) extends DefaultProject
 {
-	val sub = project("sub", "Sub", new Sub(_))
-	val subDep = sub % compile
+        override def name = "root"
 
-	val ju = "junit" % "junit" % "4.4"
+        val sub = project("sub", "Sub", new Sub(_))
+        val subDep = sub % "compile"
 
-	class Sub(val info: ProjectInfo) extends DefaultProject
-	{
-		val ju = "junit" % "junit" % "4.5"
-	}
+        val ju = "junit" % "junit" % "4.4" % "compile"
+
+        class Sub(val info: ProjectInfo) extends DefaultProject
+        {
+                override def name = "sub"
+
+                val ju = "junit" % "junit" % "4.5" % "compile"
+        }
 }
 }}}
 
-Start sbt, `loadp`, and run `show update`.  You can see that the result of the `update` task is a mapping from configuration to dependency locations.  Note that this does not include project dependencies; these are handled separately.  You have noticed from running `compile` that the `compile` task runs `update` first.  It does this to get the mapping that `update` provides.  Currently, `update` does a full run each time.  However, the intention is for `update` to only run if the inputs have changed.  sbt 0.9 provides much better mechanisms for implementing this behavior, which has been discussed before.  If you are interested in implementing this useful feature, please let me know.
+Start sbt, `loadp`, and run `show update`.  You can see that the result of the `update` task is a mapping from configuration to dependency locations.  Note that this does not include project dependencies; these are handled separately.  You may have noticed from running `compile` that the `compile` task runs `update` first.  It does this to get the mapping that `update` provides.  Currently, `update` does a full run each time.  However, the intention is for `update` to only run if the inputs have changed.  sbt 0.9 provides much better mechanisms for implementing this behavior, which has been discussed before.  If you are interested in implementing this feature, send an email to the mailing list.
 
 = Aggregation =
 
@@ -216,19 +220,19 @@ This final section will highlight the refined semantics of project dependencies.
 
 {{{
 import sbt._
-class DepDemo(val info: ProjectInfo) extends DefaultProject
+class AggDemo(val info: ProjectInfo) extends DefaultProject
 {
 	// declare an execution dependency on 'sub'
 	val sub = project("sub", "Sub", new Sub(_))
 
 	// make it an aggregate task
-	lazy val hiAgg = task { println("Hello 1") } implies()
+	lazy val hiAgg = task { println("Hello 1") } implies;
 	// not an aggregate task
 	lazy val hiPlain = task { println("Hello 2") }
 
 	class Sub(val info: ProjectInfo) extends DefaultProject
 	{
-		lazy val hiAgg = task { println("Hello Sub 1") } implies()
+		lazy val hiAgg = task { println("Hello Sub 1") } implies;
 		lazy val hiPlain = task { println("Hello Sub 2") }
 	}
 }
@@ -241,6 +245,9 @@ Hello Sub 1
 Hello 1
 > hiPlain
 Hello 2
+> project sub
+> hiPlain
+Hello Sub 2
 }}}
 
 The reason that aggregation is no longer the default is that now that tasks return values, you will usually explicitly `map` the output of dependent tasks that might have previously been implicit.  For example, `compile` depends on the classpath tasks of the enclosing project's classpath dependencies.  These will in turn depend on the `compile` task in their respective projects.  So, there is no need for an implicit dependency between `compile` tasks.
