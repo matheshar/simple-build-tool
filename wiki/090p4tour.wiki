@@ -1,0 +1,238 @@
+= Introduction =
+
+This is the last preview of major new aspects in 0.9.x.  Aspects presented in earlier previews were a redone command system, a new task model, and a new logging and I/O system called streams.  This preview introduces the new multi-project incremental compilation, redesigned multi-project dependency management, and redesigned overall multi-project support, including better control over execution vs. classpath dependencies, support for external projects.  If you only ever work on single projects, the new incremental compilation should still benefit you as well as the potential future support for remote projects.
+
+= Single project incremental compilation =
+
+Create a new project.  Add `project/Single.scala` with these contents:
+{{{
+	import sbt._
+class Single(val info: ProjectInfo) extends DefaultProject
+{
+	// haven't gotten to reading from build.properties yet
+	override def name = "single"
+}
+}}}
+
+Create a couple of source files in the root directory (or `src/main/scala` if you prefer):
+
+`A.scala`
+{{{
+object A
+{
+	val x = 3
+}
+}}}
+
+`B.scala`
+{{{
+object B
+{
+	val x = A.x
+}
+}}}
+
+You can see the `B` uses `A` and that the inferred type of `B.x` will be the type of `A.x`.  Go ahead and startup sbt, load the project definition, and run an initial compilation:
+{{{
+$ xsbt shell
+> loadp
+> compile
+}}}
+
+Now change the value for `A.x` to be `5` instead of `3`.  sbt prior to 0.9 would recompile both `A.scala` and `B.scala` because it only knew that the file had changed, not what changed inside.  Now, sbt recompiles the modified files and only recompiles dependencies if the public API changes.  So, if you run another `compile`, sbt will only recompile `A.scala`.  However, if you change `A.x` to be `true` instead of `5`, you will notice that sbt recompiles `A.scala`, realizes it affects `B.scala` and recompiles that as well.  Perhaps most usefully, this works across multiple projects as well.
+
+= Multi-project incremental compilation =
+
+Now, let's create a new project to demonstrate multi-project recompilation.  Add `project/Root.scala`:
+{{{
+	import sbt._
+class Root(val info: ProjectInfo) extends DefaultProject
+{
+	override def name = "root"
+
+	// unlike in 0.7.4, this only declares subA as an execution dependency
+	//  That is, it is not placed on the classpath of the root project, but aggregate commands are executed on it.
+	//  Also unlike 0.7.4, commands are not aggregate by default.  This will be shown later.
+	val subA = project("a", "A", (i: ProjectInfo) => new DefaultProject { val info = i })
+
+	// so, to declare it as a classpath dependency, we say we want it as a 'compile' dependency
+	//  with that, 'A' is compiled first and the result used on 'root's classpath.
+	val subADep = subA % "compile"
+}
+}}}
+
+Let's create the same source files, but in separate projects.  We'll put `A.scala` in the subproject and `B.scala` in the root project.
+`a/A.scala`
+{{{
+object A
+{
+	val x = 3
+}
+}}}
+
+`B.scala`
+{{{
+object B
+{
+	val x = A.x
+}
+}}}
+
+Now, we execute `compile` for the initial compile (after starting up sbt and loading the project definition with `loadp`).  Then, make the changes as before.  Modify `A.x` to be `5` and note that `B.scala` is not recompiled.  Modify `A.x` to be `true` and note that `B.scala` is recompiled.
+
+= Incremental Recompilation Details =
+
+The full details would comprise a long article, but here is a short summary.
+
+sbt now inserts an additional compiler phase after `typer` that extracts the API of compiled classes as an immutable data structure that tries to correspond as closely as possible to the Scala specification, especially Ch. 3 on types.  This data structure is persisted so that it can be used between jvm invocations.  Additionally it is available as the output of the `compile` task.  A later section shows one way this can be used from your project definition.
+
+As before, sbt checks which sources are modified or are out of date because of changes to binary dependencies (jars).  What is new is that dependencies on other projects are tracked by their source API instead of the last modified time of the binary (either a class file or a jar).  So, sbt will check whether the API for a dependency has changed and if it has, invalidate the dependent source (schedule it for recompilation).  The first compilation run is then performed on these modified or invalidated sources.  Note that within the project, transitive dependencies are not recompiled at this time.
+
+During this compilation the new API for the sources is determined and checked against the previous API.  If the public API has changed, then transitive dependencies of the changed source are recompiled.  Note that the steps of determining the changes and propagating the changes are separate.  That is, sbt does not determine what additional files to recompile based on what changed, only that there were changes.
+
+= Discovery =
+
+As sbt users probably know, sbt 0.7.4 auto-detects test classes during compilation.  Because the API of sources is now extracted and available after compilation, this discovery is now done after compilation.  In fact, you can fairly easily do your own discovery.  The following example shows how to detect subclasses of the marker interface `DiscoveryTest`.
+
+Add the following task definition to one of the project definitions above (and reload the project definition with `loadp`):
+{{{
+	lazy val find = compile map { analysis =>
+		build.Build.discover(analysis, None, build.Auto.Subclass, "DiscoverTest")
+	}
+}}}
+
+You can restrict the results to modules by using `Some(true)` instead of `None` or to only classes with `Some(false)`.  You could detect annotations instead by using `build.Auto.Annotation` instead of `build.Auto.Subclass`.  You can do more advanced processing, but you'd have to implement that yourself.  The `discover` method is only for the relatively simple needs of test discovery.
+
+Try it out by defining the marker interface, having one of the objects implement it (the object should be in the project defining `find`), and then running `show find`.  (`show` will print the result of `find`.  We could have also used a `println` in the definition of `find` if we wanted.)
+{{{
+object B extends DiscoverTest
+trait DiscoverTest
+}}}
+
+= External Projects =
+
+External projects are fully supported in 0.9.  There are no longer any restrictions with respect to location on the local filesystem.  There is no longer the requirement that there be a single point of definition.  That is, you can call `project("sub")` in multiple projects and `sub` will only be loaded once.  The tradeoff is that `project("sub")` no longer loads and returns the `Project` instance immediately, but instead returns a descriptor that can later be used to obtain the `Project` instance.  A bonus of this approach is that I believe it would be straightforward to add simple support for remote projects, like `project("git://github.com/harrah/sbinary")`.  It would be more work to properly generalize it to allow arbitrary handlers, control updating the local copy, and so forth, but if you are interested in this, let me know and I'll try to point you in the right direction.
+
+With that said, let's look at an example.  We will add an additional sub project to our multi-project example.  Because it is an external project, we need to make a full new project.  Create this new project some other directory than the current project (this is not mandatory, it is just to demonstrate that it works outside of the project hierarchy).  Add a project definition in this new project in `project/External.scala`:
+{{{
+	import sbt._
+class External(val info: ProjectInfo) extends DefaultProject
+{
+	override def name = "external"
+}
+}}}
+
+and a new source in `E.scala` (in the new project's root directory or in `src/main/scala`):
+{{{
+object E
+{
+	val x = false
+}
+}}}
+
+Change `B.x` from before to refer to `E.x`:
+{{{
+object B
+{
+	val x = E.x
+}
+}}}
+
+Add the dependency to `MultiProject.scala`:
+{{{
+	val ext = project(info.projectDirectory.getParentFile / "<external>")
+	val extDep = ext % "compile"
+}}}
+where `<external>` is the name of the directory you put the external project in.
+
+
+You can start sbt in the external project directory (`xsbt shell`), load the project definition (`loadp`), and run `compile`.  Here you are working directly on this project.  You can then exit out of sbt and head back to the original project directory, startup sbt, load the project definition, and run `compile` there.  Now, you are working with the project as an external project.
+
+Modify `E` to be
+{{{
+object E
+{
+	val x = "a string"
+}
+}}}
+
+Run `compile`.  `B.scala` is recompiled again.  Change `E.x` to return a different string.  Note that `E.scala` is recompiled, but `B.scala` is not.
+
+Note that the `sbt.version` setting for an external project is ignored.  sbt should really check that it is the same or do something else more intelligent, but it doesn't.  Also, I don't remember if cycles between projects are detected.
+
+= Dependency Management =
+
+Issue #44 describes a design flaw in sbt's inter-project dependency management.  Consider a project A that depends on a project B.  B declares a dependency on library L version 1.0.  A declares a dependency on L 1.0.1.  What goes on the compile classpath for B? How about A?  Assume conflicts are resolved by the newest version available, as is the default in Ivy.  Then, B should compile against L 1.0 and A should compile against L 1.0.1 and B, but L 1.0 should not be on A's classpath.  Both L 1.0 and L 1.0.1 are on A's classpath in sbt 0.7.4.  This is fixed in 0.9, but required an overhaul of how sbt does dependency management.
+
+Previously, each project's dependencies were resolved independently and for each configuration separately.  That is, A's 'compile' dependencies would be resolved without B entering the picture.  The dependencies were retrieved to `lib_managed/compile` for each project.  When the 'compile' classpath was required for A, the jars in A's `lib_managed/compile` were combined with those in B's `lib_managed/compile`.  Clearly, this gives rise to the issue mentioned previously.
+
+The fix is to resolve A's dependencies with the information that B is a dependency of A.  For various reasons, the current way of laying out `lib_managed` is no longer reasonable.  The current implementation of `update` returns a map from a configuration to the list of dependency locations in the Ivy cache.  There are many good reasons not to use dependencies out of the cache, but ease of implementation is no longer one of them.  I expect to implement the option of retrieving to `lib_managed`, but it will not be in the same layout (because it is incorrect).  It is, however, straightforward to get the locations of dependencies from the `update` task.  Consider the following multi-project definition:
+{{{
+	import sbt._
+class DepDemo(val info: ProjectInfo) extends DefaultProject
+{
+	val sub = project("sub", "Sub", new Sub(_))
+	val subDep = sub % compile
+
+	val ju = "junit" % "junit" % "4.4"
+
+	class Sub(val info: ProjectInfo) extends DefaultProject
+	{
+		val ju = "junit" % "junit" % "4.5"
+	}
+}
+}}}
+
+Start sbt, `loadp`, and run `show update`.  You can see that the result of the `update` task is a mapping from configuration to dependency locations.  Note that this does not include project dependencies; these are handled separately.  You have noticed from running `compile` that the `compile` task runs `update` first.  It does this to get the mapping that `update` provides.  Currently, `update` does a full run each time.  However, the intention is for `update` to only run if the inputs have changed.  sbt 0.9 provides much better mechanisms for implementing this behavior, which has been discussed before.  If you are interested in implementing this useful feature, please let me know.
+
+= Aggregation =
+
+This final section will highlight the refined semantics of project dependencies.  Project dependencies are now separated into execution and classpath dependencies.  If a project A has an execution dependency on project B, an aggregate task `act` in `A` has an implicit dependency on the `act` task in B (if it exists).  An aggregate task is a task that can be executed across projects.  In 0.9, tasks are not aggregate by default.  This can be enabled by calling the `implies` method.  For example:
+
+{{{
+	import sbt._
+class DepDemo(val info: ProjectInfo) extends DefaultProject
+{
+	// declare an execution dependency on 'sub'
+	val sub = project("sub", "Sub", new Sub(_))
+
+	// make it an aggregate task
+	lazy val hiAgg = task { println("Hello 1") } implies()
+	// not an aggregate task
+	lazy val hiPlain = task { println("Hello 2") }
+
+	class Sub(val info: ProjectInfo) extends DefaultProject
+	{
+		lazy val hiAgg = task { println("Hello Sub 1") } implies()
+		lazy val hiPlain = task { println("Hello Sub 2") }
+	}
+}
+}}}
+
+Start sbt, `loadp`, and run:
+{{{
+> hiAgg
+Hello Sub 1
+Hello 1
+> hiPlain
+Hello 2
+}}}
+
+The reason that aggregation is no longer the default is that now that tasks return values, you will usually explicitly `map` the output of dependent tasks that might have previously been implicit.  For example, `compile` depends on the classpath tasks of the enclosing project's classpath dependencies.  These will in turn depend on the `compile` task in their respective projects.  So, there is no need for an implicit dependency between `compile` tasks.
+
+As shown in the [#Dependency_Management Dependency Management] section, classpath project dependencies are project that are used in a project's classpath and are enabled by declaring the configuration mapping, which is usually "compile" for a compile dependency (it will also be available in tests and at runtime) or "test" to only use the dependency in test code.  This latter use case was a bit more verbose and fragile in previous versions of sbt.
+
+If you want only a classpath dependency and not an execution dependency, make the initial val private:
+{{{
+	private val sub = project("sub", "Sub", new Sub(_))
+	
+	val subDep = sub % "compile"
+}}}
+
+Tasks in `sub` will still get run when there are explicit dependencies on them, as for `compile`.  If you run `update`, however, it will only update the current project.
+
+= Outlook =
+
+This preview concludes the presentation of the major, open-ended, long-term architectural designs/redesigns that have come to fruition for 0.9.  (The new task engine has been in progress for over a year and so has multi-project aggressive incremental recompilation with API extraction.)  With this, I believe 0.9.0 is almost ready.  Rather than work until 0.9.0 is nearly a drop-in replacement for 0.7.4, I'd like to release it now (well, very soon) essentially with the features presented so far.  The features for 0.9.1 will probably be 'test', 'console', and 'run'.
+
+Beyond that, I have some ideas.  However, I think now is a great time to get involved.  Some people have inquired about this and I'd very much like to help people get involved and working on interesting projects.  Certainly I can drive 0.9.x to 0.10.0 myself, but I think the result will be more interesting and useful with others building on the systems I have described so far.  The next article you can expect to see is a discussion of some opportunities for working on sbt, including what needs to be done or could be done.
