@@ -6,7 +6,7 @@ This is the last preview of major new aspects in 0.9.x.  Aspects presented in ea
 
 Create a new project.  Add `project/Single.scala` with these contents:
 {{{
-	import sbt._
+import sbt._
 class Single(val info: ProjectInfo) extends DefaultProject
 {
 	// haven't gotten to reading from build.properties yet
@@ -45,7 +45,7 @@ Now change the value for `A.x` to be `5` instead of `3`.  sbt prior to 0.9 would
 
 Now, let's create a new project to demonstrate multi-project recompilation.  Add `project/Root.scala`:
 {{{
-	import sbt._
+import sbt._
 class Root(val info: ProjectInfo) extends DefaultProject
 {
 	override def name = "root"
@@ -115,7 +115,7 @@ External projects are fully supported in 0.9.  There are no longer any restricti
 
 With that said, let's look at an example.  We will add an additional sub project to our multi-project example.  Because it is an external project, we need to make a full new project.  Create this new project some other directory than the current project (this is not mandatory, it is just to demonstrate that it works outside of the project hierarchy).  Add a project definition in this new project in `project/External.scala`:
 {{{
-	import sbt._
+import sbt._
 class External(val info: ProjectInfo) extends DefaultProject
 {
 	override def name = "external"
@@ -168,7 +168,7 @@ Previously, each project's dependencies were resolved independently and for each
 
 The fix is to resolve A's dependencies with the information that B is a dependency of A.  For various reasons, the current way of laying out `lib_managed` is no longer reasonable.  The current implementation of `update` returns a map from a configuration to the list of dependency locations in the Ivy cache.  There are many good reasons not to use dependencies out of the cache, but ease of implementation is no longer one of them.  I expect to implement the option of retrieving to `lib_managed`, but it will not be in the same layout (because it is incorrect).  It is, however, straightforward to get the locations of dependencies from the `update` task.  Consider the following multi-project definition:
 {{{
-	import sbt._
+import sbt._
 class DepDemo(val info: ProjectInfo) extends DefaultProject
 {
 	val sub = project("sub", "Sub", new Sub(_))
@@ -190,7 +190,7 @@ Start sbt, `loadp`, and run `show update`.  You can see that the result of the `
 This final section will highlight the refined semantics of project dependencies.  Project dependencies are now separated into execution and classpath dependencies.  If a project A has an execution dependency on project B, an aggregate task `act` in `A` has an implicit dependency on the `act` task in B (if it exists).  An aggregate task is a task that can be executed across projects.  In 0.9, tasks are not aggregate by default.  This can be enabled by calling the `implies` method.  For example:
 
 {{{
-	import sbt._
+import sbt._
 class DepDemo(val info: ProjectInfo) extends DefaultProject
 {
 	// declare an execution dependency on 'sub'
@@ -233,6 +233,6 @@ Tasks in `sub` will still get run when there are explicit dependencies on them, 
 
 = Outlook =
 
-This preview concludes the presentation of the major, open-ended, long-term architectural designs/redesigns that have come to fruition for 0.9.  (The new task engine has been in progress for over a year and so has multi-project aggressive incremental recompilation with API extraction.)  With this, I believe 0.9.0 is almost ready.  Rather than work until 0.9.0 is nearly a drop-in replacement for 0.7.4, I'd like to release it now (well, very soon) essentially with the features presented so far.  The features for 0.9.1 will probably be 'test', 'console', and 'run'.
+This preview concludes the presentation of the major, open-ended, long-term architectural designs/redesigns that have come to fruition in 0.9.  (The new task engine has been in progress for over a year and so has multi-project aggressive incremental recompilation with API extraction.  Issue #44 has been pending for about a year as well.)  With this, I believe 0.9.0 is almost ready.  Rather than work until 0.9.0 is nearly a drop-in replacement for 0.7.4, I'd like to release it now (well, very soon) essentially with the features presented so far.  The features for 0.9.1 will probably be 'test', 'console', and 'run'.
 
 Beyond that, I have some ideas.  However, I think now is a great time to get involved.  Some people have inquired about this and I'd very much like to help people get involved and working on interesting projects.  Certainly I can drive 0.9.x to 0.10.0 myself, but I think the result will be more interesting and useful with others building on the systems I have described so far.  The next article you can expect to see is a discussion of some opportunities for working on sbt, including what needs to be done or could be done.
