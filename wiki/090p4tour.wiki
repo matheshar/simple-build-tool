@@ -23,7 +23,7 @@ $ sbt
 > publish-local
 }}}
 
-Copy your `~/bin/sbt` script to `~/bin/xsbt` and change it to use the launcher in `target/scala_2.8.0/`.
+Copy your `~/bin/sbt` script to `~/bin/xsbt` and change it to use the launcher at `target/sbt-launch-0.9.0-SNAPSHOT.jar`.
 
 = Single project incremental compilation =
 
