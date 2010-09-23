@@ -85,6 +85,7 @@ class Root(val info: ProjectInfo) extends DefaultProject
 }}}
 
 Let's create the same source files, but in separate projects.  We'll put `A.scala` in the subproject and `B.scala` in the root project.
+
 `a/A.scala`
 {{{
 object A
