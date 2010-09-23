@@ -168,10 +168,9 @@ object B
 
 Add the dependency to `MultiProject.scala`:
 {{{
-	val ext = project(info.projectDirectory.getParentFile / "<external>")
+	val ext = project(new File("/path/to/external"))
 	val extDep = ext % "compile"
 }}}
-where `<external>` is the name of the directory you put the external project in.
 
 
 You can start sbt in the external project directory (`xsbt shell`), load the project definition (`loadp`), and run `compile`.  Here you are working directly on this project.  You can then exit out of sbt and head back to the original project directory, startup sbt, load the project definition, and run `compile` there.  Now, you are working with the project as an external project.
