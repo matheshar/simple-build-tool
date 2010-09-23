@@ -1,6 +1,27 @@
 = Introduction =
 
-This is the last preview of major new aspects in 0.9.x.  Aspects presented in earlier previews were a redone command system, a new task model, and a new logging and I/O system called streams.  This preview introduces the new multi-project incremental compilation, redesigned multi-project dependency management, and redesigned overall multi-project support, including better control over execution vs. classpath dependencies, support for external projects.  If you only ever work on single projects, the new incremental compilation should still benefit you as well as the potential future support for remote projects.
+This is the last preview of major new aspects in 0.9.x.  Aspects presented in earlier previews were a redone [090p1tour command system], a new [090p2tour task model], and a new [090p3tour logging and I/O system called streams].  This preview introduces the new multi-project incremental compilation, redesigned multi-project dependency management, and redesigned overall multi-project support, including better control over execution vs. classpath dependencies, support for external projects.  If you only ever work on single projects, the new incremental compilation should still benefit you as well as the potential future support for remote projects.
+
+= Setup =
+
+First, grab [http://github.com/harrah/xsbt/] and switch to the 0.9 branch:
+{{{
+$ git clone git://github.com/harrah/xsbt.git
+$ cd xsbt
+$ git checkout 0.9
+}}}
+
+Now, build the 0.9 launcher and project (using sbt 0.7.4):
+{{{
+$ sbt
+> update
+> project Launcher
+> proguard
+> project Simple Build Tool
+> publish-local
+}}}
+
+Copy your `~/bin/sbt` script to `~/bin/xsbt` and change it to use the launcher in `target/scala_2.8.0/`.
 
 = Single project incremental compilation =
 
@@ -79,6 +100,8 @@ object B
 }}}
 
 Now, we execute `compile` for the initial compile (after starting up sbt and loading the project definition with `loadp`).  Then, make the changes as before.  Modify `A.x` to be `5` and note that `B.scala` is not recompiled.  Modify `A.x` to be `true` and note that `B.scala` is recompiled.
+
+You can list project with `projects` and move between them with `project <name>` (tab completion is not there yet).
 
 = Incremental Recompilation Details =
 
@@ -235,4 +258,4 @@ Tasks in `sub` will still get run when there are explicit dependencies on them, 
 
 This preview concludes the presentation of the major, open-ended, long-term architectural designs/redesigns that have come to fruition in 0.9.  (The new task engine has been in progress for over a year and so has multi-project aggressive incremental recompilation with API extraction.  Issue #44 has been pending for about a year as well.)  With this, I believe 0.9.0 is almost ready.  Rather than work until 0.9.0 is nearly a drop-in replacement for 0.7.4, I'd like to release it now (well, very soon) essentially with the features presented so far.  The features for 0.9.1 will probably be 'test', 'console', and 'run'.
 
-Beyond that, I have some ideas.  However, I think now is a great time to get involved.  Some people have inquired about this and I'd very much like to help people get involved and working on interesting projects.  Certainly I can drive 0.9.x to 0.10.0 myself, but I think the result will be more interesting and useful with others building on the systems I have described so far.  The next article you can expect to see is a discussion of some opportunities for working on sbt, including what needs to be done or could be done.
+Beyond that, I have some ideas.  However, I think now is a great time to get involved.  Some people have inquired about this and I'd very much like to help people get involved and working on interesting projects.  Certainly I can drive the 0.9.x experimental series to become the stable 0.10.0 release myself, but I think the result will be more interesting and useful with others building on the systems I have described so far.  The next article you can expect to see is a discussion of some opportunities for working on sbt, including what needs to be done or could be done.
