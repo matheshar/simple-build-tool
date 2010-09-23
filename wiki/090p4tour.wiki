@@ -68,10 +68,10 @@ Now change the value for `A.x` to be `5` instead of `3`.  sbt prior to 0.9 would
 
 = Multi-project incremental compilation =
 
-Now, let's create a new project to demonstrate multi-project recompilation.  Add `project/Root.scala`:
+Now, let's create a new project to demonstrate multi-project recompilation.  Add `project/Multi.scala`:
 {{{
 import sbt._
-class Root(val info: ProjectInfo) extends DefaultProject
+class Multi(val info: ProjectInfo) extends DefaultProject
 {
 	override def name = "root"
 
