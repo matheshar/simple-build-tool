@@ -1,3 +1,5 @@
+<wiki:toc max_depth="3" />
+
 = Introduction =
 
 This is the last preview of major new aspects in 0.9.x.  Aspects presented in earlier previews were a redone [090p1tour command system], a new [090p2tour task model], and a new [090p3tour logging and I/O system called streams].  This preview introduces the new multi-project incremental compilation, redesigned multi-project dependency management, and redesigned overall multi-project support, including better control over execution vs. classpath dependencies, support for external projects.  If you only ever work on single projects, the new incremental compilation should still benefit you as well as the potential future support for remote projects.
