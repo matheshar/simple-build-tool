@@ -13,7 +13,7 @@ There are a few goals to the proposed configuration system, which I'll generally
   > set[update] log-level debug
   > set[test-compile] options -Xlog-implicits -explaintypes
 }}}
- # These are transient settings.  That is, they are only for the current session.  This is similar to setting a variable in bash.  If you want it to be set every time, you stick it in your `.bashrc` (`.sbtrc` for sbt).   A side-effect of being able to set parameters from the command line is being able to set them from initialization scripts, as shown in the [http://code.google.com/p/simple-build-tool/wiki/090p1tour#sbtrc first preview], which allows you t.  Alternatively, you use the existing mechanism of properties, mentioned next.
+ # These are transient settings.  That is, they are only for the current session.  This is similar to setting a variable in bash.  If you want it to be set every time, you stick it in your `.bashrc` (`.sbtrc` for sbt).   A side-effect of being able to set parameters from the command line is being able to set them from initialization scripts, as shown in the [http://code.google.com/p/simple-build-tool/wiki/090p1tour#sbtrc first preview].  Alternatively, you use the existing mechanism of properties, mentioned next.
  # Integrate settings with properties.  Properties would be options backed by a file that uses properties syntax and applied to a project as if by calling `set <key> <value>`.  Modifying those values would write back to the file.
 
 == Static/full configuration ==
