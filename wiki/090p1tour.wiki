@@ -19,19 +19,13 @@ $ sbt
 > update
 > project Launcher
 > proguard
-> project Alternate Compiler Test
+> project Simple Build Tool
 > publish-local
 }}}
 
-Copy your `~/bin/sbt` script to `~/bin/xsbt` and change it to use the launcher in `target/scala_2.8.0/`.
+Copy your `~/bin/sbt` script to `~/bin/xsbt` and change it to use the launcher at `target/sbt-launch-0.9.0-SNAPSHOT.jar`.
 
-Now, create a new directory somewhere, say `~/test` and setup a scratch project.
-{{{
-$ mkdir test
-$ cd test
-$ xsbt
-...? s
-}}}
+Whenever you construct a new project, just make it a new scratch project.  The Scala version is currently fixed to 2.8.1.RC1 and the project properties are currently ignored.
 
 = Basics =
 
