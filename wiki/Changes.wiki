@@ -6,6 +6,8 @@
  * Updated to [http://ant.apache.org/ivy/history/2.2.0/release-notes.html Ivy 2.2.0].
  * Trond's patches that allow configuring [http://github.com/harrah/xsbt/commit/5e41a47f50e6 jetty-env.xml] and [http://github.com/harrah/xsbt/commit/030e2ee91bac0 webdefault.xml]
  * Doug's [http://github.com/harrah/xsbt/commit/aa75ecf7055db patch] to make 'projects' command show an asterisk next to current project 
+ * Fixed issue 122
+ * Implemented issue 118
 
 === 0.7.3 to 0.7.4 ===
  * prefix continuous compilation with run number for better feedback when logging level is 'warn'
