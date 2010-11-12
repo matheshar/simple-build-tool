@@ -11,6 +11,7 @@
  * [http://bmc.github.com/sbt-plugins/ EditSource, IzPack, and Markdown]
  * [http://github.com/Gekkio/sbt-jrebel-plugin JRebel]
  * [http://github.com/markchadwick/jython-sbt-plugin Jython]
+ * [http://bitbucket.org/jmhofer/findbugs4sbt FindBugs]
 
 See [http://code.google.com/p/simple-build-tool/wiki/IntegrationSupport Integration Support] for IDE-related plugins.
 
