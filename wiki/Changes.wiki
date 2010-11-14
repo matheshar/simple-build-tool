@@ -1,6 +1,6 @@
 === 0.7.4 to 0.7.5 (currently RC0) ===
  * Joonas's update to work with Jetty 7.1 logging API changes.
- * Updated to work with Jetty 7.2 WebAppClassLoader binary incompatibility (issue 129).
+ * Updated to work with Jetty 7.2 !WebAppClassLoader binary incompatibility (issue 129).
  * Provide application and boot classpaths to tests and 'run'ning code according to http://gist.github.com/404272
  * Fix `provided` configuration.  It is no longer included on the classpath of dependent projects.
  * Scala 2.8.1 is the default version used when starting a new project.
