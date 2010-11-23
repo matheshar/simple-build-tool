@@ -9,6 +9,7 @@
  * Doug's [http://github.com/harrah/xsbt/commit/aa75ecf7055db patch] to make 'projects' command show an asterisk next to current project 
  * Fixed issue 122
  * Implemented issue 118
+ * Patch from Viktor and Ross for issue 123.
 
 === 0.7.3 to 0.7.4 ===
  * prefix continuous compilation with run number for better feedback when logging level is 'warn'
