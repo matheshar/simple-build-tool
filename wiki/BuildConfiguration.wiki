@@ -82,7 +82,7 @@ Method `mainClass` is of type `Option[String]` and specifies an optional main cl
 
 If defined, the `mainClass` method specifies the value of the `Main-Class` attribute in the manifest.  The `manifestClassPath`method, if defined, specifies the value of `Class-Path` attribute.  Method `packageOptions` specifies general options for task `package` and is of type `Seq[PackageOption]`.  Provided options are:
   * `MainClass(mainClassName: String)`   Specifies the `Main-Class` attribute in the manifest.  By default, this option is included with the value of the `mainClass` method if it is defined.  When `mainClass` is not specified explicitly, the `package` task will try to determine which class to use automatically.  If exactly one main class is detected, it is used.  If multiple main classes are detected, a warning is printed and no `Main-Class` attribute is added to the manifest.
-  * `ManifestAttributes(attributes: (java.util.Attributes.Name, String)*)` or `ManifestAttributes(attributes: (String, String)*)`   Defines main attributes to add to the manifest.
+  * `ManifestAttributes(attributes: (java.util.jar.Attributes.Name, String)*)` or `ManifestAttributes(attributes: (String, String)*)`   Defines main attributes to add to the manifest.
   * `JarManifest(m: Manifest)`   Specifies the manifest to use for the jar.  The default manifest includes the `Main-Class` attribute if `mainClass` (as described above) is not empty and the `Class-Path` attribute if `manifestClassPath` is not empty.
 
 == Document Options ==
