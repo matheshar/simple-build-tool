@@ -1,5 +1,13 @@
 = sbt Processors =
 
+== Existing Processors ==
+ * [http://lifty.github.com/ Lifty]
+ * [http://github.com/sroebuck/sbt-coverage Code coverage with Undercover ]
+
+See [http://code.google.com/p/simple-build-tool/wiki/IntegrationSupport Integration Support] for IDE-related processors.
+
+== Basics ==
+
 A processor is complementary to a plugin.  The table below compares the two.
 
 || || Processors || Plugins ||
