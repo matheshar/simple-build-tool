@@ -16,6 +16,7 @@
 
 See [http://code.google.com/p/simple-build-tool/wiki/IntegrationSupport Integration Support] for IDE-related plugins.
 
+See also the complementary extension mechanism [http://code.google.com/p/simple-build-tool/wiki/Processors Processors], which includes a list of existing processors.
 
 == Basics ==
 
