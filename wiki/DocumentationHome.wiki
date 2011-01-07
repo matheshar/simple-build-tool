@@ -22,6 +22,7 @@
   * [ScalaJars Scala Jars and Dependency Management]
   * [TestFrameworkExtensions Extending the Test Framework]
   * [SbtPlugins Plugins] - Reusing and distributing project definitions
+  * [Processors Processors] - Creating new commands outside project definitions
   * Managed Dependencies
    * [LibraryManagement Basics]
    * [ManagedConfigurations Configurations]
