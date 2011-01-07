@@ -39,13 +39,13 @@ set efm=%E\ %#[error]\ %f:%l:\ %m,%C\ %#[error]\ %p^,%-C%.%#,%Z,
 
 You'll need to `cd` into your project root to issue the `:make` command. 
 
-= TextMate =
+= !TextMate =
 
 See [http://www.sidewayscoding.com/2010/08/using-textmate-for-scala-development.html].
 
 = IDEA =
 
-sbt plugin: [http://github.com/mpeltonen/sbt-idea-plugin]
+sbt plugin/processor: [https://github.com/mpeltonen/sbt-idea]
 
 IDEA plugin: [http://plugins.intellij.net/plugin/?idea&id=5007]
 
