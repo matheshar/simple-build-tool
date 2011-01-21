@@ -72,3 +72,7 @@ There are currently three options for Eclipse integration.
  # Add/remove dependencies in your project definition.
  # Issue `reload` and `deliver-local` in the `sbt` console
  # Update Eclipse classpath container as follows: right-click on the Ivy container in your project (should look like: `target/ivy-1.0.xml [compile]`) and click on the bottommost `Refresh` (not the one with `F5`, but just below `Resolve`)
+
+= Hudson =
+
+See the [http://wiki.hudson-ci.org/display/HUDSON/sbt+plugin plugin for sbt].
