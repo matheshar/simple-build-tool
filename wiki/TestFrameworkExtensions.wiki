@@ -35,7 +35,7 @@ trait TestsListener extends TestReportListener
   def doComplete(finalResult: Result.Value)
 }
 
-abstract class TestEvent extends NotNull
+abstract class TestEvent
 {
   def result: Option[Result.Value]
   def detail: Seq[org.scalatools.testing.Event] = Nil
@@ -49,7 +49,7 @@ To use your extensions in a project definition:
 Overriding the `testFrameworks` method in your project definition to reference your test framework.
 {{{
   def extraFramework = new TestFramework("custom.framework.ClassName")
-  override def testFrameworks: Iterable[TestFramework] = super.testFrameworks ++ Seq(extraFramework)
+  override def testFrameworks: Seq[TestFramework] = super.testFrameworks ++ Seq(extraFramework)
 }}}
 
 Specify the test reporters you want to use by overriding the `testListeners` method in your project definition.
