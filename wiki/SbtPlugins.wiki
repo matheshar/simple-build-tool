@@ -13,6 +13,7 @@
  * [http://github.com/markchadwick/jython-sbt-plugin Jython]
  * [http://bitbucket.org/jmhofer/findbugs4sbt FindBugs]
  * [http://bitbucket.org/jmhofer/cpd4sbt Copy/Paste Detector (CPD) of PMD]
+ * [https://bitbucket.org/wyuenho/sbt-filter-plugin Resource Filtering]
 
 See [http://code.google.com/p/simple-build-tool/wiki/IntegrationSupport Integration Support] for IDE-related plugins.
 
