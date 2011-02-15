@@ -70,6 +70,8 @@ The actual identifier for the `val` is currently unimportant.  See [Configuratio
 }}}
 This will download the right jar for the dependency built with the version of Scala that you are currently using.  If you get an error while resolving this kind of dependency, that dependency probably wasn't published for the version of Scala you are using.  See [CrossBuild cross-building] for details.
 
+Ivy can select the latest revision of a module according to constraints you specify.  Instead of a fixed revision like `"1.6.1"`, you specify `"latest.integration"`, `"2.9.+"`, or `"[1.0,)"`.  See the [http://ant.apache.org/ivy/history/2.1.0/ivyfile/dependency.html#revision Ivy documentation] for details.
+
 === Additional Repositories ===
  
 Declare additional repositories besides the default Maven2 and Scala Tools Releases repositories that you want to use with the form:
