@@ -73,6 +73,10 @@ There are currently three options for Eclipse integration.
  # Issue `reload` and `deliver-local` in the `sbt` console
  # Update Eclipse classpath container as follows: right-click on the Ivy container in your project (should look like: `target/ivy-1.0.xml [compile]`) and click on the bottommost `Refresh` (not the one with `F5`, but just below `Resolve`)
 
-= Hudson =
+= Jenkins =
 
-See the [http://wiki.hudson-ci.org/display/HUDSON/sbt+plugin plugin for sbt].
+Jenkins plugin: [http://wiki.jenkins-ci.org/display/JENKINS/sbt+plugin].
+
+= JEdit =
+
+JEdit plugin: [https://github.com/StefanE/SBT4jEdit]
