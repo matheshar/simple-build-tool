@@ -153,21 +153,24 @@ If the command doesn't select that particular `Command`, `None` is returned.
 
 As an example, make a file `~/.sbt/commands/HelloWorld.scala`:
 {{{
+
+import sbt._
+
 class HelloWorld extends ReflectedCommands
 {
-	val hw = Command.simple(
-		"hello", /* command name */
-		("hello x", briefHelp) /* (usage, description) */
-		briefHelp /* Detailed help.  Here, just use the brief help. */
-		) { (in: Input, s: State) =>
-		
-			println("Hello " + in.arguments)
-		
-			// no changes to the state.  We could have added new commands to run, loaded new Commands, changed the current project definition, ...
-			s
-		}
-	
-	private def briefHelp = "Says hello to the name provided on the command line."
+         val hw = Command.single(
+                 "hello", /* command name */
+                 ("hello x", briefHelp), /* (usage, description) */
+                 briefHelp /* Detailed help.  Here, just use the brief help.  */
+                 ) { (s: State, in: String) =>
+
+                         println("Hello " + in)
+
+                         // no changes to the state.  We could have added new commands to run, loaded new Commands, changed the current project definition, ...
+                         s
+                 }
+
+         private def briefHelp = "Says hello to the name provided on the command line."
 }
 }}}
 
