@@ -72,5 +72,5 @@ To build a custom managed classpath, say for using something like `fmpp` for you
 	def fmppTask(args: List[String]) =
 		runTask(Some("fmpp.tools.CommandLine"), fmppClasspath, args)
 
-	lazy val fmpp - fmppTask(...)
+	lazy val fmpp = fmppTask(...)
 }}}
