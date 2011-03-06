@@ -65,7 +65,7 @@ If `rand` produces `true`, the `four` task is run and its result is the result o
 
 = Parallel =
 
-Those were the baic serial methods[#Notes [1]].  There are also versions of `map` and `flatMap` that operate on multiple input tasks[#Notes [2]].  They do not impose an ordering on the input tasks, so you might refer to them as parallel map and flatMap.  For example:
+Those were the basic serial methods[#Notes [1]].  There are also versions of `map` and `flatMap` that operate on multiple input tasks[#Notes [2]].  They do not impose an ordering on the input tasks, so you might refer to them as parallel map and flatMap.  For example:
 {{{
   lazy val par: Task[Int] = (three, four) map { (t: Int, f: Int) => t * f }
 }}}
@@ -93,7 +93,7 @@ If a Task fails by throwing an Exception, tasks that need the failing task's res
 }}}
 This just prints the stack trace of the top-level failure, but more useful error reporting would need to report the full graph of failures.
 
-Like an exception in normal code, the failure propagates through the dependency graph.  If all dependent tasks "catch" the failure, propation of the failure ceases.  As with `catch`, you must rethrow the exception if you want the catching function to fail as well.  There is also `flatMapFailure` that allows returning a new `Task` like `flatMap` does when the input succeeds.  Both methods are also available in parallel.  The parallel `map/flatMapFailure` succeeds if any input fails and provides a `Seq[Incomplete]` to the error handling function.
+Like an exception in normal code, the failure propagates through the dependency graph.  If all dependent tasks "catch" the failure, propagation of the failure ceases.  As with `catch`, you must rethrow the exception if you want the catching function to fail as well.  There is also `flatMapFailure` that allows returning a new `Task` like `flatMap` does when the input succeeds.  Both methods are also available in parallel.  The parallel `map/flatMapFailure` succeeds if any input fails and provides a `Seq[Incomplete]` to the error handling function.
 
 To always run some code regardless of the success of a task, use `andFinally`.  This works like `finally`.  The provided code is run and the result of the initial task, either a successful value or an exception, is propagated.
 {{{
