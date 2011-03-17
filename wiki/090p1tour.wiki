@@ -4,29 +4,6 @@
 
 This is intended as a guided tour through some of the ideas being explored in 0.9.
 
-= Setup =
-
-First, grab [http://github.com/harrah/xsbt/] and switch to the 0.9 branch:
-{{{
-$ git clone git://github.com/harrah/xsbt.git
-$ cd xsbt
-$ git checkout 0.9
-}}}
-
-Now, build the 0.9 launcher and project (using sbt 0.7.4):
-{{{
-$ sbt
-> update
-> project Launcher
-> proguard
-> project Simple Build Tool
-> publish-local
-}}}
-
-Copy your `~/bin/sbt` script to `~/bin/xsbt` and change it to use the launcher at `target/sbt-launch-0.9.0-SNAPSHOT.jar`.
-
-Whenever you construct a new project, just make it a new scratch project.  The Scala version is currently fixed to 2.8.1.RC1 and the project properties are currently ignored.
-
 = Basics =
 
 The interface is different from what you are used to in 0.7.4 due to this being an early preview for the curious.
