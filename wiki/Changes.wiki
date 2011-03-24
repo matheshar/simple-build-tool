@@ -1,4 +1,4 @@
-=== 0.7.4 to 0.7.5 (currently RC0) ===
+=== 0.7.4 to 0.7.5 (currently RC1) ===
  * Joonas's update to work with Jetty 7.1 logging API changes.
  * Updated to work with Jetty 7.2 !WebAppClassLoader binary incompatibility (issue 129).
  * Provide application and boot classpaths to tests and 'run'ning code according to http://gist.github.com/404272
@@ -9,7 +9,9 @@
  * Doug's [http://github.com/harrah/xsbt/commit/aa75ecf7055db patch] to make 'projects' command show an asterisk next to current project 
  * Fixed issue 122
  * Implemented issue 118
- * Patch from Viktor and Ross for issue 123.
+ * Patch from Viktor and Ross for issue 123
+ * (RC1) Patch from Jorge for issue 100
+ * (RC1) Fix `<packaging>` type
 
 === 0.7.3 to 0.7.4 ===
  * prefix continuous compilation with run number for better feedback when logging level is 'warn'
