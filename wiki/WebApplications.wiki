@@ -19,7 +19,7 @@ You can also continuously recompile and reload the web application when using Je
 }}}
 `jetty-run` starts Jetty and the `~ prepare-webapp` recompiles and recreates the web application whenever sources files change (see TriggeredExecution for details on `~`).  The `jetty-run` action monitors the directories given by `scanDirectories` and redeploys on changes.  By default, the entire temporary web application directory is monitored.  You might want to change `scanDirectories` in some cases.  For example, set `scanDirectories` to `Nil` if you do not want to redeploy on any changes.  Or, set `scanDirectories` to only monitor the library and classes directories:
 {{{
-  override def scanDirectories = ( temporaryWarPath / "WEB-INF" / ("classes" | "lib") ).get.toSeq
+  override def scanDirectories = ( temporaryWarPath / "WEB-INF" * ("classes" | "lib") ).get.toSeq
 }}}
 You might use one of these options if your web application picks up changes to resource files and therefore does not need to be redeployed or if you are using [http://www.zeroturnaround.com/jrebel/ JRebel].
 
