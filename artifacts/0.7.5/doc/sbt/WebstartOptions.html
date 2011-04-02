@@ -1,0 +1,374 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head><title>trait WebstartOptions in sbt</title>
+        <meta http-equiv="content-type" content="text/html; charset=UTF8"></meta><meta content="scaladoc (version 2.7.7.final)" name="generator"></meta><link href="../style.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../script.js"></script>
+        </head>
+        <body onload="init()">
+        <table summary="" class="navigation">
+        <tr>
+          <td class="navigation-links" valign="top">
+            <!-- <table><tr></tr></table> -->
+          </td>
+          <td align="right" valign="top" style="white-space:nowrap;" rowspan="2">
+            <div class="doctitle-larger">Simple Build Tool 0.7.5 API</div>
+          </td>
+        </tr>
+        <tr><td></td></tr>
+      </table>
+        
+      <div class="entity">
+        <a href="../sbt$package.html" target="_self">sbt</a>
+        <br></br>
+        <span class="entity">trait  WebstartOptions</span>
+      </div><hr></hr>
+      <div class="source">
+        [source: <a href="" class="sbt/WebstartOptions"><code>sbt/WebstartOptions.scala</code></a>]
+      </div><hr></hr>
+      <a name="WebstartOptions"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>trait</code>
+        <em>WebstartOptions</em>
+      </dt>
+      <dd><code> extends </code><a href="" target="contentFrame" class="scala/NotNull">scala.NotNull</a></dd>
+    </dl>
+      <dl><dd>Defines the configurable parameters for the webstart task.</dd></dl>
+      <dl></dl>
+    <dl>
+      <dt style="margin:10px 0 0 20px;"><b>Direct Known Subclasses:</b></dt>
+      <dd><a href="../sbt/BasicWebstartProject.html" target="_self">BasicWebstartProject</a></dd>
+      </dl><hr></hr>
+      
+
+
+<table summary="" cellpadding="3" class="member">
+      <tr><td class="title" colspan="2">Method Summary</td></tr>
+      <tr>
+      <td class="modifiers" valign="top"> 
+        <code>abstract def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/WebstartOptions.html#jnlpFile" target="_self">jnlpFile</a></em>
+         : <a href="../sbt/Path.html" target="_self">Path</a>
+        
+        <div>The location to write the .jnlp file to.  It must be in 'webstartOutputDirectory'.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>abstract def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/WebstartOptions.html#jnlpXML%28Seq%5Bsbt.WebstartJarResource%5D%29" target="_self">jnlpXML</a></em>
+        (<em>jars</em> : <a href="" target="contentFrame" class="scala/Seq">scala.Seq</a>[<a href="../sbt/WebstartJarResource.html" target="_self">WebstartJarResource</a>]) : <a href="" target="contentFrame" class="scala/xml/Elem">scala.xml.Elem</a>
+        
+        <div>Generates the .jnlp file using the provided resource descriptions.  Each resource description
+ provides the path of the jar relative to 'webstartOutputDirectory' and whether or not
+ it is the main jar.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>abstract def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/WebstartOptions.html#webstartExtraLibraries" target="_self">webstartExtraLibraries</a></em>
+         : <a href="../sbt/PathFinder.html" target="_self">PathFinder</a>
+        
+        <div>Libraries external to the project needed for webstart.  This is mainly for scala libraries.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>abstract def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/WebstartOptions.html#webstartGzip" target="_self">webstartGzip</a></em>
+         : <a href="http://www.scala-lang.org/docu/files/api/scala/Boolean.html" target="_self">Boolean</a>
+        
+        <div>If true, gzip compression will be applied to all jars.  If pack200 compression is enabled,
+ gzip compression is also applied to the archives with pack200 compression.  A version of
+ each file without gzip compression is still created in the webstart output directory.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>abstract def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/WebstartOptions.html#webstartLibDirectory" target="_self">webstartLibDirectory</a></em>
+         : <a href="../sbt/Path.html" target="_self">Path</a>
+        
+        <div>The location to put all jars that are not the main jar.  It must be in 'webstartOutputDirectory'.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>abstract def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/WebstartOptions.html#webstartLibraries" target="_self">webstartLibraries</a></em>
+         : <a href="../sbt/PathFinder.html" target="_self">PathFinder</a>
+        
+        <div>The libraries needed for webstart.  Note that only jars are used; directories are discarded.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>abstract def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/WebstartOptions.html#webstartMainJar" target="_self">webstartMainJar</a></em>
+         : <a href="../sbt/Path.html" target="_self">Path</a>
+        
+        <div>The main jar to use for webstart.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>abstract def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/WebstartOptions.html#webstartOutputDirectory" target="_self">webstartOutputDirectory</a></em>
+         : <a href="../sbt/Path.html" target="_self">Path</a>
+        
+        <div>The location to put all generated files for webstart.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>abstract def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/WebstartOptions.html#webstartPack200" target="_self">webstartPack200</a></em>
+         : <a href="http://www.scala-lang.org/docu/files/api/scala/Boolean.html" target="_self">Boolean</a>
+        
+        <div>If true, pack200 compression is applied to all jars (main and libraries).  A version of each jar
+ without pack200 compression is still created in the webstart output directory.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>abstract def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/WebstartOptions.html#webstartResources" target="_self">webstartResources</a></em>
+         : <a href="../sbt/PathFinder.html" target="_self">PathFinder</a>
+        
+        <div>Resources to copy to the webstart output directory.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>abstract def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/WebstartOptions.html#webstartSignConfiguration" target="_self">webstartSignConfiguration</a></em>
+         : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="../sbt/SignConfiguration.html" target="_self">SignConfiguration</a>]
+        
+        <div>If defined, configures signing of jars.  All jars (main and libraries) are signed using
+ this configuration.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code>abstract def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/WebstartOptions.html#webstartZip" target="_self">webstartZip</a></em>
+         : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="../sbt/Path.html" target="_self">Path</a>]
+        
+        <div>If defined, this specifies where to create a zip of the webstart output directory.  It cannot be
+ in the output directory.</div>
+      </td>
+    </tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#getClass%28%29" target="_self">getClass</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#hashCode%28%29" target="_self">hashCode</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#equals%28Any%29" target="_self">equals</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#clone%28%29" target="_self">clone</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#toString%28%29" target="_self">toString</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#notify%28%29" target="_self">notify</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#notifyAll%28%29" target="_self">notifyAll</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#wait%28Long%29" target="_self">wait</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#wait%28Long%2CInt%29" target="_self">wait</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#wait%28%29" target="_self">wait</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#finalize%28%29" target="_self">finalize</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#%3D%3D%28AnyRef%29" target="_self">==</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#%21%3D%28AnyRef%29" target="_self">!=</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#eq%28AnyRef%29" target="_self">eq</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#ne%28AnyRef%29" target="_self">ne</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#synchronized%28T0%29" target="_self">synchronized</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html" target="_self">Any</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html#%3D%3D%28Any%29" target="_self">==</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html#%21%3D%28Any%29" target="_self">!=</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html#isInstanceOf" target="_self">isInstanceOf</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html#asInstanceOf" target="_self">asInstanceOf</a>
+        </td></tr>
+      </table>
+
+
+      
+
+
+<table summary="" cellpadding="3" class="member-detail">
+          <tr><td class="title">Method Details</td></tr>
+        </table><div><a name="webstartMainJar"></a><dl>
+      <dt>
+        
+        <code>abstract</code>
+        <code>def</code>
+        <em>webstartMainJar</em> : <a href="../sbt/Path.html" target="_self">Path</a>
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>The main jar to use for webstart.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="webstartOutputDirectory"></a><dl>
+      <dt>
+        
+        <code>abstract</code>
+        <code>def</code>
+        <em>webstartOutputDirectory</em> : <a href="../sbt/Path.html" target="_self">Path</a>
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>The location to put all generated files for webstart.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="jnlpXML%28Seq%5Bsbt.WebstartJarResource%5D%29"></a><dl>
+      <dt>
+        
+        <code>abstract</code>
+        <code>def</code>
+        <em>jnlpXML</em>(<em>jars</em> : <a href="" target="contentFrame" class="scala/Seq">scala.Seq</a>[<a href="../sbt/WebstartJarResource.html" target="_self">WebstartJarResource</a>]) : <a href="" target="contentFrame" class="scala/xml/Elem">scala.xml.Elem</a>
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Generates the .jnlp file using the provided resource descriptions.  Each resource description
+ provides the path of the jar relative to 'webstartOutputDirectory' and whether or not
+ it is the main jar.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="jnlpFile"></a><dl>
+      <dt>
+        
+        <code>abstract</code>
+        <code>def</code>
+        <em>jnlpFile</em> : <a href="../sbt/Path.html" target="_self">Path</a>
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>The location to write the .jnlp file to.  It must be in 'webstartOutputDirectory'.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="webstartLibDirectory"></a><dl>
+      <dt>
+        
+        <code>abstract</code>
+        <code>def</code>
+        <em>webstartLibDirectory</em> : <a href="../sbt/Path.html" target="_self">Path</a>
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>The location to put all jars that are not the main jar.  It must be in 'webstartOutputDirectory'.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="webstartLibraries"></a><dl>
+      <dt>
+        
+        <code>abstract</code>
+        <code>def</code>
+        <em>webstartLibraries</em> : <a href="../sbt/PathFinder.html" target="_self">PathFinder</a>
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>The libraries needed for webstart.  Note that only jars are used; directories are discarded.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="webstartExtraLibraries"></a><dl>
+      <dt>
+        
+        <code>abstract</code>
+        <code>def</code>
+        <em>webstartExtraLibraries</em> : <a href="../sbt/PathFinder.html" target="_self">PathFinder</a>
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Libraries external to the project needed for webstart.  This is mainly for scala libraries.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="webstartResources"></a><dl>
+      <dt>
+        
+        <code>abstract</code>
+        <code>def</code>
+        <em>webstartResources</em> : <a href="../sbt/PathFinder.html" target="_self">PathFinder</a>
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Resources to copy to the webstart output directory.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="webstartZip"></a><dl>
+      <dt>
+        
+        <code>abstract</code>
+        <code>def</code>
+        <em>webstartZip</em> : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="../sbt/Path.html" target="_self">Path</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>If defined, this specifies where to create a zip of the webstart output directory.  It cannot be
+ in the output directory.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="webstartSignConfiguration"></a><dl>
+      <dt>
+        
+        <code>abstract</code>
+        <code>def</code>
+        <em>webstartSignConfiguration</em> : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="../sbt/SignConfiguration.html" target="_self">SignConfiguration</a>]
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>If defined, configures signing of jars.  All jars (main and libraries) are signed using
+ this configuration.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="webstartPack200"></a><dl>
+      <dt>
+        
+        <code>abstract</code>
+        <code>def</code>
+        <em>webstartPack200</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/Boolean.html" target="_self">Boolean</a>
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>If true, pack200 compression is applied to all jars (main and libraries).  A version of each jar
+ without pack200 compression is still created in the webstart output directory.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="webstartGzip"></a><dl>
+      <dt>
+        
+        <code>abstract</code>
+        <code>def</code>
+        <em>webstartGzip</em> : <a href="http://www.scala-lang.org/docu/files/api/scala/Boolean.html" target="_self">Boolean</a>
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>If true, gzip compression will be applied to all jars.  If pack200 compression is enabled,
+ gzip compression is also applied to the archives with pack200 compression.  A version of
+ each file without gzip compression is still created in the webstart output directory.</dd></dl>
+      <dl></dl>
+    <hr></hr></div>
+
+
+    <hr></hr>
+        <table summary="" class="navigation">
+        <tr>
+          <td class="navigation-links" valign="top">
+            <!-- <table><tr></tr></table> -->
+          </td>
+          <td align="right" valign="top" style="white-space:nowrap;" rowspan="2">
+            <div class="doctitle-larger">Simple Build Tool 0.7.5 API</div>
+          </td>
+        </tr>
+        <tr><td></td></tr>
+      </table>
+      </body>
+      </html>

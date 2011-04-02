@@ -1,0 +1,321 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head><title>class Handler in sbt.processor</title>
+        <meta http-equiv="content-type" content="text/html; charset=UTF8"></meta><meta content="scaladoc (version 2.7.7.final)" name="generator"></meta><link href="../../style.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../../script.js"></script>
+        </head>
+        <body onload="init()">
+        <table summary="" class="navigation">
+        <tr>
+          <td class="navigation-links" valign="top">
+            <!-- <table><tr></tr></table> -->
+          </td>
+          <td align="right" valign="top" style="white-space:nowrap;" rowspan="2">
+            <div class="doctitle-larger">Simple Build Tool 0.7.5 API</div>
+          </td>
+        </tr>
+        <tr><td></td></tr>
+      </table>
+        
+      <div class="entity">
+        <a href="../../sbt/processor$package.html" target="_self">sbt.processor</a>
+        <br></br>
+        <span class="entity">class  Handler</span>
+      </div><hr></hr>
+      <div class="source">
+        [source: <a href="" class="sbt/processor/Handler"><code>sbt/processor/Handler.scala</code></a>]
+      </div><hr></hr>
+      <a name="Handler"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>class</code>
+        <em>Handler</em>(<em>baseProject</em> : <a href="../../sbt/Project.html" target="_self">Project</a>)
+      </dt>
+      <dd><code> extends </code><a href="" target="contentFrame" class="scala/NotNull">scala.NotNull</a><code> with </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a></dd>
+    </dl>
+      
+
+<table summary="" cellpadding="3" class="member">
+      <tr><td class="title" colspan="2">Value Summary</td></tr>
+      <tr>
+      <td class="modifiers" valign="top"> 
+        <code> lazy val</code>
+      </td>
+      <td class="signature">
+        <em><a href="../../sbt/processor/Handler.html#base" target="_self">base</a></em>
+         : <a href="../../sbt/Path.html" target="_self">Path</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> lazy val</code>
+      </td>
+      <td class="signature">
+        <em><a href="../../sbt/processor/Handler.html#defParser" target="_self">defParser</a></em>
+         : <a href="../../sbt/processor/DefinitionParser.html" target="_self">DefinitionParser</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> lazy val</code>
+      </td>
+      <td class="signature">
+        <em><a href="../../sbt/processor/Handler.html#manager" target="_self">manager</a></em>
+         : <a href="../../sbt/processor/ManagerImpl.html" target="_self">ManagerImpl</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> lazy val</code>
+      </td>
+      <td class="signature">
+        <em><a href="../../sbt/processor/Handler.html#persistBase" target="_self">persistBase</a></em>
+         : <a href="../../sbt/Path.html" target="_self">Path</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> lazy val</code>
+      </td>
+      <td class="signature">
+        <em><a href="../../sbt/processor/Handler.html#scalaVersion" target="_self">scalaVersion</a></em>
+         : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+        
+        
+      </td>
+    </tr>
+      </table>
+<table summary="" cellpadding="3" class="member">
+      <tr><td class="title" colspan="2">Method Summary</td></tr>
+      <tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../../sbt/processor/Handler.html#definitionsFile" target="_self">definitionsFile</a></em>
+         : <a href="../../sbt/Path.html" target="_self">Path</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../../sbt/processor/Handler.html#files" target="_self">files</a></em>
+         : <a href="../../sbt/processor/ManagerFiles.html" target="_self">ManagerFiles</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../../sbt/processor/Handler.html#lock" target="_self">lock</a></em>
+         : <a href="../../xsbti/GlobalLock.html" target="_self">GlobalLock</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../../sbt/processor/Handler.html#lockName" target="_self">lockName</a></em>
+         : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../../sbt/processor/Handler.html#persistLockFile" target="_self">persistLockFile</a></em>
+         : <a href="../../sbt/Path.html" target="_self">Path</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../../sbt/processor/Handler.html#retrieveLockFile" target="_self">retrieveLockFile</a></em>
+         : <a href="../../sbt/Path.html" target="_self">Path</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../../sbt/processor/Handler.html#unapply%28String%29" target="_self">unapply</a></em>
+        (<em>line</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="../../sbt/processor/ParsedProcessor.html" target="_self">ParsedProcessor</a>]
+        
+        
+      </td>
+    </tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#getClass%28%29" target="_self">getClass</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#hashCode%28%29" target="_self">hashCode</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#equals%28Any%29" target="_self">equals</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#clone%28%29" target="_self">clone</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#toString%28%29" target="_self">toString</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#notify%28%29" target="_self">notify</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#notifyAll%28%29" target="_self">notifyAll</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#wait%28Long%29" target="_self">wait</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#wait%28Long%2CInt%29" target="_self">wait</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#wait%28%29" target="_self">wait</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#finalize%28%29" target="_self">finalize</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#%3D%3D%28AnyRef%29" target="_self">==</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#%21%3D%28AnyRef%29" target="_self">!=</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#eq%28AnyRef%29" target="_self">eq</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#ne%28AnyRef%29" target="_self">ne</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#synchronized%28T0%29" target="_self">synchronized</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html" target="_self">Any</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html#%3D%3D%28Any%29" target="_self">==</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html#%21%3D%28Any%29" target="_self">!=</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html#isInstanceOf" target="_self">isInstanceOf</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html#asInstanceOf" target="_self">asInstanceOf</a>
+        </td></tr>
+      </table>
+
+
+      
+
+<table summary="" cellpadding="3" class="member-detail">
+          <tr><td class="title">Value Details</td></tr>
+        </table><div><a name="scalaVersion"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>lazy val</code>
+        <em>scalaVersion</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="base"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>lazy val</code>
+        <em>base</em> : <a href="../../sbt/Path.html" target="_self">Path</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="persistBase"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>lazy val</code>
+        <em>persistBase</em> : <a href="../../sbt/Path.html" target="_self">Path</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="defParser"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>lazy val</code>
+        <em>defParser</em> : <a href="../../sbt/processor/DefinitionParser.html" target="_self">DefinitionParser</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="manager"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>lazy val</code>
+        <em>manager</em> : <a href="../../sbt/processor/ManagerImpl.html" target="_self">ManagerImpl</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr></div>
+<table summary="" cellpadding="3" class="member-detail">
+          <tr><td class="title">Method Details</td></tr>
+        </table><div><a name="unapply%28String%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>unapply</em>(<em>line</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>) : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="../../sbt/processor/ParsedProcessor.html" target="_self">ParsedProcessor</a>]
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="lock"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>lock</em> : <a href="../../xsbti/GlobalLock.html" target="_self">GlobalLock</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="retrieveLockFile"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>retrieveLockFile</em> : <a href="../../sbt/Path.html" target="_self">Path</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="persistLockFile"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>persistLockFile</em> : <a href="../../sbt/Path.html" target="_self">Path</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="lockName"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>lockName</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="definitionsFile"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>definitionsFile</em> : <a href="../../sbt/Path.html" target="_self">Path</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="files"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>files</em> : <a href="../../sbt/processor/ManagerFiles.html" target="_self">ManagerFiles</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr></div>
+
+
+    <hr></hr>
+        <table summary="" class="navigation">
+        <tr>
+          <td class="navigation-links" valign="top">
+            <!-- <table><tr></tr></table> -->
+          </td>
+          <td align="right" valign="top" style="white-space:nowrap;" rowspan="2">
+            <div class="doctitle-larger">Simple Build Tool 0.7.5 API</div>
+          </td>
+        </tr>
+        <tr><td></td></tr>
+      </table>
+      </body>
+      </html>

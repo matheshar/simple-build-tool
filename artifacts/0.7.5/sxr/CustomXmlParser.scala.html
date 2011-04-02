@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+			<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" ></meta>
+        <title>CustomXmlParser.scala</title>
+        <script type="text/javascript" src="jquery-all.js"></script>
+        <script type="text/javascript" src="linked.js"></script>
+        <link rel="stylesheet" type="text/css" href="style.css" title="Style"></link>
+    </head>
+    <body>
+        <pre>
+<span class="comment">/* sbt -- Simple Build Tool
+ * Copyright 2008, 2009, 2010  Mark Harrah
+ */</span>
+<span class="keyword">package</span> sbt
+
+<span class="keyword">import</span> java.io.ByteArrayInputStream
+<span class="keyword">import</span> java.net.URL
+
+<span class="keyword">import</span> org.apache.ivy.{core, plugins}
+<span class="keyword">import</span> core.module.descriptor.{DefaultDependencyDescriptor, DefaultModuleDescriptor}
+<span class="keyword">import</span> core.settings.IvySettings
+<span class="keyword">import</span> plugins.parser.xml.XmlModuleDescriptorParser
+<span class="keyword">import</span> plugins.repository.Resource
+<span class="keyword">import</span> plugins.repository.url.URLResource
+
+<span class="comment">/** Subclasses the default Ivy file parser in order to provide access to protected methods.*/</span>
+<span class="keyword">private</span>[sbt] <span class="keyword">object</span> <a title="object sbt.CustomXmlParser" id="13432">CustomXmlParser</a> <span class="keyword">extends</span> <a title="org.apache.ivy.plugins.parser.xml.XmlModuleDescriptorParser" id="42099">XmlModuleDescriptorParser</a> <span class="keyword">with</span> <span title="NotNull">NotNull</span>
+{
+	<span class="keyword">import</span> XmlModuleDescriptorParser.Parser
+	<span class="keyword">class</span> <a title="class CustomParser extends org.apache.ivy.plugins.parser.xml.XmlModuleDescriptorParser.Parser with NotNull with ScalaObject" id="42147">CustomParser</a>(<a title="org.apache.ivy.core.settings.IvySettings" id="42885">settings</a>: <a title="org.apache.ivy.core.settings.IvySettings" id="41244">IvySettings</a>, <a title="Option[String]" id="42886">defaultConfig</a>: <a title="Option[String]" id="901">Option</a>[String]) <span class="keyword">extends</span> <a title="org.apache.ivy.plugins.parser.xml.XmlModuleDescriptorParser.Parser" id="42100">Parser</a>(<a href="#13432" title="object sbt.CustomXmlParser">CustomXmlParser</a>, <a href="#42885" title="org.apache.ivy.core.settings.IvySettings">settings</a>) <span class="keyword">with</span> <span title="NotNull">NotNull</span>
+	{
+		<span title="Unit" class="keyword">if</span>(<a href="#42886" title="Option[String]">defaultConfig</a>.<a title="=&gt; Boolean" id="30325">isDefined</a>) <a href="#42147" title="(java.lang.String)Unit" id="42396">setDefaultConfMapping</a>(<span title="java.lang.String(&quot;*-&gt;default(compile)&quot;)" class="string">&quot;*-&gt;default(compile)&quot;</span>)
+
+		<span class="keyword">def</span> <a title="(java.net.URL)Unit" id="42339">setSource</a>(<a title="java.net.URL" id="42946">url</a>: <a title="java.net.URL" id="4377">URL</a>) =
+		{
+			<span class="keyword">super</span>.<a title="(org.apache.ivy.plugins.repository.Resource)Unit" id="42393">setResource</a>(<span title="org.apache.ivy.plugins.repository.url.URLResource" class="keyword">new</span> <a title="org.apache.ivy.plugins.repository.url.URLResource" id="41512">URLResource</a>(<a href="#42946" title="java.net.URL">url</a>))
+			<span class="keyword">super</span>.<a title="(java.net.URL)Unit" id="42169">setInput</a>(<a href="#42946" title="java.net.URL">url</a>)
+		}
+		<span class="keyword">def</span> <a title="(Array[Byte])Unit" id="42340">setInput</a>(<a title="Array[Byte]" id="42968">bytes</a>: <a title="Array[Byte]" id="1036">Array</a>[Byte]) { <a href="#42147" title="(java.io.InputStream)Unit" id="42168">setInput</a>(<span title="java.io.ByteArrayInputStream" class="keyword">new</span> <a title="java.io.ByteArrayInputStream" id="3507">ByteArrayInputStream</a>(<a href="#42968" title="Array[Byte]">bytes</a>)) }
+		<span class="comment">/** Overridden because the super implementation overwrites the module descriptor.*/</span>
+		<span class="keyword">override</span> <span class="keyword">def</span> <a title="(org.apache.ivy.plugins.repository.Resource)Unit" id="42341">setResource</a>(<a title="org.apache.ivy.plugins.repository.Resource" id="43014">res</a>: <a title="org.apache.ivy.plugins.repository.Resource" id="39422">Resource</a>) <span title="Unit">{</span>}
+		<span class="keyword">override</span> <span class="keyword">def</span> <a title="(org.apache.ivy.core.module.descriptor.DefaultModuleDescriptor)Unit" id="42342">setMd</a>(<a title="org.apache.ivy.core.module.descriptor.DefaultModuleDescriptor" id="43015">md</a>: <a title="org.apache.ivy.core.module.descriptor.DefaultModuleDescriptor" id="39366">DefaultModuleDescriptor</a>) = <span class="keyword">super</span>.<a title="(org.apache.ivy.core.module.descriptor.DefaultModuleDescriptor)Unit" id="42411">setMd</a>(<a href="#43015" title="org.apache.ivy.core.module.descriptor.DefaultModuleDescriptor">md</a>)
+		<span class="keyword">override</span> <span class="keyword">def</span> <a title="(String,org.apache.ivy.core.module.descriptor.DefaultDependencyDescriptor)Unit" id="42343">parseDepsConfs</a>(<a title="String" id="43102">confs</a>: <a title="String" id="1804">String</a>, <a title="org.apache.ivy.core.module.descriptor.DefaultDependencyDescriptor" id="43103">dd</a>: <a title="org.apache.ivy.core.module.descriptor.DefaultDependencyDescriptor" id="39354">DefaultDependencyDescriptor</a>) = <span class="keyword">super</span>.<a title="(java.lang.String,org.apache.ivy.core.module.descriptor.DefaultDependencyDescriptor)Unit" id="42397">parseDepsConfs</a>(<a href="#43102" title="String">confs</a>, <a href="#43103" title="org.apache.ivy.core.module.descriptor.DefaultDependencyDescriptor">dd</a>)
+		<span class="keyword">override</span> <span class="keyword">def</span> <a title="()String" id="42344">getDefaultConf</a> = <a href="#42886" title="Option[String]">defaultConfig</a>.<a title="(=&gt; String)String" id="30329">getOrElse</a>(<span class="keyword">super</span>.<a title="()java.lang.String" id="42407">getDefaultConf</a>)
+	}
+}
+        </pre>
+    </body>
+</html>
