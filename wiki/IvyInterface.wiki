@@ -1,7 +1,7 @@
 This page describes how to use sbt's Ivy interface directly.  This interface is new in 0.7.  The source code can be found in the [http://github.com/harrah/xsbt/tree/master/ivy/ Ivy project of xsbt].  The Ivy interface is published to the `databinder.net` repository (Ivy metadata only).  You can use it in an `sbt` project like:
 
 {{{
-val sbtIvy = "org.scala-tools.sbt" %% "ivy" % "0.7.4"
+val sbtIvy = "org.scala-tools.sbt" %% "ivy" % "0.7.5"
 val dbRepo = Resolver.url("technically.us", new URL("http://databinder.net/repo/"))(Resolver.ivyStylePatterns)
 }}}
 
