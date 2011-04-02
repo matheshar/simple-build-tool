@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+			<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" ></meta>
+        <title>sbt/complete/History.scala</title>
+        <script type="text/javascript" src="../../jquery-all.js"></script>
+        <script type="text/javascript" src="../../linked.js"></script>
+        <link rel="stylesheet" type="text/css" href="../../style.css" title="Style"></link>
+    </head>
+    <body>
+        <pre>
+<span class="keyword">package</span> sbt.complete
+
+<span class="keyword">import</span> History.number
+
+<span class="keyword">final</span> <span class="keyword">class</span> <a title="class History extends java.lang.Object with NotNull with ScalaObject" id="14247">History</a> <span class="keyword">private</span>(<a title="Array[String]" id="82491">lines</a>: <a title="Array[String]" id="1036">Array</a>[String], <a title="sbt.Logger" id="82492">log</a>: <a href="../Logger.scala.html#13533" title="sbt.Logger">Logger</a>) <span class="keyword">extends</span> <a title="NotNull" id="193">NotNull</a>
+{
+	<span class="keyword">private</span> <span class="keyword">def</span> <a title="=&gt; Array.Projection[String]" id="82475">reversed</a> = <a href="#82491" title="Array[String]">lines</a>.<a title="=&gt; Array.Projection[String]" id="15664">reverse</a>
+
+	<span class="keyword">def</span> <a title="=&gt; Seq[String]" id="82476">all</a>: <span title="Seq[String]">Seq</span>[String] = <a href="#82491" title="Array[String]">lines</a>.<span title="Array[String]">toArray</span>
+	<span class="keyword">def</span> <a title="=&gt; Int" id="82477">size</a> = <a href="#82491" title="Array[String]">lines</a>.<a title="=&gt; Int" id="15677">length</a>
+	<span class="keyword">def</span> <a title="=&gt; Option[String]" id="82478">!!</a> : <span title="Option[String]">Option</span>[String] = <a href="#82482" title="(Int)Option[String]">!-</a> (<span title="Int(1)" class="int">1</span>)
+	<span class="keyword">def</span> <a title="(Int)Option[String]" id="82479">apply</a>(<a title="Int" id="82504">i</a>: <span title="Int">Int</span>): <span title="Option[String]">Option</span>[String] = <span title="Option[String]" class="keyword">if</span>(<span title="Int(0)" class="int">0</span> <a title="(Int)Boolean" id="3087">&lt;=</a> <a href="#82504" title="Int">i</a> <a title="(Boolean)Boolean" id="2694">&amp;&amp;</a> <a href="#82504" title="Int">i</a> <span title="(Int)Boolean">&lt;</span> <a href="#82477" title="=&gt; Int">size</a>) <span title="(String)Some[String]">Some</span>( <a href="#82491" title="(Int)String" id="15678">lines</a>(<a href="#82504" title="Int">i</a>) ) <span class="keyword">else</span> { <a href="#82492" title="sbt.Logger">log</a>.<a href="../Logger.scala.html#49387" title="(=&gt; String)Unit">error</a>(<span title="java.lang.String(&quot;Invalid history index: &quot;)" class="string">&quot;Invalid history index: &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#82504" title="Int">i</a>); <span title="object None">None</span> }
+	<span class="keyword">def</span> <a title="(Int)Option[String]" id="82480">!</a>(<a title="Int" id="82512">i</a>: <span title="Int">Int</span>): <span title="Option[String]">Option</span>[String] = <a href="#82479" title="(Int)Option[String]">apply</a>(<a href="#82512" title="Int">i</a>)
+
+	<span class="keyword">def</span> <a title="(String)Option[String]" id="82481">!</a>(<a title="String" id="82513">s</a>: <span title="String">String</span>): <span title="Option[String]">Option</span>[String] =
+		<a href="#82469" title="(String)Option[Int]">number</a>(<a href="#82513" title="String">s</a>) <span title="Option[String]" class="keyword">match</span>
+		{
+			<span title="Option[String]" class="keyword">case</span> Some(<a title="Int" id="82515">n</a>) =&gt; <span title="Option[String]" class="keyword">if</span>(<a href="#82515" title="Int">n</a> <span title="(Int)Boolean">&lt;</span> <span title="Int(0)" class="int">0</span>) <a href="#82482" title="(Int)Option[String]">!-</a> (-<a href="#82515" title="=&gt; Int" id="3040">n</a>) <span class="keyword">else</span> <a href="#82479" title="(Int)Option[String]">apply</a>(<a href="#82515" title="Int">n</a>)
+			<span title="Option[String]" class="keyword">case</span> <span title="object None">None</span> =&gt; <a href="#82484" title="(String)(=&gt; Option[String])Option[String]">nonEmpty</a>(<a href="#82513" title="String">s</a>) { <a href="#82475" title="=&gt; Array.Projection[String]">reversed</a>.<span title="((String) =&gt; Boolean)Option[String]">find</span>(<a href="#82521" title="String">_</a>.<a title="(java.lang.String)Boolean" id="6374">startsWith</a>(<a href="#82513" title="String">s</a>)) }
+		}
+	<span class="keyword">def</span> <a title="(Int)Option[String]" id="82482">!-</a> (<a title="Int" id="82503">n</a>: <span title="Int">Int</span>): <span title="Option[String]">Option</span>[String] = <a href="#82479" title="(Int)Option[String]">apply</a>(<a href="#82477" title="=&gt; Int">size</a> <span title="(Int)Int">-</span> <a href="#82503" title="Int">n</a> <span title="(Int)Int">-</span> <span title="Int(1)" class="int">1</span>)
+
+	<span class="keyword">def</span> <a title="(String)Option[String]" id="82483">!?</a>(<a title="String" id="82539">s</a>: <span title="String">String</span>): <span title="Option[String]">Option</span>[String] = <a href="#82484" title="(String)(=&gt; Option[String])Option[String]">nonEmpty</a>(<a href="#82539" title="String">s</a>) { <a href="#82475" title="=&gt; Array.Projection[String]">reversed</a>.<a title="(Int)Array.Projection[String]" id="15653">drop</a>(<span title="Int(1)" class="int">1</span>).<span title="((String) =&gt; Boolean)Option[String]">find</span>(<a href="#82543" title="String">_</a>.<a title="(java.lang.CharSequence)Boolean" id="6393">contains</a>(<a href="#82539" title="String">s</a>)) }
+
+	<span class="keyword">private</span> <span class="keyword">def</span> <a title="[T](String)(=&gt; Option[T])Option[T]" id="82484">nonEmpty</a>[<a title="&gt;: Nothing &lt;: Any" id="82486">T</a>](<a title="String" id="82517">s</a>: <span title="String">String</span>)(<a title="=&gt; Option[T]" id="82518">act</a>: =&gt; Option[T]): <span title="Option[T]">Option</span>[T] =
+		<span title="Option[T]" class="keyword">if</span>(<a href="#82517" title="String">s</a>.<a title="()Boolean" id="6353">isEmpty</a>)
+		{
+			<a href="#82492" title="sbt.Logger">log</a>.<a href="../Logger.scala.html#49387" title="(=&gt; String)Unit">error</a>(<span title="java.lang.String(&quot;No action specified to history command&quot;)" class="string">&quot;No action specified to history command&quot;</span>)
+			<span title="object None">None</span>
+		}
+		<span class="keyword">else</span>
+			<a href="#82518" title="=&gt; Option[T]">act</a>
+
+	<span class="keyword">def</span> <a title="(Int,Int)Seq[String]" id="82487">list</a>(<a title="Int" id="82545">historySize</a>: <span title="Int">Int</span>, <a title="Int" id="82546">show</a>: <span title="Int">Int</span>): <span title="Seq[String]">Seq</span>[String] =
+		<a href="#82491" title="Array[String]">lines</a>.<a title="=&gt; List[String]" id="15975">toList</a>.<a title="(Int)List[String]" id="15522">drop</a>((<a href="#82491" title="Array[String]">lines</a>.<a title="=&gt; Int" id="15803">size</a> <span title="implicit scala.Predef.intWrapper : (Int)scala.runtime.RichInt">-</span> <a href="#82545" title="Int">historySize</a>) <span title="(Int)Int">max</span> <span title="Int(0)" class="int">0</span>).<a title="=&gt; List[(String, Int)]" id="15557">zipWithIndex</a>.<a title="(((String, Int)) =&gt; java.lang.String)List[java.lang.String]" id="15531">map</a> <a href="#82556" title="java.lang.String">{</a> <span title="java.lang.String" class="keyword">case</span> (<a title="String" id="82557">line</a>, <a title="Int" id="82558">number</a>) =&gt; <span title="java.lang.String(&quot;   &quot;)" class="string">&quot;   &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#82558" title="Int">number</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot;  &quot;)" class="string">&quot;  &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#82557" title="String">line</a> }.<a title="(Int)List[java.lang.String]" id="15523">takeRight</a>(<a href="#82546" title="implicit scala.Predef.intWrapper : (Int)scala.runtime.RichInt">show</a> <span title="(Int)Int">max</span> <span title="Int(1)" class="int">1</span>)
+}
+
+<span class="keyword">object</span> <a title="object sbt.complete.History" id="14248">History</a>
+{
+	<span class="keyword">def</span> <a title="(Seq[String],sbt.Logger)sbt.complete.History" id="82468">apply</a>(<a title="Seq[String]" id="82564">lines</a>: <span title="Seq[String]">Seq</span>[String], <a title="sbt.Logger" id="82565">log</a>: <a href="../Logger.scala.html#13533" title="sbt.Logger">Logger</a>): <a href="#14247" title="sbt.complete.History">History</a> = <span title="sbt.complete.History" class="keyword">new</span> <a href="#14247" title="sbt.complete.History">History</a>(<a href="#82564" title="Seq[String]">lines</a>.<span title="Array[String]">toArray</span>, <a href="#82565" title="sbt.Logger">log</a>)
+
+	<span class="keyword">def</span> <a title="(String)Option[Int]" id="82469">number</a>(<a title="String" id="82514">s</a>: <span title="String">String</span>): <span title="Option[Int]">Option</span>[Int] =
+		<span class="keyword">try</span> { <span title="(Int)Some[Int]">Some</span>(<a href="#82514" title="implicit scala.Predef.stringWrapper : (String)scala.runtime.RichString" id="6615">s</a>.<a title="=&gt; Int" id="17327">toInt</a>) }
+		<span class="keyword">catch</span> { <span title="None.type" class="keyword">case</span> <a title="NumberFormatException" id="82575">e</a>: <a title="NumberFormatException" id="2044">NumberFormatException</a> =&gt; <span title="object None">None</span> }
+}
+        </pre>
+    </body>
+</html>

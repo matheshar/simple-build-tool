@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+			<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" ></meta>
+        <title>sbt/SourceModificationWatch.scala</title>
+        <script type="text/javascript" src="../jquery-all.js"></script>
+        <script type="text/javascript" src="../linked.js"></script>
+        <link rel="stylesheet" type="text/css" href="../style.css" title="Style"></link>
+    </head>
+    <body>
+        <pre>
+<span class="comment">/* sbt -- Simple Build Tool
+ * Copyright 2009  Mikko Peltonen, Mark Harrah
+ */</span>
+<span class="keyword">package</span> sbt
+
+<span class="keyword">object</span> <a title="object sbt.SourceModificationWatch" id="8458">SourceModificationWatch</a>
+{
+	<span class="keyword">def</span> <a title="(sbt.Project,Int)(=&gt; Boolean)(=&gt; Unit)Unit" id="67419">watchUntil</a>(<a title="sbt.Project" id="67420">project</a>: <a href="Project.scala.html#9291" title="sbt.Project">Project</a>, <a title="Int" id="67421">pollDelaySec</a>: <span title="Int">Int</span>)(<a title="=&gt; Boolean" id="67422">terminationCondition</a>: =&gt; Boolean)(<a title="=&gt; Unit" id="67423">onSourcesModified</a>: =&gt; Unit)
+	{
+		<span class="keyword">def</span> <a title="=&gt; Iterable[java.io.File]" id="75077">sourceFiles</a>: <a title="Iterable[java.io.File]" id="376">Iterable</a>[java.io.File] = <a href="#75078" title="=&gt; sbt.PathFinder">sourcesFinder</a>.<a href="Path.scala.html#49339" title="=&gt; scala.collection.immutable.Set[java.io.File]">getFiles</a>
+		<span class="keyword">def</span> <a title="=&gt; sbt.PathFinder" id="75078">sourcesFinder</a>: <a href="Path.scala.html#10419" title="sbt.PathFinder">PathFinder</a> = (<a href="Path.scala.html#11863" title="object sbt.Path">Path</a>.<a href="Path.scala.html#49303" title="=&gt; sbt.PathFinder">emptyPathFinder</a> <a href="#75080" title="(sbt.PathFinder)((sbt.PathFinder, sbt.Project) =&gt; sbt.PathFinder)sbt.PathFinder" id="15963">/:</a> <a href="#67420" title="sbt.Project">project</a>.<a href="Dag.scala.html#51246" title="=&gt; List[sbt.Project]">topologicalSort</a>)(<a href="#75083" title="sbt.PathFinder">_</a> <a href="Path.scala.html#49326" title="(sbt.PathFinder)sbt.PathFinder">+++</a> <a href="#75084" title="sbt.Project">_</a>.<a href="Project.scala.html#50946" title="=&gt; sbt.PathFinder">watchPaths</a>)
+		<span class="keyword">def</span> <a title="(Long,Int)Unit" id="75079">loop</a>(<a title="Long" id="75085">lastCallbackCallTime</a>: <a title="Long" id="2351">Long</a>, <a title="Int" id="75086">previousFileCount</a>: <span title="Int">Int</span>)
+		{
+			<span class="keyword">val</span> <a href="#75088" title="(Long, Int)">(</a><a href="#75087" title="Long" id="75088">lastModifiedTime</a>, <a href="#75087" title="Int" id="75089">fileCount</a>) = <a href="#75077" title="=&gt; Iterable[java.io.File]">sourceFiles</a>.<a title="((Long, Int))(((Long, Int), java.io.File) =&gt; (Long, Int))(Long, Int)" id="15959">foldLeft</a>(<span title="(Long,Int)(Long, Int)">(</span><span title="Long(0L)" class="long">0L</span>, <span title="Int(0)" class="int">0</span>)){(<a title="(Long, Int)" id="75095">acc</a>, <a title="java.io.File" id="75096">file</a>) =&gt; <span title="(Long,Int)(Long, Int)">(</span><a title="object Math" id="578">Math</a>.<a title="(Long,Long)Long" id="66539">max</a>(<a href="#75095" title="(Long, Int)">acc</a>.<span title="=&gt; Long">_1</span>, <a href="#75096" title="java.io.File">file</a>.<a title="()Long" id="16776">lastModified</a>), <a href="#75095" title="(Long, Int)">acc</a>.<span title="=&gt; Int">_2</span> <a title="(Int)Int" id="3090">+</a> <span title="Int(1)" class="int">1</span>)}
+			<span class="keyword">val</span> <a title="Long" id="75090">newCallbackCallTime</a> =
+				<span class="comment">// check if sources are modified</span>
+				<span title="Long" class="keyword">if</span> (<a href="#75088" title="Long">lastModifiedTime</a> <a title="(Long)Boolean" id="3211">&gt;</a> <a href="#75085" title="Long">lastCallbackCallTime</a> <a title="(Boolean)Boolean" id="2693">||</a> <a href="#75086" title="Int">previousFileCount</a> <a title="(Int)Boolean" id="3085">!=</a> <a href="#75089" title="Int">fileCount</a>)
+				{
+					<span class="keyword">val</span> <a title="Long" id="75134">now</a> = <a title="object java.lang.System" id="1829">System</a>.<a title="()Long" id="18115">currentTimeMillis</a>
+					<a href="#67423" title="=&gt; Unit">onSourcesModified</a>
+					<a href="#75134" title="Long">now</a>
+				}
+				<span class="keyword">else</span>
+					<a href="#75085" title="Long">lastCallbackCallTime</a>
+			<a title="object java.lang.Thread" id="2024">Thread</a>.<a title="(Long)Unit" id="59283">sleep</a>(<a href="#67421" title="Int">pollDelaySec</a> <a title="implicit scala.Predef.int2long : (Int)Long" id="3092">*</a> <span title="Int(1000)" class="int">1000</span>)
+			<span title="Unit" class="keyword">if</span>(<a title="=&gt; Boolean" id="2690">!</a><a href="#67422" title="=&gt; Boolean">terminationCondition</a>)
+				<a href="#75079" title="(Long,Int)Unit">loop</a>(<a href="#75090" title="Long">newCallbackCallTime</a>, <a href="#75089" title="Int">fileCount</a>)
+		}
+		<a href="#75079" title="(Long,Int)Unit">loop</a>(<span title="Long(0L)" class="long">0L</span>, <span title="Int(0)" class="int">0</span>)
+	}
+}
+        </pre>
+    </body>
+</html>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+			<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" ></meta>
+        <title>sbt/processor/Handler.scala</title>
+        <script type="text/javascript" src="../../jquery-all.js"></script>
+        <script type="text/javascript" src="../../linked.js"></script>
+        <link rel="stylesheet" type="text/css" href="../../style.css" title="Style"></link>
+    </head>
+    <body>
+        <pre>
+<span class="comment">/* sbt -- Simple Build Tool
+ * Copyright 2010  Mark Harrah
+ */</span>
+<span class="keyword">package</span> sbt.processor
+
+<span class="keyword">class</span> <a title="class Handler extends java.lang.Object with NotNull with ScalaObject" id="14731">Handler</a>(<a title="sbt.Project" id="65993">baseProject</a>: <a href="../Project.scala.html#9291" title="sbt.Project">Project</a>) <span class="keyword">extends</span> <span title="NotNull">NotNull</span>
+{
+	<span class="keyword">def</span> <a title="(String)Option[sbt.processor.ParsedProcessor]" id="65974">unapply</a>(<a title="String" id="66772">line</a>: <span title="String">String</span>): <span title="Option[sbt.processor.ParsedProcessor]">Option</span>[ParsedProcessor] =
+		<a href="#66772" title="String">line</a>.<a title="(java.lang.String,Int)Array[java.lang.String]" id="6397">split</a>(<span title="java.lang.String(&quot;\s+&quot;)" class="string">&quot;&quot;&quot;\s+&quot;&quot;&quot;</span>, <span title="Int(2)" class="int">2</span>) <span title="Option[sbt.processor.ParsedProcessor]" class="keyword">match</span>
+		{
+			<span title="Some[sbt.processor.ParsedProcessor]" class="keyword">case</span> <a href="#84837" title="(Array[java.lang.String])Option[Seq[java.lang.String]]" id="1037">Array</a>(<a title="java.lang.String" id="84840">label</a> @ <a href="#84842" title="(String)Option[sbt.processor.Processor]">GetProcessor</a>(<a title="sbt.processor.Processor" id="84845">processor</a>), <a title="Seq[java.lang.String]" id="84846">args</a> @ _*) =&gt; <a title="(sbt.processor.ParsedProcessor)Some[sbt.processor.ParsedProcessor]" id="290">Some</a>( <span title="sbt.processor.ParsedProcessor" class="keyword">new</span> <a href="#14737" title="sbt.processor.ParsedProcessor">ParsedProcessor</a>(<a href="#84840" title="java.lang.String">label</a>, <a href="#84845" title="sbt.processor.Processor">processor</a>, <a href="#84846" title="Seq[java.lang.String]">args</a>.<a title="=&gt; String" id="15980">mkString</a>) )
+			<span title="None.type" class="keyword">case</span> _ =&gt; <a title="object None" id="509">None</a>
+		}
+	<span class="keyword">private</span> <span class="keyword">object</span> <a title="object Handler.this.GetProcessor" id="65975">GetProcessor</a>
+	{
+		<span class="keyword">def</span> <a title="(String)Option[sbt.processor.Processor]" id="84842">unapply</a>(<a title="String" id="84843">name</a>: <span title="String">String</span>): <span title="Option[sbt.processor.Processor]">Option</span>[Processor] =
+			<a href="#65991" title="=&gt; sbt.processor.ManagerImpl">manager</a>.<a href="Manager.scala.html#66664" title="(String)Option[sbt.processor.ProcessorDefinition]">processorDefinition</a>(<a href="#84843" title="String">name</a>).<a title="((sbt.processor.ProcessorDefinition) =&gt; Option[sbt.processor.Processor])Option[sbt.processor.Processor]" id="30333">flatMap</a>(<a href="#65991" title="=&gt; sbt.processor.ManagerImpl">manager</a>.<a href="Manager.scala.html#66665" title="(sbt.processor.ProcessorDefinition)Option[sbt.processor.Processor]">processor</a>)
+	}
+	
+	<span class="keyword">def</span> <a title="=&gt; xsbti.GlobalLock" id="65977">lock</a> = <a href="#65993" title="sbt.Project">baseProject</a>.<a href="../Project.scala.html#50857" title="=&gt; sbt.ProjectInfo">info</a>.<a href="../ProjectInfo.scala.html#52153" title="=&gt; xsbti.Launcher">launcher</a>.<a href="../../xsbti/Launcher.java.html#22323" title="()xsbti.GlobalLock">globalLock</a>
+	
+	<span class="keyword">lazy</span> <span class="keyword">val</span> <a title="String" id="65979">scalaVersion</a> = <a href="#65993" title="sbt.Project">baseProject</a>.<a href="../Project.scala.html#50912" title="=&gt; Handler.this.baseProject.Property[String]">defScalaVersion</a>.<a href="../Environment.scala.html#52128" title="=&gt; String">value</a>
+	<span class="keyword">lazy</span> <span class="keyword">val</span> <a title="sbt.Path" id="65981">base</a> = <a href="#65993" title="sbt.Project">baseProject</a>.<a href="../Project.scala.html#50857" title="=&gt; sbt.ProjectInfo">info</a>.<a href="../ProjectInfo.scala.html#52160" title="=&gt; sbt.Path">bootPath</a> <a href="../Path.scala.html#49353" title="(String)sbt.Path">/</a> (<span title="java.lang.String(&quot;scala-&quot;)" class="string">&quot;scala-&quot;</span> <a title="(Any)java.lang.String" id="6025">+</a> <a href="#65978" title="=&gt; String">scalaVersion</a>) <a href="../Path.scala.html#49353" title="(String)sbt.Path">/</a> <span title="java.lang.String(&quot;sbt-processors&quot;)" class="string">&quot;sbt-processors&quot;</span>
+	<span class="keyword">lazy</span> <span class="keyword">val</span> <a title="sbt.Path" id="65983">persistBase</a> = <a href="../Path.scala.html#11863" title="object sbt.Path">Path</a>.<a href="../Path.scala.html#49297" title="=&gt; sbt.Path">userHome</a> <a href="../Path.scala.html#49353" title="(String)sbt.Path">/</a> <span title="java.lang.String(&quot;.ivy2&quot;)" class="string">&quot;.ivy2&quot;</span> <a href="../Path.scala.html#49353" title="(String)sbt.Path">/</a> <span title="java.lang.String(&quot;sbt&quot;)" class="string">&quot;sbt&quot;</span>
+	
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="65984">retrieveLockFile</a> = <a href="#65980" title="=&gt; sbt.Path">base</a> <a href="../Path.scala.html#49353" title="(String)sbt.Path">/</a> <a href="#65986" title="=&gt; java.lang.String">lockName</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="65985">persistLockFile</a> = <a href="#65982" title="=&gt; sbt.Path">persistBase</a> <a href="../Path.scala.html#49353" title="(String)sbt.Path">/</a> <a href="#65986" title="=&gt; java.lang.String">lockName</a>
+	<span class="keyword">def</span> <a title="=&gt; java.lang.String" id="65986">lockName</a> = <span title="java.lang.String(&quot;processors.lock&quot;)" class="string">&quot;processors.lock&quot;</span>
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="65987">definitionsFile</a> = <a href="#65982" title="=&gt; sbt.Path">persistBase</a> <a href="../Path.scala.html#49353" title="(String)sbt.Path">/</a> <span title="java.lang.String(&quot;processors.properties&quot;)" class="string">&quot;processors.properties&quot;</span>
+	<span class="keyword">def</span> <a title="=&gt; sbt.processor.ManagerFiles" id="65988">files</a> = <span title="sbt.processor.ManagerFiles" class="keyword">new</span> <a href="Manager.scala.html#14668" title="sbt.processor.ManagerFiles">ManagerFiles</a>(<a href="#65980" title="=&gt; sbt.Path">base</a>.<a href="../Path.scala.html#49359" title="=&gt; java.io.File">asFile</a>, <a href="#65984" title="=&gt; sbt.Path">retrieveLockFile</a>.<a href="../Path.scala.html#49359" title="=&gt; java.io.File">asFile</a>, <a href="#65987" title="=&gt; sbt.Path">definitionsFile</a>.<a href="../Path.scala.html#49359" title="=&gt; java.io.File">asFile</a>)
+	
+	<span class="keyword">lazy</span> <span class="keyword">val</span> <a title="sbt.processor.DefinitionParser" id="65990">defParser</a> = <span title="sbt.processor.DefinitionParser" class="keyword">new</span> <a href="Parser.scala.html#14722" title="sbt.processor.DefinitionParser">DefinitionParser</a>
+	<span class="keyword">lazy</span> <span class="keyword">val</span> <a title="sbt.processor.ManagerImpl" id="65992">manager</a> = <span title="sbt.processor.ManagerImpl" class="keyword">new</span> <a href="Manager.scala.html#14782" title="sbt.processor.ManagerImpl">ManagerImpl</a>(<a href="#65988" title="=&gt; sbt.processor.ManagerFiles">files</a>, <a href="#65978" title="=&gt; String">scalaVersion</a>, <span title="sbt.processor.Persist" class="keyword">new</span> <a href="Persist.scala.html#14719" title="sbt.processor.Persist">Persist</a>(<a href="#65977" title="=&gt; xsbti.GlobalLock">lock</a>, <a href="#65985" title="=&gt; sbt.Path">persistLockFile</a>.<a href="../Path.scala.html#49359" title="=&gt; java.io.File">asFile</a>, <a href="#65989" title="=&gt; sbt.processor.DefinitionParser">defParser</a>), <a href="#65993" title="sbt.Project">baseProject</a>.<a href="../Project.scala.html#50920" title="=&gt; Handler.this.baseProject.Property[Boolean]">offline</a>.<a href="../Environment.scala.html#52128" title="=&gt; Boolean">value</a>, <a href="#65993" title="sbt.Project">baseProject</a>.<a href="../Project.scala.html#50852" title="=&gt; sbt.Logger">log</a>)
+}
+<span class="keyword">class</span> <a title="class ParsedProcessor extends java.lang.Object with NotNull with ScalaObject" id="14737">ParsedProcessor</a>(<span class="keyword">val</span> <a title="String" id="84848">label</a>: <span title="String">String</span>, <span class="keyword">val</span> <a title="sbt.processor.Processor" id="84849">processor</a>: <a href="Processor.scala.html#14674" title="sbt.processor.Processor">Processor</a>, <span class="keyword">val</span> <a title="String" id="84850">arguments</a>: <span title="String">String</span>) <span class="keyword">extends</span> <span title="NotNull">NotNull</span>
+        </pre>
+    </body>
+</html>

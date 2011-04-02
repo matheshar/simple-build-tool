@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+			<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" ></meta>
+        <title>LoggerReporter.scala</title>
+        <script type="text/javascript" src="jquery-all.js"></script>
+        <script type="text/javascript" src="linked.js"></script>
+        <link rel="stylesheet" type="text/css" href="style.css" title="Style"></link>
+    </head>
+    <body>
+        <pre>
+<span class="comment">/* sbt -- Simple Build Tool
+ * Copyright 2008, 2009 Mark Harrah
+ */</span>
+<span class="keyword">package</span> xsbt
+
+<span class="keyword">import</span> xsbti.{F0,Logger}
+
+<span class="keyword">private</span> <span class="keyword">object</span> <a title="object xsbt.LoggerReporter" id="7163">LoggerReporter</a>
+{
+	<span class="keyword">def</span> <a title="(scala.tools.nsc.Settings,Int,xsbti.Logger)xsbt.LoggerReporter" id="34366">apply</a>(<a title="scala.tools.nsc.Settings" id="34367">settings</a>: scala.tools.nsc.<a title="scala.tools.nsc.Settings" id="21841">Settings</a>, <a title="Int" id="34368">maximumErrors</a>: <span title="Int">Int</span>, <a title="xsbti.Logger" id="34369">log</a>: <a href="xsbti/Logger.java.html#7619" title="xsbti.Logger">Logger</a>): <a href="#7162" title="xsbt.LoggerReporter">LoggerReporter</a> =
+		<span title="xsbt.LoggerReporter" class="keyword">new</span> <a href="#7162" title="xsbt.LoggerReporter">LoggerReporter</a>(<a href="Command.scala.html#6815" title="object xsbt.Command">Command</a>.<a href="Command.scala.html#34220" title="(scala.tools.nsc.Settings)Boolean">getWarnFatal</a>(<a href="#34367" title="scala.tools.nsc.Settings">settings</a>), <a href="#34368" title="Int">maximumErrors</a>, <a href="#34369" title="xsbti.Logger">log</a>)
+}
+
+<span class="comment">// The following code is based on scala.tools.nsc.reporters.{AbstractReporter, ConsoleReporter}</span>
+<span class="comment">// Copyright 2002-2009 LAMP/EPFL</span>
+<span class="comment">// Original author: Martin Odersky</span>
+<span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">class</span> <a title="class LoggerReporter extends scala.tools.nsc.reporters.Reporter with ScalaObject" id="7162">LoggerReporter</a>(<a title="Boolean" id="37748">warnFatal</a>: <span title="Boolean">Boolean</span>, <a title="Int" id="37749">maximumErrors</a>: <span title="Int">Int</span>, <a title="xsbti.Logger" id="37750">log</a>: <a href="xsbti/Logger.java.html#7619" title="xsbti.Logger">Logger</a>) <span class="keyword">extends</span> scala.tools.nsc.reporters.<a title="scala.tools.nsc.reporters.Reporter" id="34370">Reporter</a>
+{
+	<span class="keyword">import</span> scala.tools.nsc.util.{FakePos,NoPosition,Position}
+	<span class="keyword">private</span> <span class="keyword">val</span> <a title="scala.collection.mutable.HashMap[scala.tools.nsc.util.Position,LoggerReporter.this.Severity]" id="34453">positions</a> = <span title="scala.collection.mutable.HashMap[scala.tools.nsc.util.Position,LoggerReporter.this.Severity]" class="keyword">new</span> scala.collection.mutable.<a title="scala.collection.mutable.HashMap[scala.tools.nsc.util.Position,LoggerReporter.this.Severity]" id="20220">HashMap</a>[Position, Severity]
+
+	<span class="keyword">def</span> <a title="(String)Unit" id="34455">error</a>(<a title="String" id="37889">msg</a>: <span title="String">String</span>) { <a href="#7162" title="(scala.tools.nsc.util.Position,String)Unit" id="34437">error</a>(<a title="(String)scala.tools.nsc.util.FakePos" id="30525">FakePos</a>(<span title="java.lang.String(&quot;scalac&quot;)" class="string">&quot;scalac&quot;</span>), <a href="#37889" title="String">msg</a>) }
+
+	<span class="keyword">def</span> <a title="()Unit" id="34456">printSummary</a>()
+	{
+		<span title="Unit" class="keyword">if</span>(<a href="#7162" title="=&gt; LoggerReporter.this.Severity">WARNING</a>.<span title="=&gt; Int">count</span> <span title="(Int)Boolean">&gt;</span> <span title="Int(0)" class="int">0</span>)
+			<a href="#37750" title="xsbti.Logger">log</a>.<a href="xsbti/Logger.java.html#15482" title="(xsbti.F0[java.lang.String])Unit">warn</a>(<a href="Message.scala.html#34322" title="(=&gt; String)java.lang.Object with xsbti.F0[String]">Message</a>(<a href="#7162" title="(Int,String)String">countElementsAsString</a>(<a href="#7162" title="=&gt; LoggerReporter.this.Severity">WARNING</a>.<span title="=&gt; Int">count</span>, <span title="java.lang.String(&quot;warning&quot;)" class="string">&quot;warning&quot;</span>) <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot; found&quot;)" class="string">&quot; found&quot;</span>))
+		<span title="Unit" class="keyword">if</span>(<a href="#7162" title="=&gt; LoggerReporter.this.Severity">ERROR</a>.<span title="=&gt; Int">count</span> <span title="(Int)Boolean">&gt;</span> <span title="Int(0)" class="int">0</span>)
+			<a href="#37750" title="xsbti.Logger">log</a>.<a href="xsbti/Logger.java.html#15481" title="(xsbti.F0[java.lang.String])Unit">error</a>(<a href="Message.scala.html#34322" title="(=&gt; String)java.lang.Object with xsbti.F0[String]">Message</a>(<a href="#7162" title="(Int,String)String">countElementsAsString</a>(<a href="#7162" title="=&gt; LoggerReporter.this.Severity">ERROR</a>.<span title="=&gt; Int">count</span>, <span title="java.lang.String(&quot;error&quot;)" class="string">&quot;error&quot;</span>) <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot; found&quot;)" class="string">&quot; found&quot;</span>))
+	}
+
+	<span class="keyword">def</span> <a title="(scala.tools.nsc.util.Position,String,LoggerReporter.this.Severity)Unit" id="34457">display</a>(<a title="scala.tools.nsc.util.Position" id="37912">pos</a>: <span title="scala.tools.nsc.util.Position">Position</span>, <a title="String" id="37913">msg</a>: <span title="String">String</span>, <a title="LoggerReporter.this.Severity" id="37914">severity</a>: <span title="LoggerReporter.this.Severity">Severity</span>)
+	{
+		<a href="#37914" title="LoggerReporter.this.Severity">severity</a>.<a title="(Int)Unit" id="34414">count</a> <a title="(Int)Int" id="3090">+=</a> <span title="Int(1)" class="int">1</span>
+		<span title="Unit" class="keyword">if</span>(<a href="#37914" title="LoggerReporter.this.Severity">severity</a> <a title="(AnyRef)Boolean" id="6016">!=</a> <a href="#7162" title="=&gt; LoggerReporter.this.Severity">ERROR</a> <span title="(Boolean)Boolean">||</span> <a href="#37749" title="Int">maximumErrors</a> <a title="(Int)Boolean" id="3086">&lt;</a> <span title="Int(0)" class="int">0</span> <span title="(Boolean)Boolean">||</span> <a href="#37914" title="LoggerReporter.this.Severity">severity</a>.<span title="=&gt; Int">count</span> <a title="(Int)Boolean" id="3087">&lt;=</a> <a href="#37749" title="Int">maximumErrors</a>)
+			<a href="#34465" title="((xsbti.F0[String]) =&gt; Unit,scala.tools.nsc.util.Position,String)Unit">print</a>(<a href="#34458" title="(LoggerReporter.this.Severity)(xsbti.F0[String]) =&gt; Unit">severityLogger</a>(<a href="#37914" title="LoggerReporter.this.Severity">severity</a>), <a href="#37912" title="scala.tools.nsc.util.Position">pos</a>, <a href="#37913" title="String">msg</a>)
+	}
+	<span class="keyword">private</span> <span class="keyword">def</span> <a title="(LoggerReporter.this.Severity)(xsbti.F0[String]) =&gt; Unit" id="34458">severityLogger</a>(<a title="LoggerReporter.this.Severity" id="37943">severity</a>: <span title="LoggerReporter.this.Severity">Severity</span>) =
+		(<a title="xsbti.F0[String]" id="37946">m</a>: <a href="xsbti/F0.java.html#7601" title="xsbti.F0[String]">F0</a>[String]) =&gt;
+		{
+			(<a href="#37943" title="LoggerReporter.this.Severity">severity</a> <span title="Unit" class="keyword">match</span>
+			{
+				<span title="Unit" class="keyword">case</span> <a href="#7162" title="=&gt; LoggerReporter.this.Severity">ERROR</a> =&gt; <a href="#37750" title="xsbti.Logger">log</a>.<a href="xsbti/Logger.java.html#15481" title="(xsbti.F0[java.lang.String])Unit">error</a>(<a href="#37946" title="xsbti.F0[String]">m</a>)
+				<span title="Unit" class="keyword">case</span> <a href="#7162" title="=&gt; LoggerReporter.this.Severity">WARNING</a> =&gt; <a href="#37750" title="xsbti.Logger">log</a>.<a href="xsbti/Logger.java.html#15482" title="(xsbti.F0[java.lang.String])Unit">warn</a>(<a href="#37946" title="xsbti.F0[String]">m</a>)
+				<span title="Unit" class="keyword">case</span> <a href="#7162" title="=&gt; LoggerReporter.this.Severity" id="34417">INFO</a> =&gt; <a href="#37750" title="xsbti.Logger">log</a>.<a href="xsbti/Logger.java.html#15483" title="(xsbti.F0[java.lang.String])Unit">info</a>(<a href="#37946" title="xsbti.F0[String]">m</a>)
+			})
+		}
+
+		<span class="comment">// this helps keep source compatibility with the changes in 2.8 : Position.{source,line,column} are no longer Option[X]s, just plain Xs</span>
+		<span class="comment">// so, we normalize to Option[X]</span>
+	<span class="keyword">private</span> <span class="keyword">def</span> <a title="[T](Option[T])Option[T]" id="34459">o</a>[<a title="&gt;: Nothing &lt;: Any" id="34461">T</a>](<a title="Option[T]" id="37947">t</a>: <span title="Option[T]">Option</span>[T]): <span title="Option[T]">Option</span>[T] = <a href="#37947" title="Option[T]">t</a>
+	<span class="keyword">private</span> <span class="keyword">def</span> <a title="[T](T)Option[T]" id="34462">o</a>[<a title="&gt;: Nothing &lt;: Any" id="34464">T</a>](<a title="T" id="37948">t</a>: <a href="#34464" title="T">T</a>): <span title="Option[T]">Option</span>[T] = <a title="(T)Some[T]" id="290">Some</a>(<a href="#37948" title="T">t</a>)
+	<span class="keyword">private</span> <span class="keyword">def</span> <a title="((xsbti.F0[String]) =&gt; Unit,scala.tools.nsc.util.Position,String)Unit" id="34465">print</a>(<a title="(xsbti.F0[String]) =&gt; Unit" id="37940">logger</a>: F0[String] =&gt; Unit, <a title="scala.tools.nsc.util.Position" id="37941">posIn</a>: <span title="scala.tools.nsc.util.Position">Position</span>, <a title="String" id="37942">msg</a>: <span title="String">String</span>)
+	{
+		<span class="keyword">def</span> <a title="(=&gt; String)Unit" id="37950">log</a>(<a title="=&gt; String" id="37952">s</a>: =&gt; String) = <a href="#37940" title="(xsbti.F0[String])Unit" id="15917">logger</a>(<a href="Message.scala.html#34322" title="(=&gt; String)java.lang.Object with xsbti.F0[String]">Message</a>(<a href="#37952" title="=&gt; String">s</a>))
+		<span class="keyword">val</span> <a title="scala.tools.nsc.util.Position" id="37951">pos</a> =
+			<a href="#37941" title="scala.tools.nsc.util.Position">posIn</a> <span title="scala.tools.nsc.util.Position" class="keyword">match</span>
+			{
+				<span title="scala.tools.nsc.util.NoPosition.type" class="keyword">case</span> <span title="Null(null)" class="keyword">null</span> | <span title="object scala.tools.nsc.util.NoPosition">NoPosition</span> =&gt; <span title="object scala.tools.nsc.util.NoPosition">NoPosition</span>
+				<span title="scala.tools.nsc.util.FakePos" class="keyword">case</span> <a title="scala.tools.nsc.util.FakePos" id="37960">x</a>: <a title="scala.tools.nsc.util.FakePos" id="30524">FakePos</a> =&gt; <a href="#37960" title="scala.tools.nsc.util.FakePos">x</a>
+				<span title="scala.tools.nsc.util.Position" class="keyword">case</span> <a title="scala.tools.nsc.util.Position" id="37961">x</a> =&gt;
+					<a href="#37941" title="scala.tools.nsc.util.Position">posIn</a>.<a title="(scala.tools.nsc.util.SourceFile)scala.tools.nsc.util.Position" id="37777">inUltimateSource</a>(<a href="#34459" title="(Option[scala.tools.nsc.util.SourceFile])Option[scala.tools.nsc.util.SourceFile]">o</a>(<a href="#37941" title="scala.tools.nsc.util.Position">posIn</a>.<span title="=&gt; Option[scala.tools.nsc.util.SourceFile]">source</span>).<a title="=&gt; scala.tools.nsc.util.SourceFile" id="30326">get</a>)
+			}
+		<a href="#37951" title="scala.tools.nsc.util.Position">pos</a> <span title="Unit" class="keyword">match</span>
+		{
+			<span title="Unit" class="keyword">case</span> <span title="object scala.tools.nsc.util.NoPosition">NoPosition</span> =&gt; <a href="#37950" title="(=&gt; String)Unit">log</a>(<a href="#37942" title="String">msg</a>)
+			<span title="Unit" class="keyword">case</span> <a id="1">FakePos</a>(<a title="String" id="37974">fmsg</a>) =&gt; <a href="#37950" title="(=&gt; String)Unit">log</a>(<a href="#37974" title="String">fmsg</a><span title="(Any)java.lang.String">+</span><span title="java.lang.String(&quot; &quot;)" class="string">&quot; &quot;</span><span title="(Any)java.lang.String">+</span><a href="#37942" title="String">msg</a>)
+			<span title="Unit" class="keyword">case</span> _ =&gt;
+				<span class="keyword">val</span> <a title="String" id="37975">sourcePrefix</a> = <a href="#34459" title="(Option[scala.tools.nsc.util.SourceFile])Option[scala.tools.nsc.util.SourceFile]">o</a>(<a href="#37951" title="scala.tools.nsc.util.Position">pos</a>.<span title="=&gt; Option[scala.tools.nsc.util.SourceFile]">source</span>).<span title="((scala.tools.nsc.util.SourceFile) =&gt; String)Option[String]">map</span>(<a href="#37989" title="scala.tools.nsc.util.SourceFile">_</a>.<a title="=&gt; scala.tools.nsc.io.AbstractFile" id="30635">file</a>.<a title="=&gt; String" id="30654">path</a>).<span title="(=&gt; String)String">getOrElse</span>(<span title="java.lang.String(&quot;&quot;)" class="string">&quot;&quot;</span>)
+				<span class="keyword">val</span> <a title="java.lang.String" id="37976">lineNumberString</a> = <a href="#34459" title="(Option[Int])Option[Int]">o</a>(<a href="#37951" title="scala.tools.nsc.util.Position">pos</a>.<span title="=&gt; Option[Int]">line</span>).<span title="((Int) =&gt; java.lang.String)Option[java.lang.String]">map</span>(<a title="Int" id="38004">line</a> =&gt; <span title="java.lang.String(&quot;:&quot;)" class="string">&quot;:&quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#38004" title="Int">line</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot;:&quot;)" class="string">&quot;:&quot;</span>).<span title="(=&gt; java.lang.String)java.lang.String">getOrElse</span>(<span title="java.lang.String(&quot;:&quot;)" class="string">&quot;:&quot;</span>) <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot; &quot;)" class="string">&quot; &quot;</span>
+				<a href="#37950" title="(=&gt; String)Unit">log</a>(<a href="#37975" title="String">sourcePrefix</a> <span title="(Any)java.lang.String">+</span> <a href="#37976" title="java.lang.String">lineNumberString</a> <span title="(Any)java.lang.String">+</span> <a href="#37942" title="String">msg</a>)
+				<span title="Unit" class="keyword">if</span> (<span title="=&gt; Boolean">!</span><a href="#34459" title="(Option[Int])Option[Int]">o</a>(<a href="#37951" title="scala.tools.nsc.util.Position">pos</a>.<span title="=&gt; Option[Int]">line</span>).<span title="=&gt; Boolean">isEmpty</span>)
+				{
+					<span class="keyword">val</span> <a title="String" id="38017">lineContent</a> = <a href="#37951" title="scala.tools.nsc.util.Position">pos</a>.<a title="implicit scala.Predef.stringWrapper : (String)scala.runtime.RichString" id="37776">lineContent</a>.<a title="=&gt; String" id="17031">stripLineEnd</a>
+					<a href="#37950" title="(=&gt; String)Unit">log</a>(<a href="#38017" title="String">lineContent</a>) <span class="comment">// source line with error/warning</span>
+					<span class="keyword">for</span>(<a title="((Int) =&gt; Unit)Unit" id="38033">offset</a> &lt;- <a href="#34459" title="(Option[Int])Option[Int]">o</a>(<a href="#37951" title="scala.tools.nsc.util.Position">pos</a>.<span title="=&gt; Option[Int]">offset</span>); <a title="((scala.tools.nsc.util.SourceFile) =&gt; Unit)Unit" id="38045">src</a> &lt;- <a href="#34459" title="(Option[scala.tools.nsc.util.SourceFile])Option[scala.tools.nsc.util.SourceFile]">o</a>(<a href="#37951" title="scala.tools.nsc.util.Position">pos</a>.<span title="=&gt; Option[scala.tools.nsc.util.SourceFile]">source</span>))
+					{
+						<span class="keyword">val</span> <a title="Int" id="38046">pointer</a> = <a href="#38033" title="Int">offset</a> <a title="(Int)Int" id="3091">-</a> <a href="#38045" title="scala.tools.nsc.util.SourceFile">src</a>.<a title="(Int)Int" id="30641">lineToOffset</a>(<a href="#38045" title="scala.tools.nsc.util.SourceFile">src</a>.<a title="(Int)Int" id="30640">offsetToLine</a>(<a href="#38033" title="Int">offset</a>))
+						<span class="keyword">val</span> <a title="Seq[Char]" id="38047">pointerSpace</a> = (<a href="#38017" title="implicit scala.Predef.stringWrapper : (String)scala.runtime.RichString">lineContent</a>: <a title="Seq[Char]" id="733">Seq</a>[Char]).<a title="(Int)Seq[Char]" id="15825">take</a>(<a href="#38046" title="Int">pointer</a>).<a title="((Char) =&gt; Char)Seq[Char]" id="15820">map</a> <a href="#38053" title="Char">{</a> <span title="Char('\011')" class="keyword">case</span> <span title="Char('\011')" class="char">'\t'</span> =&gt; <span title="Char('\011')" class="char">'\t'</span>; <span title="Char(' ')" class="keyword">case</span> <a title="Char" id="38054">x</a> =&gt; <span title="Char(' ')" class="char">' '</span> }
+						<a href="#37950" title="(=&gt; String)Unit">log</a>(<a href="#38047" title="Seq[Char]">pointerSpace</a>.<a title="=&gt; String" id="15980">mkString</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot;^&quot;)" class="string">&quot;^&quot;</span>) <span class="comment">// pointer to the column position of the error/warning</span>
+					}
+				}
+		}
+	}
+	<span class="keyword">override</span> <span class="keyword">def</span> <a title="=&gt; Unit" id="34466">reset</a> =
+	{
+		<span class="keyword">super</span>.<a title="=&gt; Unit" id="34423">reset</a>
+		<a href="#34453" title="=&gt; scala.collection.mutable.HashMap[scala.tools.nsc.util.Position,LoggerReporter.this.Severity]">positions</a>.<a title="()Unit" id="37761">clear</a>
+	}
+
+	
+	<span class="keyword">protected</span> <span class="keyword">def</span> <a title="(scala.tools.nsc.util.Position,String,LoggerReporter.this.Severity,Boolean)Unit" id="34467">info0</a>(<a title="scala.tools.nsc.util.Position" id="38059">pos</a>: <span title="scala.tools.nsc.util.Position">Position</span>, <a title="String" id="38060">msg</a>: <span title="String">String</span>, <a title="LoggerReporter.this.Severity" id="38061">rawSeverity</a>: <span title="LoggerReporter.this.Severity">Severity</span>, <a title="Boolean" id="38062">force</a>: <span title="Boolean">Boolean</span>)
+	{
+		<span class="keyword">val</span> <a title="LoggerReporter.this.Severity" id="38063">severity</a> = <span title="LoggerReporter.this.Severity" class="keyword">if</span>(<a href="#37748" title="Boolean">warnFatal</a> <a title="(Boolean)Boolean" id="2694">&amp;&amp;</a> <a href="#38061" title="LoggerReporter.this.Severity">rawSeverity</a> <span title="(AnyRef)Boolean">==</span> <a href="#7162" title="=&gt; LoggerReporter.this.Severity">WARNING</a>) <a href="#7162" title="=&gt; LoggerReporter.this.Severity">ERROR</a> <span class="keyword">else</span> <a href="#38061" title="LoggerReporter.this.Severity">rawSeverity</a>
+		<a href="#38063" title="LoggerReporter.this.Severity">severity</a> <span title="Unit" class="keyword">match</span>
+		{
+			<span title="Unit" class="keyword">case</span> <a href="#7162" title="=&gt; LoggerReporter.this.Severity">WARNING</a> | <a href="#7162" title="=&gt; LoggerReporter.this.Severity">ERROR</a> =&gt;
+			{
+				<span title="Unit" class="keyword">if</span>(<span title="=&gt; Boolean">!</span><a href="#34468" title="(scala.tools.nsc.util.Position,LoggerReporter.this.Severity)Boolean">testAndLog</a>(<a href="#38059" title="scala.tools.nsc.util.Position">pos</a>, <a href="#38063" title="LoggerReporter.this.Severity">severity</a>))
+					<a href="#34457" title="(scala.tools.nsc.util.Position,String,LoggerReporter.this.Severity)Unit">display</a>(<a href="#38059" title="scala.tools.nsc.util.Position">pos</a>, <a href="#38060" title="String">msg</a>, <a href="#38063" title="LoggerReporter.this.Severity">severity</a>)
+			}
+			<span title="Unit" class="keyword">case</span> _ =&gt; <a href="#34457" title="(scala.tools.nsc.util.Position,String,LoggerReporter.this.Severity)Unit">display</a>(<a href="#38059" title="scala.tools.nsc.util.Position">pos</a>, <a href="#38060" title="String">msg</a>, <a href="#38063" title="LoggerReporter.this.Severity">severity</a>)
+		}
+	}
+
+	<span class="keyword">private</span> <span class="keyword">def</span> <a title="(scala.tools.nsc.util.Position,LoggerReporter.this.Severity)Boolean" id="34468">testAndLog</a>(<a title="scala.tools.nsc.util.Position" id="38065">pos</a>: <span title="scala.tools.nsc.util.Position">Position</span>, <a title="LoggerReporter.this.Severity" id="38066">severity</a>: <span title="LoggerReporter.this.Severity">Severity</span>): <span title="Boolean">Boolean</span> =
+	{
+		<span title="Boolean" class="keyword">if</span>(<a href="#38065" title="scala.tools.nsc.util.Position">pos</a> <span title="(AnyRef)Boolean">==</span> <span title="Null(null)" class="keyword">null</span> <span title="(Boolean)Boolean">||</span> <a href="#38065" title="scala.tools.nsc.util.Position">pos</a>.<span title="=&gt; Option[Int]">offset</span>.<span title="=&gt; Boolean">isEmpty</span>)
+			<span title="Boolean(false)" class="keyword">false</span>
+		<span class="keyword">else</span> <span title="Boolean" class="keyword">if</span>(<a href="#34453" title="=&gt; scala.collection.mutable.HashMap[scala.tools.nsc.util.Position,LoggerReporter.this.Severity]">positions</a>.<a title="(scala.tools.nsc.util.Position)Option[LoggerReporter.this.Severity]" id="37886">get</a>(<a href="#38065" title="scala.tools.nsc.util.Position">pos</a>).<span title="((LoggerReporter.this.Severity) =&gt; Boolean)Option[Boolean]">map</span>(<a href="#38070" title="LoggerReporter.this.Severity">_</a> <a title="(LoggerReporter.this.severity.Value)Boolean" id="17354">&gt;=</a> <a href="#38066" title="LoggerReporter.this.Severity">severity</a>).<span title="(=&gt; Boolean)Boolean">getOrElse</span>(<span title="Boolean(false)" class="keyword">false</span>))
+			<span title="Boolean(true)" class="keyword">true</span>
+		<span class="keyword">else</span>
+		{
+			<a href="#34453" title="=&gt; scala.collection.mutable.HashMap[scala.tools.nsc.util.Position,LoggerReporter.this.Severity]">positions</a>(<a href="#38065" title="scala.tools.nsc.util.Position">pos</a>) = <a href="#38066" title="LoggerReporter.this.Severity">severity</a>
+			<span title="Boolean(false)" class="keyword">false</span>
+		}
+	}
+}
+        </pre>
+    </body>
+</html>

@@ -1,0 +1,232 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head><title>object IvyActions in sbt</title>
+        <meta http-equiv="content-type" content="text/html; charset=UTF8"></meta><meta content="scaladoc (version 2.7.7.final)" name="generator"></meta><link href="../style.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../script.js"></script>
+        </head>
+        <body onload="init()">
+        <table summary="" class="navigation">
+        <tr>
+          <td class="navigation-links" valign="top">
+            <!-- <table><tr></tr></table> -->
+          </td>
+          <td align="right" valign="top" style="white-space:nowrap;" rowspan="2">
+            <div class="doctitle-larger">Simple Build Tool 0.7.5 API</div>
+          </td>
+        </tr>
+        <tr><td></td></tr>
+      </table>
+        
+      <div class="entity">
+        <a href="../sbt$package.html" target="_self">sbt</a>
+        <br></br>
+        <span class="entity">object  IvyActions</span>
+      </div><hr></hr>
+      <div class="source">
+        [source: <a href="" class="sbt/IvyActions"><code>sbt/IvyActions.scala</code></a>]
+      </div><hr></hr>
+      <a name="IvyActions"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>object</code>
+        <em>IvyActions</em>
+      </dt>
+      <dd><code> extends </code><a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a></dd>
+    </dl>
+      
+
+
+<table summary="" cellpadding="3" class="member">
+      <tr><td class="title" colspan="2">Method Summary</td></tr>
+      <tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/IvyActions$object.html#cleanCache%28sbt.IvySbt%29" target="_self">cleanCache</a></em>
+        (<em>ivy</em> : <a href="../sbt/IvySbt.html" target="_self">IvySbt</a>) : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+        
+        <div>Clears the Ivy cache, as configured by 'config'.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/IvyActions$object.html#deliver%28sbt.IvySbt%23Module%2CString%2CString%2CIterable%5Bsbt.ModuleID%5D%2COption%5BIterable%5Bsbt.Configuration%5D%5D%2Csbt.UpdateLogging.Value%29" target="_self">deliver</a></em>
+        (<em>module</em> : <a href="../sbt/IvySbt.Module.html" target="_self">Module</a>, <em>status</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <em>deliverIvyPattern</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <em>extraDependencies</em> : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="../sbt/ModuleID.html" target="_self">ModuleID</a>], <em>configurations</em> : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="../sbt/Configuration.html" target="_self">Configuration</a>]], <em>logging</em> : <a href="" target="contentFrame" class="scala/Enumeration/Value">scala.Enumeration.Value</a>) : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/IvyActions$object.html#install%28sbt.IvySbt%23Module%2CString%2CString%29" target="_self">install</a></em>
+        (<em>module</em> : <a href="../sbt/IvySbt.Module.html" target="_self">Module</a>, <em>from</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <em>to</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>) : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+        
+        <div>Installs the dependencies of the given 'module' from the resolver named 'from' to the resolver named 'to'.</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/IvyActions$object.html#makePom%28sbt.IvySbt%23Module%2CIterable%5Bsbt.ModuleID%5D%2COption%5BIterable%5Bsbt.Configuration%5D%5D%2Cscala.xml.NodeSeq%2Cjava.io.File%29" target="_self">makePom</a></em>
+        (<em>module</em> : <a href="../sbt/IvySbt.Module.html" target="_self">Module</a>, <em>extraDependencies</em> : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="../sbt/ModuleID.html" target="_self">ModuleID</a>], <em>configurations</em> : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="../sbt/Configuration.html" target="_self">Configuration</a>]], <em>extra</em> : <a href="" target="contentFrame" class="scala/xml/NodeSeq">scala.xml.NodeSeq</a>, <em>output</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>) : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+        
+        <div>Creates a Maven pom from the given Ivy configuration</div>
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/IvyActions$object.html#makePom%28sbt.IvySbt%23Module%2Csbt.MakePomConfiguration%2Cjava.io.File%29" target="_self">makePom</a></em>
+        (<em>module</em> : <a href="../sbt/IvySbt.Module.html" target="_self">Module</a>, <em>configuration</em> : <a href="../sbt/MakePomConfiguration.html" target="_self">MakePomConfiguration</a>, <em>output</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>) : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/IvyActions$object.html#publish%28sbt.IvySbt%23Module%2CString%2CIterable%5BString%5D%2COption%5BString%5D%2COption%5BIterable%5Bsbt.Configuration%5D%5D%29" target="_self">publish</a></em>
+        (<em>module</em> : <a href="../sbt/IvySbt.Module.html" target="_self">Module</a>, <em>resolverName</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <em>srcArtifactPatterns</em> : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>], <em>deliveredIvyPattern</em> : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>], <em>configurations</em> : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="../sbt/Configuration.html" target="_self">Configuration</a>]]) : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+        
+        
+      </td>
+    </tr>
+<tr>
+      <td class="modifiers" valign="top"> 
+        <code> def</code>
+      </td>
+      <td class="signature">
+        <em><a href="../sbt/IvyActions$object.html#update%28sbt.IvySbt%23Module%2Csbt.UpdateConfiguration%29" target="_self">update</a></em>
+        (<em>module</em> : <a href="../sbt/IvySbt.Module.html" target="_self">Module</a>, <em>configuration</em> : <a href="../sbt/UpdateConfiguration.html" target="_self">UpdateConfiguration</a>) : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+        
+        <div>Resolves and retrieves dependencies.  'ivyConfig' is used to produce an Ivy file and configuration.
+ 'updateConfig' configures the actual resolution and retrieval process.</div>
+      </td>
+    </tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#getClass%28%29" target="_self">getClass</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#hashCode%28%29" target="_self">hashCode</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#equals%28Any%29" target="_self">equals</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#clone%28%29" target="_self">clone</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#toString%28%29" target="_self">toString</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#notify%28%29" target="_self">notify</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#notifyAll%28%29" target="_self">notifyAll</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#wait%28Long%29" target="_self">wait</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#wait%28Long%2CInt%29" target="_self">wait</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#wait%28%29" target="_self">wait</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#finalize%28%29" target="_self">finalize</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#%3D%3D%28AnyRef%29" target="_self">==</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#%21%3D%28AnyRef%29" target="_self">!=</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#eq%28AnyRef%29" target="_self">eq</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#ne%28AnyRef%29" target="_self">ne</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#synchronized%28T0%29" target="_self">synchronized</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html" target="_self">Any</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html#%3D%3D%28Any%29" target="_self">==</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html#%21%3D%28Any%29" target="_self">!=</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html#isInstanceOf" target="_self">isInstanceOf</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html#asInstanceOf" target="_self">asInstanceOf</a>
+        </td></tr>
+      </table>
+
+
+      
+
+
+<table summary="" cellpadding="3" class="member-detail">
+          <tr><td class="title">Method Details</td></tr>
+        </table><div><a name="install%28sbt.IvySbt%23Module%2CString%2CString%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>install</em>(<em>module</em> : <a href="../sbt/IvySbt.Module.html" target="_self">Module</a>, <em>from</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <em>to</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>) : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Installs the dependencies of the given 'module' from the resolver named 'from' to the resolver named 'to'.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="cleanCache%28sbt.IvySbt%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>cleanCache</em>(<em>ivy</em> : <a href="../sbt/IvySbt.html" target="_self">IvySbt</a>) : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Clears the Ivy cache, as configured by 'config'.</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="makePom%28sbt.IvySbt%23Module%2CIterable%5Bsbt.ModuleID%5D%2COption%5BIterable%5Bsbt.Configuration%5D%5D%2Cscala.xml.NodeSeq%2Cjava.io.File%29"></a><dl>
+      <dt>
+        @<a href="" target="contentFrame" class="scala/deprecated">scala.deprecated</a><br></br>
+        <code></code>
+        <code>def</code>
+        <em>makePom</em>(<em>module</em> : <a href="../sbt/IvySbt.Module.html" target="_self">Module</a>, <em>extraDependencies</em> : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="../sbt/ModuleID.html" target="_self">ModuleID</a>], <em>configurations</em> : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="../sbt/Configuration.html" target="_self">Configuration</a>]], <em>extra</em> : <a href="" target="contentFrame" class="scala/xml/NodeSeq">scala.xml.NodeSeq</a>, <em>output</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>) : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Creates a Maven pom from the given Ivy configuration</dd></dl>
+      <dl></dl>
+    <hr></hr>
+<a name="makePom%28sbt.IvySbt%23Module%2Csbt.MakePomConfiguration%2Cjava.io.File%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>makePom</em>(<em>module</em> : <a href="../sbt/IvySbt.Module.html" target="_self">Module</a>, <em>configuration</em> : <a href="../sbt/MakePomConfiguration.html" target="_self">MakePomConfiguration</a>, <em>output</em> : <a href="" target="contentFrame" class="java/io/File">java.io.File</a>) : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="deliver%28sbt.IvySbt%23Module%2CString%2CString%2CIterable%5Bsbt.ModuleID%5D%2COption%5BIterable%5Bsbt.Configuration%5D%5D%2Csbt.UpdateLogging.Value%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>deliver</em>(<em>module</em> : <a href="../sbt/IvySbt.Module.html" target="_self">Module</a>, <em>status</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <em>deliverIvyPattern</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <em>extraDependencies</em> : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="../sbt/ModuleID.html" target="_self">ModuleID</a>], <em>configurations</em> : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="../sbt/Configuration.html" target="_self">Configuration</a>]], <em>logging</em> : <a href="" target="contentFrame" class="scala/Enumeration/Value">scala.Enumeration.Value</a>) : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="publish%28sbt.IvySbt%23Module%2CString%2CIterable%5BString%5D%2COption%5BString%5D%2COption%5BIterable%5Bsbt.Configuration%5D%5D%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>publish</em>(<em>module</em> : <a href="../sbt/IvySbt.Module.html" target="_self">Module</a>, <em>resolverName</em> : <a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>, <em>srcArtifactPatterns</em> : <a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>], <em>deliveredIvyPattern</em> : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="java/lang/String">java.lang.String</a>], <em>configurations</em> : <a href="" target="contentFrame" class="scala/Option">scala.Option</a>[<a href="" target="contentFrame" class="scala/Iterable">scala.Iterable</a>[<a href="../sbt/Configuration.html" target="_self">Configuration</a>]]) : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+      </dt>
+      <dd></dd>
+    </dl><hr></hr>
+<a name="update%28sbt.IvySbt%23Module%2Csbt.UpdateConfiguration%29"></a><dl>
+      <dt>
+        
+        <code></code>
+        <code>def</code>
+        <em>update</em>(<em>module</em> : <a href="../sbt/IvySbt.Module.html" target="_self">Module</a>, <em>configuration</em> : <a href="../sbt/UpdateConfiguration.html" target="_self">UpdateConfiguration</a>) : <a href="http://www.scala-lang.org/docu/files/api/scala/Unit.html" target="_self">Unit</a>
+      </dt>
+      <dd></dd>
+    </dl>
+      <dl><dd>Resolves and retrieves dependencies.  'ivyConfig' is used to produce an Ivy file and configuration.
+ 'updateConfig' configures the actual resolution and retrieval process.</dd></dl>
+      <dl></dl>
+    <hr></hr></div>
+
+
+    <hr></hr>
+        <table summary="" class="navigation">
+        <tr>
+          <td class="navigation-links" valign="top">
+            <!-- <table><tr></tr></table> -->
+          </td>
+          <td align="right" valign="top" style="white-space:nowrap;" rowspan="2">
+            <div class="doctitle-larger">Simple Build Tool 0.7.5 API</div>
+          </td>
+        </tr>
+        <tr><td></td></tr>
+      </table>
+      </body>
+      </html>

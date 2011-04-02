@@ -1,0 +1,509 @@
+<?xml version="1.0" encoding="utf-8"?>
+			<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" ></meta>
+        <title>sbt/ParallelRunner.scala</title>
+        <script type="text/javascript" src="../jquery-all.js"></script>
+        <script type="text/javascript" src="../linked.js"></script>
+        <link rel="stylesheet" type="text/css" href="../style.css" title="Style"></link>
+    </head>
+    <body>
+        <pre>
+<span class="comment">/* sbt -- Simple Build Tool
+ * Copyright 2009  Mark Harrah
+ */</span>
+<span class="keyword">package</span> sbt
+
+<span class="comment">/** This file provides the parallel execution engine of sbt.  It is a fairly general module, with pluggable Schedulers and Strategies.
+*
+* There are three main componenets to the engine: Distributors, Schedulers, and Strategies.
+*
+* A Scheduler provides work that is ready to execute.  The main type of Scheduler in sbt is a scheduler
+* of nodes in a directed, acyclic graph..  This type of scheduler provides work when its
+* dependencies have finished executing successfully.  Another type of scheduler is a MultiScheduler, which draws work
+* from sub-schedulers.
+*
+* A Strategy is used by a Scheduler to select the work to process from the work that is ready.  It is notified as work
+* becomes ready.  It is requested to select work to process from the work that is ready.  The main Strategy in sbt is the
+* OrderedStrategy, which prioritizes work according to some ordering defined by its constructor.  The primary ordering
+* used in sbt is based on the longest length of the processing path that includes the node being ordered.
+*
+* A Distributor uses a Scheduler to obtain work according up to the maximum work allowed to run at once.  It runs each
+* unit of work in its own Thread.
+**/</span>
+
+<span class="keyword">import</span> java.util.concurrent.LinkedBlockingQueue
+<span class="keyword">import</span> scala.collection.{immutable, mutable}
+<span class="keyword">import</span> immutable.TreeSet
+
+<span class="comment">/** Interface to the Distributor/Scheduler system for running tasks with dependencies described by a directed acyclic graph.*/</span>
+<span class="keyword">object</span> <a title="object sbt.ParallelRunner" id="8446">ParallelRunner</a>
+{
+	<span class="comment">/** Executes work for nodes in an acyclic directed graph with root node `node`.  The name of a node is provided
+	* by the `name` function, the work to perform for a node by `action`, and the logger to use for a node by `log`.
+	* The maximum number of tasks to execute simultaneously is `maximumTasks`. */</span>
+	<span class="keyword">def</span> <a title="[D &lt;: sbt.Dag[D]](D,(D) =&gt; String,(D) =&gt; Option[String],Int,(D) =&gt; sbt.Logger)List[sbt.WorkFailure[D]]" id="69288">run</a>[<a title="&gt;: Nothing &lt;: sbt.Dag[D]" id="69290">D</a> &lt;: Dag[D]](<a title="D" id="69301">node</a>: <a href="#69290" title="D">D</a>, <a title="(D) =&gt; String" id="69302">name</a>: D =&gt; String, <a title="(D) =&gt; Option[String]" id="69303">action</a>: D =&gt; Option[String], <a title="Int" id="69304">maximumTasks</a>: <span title="Int">Int</span>, <a title="(D) =&gt; sbt.Logger" id="69305">log</a>: D =&gt; Logger): <span title="List[sbt.WorkFailure[D]]">List</span>[WorkFailure[D]] =
+	{
+		<span class="keyword">val</span> <a title="sbt.DagInfo[D]" id="69314">info</a> = <a href="#69320" title="(D)sbt.DagInfo[D]">DagInfo</a>(<a href="#69301" title="D">node</a>)
+		<span class="comment">// Create a strategy that gives each node a uniform self cost and uses the maximum cost to execute it and the nodes that depend on it</span>
+		<span class="comment">// to determine which node to run.  The self cost could be modified to include more information about a node, such as the size of input files</span>
+		<span class="keyword">val</span> <a title="sbt.ScheduleStrategy[D]" id="69315">strategy</a> = <a href="#69294" title="(sbt.DagInfo[D])sbt.ScheduleStrategy[D]">defaultStrategy</a>(<a href="#69314" title="sbt.DagInfo[D]">info</a>)
+		<span class="keyword">val</span> <a title="sbt.Scheduler[D]" id="69316">jobScheduler</a> = <a href="#69356" title="(sbt.Scheduler[D],sbt.ScheduleStrategy[D])sbt.Scheduler[D]">CompoundScheduler</a>(<span title="sbt.DagScheduler[D]" class="keyword">new</span> <a href="#11763" title="sbt.DagScheduler[D]">DagScheduler</a>(<a href="#69314" title="sbt.DagInfo[D]">info</a>, <a href="#69315" title="sbt.ScheduleStrategy[D]">strategy</a>), <a href="#69315" title="sbt.ScheduleStrategy[D]">strategy</a>)
+		<span class="keyword">val</span> <a title="sbt.Distributor[D]" id="69317">distributor</a> = <span title="sbt.Distributor[D]" class="keyword">new</span> <a href="#11748" title="sbt.Distributor[D]">Distributor</a>(<a href="#69316" title="sbt.Scheduler[D]">jobScheduler</a>, <a href="#69303" title="(D) =&gt; Option[String]">action</a>, <a href="#69304" title="Int">maximumTasks</a>, <a href="#69305" title="(D) =&gt; sbt.Logger">log</a>)
+		<span class="keyword">val</span> <a title="List[sbt.WorkFailure[D]]" id="69318">result</a> = <a href="#69317" title="sbt.Distributor[D]">distributor</a>.<a href="#69383" title="()Iterable[sbt.WorkFailure[D]]">run</a>().<span title="=&gt; List[sbt.WorkFailure[D]]">toList</span>
+		<span class="keyword">for</span>( <a href="#69392" title="((sbt.WorkFailure[D]) =&gt; sbt.WorkFailure[D])List[sbt.WorkFailure[D]]" id="15536">WorkFailure</a>(<a title="D" id="69413">work</a>, <a title="String" id="69414">message</a>) &lt;- <a href="#69318" title="List[sbt.WorkFailure[D]]">result</a> ) <span class="keyword">yield</span> <a href="#69394" title="(D,String)sbt.WorkFailure[D]">WorkFailure</a>(<a href="#69413" title="D">work</a>, <span title="java.lang.String(&quot;Error running &quot;)" class="string">&quot;Error running &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#69302" title="(D)String">name</a>(<a href="#69413" title="D">work</a>) <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot;: &quot;)" class="string">&quot;: &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#69414" title="String">message</a>)
+	}
+	<span class="keyword">def</span> <a title="[D &lt;: sbt.Dag[D]](D)sbt.DagScheduler[D]" id="69291">dagScheduler</a>[<a title="&gt;: Nothing &lt;: sbt.Dag[D]" id="69293">D</a> &lt;: Dag[D]](<a title="D" id="69418">node</a>: <a href="#69293" title="D">D</a>) =
+	{
+		<span class="keyword">val</span> <a title="sbt.DagInfo[D]" id="69420">info</a> = <a href="#69320" title="(D)sbt.DagInfo[D]">DagInfo</a>(<a href="#69418" title="D">node</a>)
+		<span title="sbt.DagScheduler[D]" class="keyword">new</span> <a href="#11763" title="sbt.DagScheduler[D]">DagScheduler</a>(<a href="#69420" title="sbt.DagInfo[D]">info</a>, <a href="#69294" title="(sbt.DagInfo[D])sbt.ScheduleStrategy[D]">defaultStrategy</a>(<a href="#69420" title="sbt.DagInfo[D]">info</a>))
+	}
+	<span class="keyword">private</span> <span class="keyword">def</span> <a title="[D &lt;: sbt.Dag[D]](sbt.DagInfo[D])sbt.ScheduleStrategy[D]" id="69294">defaultStrategy</a>[<a title="&gt;: Nothing &lt;: sbt.Dag[D]" id="69296">D</a> &lt;: Dag[D]](<a title="sbt.DagInfo[D]" id="69340">info</a>: <a href="#12843" title="sbt.DagInfo[D]">DagInfo</a>[D]) = <a href="#69343" title="((D) =&gt; Int,sbt.DagInfo[D])sbt.ScheduleStrategy[D]">MaxPathStrategy</a>((<a title="D" id="69353">d</a>: <a href="#69296" title="D">D</a>) =&gt; <span title="Int(1)" class="int">1</span>, <a href="#69340" title="sbt.DagInfo[D]">info</a>)
+	<span class="keyword">def</span> <a title="[D]sbt.Scheduler[D]" id="69297">emptyScheduler</a>[<a title="&gt;: Nothing &lt;: Any" id="69299">D</a>]: <a href="#13446" title="sbt.Scheduler[D]">Scheduler</a>[D] =
+		<a title="template $anon extends java.lang.Object with sbt.Scheduler[D]" id="69425" class="keyword">new</a> <a href="#13446" title="sbt.Scheduler[D]">Scheduler</a>[D]
+		{
+			<span class="comment">/** Starts a new run.  The returned object is a new Run, representing a single scheduler run.  All state for the run
+			* is encapsulated in this object.*/</span>
+			<span class="keyword">def</span> <a title="=&gt; this.Run" id="69427">run</a>: <a href="#69363" title="this.Run">Run</a> = <a title="template $anon extends java.lang.Object with this.Run" id="69437" class="keyword">new</a> <a href="#69363" title="this.Run">Run</a>
+			{
+				<span class="keyword">def</span> <a title="(D,Option[String])Unit" id="69439">complete</a>(<a title="D" id="69446">d</a>: <a href="#69299" title="D">D</a>, <a title="Option[String]" id="69447">result</a>: <span title="Option[String]">Option</span>[String]) <span title="Unit">{</span>}
+				<span class="keyword">def</span> <a title="=&gt; Boolean" id="69440">hasPending</a> = <span title="Boolean(false)" class="keyword">false</span>
+				<span class="comment">/**Returns true if this scheduler has no more work to be done, ever.*/</span>
+				<span class="keyword">def</span> <a title="=&gt; Boolean" id="69441">isComplete</a> = <span title="Boolean(true)" class="keyword">true</span>
+				<span class="keyword">def</span> <a title="(Int)object Nil" id="69442">next</a>(<a title="Int" id="69454">max</a>: <span title="Int">Int</span>) = <span title="object Nil">Nil</span>
+				<span class="keyword">def</span> <a title="=&gt; object Nil" id="69443">failures</a> = <span title="object Nil">Nil</span>
+			}
+		}
+}
+<span class="comment">/** Requests work from `scheduler` and processes it using `doWork`.  This class limits the amount of work processing at any given time
+* to `workers`.*/</span>
+<span class="keyword">final</span> <span class="keyword">class</span> <a title="class Distributor[D] extends java.lang.Object with NotNull with ScalaObject" id="11748">Distributor</a>[<a title="&gt;: Nothing &lt;: Any" id="13882">D</a>](<a title="sbt.Scheduler[D]" id="69387">scheduler</a>: <a href="#13446" title="sbt.Scheduler[D]">Scheduler</a>[D], <a title="(D) =&gt; Option[String]" id="69388">doWork</a>: D =&gt; Option[String], <a title="Int" id="69389">workers</a>: <span title="Int">Int</span>, <a title="(D) =&gt; sbt.Logger" id="69390">log</a>: D =&gt; Logger) <span class="keyword">extends</span> <span title="NotNull">NotNull</span>
+{
+	<span title="(Boolean)Unit">require</span>(<a href="#69389" title="Int">workers</a> <span title="(Int)Boolean">&gt;</span> <span title="Int(0)" class="int">0</span>)
+	<span class="keyword">final</span> <span class="keyword">def</span> <a title="()Iterable[sbt.WorkFailure[D]]" id="69383">run</a>(): <span title="Iterable[sbt.WorkFailure[D]]">Iterable</span>[WorkFailure[D]]  = (<span title="Distributor.this.Run" class="keyword">new</span> <a href="#69384" title="Distributor.this.Run">Run</a>).<a href="#69471" title="()Iterable[sbt.WorkFailure[D]]">run</a>()
+
+	<span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">class</span> <a title="class Run extends java.lang.Object with NotNull with ScalaObject" id="69384">Run</a> <span class="keyword">extends</span> <span title="NotNull">NotNull</span>
+	{
+		<span class="keyword">private</span>[<span class="keyword">this</span>] <span class="keyword">val</span> <a title="Distributor.this.scheduler.Run" id="69468">schedule</a> = <a href="#69387" title="sbt.Scheduler[D]">scheduler</a>.<a href="#69362" title="=&gt; Distributor.this.scheduler.Run">run</a>
+		<span class="comment">/** The number of threads currently running. */</span>
+		<span class="keyword">private</span>[<span class="keyword">this</span>] <span class="keyword">var</span> <a title="Int" id="69469">running</a> = <span title="Int(0)" class="int">0</span>
+		<span class="comment">/** Pending notifications of completed work. */</span>
+		<span class="keyword">private</span>[<span class="keyword">this</span>] <span class="keyword">val</span> <a title="java.util.concurrent.LinkedBlockingQueue[Distributor.this.Done]" id="69470">complete</a> = <span title="java.util.concurrent.LinkedBlockingQueue[Distributor.this.Done]" class="keyword">new</span> java.util.concurrent.<a title="java.util.concurrent.LinkedBlockingQueue[Distributor.this.Done]" id="15041">LinkedBlockingQueue</a>[Done]
+		
+		<span class="keyword">private</span>[Distributor] <span class="keyword">def</span> <a title="()Iterable[sbt.WorkFailure[D]]" id="69471">run</a>(): <span title="Iterable[sbt.WorkFailure[D]]">Iterable</span>[WorkFailure[D]] =
+		{
+			<a href="#69475" title="()Unit">next</a>()
+			<span title="Iterable[sbt.WorkFailure[D]]" class="keyword">if</span>(<a href="#69474" title="=&gt; Boolean">isIdle</a> <span title="(Boolean)Boolean">&amp;&amp;</span> <span title="=&gt; Boolean">!</span><a href="#69468" title="Distributor.this.scheduler.Run">schedule</a>.<a href="#69433" title="=&gt; Boolean">hasPending</a>) <span class="comment">// test if all work is complete</span>
+				<a href="#69468" title="Distributor.this.scheduler.Run">schedule</a>.<a href="#69436" title="=&gt; Iterable[sbt.WorkFailure[D]]">failures</a>
+			<span class="keyword">else</span>
+			{
+				<a href="#69476" title="()Unit">waitForCompletedWork</a>() <span class="comment">// wait for some work to complete </span>
+				<a href="#69471" title="()Iterable[sbt.WorkFailure[D]]">run</a>() <span class="comment">// continue</span>
+			}
+		}
+		<span class="comment">// true if the maximum number of worker threads are currently running</span>
+		<span class="keyword">private</span> <span class="keyword">def</span> <a title="=&gt; Boolean" id="69472">atMaximum</a> = <a href="#69469" title="Int">running</a> <span title="(Int)Boolean">==</span> <a href="#69389" title="Int">workers</a>
+		<span class="keyword">private</span> <span class="keyword">def</span> <a title="=&gt; Int" id="69473">availableWorkers</a> = <a href="#69389" title="Int">workers</a> <span title="(Int)Int">-</span> <a href="#69469" title="Int">running</a>
+		<span class="comment">// true if no worker threads are currently running</span>
+		<span class="keyword">private</span> <span class="keyword">def</span> <a title="=&gt; Boolean" id="69474">isIdle</a> = <a href="#69469" title="Int">running</a> <span title="(Int)Boolean">==</span> <span title="Int(0)" class="int">0</span>
+		<span class="comment">// process more work</span>
+		<span class="keyword">private</span> <span class="keyword">def</span> <a title="()Unit" id="69475">next</a>()
+		{
+			 <span class="comment">// if the maximum threads are being used, do nothing</span>
+			 <span class="comment">// if all work is complete or the scheduler is waiting for current work to complete, do nothing</span>
+			<span title="Unit" class="keyword">if</span>(<span title="=&gt; Boolean">!</span><a href="#69472" title="=&gt; Boolean">atMaximum</a> <span title="(Boolean)Boolean">&amp;&amp;</span> <a href="#69468" title="Distributor.this.scheduler.Run">schedule</a>.<a href="#69433" title="=&gt; Boolean">hasPending</a>)
+			{
+				<span class="keyword">val</span> <a title="Seq[D]" id="69704">nextWork</a> = <a href="#69468" title="Distributor.this.scheduler.Run">schedule</a>.<a href="#69435" title="(Int)Seq[D]">next</a>(<a href="#69473" title="=&gt; Int">availableWorkers</a>)
+				<span class="keyword">val</span> <a title="Int" id="69705">nextSize</a> = <a href="#69704" title="Seq[D]">nextWork</a>.<span title="=&gt; Int">size</span>
+				<span title="(Boolean,Any)Unit">assume</span>(<a href="#69705" title="Int">nextSize</a> <span title="(Int)Boolean">&lt;=</span> <a href="#69473" title="=&gt; Int">availableWorkers</a>, <span title="java.lang.String(&quot;Scheduler provided more work (&quot;)" class="string">&quot;Scheduler provided more work (&quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#69705" title="Int">nextSize</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot;) than allowed (&quot;)" class="string">&quot;) than allowed (&quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#69473" title="=&gt; Int">availableWorkers</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot;)&quot;)" class="string">&quot;)&quot;</span>)
+				<span title="(Boolean,Any)Unit">assume</span>(<a href="#69705" title="Int">nextSize</a> <span title="(Int)Boolean">&gt;</span> <span title="Int(0)" class="int">0</span> <span title="(Boolean)Boolean">||</span> <span title="=&gt; Boolean">!</span><a href="#69474" title="=&gt; Boolean">isIdle</a>, <span title="java.lang.String(&quot;Distributor idle and the scheduler indicated work pending, but provided no work.&quot;)" class="string">&quot;Distributor idle and the scheduler indicated work pending, but provided no work.&quot;</span>)
+				<a href="#69704" title="Seq[D]">nextWork</a>.<span title="((D) =&gt; Unit)Unit">foreach</span>(<a href="#69477" title="(D)Unit">process</a>)
+			}
+		}
+		<span class="comment">// wait on the blocking queue `complete` until some work finishes and notify the scheduler</span>
+		<span class="keyword">private</span> <span class="keyword">def</span> <a title="()Unit" id="69476">waitForCompletedWork</a>()
+		{
+			<span title="(Boolean)Unit">require</span>(<a href="#69469" title="Int">running</a> <span title="(Int)Boolean">&gt;</span> <span title="Int(0)" class="int">0</span>)
+			<span class="keyword">val</span> <a title="Distributor.this.Done" id="69726">done</a> = <a href="#69470" title="java.util.concurrent.LinkedBlockingQueue[Distributor.this.Done]">complete</a>.<a title="()Distributor.this.Done" id="69498">take</a>()
+			<a href="#69469" title="Int">running</a> <span title="(Int)Int">-=</span> <span title="Int(1)" class="int">1</span>
+			<a href="#69468" title="Distributor.this.scheduler.Run">schedule</a>.<a href="#69432" title="(D,Option[String])Unit">complete</a>(<a href="#69726" title="Distributor.this.Done">done</a>.<a href="#69835" title="=&gt; D">data</a>, <a href="#69726" title="Distributor.this.Done">done</a>.<a href="#69834" title="=&gt; Option[String]">result</a>)
+		}
+		<span class="keyword">private</span> <span class="keyword">def</span> <a title="(D)Unit" id="69477">process</a>(<a title="D" id="69723">data</a>: <a href="#13882" title="D">D</a>)
+		{
+			<span title="(Boolean)Unit">require</span>(<a href="#69469" title="Int">running</a> <span title="(Int)Int">+</span> <span title="Int(1)" class="int">1</span> <span title="(Int)Boolean">&lt;=</span> <a href="#69389" title="Int">workers</a>)
+			<a href="#69469" title="Int">running</a> <span title="(Int)Int">+=</span> <span title="Int(1)" class="int">1</span>
+			<span title="Run.this.Worker" class="keyword">new</span> <a href="#69478" title="Run.this.Worker">Worker</a>(<a href="#69723" title="D">data</a>).<a title="()Unit" id="59293">start</a>()
+		}
+		<span class="keyword">private</span> <span class="keyword">class</span> <a title="class Worker extends java.lang.Thread with NotNull with ScalaObject" id="69478">Worker</a>(<a title="D" id="69786">data</a>: <a href="#13882" title="D">D</a>) <span class="keyword">extends</span> <a title="java.lang.Thread" id="2023">Thread</a> <span class="keyword">with</span> <span title="NotNull">NotNull</span>
+		{
+			<span class="keyword">override</span> <span class="keyword">def</span> <a title="()Unit" id="69784">interrupt</a>() <span title="Unit">{</span>}
+			<span class="keyword">override</span> <span class="keyword">def</span> <a title="()Unit" id="69785">run</a>()
+			{
+				<span class="keyword">val</span> <a title="Option[String]" id="69833">result</a> = <a href="Control.scala.html#13546" title="object sbt.Control">Control</a>.<a href="Control.scala.html#50234" title="(=&gt; String,sbt.Logger)(=&gt; Option[String])Option[String]">trapUnit</a>(<span title="java.lang.String(&quot;&quot;)" class="string">&quot;&quot;</span>, <a href="#69390" title="(D)sbt.Logger">log</a>(<a href="#69786" title="D">data</a>))(<a href="#69388" title="(D)Option[String]">doWork</a>(<a href="#69786" title="D">data</a>))
+				<a href="#69470" title="java.util.concurrent.LinkedBlockingQueue[Distributor.this.Done]">complete</a>.<a title="(Distributor.this.Done)Unit" id="69495">put</a>( <span title="Distributor.this.Done" class="keyword">new</span> <a href="#69385" title="Distributor.this.Done">Done</a>(<a href="#69833" title="Option[String]">result</a>, <a href="#69786" title="D">data</a>) )
+			}
+		}
+	}
+	<span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">class</span> <a title="class Done extends java.lang.Object with NotNull with ScalaObject" id="69385">Done</a>(<span class="keyword">val</span> <a title="Option[String]" id="69834">result</a>: <span title="Option[String]">Option</span>[String], <span class="keyword">val</span> <a title="D" id="69835">data</a>: <a href="#13882" title="D">D</a>) <span class="keyword">extends</span> <span title="NotNull">NotNull</span>
+}
+<span class="keyword">final</span> <span class="keyword">case</span> <span class="keyword">class</span> <a title="class WorkFailure[D] extends java.lang.Object with NotNull with ScalaObject with Product" id="69394">WorkFailure</a>[<a title="&gt;: Nothing &lt;: Any" id="69396">D</a>](<a title="D" id="69415">work</a>: <a href="#69396" title="D">D</a>, <a title="String" id="69416">message</a>: <a title="String" id="1804">String</a>) <span class="keyword">extends</span> <span title="NotNull">NotNull</span>
+{
+	<span class="keyword">override</span> <span class="keyword">def</span> <a title="()String" id="69313">toString</a> = <a href="#69416" title="=&gt; String">message</a>
+}
+<span class="comment">/** Schedules work of type D.  A Scheduler determines what work is ready to be processed.
+* A Scheduler is itself immutable.  It creates a mutable object for each scheduler run.*/</span>
+<span class="keyword">trait</span> <a title="trait Scheduler[D] extends java.lang.Object with NotNull with ScalaObject" id="13446">Scheduler</a>[<a title="&gt;: Nothing &lt;: Any" id="13884">D</a>] <span class="keyword">extends</span> <span title="NotNull">NotNull</span>
+{
+	<span class="comment">/** Starts a new run.  The returned object is a new Run, representing a single scheduler run.  All state for the run
+	* is encapsulated in this object.*/</span>
+	<span class="keyword">def</span> <a title="=&gt; Scheduler.this.Run" id="69362">run</a>: <a href="#69363" title="Scheduler.this.Run">Run</a>
+	<span class="keyword">trait</span> <a title="trait Run extends java.lang.Object with NotNull" id="69363">Run</a> <span class="keyword">extends</span> <span title="NotNull">NotNull</span>
+	{
+		<span class="comment">/** Notifies this scheduler that work has completed with the given result (Some with the error message or None if the work succeeded).*/</span>
+		<span class="keyword">def</span> <a title="(D,Option[String])Unit" id="69432">complete</a>(<a title="D" id="69754">d</a>: <a href="#13884" title="D">D</a>, <a title="Option[String]" id="69755">result</a>: <span title="Option[String]">Option</span>[String]): <span title="Unit">Unit</span>
+		<span class="comment">/** Returns true if there is any more work to be done, although remaining work can be blocked
+		* waiting for currently running work to complete.*/</span>
+		<span class="keyword">def</span> <a title="=&gt; Boolean" id="69433">hasPending</a>: <span title="Boolean">Boolean</span>
+		<span class="comment">/**Returns true if this scheduler has no more work to be done, ever.*/</span>
+		<span class="keyword">def</span> <a title="=&gt; Boolean" id="69434">isComplete</a>: <span title="Boolean">Boolean</span>
+		<span class="comment">/** Returns up to 'max' units of work.  `max` is always positive.  The returned sequence cannot be empty if there is
+		* no work currently being processed.*/</span>
+		<span class="keyword">def</span> <a title="(Int)Seq[D]" id="69435">next</a>(<a title="Int" id="69456">max</a>: <span title="Int">Int</span>): <span title="Seq[D]">Seq</span>[D]
+		<span class="comment">/** A list of failures that occurred to this point, as reported to the `complete` method. */</span>
+		<span class="keyword">def</span> <a title="=&gt; Iterable[sbt.WorkFailure[D]]" id="69436">failures</a>: <span title="Iterable[sbt.WorkFailure[D]]">Iterable</span>[WorkFailure[D]]
+	}
+}
+<span class="comment">/** A Strategy selects the work to process from work that is ready to be processed.*/</span>
+<span class="keyword">private</span> <span class="keyword">trait</span> <a title="trait ScheduleStrategy[D] extends java.lang.Object with NotNull with ScalaObject" id="9963">ScheduleStrategy</a>[<a title="&gt;: Nothing &lt;: Any" id="13885">D</a>] <span class="keyword">extends</span> <span title="NotNull">NotNull</span>
+{
+	<span class="comment">/** Starts a new run.  The returned object is a new Run, representing a single strategy run.  All state for the run
+	* is handled through this object and is encapsulated in this object.*/</span>
+	<span class="keyword">def</span> <a title="=&gt; ScheduleStrategy.this.Run" id="69349">run</a>: <a href="#69350" title="ScheduleStrategy.this.Run">Run</a>
+	<span class="keyword">trait</span> <a title="trait Run extends java.lang.Object with NotNull" id="69350">Run</a> <span class="keyword">extends</span> <span title="NotNull">NotNull</span>
+	{
+		<span class="comment">/** Adds the given work to the list of work that is ready to run.*/</span>
+		<span class="keyword">def</span> <a title="(D)Unit" id="69862">workReady</a>(<a title="D" id="69867">dep</a>: <a href="#13885" title="D">D</a>): <span title="Unit">Unit</span>
+		<span class="comment">/** Returns true if there is work ready to be run. */</span>
+		<span class="keyword">def</span> <a title="=&gt; Boolean" id="69863">hasReady</a>: <span title="Boolean">Boolean</span>
+		<span class="comment">/** Provides up to `max` units of work.  `max` is always positive and this method is not called
+		* if hasReady is false. The returned list cannot be empty is there is work ready to be run.*/</span>
+		<span class="keyword">def</span> <a title="(Int)List[D]" id="69864">next</a>(<a title="Int" id="69869">max</a>: <span title="Int">Int</span>): <span title="List[D]">List</span>[D]
+		<span class="comment">/** If this strategy returns different work from `next` than is provided to `workReady`,
+		* this method must map back to the original work.*/</span>
+		<span class="keyword">def</span> <a title="(D)Iterable[D]" id="69865">reverseMap</a>(<a title="D" id="69870">dep</a>: <a href="#13885" title="D">D</a>): <span title="Iterable[D]">Iterable</span>[D]
+	}
+}
+
+<span class="comment">/** A scheduler for nodes of a directed-acyclic graph.  It requires the root of the graph
+* and a strategy to select which available nodes to run on limited resources.*/</span>
+<span class="keyword">private</span>[sbt] <span class="keyword">final</span> <span class="keyword">class</span> <a title="class DagScheduler[D &lt;: sbt.Dag[D]] extends java.lang.Object with sbt.Scheduler[D] with ScalaObject" id="11763">DagScheduler</a>[<a title="&gt;: Nothing &lt;: sbt.Dag[D]" id="13886">D</a> &lt;: Dag[D]](<a title="sbt.DagInfo[D]" id="69372">info</a>: <a href="#12843" title="sbt.DagInfo[D]">DagInfo</a>[D], <a title="sbt.ScheduleStrategy[D]" id="69373">strategy</a>: <a href="#9963" title="sbt.ScheduleStrategy[D]">ScheduleStrategy</a>[D]) <span class="keyword">extends</span> <a href="#13446" title="sbt.Scheduler[D]">Scheduler</a>[D]
+{
+	<span class="keyword">def</span> <a title="=&gt; DagScheduler.this.Run" id="69370">run</a>: <a href="#69363" title="DagScheduler.this.Run">Run</a> = <a title="template $anon extends java.lang.Object with DagScheduler.this.Run" id="69875" class="keyword">new</a> <a href="#69363" title="DagScheduler.this.Run">Run</a>
+	{
+		<span class="keyword">val</span> <a title="DagScheduler.this.info.Run" id="69877">infoRun</a> = <a href="#69372" title="sbt.DagInfo[D]">info</a>.<a href="#69337" title="=&gt; DagScheduler.this.info.Run">run</a>
+		<span class="keyword">val</span> <a title="DagScheduler.this.strategy.Run" id="69879">strategyRun</a> = <a href="#69373" title="sbt.ScheduleStrategy[D]">strategy</a>.<a href="#69349" title="=&gt; DagScheduler.this.strategy.Run">run</a>
+		
+		<span class="comment">// find nodes that are ready to be run (no dependencies)</span>
+		{
+			<span class="keyword">val</span> <a title="Iterable[D]" id="69899">startReady</a> = <span class="keyword">for</span>( <a href="#69903" title="(((D, scala.collection.mutable.Set[D])) =&gt; D)Iterable[D]">(</a><a title="D" id="69913">key</a>, <a title="scala.collection.mutable.Set[D]" id="69914">value</a>) &lt;- <a href="#69877" title="=&gt; DagScheduler.this.info.Run">infoRun</a>.<a href="#69892" title="=&gt; scala.collection.mutable.Map[D,scala.collection.mutable.Set[D]]">remainingDepsRun</a> <span class="keyword">if</span>(<a href="#69914" title="scala.collection.mutable.Set[D]">value</a>.<span title="=&gt; Boolean">isEmpty</span>)) <span class="keyword">yield</span> <a href="#69913" title="D">key</a>
+			<a href="#69877" title="=&gt; DagScheduler.this.info.Run">infoRun</a>.<a href="#69892" title="=&gt; scala.collection.mutable.Map[D,scala.collection.mutable.Set[D]]">remainingDepsRun</a> <a title="(Iterable[D])Unit" id="37795">--=</a> <a href="#69899" title="Iterable[D]">startReady</a>
+			<a href="#69899" title="Iterable[D]">startReady</a>.<span title="((D) =&gt; Unit)Unit">foreach</span>(<a href="#69879" title="=&gt; DagScheduler.this.strategy.Run">strategyRun</a>.<a href="#69862" title="(D)Unit">workReady</a>)
+		}
+			
+		<span class="keyword">val</span> <a title="scala.collection.mutable.ListBuffer[sbt.WorkFailure[D]]" id="69881">failures</a> = <span title="scala.collection.mutable.ListBuffer[sbt.WorkFailure[D]]" class="keyword">new</span> mutable.<span title="scala.collection.mutable.ListBuffer[sbt.WorkFailure[D]]">ListBuffer</span>[WorkFailure[D]]
+		<span class="keyword">def</span> <a title="(Int)List[D]" id="69883">next</a>(<a title="Int" id="69918">max</a>: <span title="Int">Int</span>) = <a href="#69879" title="=&gt; DagScheduler.this.strategy.Run">strategyRun</a>.<a href="#69864" title="(Int)List[D]">next</a>(<a href="#69918" title="Int">max</a>)
+		<span class="keyword">def</span> <a title="(D,Option[String])Unit" id="69884">complete</a>(<a title="D" id="69920">work</a>: <a href="#13886" title="D">D</a>, <a title="Option[String]" id="69921">result</a>: <span title="Option[String]">Option</span>[String])
+		{
+			<span class="keyword">for</span>(<a title="((D) =&gt; Unit)Unit" id="69923">originalWork</a> &lt;- <a href="#69879" title="=&gt; DagScheduler.this.strategy.Run">strategyRun</a>.<a href="#69865" title="(D)Iterable[D]">reverseMap</a>(<a href="#69920" title="D">work</a>))
+			{
+				<a href="#69921" title="Option[String]">result</a> <span title="Unit" class="keyword">match</span>
+				{
+					<span title="Unit" class="keyword">case</span> <span title="object None">None</span> =&gt; <a href="#69877" title="=&gt; DagScheduler.this.info.Run">infoRun</a>.<a href="#69897" title="(D,(D) =&gt; Unit)Unit">complete</a>(<a href="#69923" title="D">originalWork</a>, <a href="#69879" title="=&gt; DagScheduler.this.strategy.Run">strategyRun</a>.<a href="#69862" title="(D)Unit">workReady</a>)
+					<span title="Unit" class="keyword">case</span> Some(<a title="String" id="69928">errorMessage</a>) =&gt;
+						<a href="#69877" title="=&gt; DagScheduler.this.info.Run">infoRun</a>.<a href="#69896" title="(D)Unit">clear</a>(<a href="#69923" title="D">originalWork</a>)
+						<a href="#69881" title="=&gt; scala.collection.mutable.ListBuffer[sbt.WorkFailure[D]]">failures</a> <a title="(sbt.WorkFailure[D])Unit" id="49552">+=</a> <a href="#69394" title="(D,String)sbt.WorkFailure[D]">WorkFailure</a>(<a href="#69923" title="D">originalWork</a>, <a href="#69928" title="String">errorMessage</a>)
+				}
+			}
+		}
+		<span class="keyword">def</span> <a title="=&gt; Boolean" id="69885">isComplete</a> = <span title="=&gt; Boolean">!</span><a href="#69879" title="=&gt; DagScheduler.this.strategy.Run">strategyRun</a>.<a href="#69863" title="=&gt; Boolean">hasReady</a> <span title="(Boolean)Boolean">&amp;&amp;</span> <a href="#69877" title="=&gt; DagScheduler.this.info.Run">infoRun</a>.<a href="#69894" title="=&gt; scala.collection.mutable.Map[D,scala.collection.mutable.Set[D]]">reverseDepsRun</a>.<span title="=&gt; Boolean">isEmpty</span>
+		<span class="comment">// the strategy might not have any work ready if the remaining work needs currently executing work to finish first</span>
+		<span class="keyword">def</span> <a title="=&gt; Boolean" id="69886">hasPending</a> = <a href="#69879" title="=&gt; DagScheduler.this.strategy.Run">strategyRun</a>.<a href="#69863" title="=&gt; Boolean">hasReady</a> <span title="(Boolean)Boolean">||</span> <span title="=&gt; Boolean">!</span><a href="#69877" title="=&gt; DagScheduler.this.info.Run">infoRun</a>.<a href="#69892" title="=&gt; scala.collection.mutable.Map[D,scala.collection.mutable.Set[D]]">remainingDepsRun</a>.<span title="=&gt; Boolean">isEmpty</span>
+	}
+}
+<span class="keyword">private</span> <span class="keyword">object</span> <a title="object sbt.MaxPathStrategy" id="8995">MaxPathStrategy</a>
+{
+	<span class="keyword">def</span> <a title="[D &lt;: sbt.Dag[D]]((D) =&gt; Int,sbt.DagInfo[D])sbt.ScheduleStrategy[D]" id="69343">apply</a>[<a title="&gt;: Nothing &lt;: sbt.Dag[D]" id="69345">D</a> &lt;: Dag[D]](<a title="(D) =&gt; Int" id="69346">selfCost</a>: D =&gt; Int, <a title="sbt.DagInfo[D]" id="69347">info</a>: <a href="#12843" title="sbt.DagInfo[D]">DagInfo</a>[D]): <a href="#9963" title="sbt.ScheduleStrategy[D]">ScheduleStrategy</a>[D] =
+	{
+		<span class="keyword">val</span> <a title="scala.collection.Map[D,Int]" id="69937">cost</a> = <span class="comment">// compute the cost of the longest execution path ending at each node</span>
+		{
+			<span class="keyword">val</span> <a title="scala.collection.mutable.HashMap[D,Int]" id="69940">cost</a> = <span title="scala.collection.mutable.HashMap[D,Int]" class="keyword">new</span> mutable.<span title="scala.collection.mutable.HashMap[D,Int]">HashMap</span>[D, Int]
+			<span class="keyword">def</span> <a title="(D)Int" id="69941">computeCost</a>(<a title="D" id="69943">work</a>: <a href="#69345" title="D">D</a>): <span title="Int">Int</span> = <a href="#69347" title="sbt.DagInfo[D]">info</a>.<a href="#70140" title="=&gt; scala.collection.immutable.Map[D,scala.collection.immutable.Set[D]]">reverseDeps</a>.<a title="(D,=&gt; scala.collection.immutable.Set[D])scala.collection.immutable.Set[D]" id="37832">getOrElse</a>(<a href="#69943" title="D">work</a>, immutable.<a title="object scala.collection.immutable.Set" id="16509">Set</a>.<a title="scala.collection.immutable.Set[D]" id="16719">empty</a>[<a href="#69345" title="D">D</a>]).<a title="(Int)((Int, D) =&gt; Int)Int" id="15959">foldLeft</a>(<span title="Int(0)" class="int">0</span>)(<a href="#69948" title="implicit scala.Predef.intWrapper : (Int)scala.runtime.RichInt">_</a> <a title="(Int)Int" id="17936">max</a> <a href="#69942" title="(D)Int">getCost</a>(<a href="#69949" title="D">_</a>)) <span title="(Int)Int">+</span> <a href="#69346" title="(D)Int">selfCost</a>(<a href="#69943" title="D">work</a>)
+			<span class="keyword">def</span> <a title="(D)Int" id="69942">getCost</a>(<a title="D" id="69971">work</a>: <a href="#69345" title="D">D</a>): <span title="Int">Int</span> = <a href="#69940" title="scala.collection.mutable.HashMap[D,Int]">cost</a>.<span title="(D,=&gt; Int)Int">getOrElseUpdate</span>(<a href="#69971" title="D">work</a>, <a href="#69941" title="(D)Int">computeCost</a>(<a href="#69971" title="D">work</a>))
+			<a href="#69347" title="sbt.DagInfo[D]">info</a>.<a href="#70139" title="=&gt; scala.collection.immutable.Map[D,scala.collection.immutable.Set[D]]">remainingDeps</a>.<span title="=&gt; Iterator[D]">keys</span>.<a title="((D) =&gt; Unit)Unit" id="19655">foreach</a>(<a href="#69942" title="(D)Int">getCost</a>)
+			wrap.<a href="wrap/Wrappers.scala.html#14839" title="object sbt.wrap.Wrappers">Wrappers</a>.<a href="wrap/Wrappers.scala.html#49477" title="(scala.collection.mutable.Map[D,Int])scala.collection.Map[D,Int]">readOnly</a>(<a href="#69940" title="scala.collection.mutable.HashMap[D,Int]">cost</a>)
+		}
+		<span class="comment">// create a function to compare units of work.  This is not as simple as cost(a) compare cost(b) because it cannot return 0 for</span>
+		<span class="comment">// unequal nodes (at least for the Ordered comparison)</span>
+		
+		<span class="comment">// 2.8.0 uses Ordering</span>
+		<span class="keyword">implicit</span> <span class="keyword">val</span> <a title="Ordering[D]" id="69938">compareOrdering</a>: <span title="Ordering[D]">Ordering</span>[D] =
+			<a title="template $anon extends java.lang.Object with Ordering[D]" id="70003" class="keyword">new</a> <span title="Ordering[D]">Ordering</span>[D]
+			{
+				<span class="keyword">def</span> <a title="(D,D)Int" id="70005">compare</a>(<a title="D" id="70008">a</a>: <a href="#69345" title="D">D</a>, <a title="D" id="70009">b</a>: <a href="#69345" title="D">D</a>) =
+				{
+					<span class="keyword">val</span> <a title="Int" id="70011">base</a> = <a href="#69937" title="implicit scala.Predef.intWrapper : (Int)scala.runtime.RichInt">cost</a>(<a href="#70008" title="D">a</a>) <span title="(Int)Int">compare</span> <a href="#69937" title="(D)Int">cost</a>(<a href="#70009" title="D">b</a>)
+					<span title="Int" class="keyword">if</span>(<a href="#70011" title="Int">base</a> <span title="(Int)Boolean">==</span> <span title="Int(0)" class="int">0</span>)
+						<a href="#70008" title="D">a</a>.<span title="implicit scala.Predef.intWrapper : (Int)scala.runtime.RichInt">hashCode</span> <span title="(Int)Int">compare</span> <a href="#70009" title="D">b</a>.<span title="()Int">hashCode</span> <span class="comment">// this is required because TreeSet interprets 0 as equal</span>
+					<span class="keyword">else</span>
+						<a href="#70011" title="Int">base</a>
+				}
+			}
+		<span class="comment">// 2.7.x uses an implicit view to Ordered</span>
+		<span class="keyword">implicit</span> <span class="keyword">val</span> <a title="(D) =&gt; java.lang.Object with Ordered[D]" id="69939">compare</a> =
+			(<a title="D" id="70034">a</a>: <a href="#69345" title="D">D</a>) =&gt; <a title="template $anon extends java.lang.Object with Ordered[D]" id="70035" class="keyword">new</a> <a title="Ordered[D]" id="1411">Ordered</a>[D] {
+				<span class="keyword">def</span> <a title="(D)Int" id="70037">compare</a>(<a title="D" id="70040">b</a>: <a href="#69345" title="D">D</a>) = <a href="#69938" title="Ordering[D]">compareOrdering</a>.<a title="(D,D)Int" id="69954">compare</a>(<a href="#70034" title="D">a</a>, <a href="#70040" title="D">b</a>)
+			}
+		<span title="sbt.OrderedStrategy[D]" class="keyword">new</span> <a href="#13365" title="sbt.OrderedStrategy[D]">OrderedStrategy</a>(<a href="#69939" title="()(implicit (D) =&gt; Ordered[D])scala.collection.immutable.TreeSet[D]" id="61097" class="keyword">new</a> <span title="scala.collection.immutable.TreeSet[D]">TreeSet</span>())
+	}
+}
+<span class="comment">/** A strategy that adds work to a tree and selects the last key as the next work to be done. */</span>
+<span class="keyword">private</span> <span class="keyword">class</span> <a title="class OrderedStrategy[D] extends java.lang.Object with sbt.ScheduleStrategy[D] with ScalaObject" id="13365">OrderedStrategy</a>[<a title="&gt;: Nothing &lt;: Any" id="13887">D</a>](<a title="scala.collection.immutable.TreeSet[D]" id="70052">ready</a>: <span title="scala.collection.immutable.TreeSet[D]">TreeSet</span>[D]) <span class="keyword">extends</span> <a href="#9963" title="sbt.ScheduleStrategy[D]">ScheduleStrategy</a>[D]
+{
+	<span class="keyword">def</span> <a title="=&gt; &lt;refinement&gt; extends java.lang.Object with OrderedStrategy.this.Run" id="70050">run</a> = <a title="template $anon extends java.lang.Object with OrderedStrategy.this.Run" id="70062" class="keyword">new</a> <a href="#69350" title="OrderedStrategy.this.Run">Run</a>
+	{
+		<span class="keyword">private</span>[<span class="keyword">this</span>] <span class="keyword">var</span> <a title="scala.collection.immutable.TreeSet[D]" id="70064">readyRun</a> = <a href="#70052" title="scala.collection.immutable.TreeSet[D]">ready</a>
+		<span class="keyword">def</span> <a title="(Int)List[D]" id="70065">next</a>(<a title="Int" id="70072">max</a>: <span title="Int">Int</span>): <span title="List[D]">List</span>[D] = <a href="#70066" title="(Int,List[D])List[D]">nextImpl</a>(<a href="#70072" title="Int">max</a>, <span title="object Nil">Nil</span>)
+		<span class="keyword">private</span>[<span class="keyword">this</span>] <span class="keyword">def</span> <a title="(Int,List[D])List[D]" id="70066">nextImpl</a>(<a title="Int" id="70073">remaining</a>: <span title="Int">Int</span>, <a title="List[D]" id="70074">accumulated</a>: <span title="List[D]">List</span>[D]): <span title="List[D]">List</span>[D] =
+		{
+			<span title="List[D]" class="keyword">if</span>(<a href="#70073" title="Int">remaining</a> <span title="(Int)Boolean">&lt;=</span> <span title="Int(0)" class="int">0</span> <span title="(Boolean)Boolean">||</span> <a href="#70064" title="scala.collection.immutable.TreeSet[D]">readyRun</a>.<span title="=&gt; Boolean">isEmpty</span>)
+				<a href="#70074" title="List[D]">accumulated</a>
+			<span class="keyword">else</span>
+			{
+				<span class="keyword">val</span> <a title="D" id="70077">next</a> = <a href="#70064" title="scala.collection.immutable.TreeSet[D]">readyRun</a>.<a title="=&gt; D" id="61114">lastKey</a>
+				<a href="#70064" title="scala.collection.immutable.TreeSet[D]">readyRun</a> <a title="(D)scala.collection.immutable.TreeSet[D]" id="61105">-=</a> <a href="#70077" title="D">next</a>
+				<a href="#70066" title="(Int,List[D])List[D]">nextImpl</a>(<a href="#70073" title="Int">remaining</a> <span title="(Int)Int">-</span> <span title="Int(1)" class="int">1</span>, <a href="#70077" title="D">next</a> <a href="#70103" title="(D)List[D]">::</a> <a href="#70074" title="List[D]">accumulated</a>)
+			}
+		}
+		<span class="keyword">def</span> <a title="(D)Unit" id="70067">workReady</a>(<a title="D" id="70106">dep</a>: <a href="#13887" title="D">D</a>) { <a href="#70064" title="scala.collection.immutable.TreeSet[D]">readyRun</a> <a title="(D)scala.collection.immutable.TreeSet[D]" id="61103">+=</a> <a href="#70106" title="D">dep</a> }
+		<span class="keyword">def</span> <a title="=&gt; Boolean" id="70068">hasReady</a> = <span title="=&gt; Boolean">!</span><a href="#70064" title="scala.collection.immutable.TreeSet[D]">readyRun</a>.<span title="=&gt; Boolean">isEmpty</span>
+		<span class="keyword">def</span> <a title="(D)List[D]" id="70069">reverseMap</a>(<a title="D" id="70120">dep</a>: <a href="#13887" title="D">D</a>) = <a href="#70120" title="D">dep</a> <a href="#70122" title="(D)List[D]">::</a> <span title="object Nil">Nil</span>
+	}
+}
+<span class="comment">/** A class that represents state for a DagScheduler and that MaxPathStrategy uses to initialize an OrderedStrategy. */</span>
+<span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">class</span> <a title="class DagInfo[D &lt;: sbt.Dag[D]] extends java.lang.Object with NotNull with ScalaObject" id="12843">DagInfo</a>[<a title="&gt;: Nothing &lt;: sbt.Dag[D]" id="13888">D</a> &lt;: Dag[D]](<span class="keyword">val</span> <a title="scala.collection.immutable.Map[D,scala.collection.immutable.Set[D]]" id="70139">remainingDeps</a>: immutable.<span title="scala.collection.immutable.Map[D,scala.collection.immutable.Set[D]]">Map</span>[D, immutable.Set[D]],
+	<span class="keyword">val</span> <a title="scala.collection.immutable.Map[D,scala.collection.immutable.Set[D]]" id="70140">reverseDeps</a>: immutable.<span title="scala.collection.immutable.Map[D,scala.collection.immutable.Set[D]]">Map</span>[D, immutable.Set[D]]) <span class="keyword">extends</span> <span title="NotNull">NotNull</span>
+{
+	<span class="keyword">def</span> <a title="=&gt; DagInfo.this.Run" id="69337">run</a> = <span title="DagInfo.this.Run" class="keyword">new</span> <a href="#69338" title="DagInfo.this.Run">Run</a>
+	<span class="keyword">final</span> <span class="keyword">class</span> <a title="class Run extends java.lang.Object with NotNull with ScalaObject" id="69338">Run</a> <span class="keyword">extends</span> <span title="NotNull">NotNull</span>
+	{
+		<span class="keyword">val</span> <a title="scala.collection.mutable.Map[D,scala.collection.mutable.Set[D]]" id="69892">remainingDepsRun</a> = <a href="#12844" title="object sbt.DagInfo">DagInfo</a>.<a href="#69326" title="(scala.collection.immutable.Map[D,scala.collection.immutable.Set[D]])scala.collection.mutable.Map[D,scala.collection.mutable.Set[D]]">mutableMap</a>(<a href="#70139" title="=&gt; scala.collection.immutable.Map[D,scala.collection.immutable.Set[D]]">remainingDeps</a>)
+		<span class="keyword">val</span> <a title="scala.collection.mutable.Map[D,scala.collection.mutable.Set[D]]" id="69894">reverseDepsRun</a> = <a href="#12844" title="object sbt.DagInfo">DagInfo</a>.<a href="#69326" title="(scala.collection.immutable.Map[D,scala.collection.immutable.Set[D]])scala.collection.mutable.Map[D,scala.collection.mutable.Set[D]]">mutableMap</a>(<a href="#70140" title="=&gt; scala.collection.immutable.Map[D,scala.collection.immutable.Set[D]]">reverseDeps</a>)
+		<span class="comment">/** Called when work does not complete successfully and so all work that (transitively) depends on the work 
+		* must be removed from the maps. */</span>
+		<span class="keyword">def</span> <a title="(D)Unit" id="69896">clear</a>(<a title="D" id="69929">work</a>: <a href="#13888" title="D">D</a>)
+		{
+			<a href="#69892" title="=&gt; scala.collection.mutable.Map[D,scala.collection.mutable.Set[D]]">remainingDepsRun</a> <span title="(D)Unit">-=</span> <a href="#69929" title="D">work</a>
+			<a href="#69898" title="(D)((D) =&gt; Unit)Unit">foreachReverseDep</a>(<a href="#69929" title="D">work</a>)(<a href="#69896" title="(D)Unit">clear</a>)
+		}
+		<span class="comment">/** Called when work completes properly.  `initial` and `ready` are used for a fold over
+		* the work that is now ready to go (becaues it was only waiting for `work` to complete).*/</span>
+		<span class="keyword">def</span> <a title="(D,(D) =&gt; Unit)Unit" id="69897">complete</a>(<a title="D" id="69924">work</a>: <a href="#13888" title="D">D</a>, <a title="(D) =&gt; Unit" id="69925">ready</a>: D =&gt; Unit)
+		{
+			<span class="keyword">def</span> <a title="(D)Unit" id="70147">completed</a>(<a title="D" id="70148">dependsOnCompleted</a>: <a href="#13888" title="D">D</a>)
+			{
+				<span class="keyword">for</span>(<a title="((scala.collection.mutable.Set[D]) =&gt; Unit)Unit" id="70150">remainingDependencies</a> &lt;- <a href="#69892" title="=&gt; scala.collection.mutable.Map[D,scala.collection.mutable.Set[D]]">remainingDepsRun</a>.<a title="(D)Option[scala.collection.mutable.Set[D]]" id="37831">get</a>(<a href="#70148" title="D">dependsOnCompleted</a>))
+				{
+					<a href="#70150" title="scala.collection.mutable.Set[D]">remainingDependencies</a> <a title="(D)Unit" id="30701">-=</a> <a href="#69924" title="D">work</a>
+					<span title="Unit" class="keyword">if</span>(<a href="#70150" title="scala.collection.mutable.Set[D]">remainingDependencies</a>.<span title="=&gt; Boolean">isEmpty</span>)
+					{
+						<a href="#69892" title="=&gt; scala.collection.mutable.Map[D,scala.collection.mutable.Set[D]]">remainingDepsRun</a> <span title="(D)Unit">-=</span> <a href="#70148" title="D">dependsOnCompleted</a>
+						<a href="#69925" title="(D)Unit">ready</a>(<a href="#70148" title="D">dependsOnCompleted</a>)
+					}
+				}
+			}
+			<a href="#69898" title="(D)((D) =&gt; Unit)Unit">foreachReverseDep</a>(<a href="#69924" title="D">work</a>)(<a href="#70147" title="(D)Unit">completed</a>)
+		}
+		<span class="keyword">private</span> <span class="keyword">def</span> <a title="(D)((D) =&gt; Unit)Unit" id="69898">foreachReverseDep</a>(<a title="D" id="70143">work</a>: <a href="#13888" title="D">D</a>)(<a title="(D) =&gt; Unit" id="70144">f</a>: D =&gt; Unit) { <a href="#69894" title="=&gt; scala.collection.mutable.Map[D,scala.collection.mutable.Set[D]]">reverseDepsRun</a>.<span title="(D)Option[scala.collection.mutable.Set[D]]">removeKey</span>(<a href="#70143" title="D">work</a>).<span title="((scala.collection.mutable.Set[D]) =&gt; Unit)Unit">foreach</span>(<a href="#70156" title="scala.collection.mutable.Set[D]">_</a>.<span title="((D) =&gt; Unit)Unit">foreach</span>(<a href="#70144" title="(D) =&gt; Unit">f</a>)) }
+	}
+}
+<span class="comment">/** Constructs forward and reverse dependency map for the given Dag root node. */</span>
+<span class="keyword">private</span> <span class="keyword">object</span> <a title="object sbt.DagInfo" id="12844">DagInfo</a>
+{
+	<span class="comment">/** Constructs the reverse dependency map from the given Dag and
+	* puts the forward dependencies into a map */</span>
+	<span class="keyword">def</span> <a title="[D &lt;: sbt.Dag[D]](D)sbt.DagInfo[D]" id="69320">apply</a>[<a title="&gt;: Nothing &lt;: sbt.Dag[D]" id="69322">D</a> &lt;: Dag[D]](<a title="D" id="69329">root</a>: <a href="#69322" title="D">D</a>): <a href="#12843" title="sbt.DagInfo[D]">DagInfo</a>[D] =
+	{
+		<span class="keyword">val</span> <a title="scala.collection.mutable.HashMap[D,scala.collection.immutable.Set[D]]" id="70158">remainingDeps</a> = <span title="scala.collection.mutable.HashMap[D,scala.collection.immutable.Set[D]]" class="keyword">new</span> mutable.<span title="scala.collection.mutable.HashMap[D,scala.collection.immutable.Set[D]]">HashMap</span>[D, immutable.Set[D]]
+		<span class="keyword">val</span> <a title="scala.collection.mutable.HashMap[D,scala.collection.mutable.Set[D]]" id="70159">reverseDeps</a> = <span title="scala.collection.mutable.HashMap[D,scala.collection.mutable.Set[D]]" class="keyword">new</span> mutable.<span title="scala.collection.mutable.HashMap[D,scala.collection.mutable.Set[D]]">HashMap</span>[D, mutable.Set[D]]
+		<span class="keyword">def</span> <a title="(D)Unit" id="70160">visitIfUnvisited</a>(<a title="D" id="70162">node</a>: <a href="#69322" title="D">D</a>): <span title="Unit">Unit</span> = <a href="#70158" title="scala.collection.mutable.HashMap[D,scala.collection.immutable.Set[D]]">remainingDeps</a>.<span title="(D,=&gt; scala.collection.immutable.Set[D])scala.collection.immutable.Set[D]">getOrElseUpdate</span>(<a href="#70162" title="D">node</a>, <a href="#70161" title="(D)Set[D]">processDependencies</a>(<a href="#70162" title="D">node</a>))
+		<span class="keyword">def</span> <a title="(D)Set[D]" id="70161">processDependencies</a>(<a title="D" id="70163">node</a>: <a href="#69322" title="D">D</a>): <a title="Set[D]" id="16508">Set</a>[D] =
+		{
+			<span class="keyword">val</span> <a title="Iterable[D]" id="70164">workDependencies</a> = <a href="#70163" title="D">node</a>.<a href="Dag.scala.html#51245" title="=&gt; Iterable[D]">dependencies</a>
+			<a href="#70164" title="Iterable[D]">workDependencies</a>.<span title="((D) =&gt; Unit)Unit">foreach</span>(<a href="#70160" title="(D)Unit">visitIfUnvisited</a>)
+			<span class="keyword">for</span>(<a title="((D) =&gt; Unit)Unit" id="70168">dep</a> &lt;- <a href="#70164" title="Iterable[D]">workDependencies</a>)
+				<a href="#70159" title="scala.collection.mutable.HashMap[D,scala.collection.mutable.Set[D]]">reverseDeps</a>.<span title="(D,=&gt; scala.collection.mutable.Set[D])scala.collection.mutable.Set[D]">getOrElseUpdate</span>(<a href="#70168" title="D">dep</a>, <span title="scala.collection.mutable.HashSet[D]" class="keyword">new</span> mutable.<a title="scala.collection.mutable.HashSet[D]" id="20037">HashSet</a>[D]) <a title="(D)Unit" id="30692">+=</a> <a href="#70163" title="D">node</a>
+			immutable.<span title="(D*)scala.collection.immutable.Set[D]">HashSet</span>(<a href="#70164" title="Iterable[D]">workDependencies</a>.<span title="=&gt; Seq[D]">toSeq</span>: _*)
+		}
+		<a href="#70160" title="(D)Unit">visitIfUnvisited</a>(<a href="#69329" title="D">root</a>)
+		<span title="sbt.DagInfo[D]" class="keyword">new</span> <a href="#12843" title="sbt.DagInfo[D]">DagInfo</a>(immutable.<span title="((D, scala.collection.immutable.Set[D])*)scala.collection.immutable.Map[D,scala.collection.immutable.Set[D]]">HashMap</span>(<a href="#70158" title="scala.collection.mutable.HashMap[D,scala.collection.immutable.Set[D]]">remainingDeps</a>.<span title="=&gt; Seq[(D, scala.collection.immutable.Set[D])]">toSeq</span> : _*), <a href="#69323" title="(scala.collection.mutable.Map[D,scala.collection.mutable.Set[D]])scala.collection.immutable.Map[D,scala.collection.immutable.Set[D]]">immute</a>(<a href="#70159" title="scala.collection.mutable.HashMap[D,scala.collection.mutable.Set[D]]">reverseDeps</a>) )
+	}
+	<span class="comment">/** Convert a mutable Map with mutable Sets for values to an immutable Map with immutable Sets for values. */</span>
+	<span class="keyword">private</span> <span class="keyword">def</span> <a title="[D](scala.collection.mutable.Map[D,scala.collection.mutable.Set[D]])scala.collection.immutable.Map[D,scala.collection.immutable.Set[D]]" id="69323">immute</a>[<a title="&gt;: Nothing &lt;: Any" id="69325">D</a>](<a title="scala.collection.mutable.Map[D,scala.collection.mutable.Set[D]]" id="70237">map</a>: mutable.<span title="scala.collection.mutable.Map[D,scala.collection.mutable.Set[D]]">Map</span>[D, mutable.Set[D]]): immutable.<span title="scala.collection.immutable.Map[D,scala.collection.immutable.Set[D]]">Map</span>[D, immutable.Set[D]] =
+	{
+		<span class="keyword">val</span> <a title="Iterable[(D, scala.collection.immutable.Set[D])]" id="70239">immutedSets</a> = <a href="#70237" title="scala.collection.mutable.Map[D,scala.collection.mutable.Set[D]]">map</a>.<span title="(((D, scala.collection.mutable.Set[D])) =&gt; (D, scala.collection.immutable.Set[D]))Iterable[(D, scala.collection.immutable.Set[D])]">map</span> <a href="#70242" title="(D, scala.collection.immutable.Set[D])">{</a> <span title="(D, scala.collection.immutable.Set[D])" class="keyword">case</span> (<a title="D" id="70243">key</a>, <a title="scala.collection.mutable.Set[D]" id="70244">value</a>) =&gt;<span title="(D,scala.collection.immutable.Set[D])(D, scala.collection.immutable.Set[D])">(</span><a href="#70243" title="D">key</a>,  immutable.<span title="(D*)scala.collection.immutable.Set[D]">HashSet</span>(<a href="#70244" title="scala.collection.mutable.Set[D]">value</a>.<span title="=&gt; Seq[D]">toSeq</span> : _*)) }
+		immutable.<span title="((D, scala.collection.immutable.Set[D])*)scala.collection.immutable.Map[D,scala.collection.immutable.Set[D]]">HashMap</span>(<a href="#70239" title="Iterable[(D, scala.collection.immutable.Set[D])]">immutedSets</a>.<span title="=&gt; Seq[(D, scala.collection.immutable.Set[D])]">toSeq</span> :_*)
+	}
+	<span class="comment">/** Convert an immutable Map with immutable Sets for values to a mutable Map with mutable Sets for values. */</span>
+	<span class="keyword">private</span> <span class="keyword">def</span> <a title="[D](scala.collection.immutable.Map[D,scala.collection.immutable.Set[D]])scala.collection.mutable.Map[D,scala.collection.mutable.Set[D]]" id="69326">mutableMap</a>[<a title="&gt;: Nothing &lt;: Any" id="69328">D</a>](<a title="scala.collection.immutable.Map[D,scala.collection.immutable.Set[D]]" id="69900">map</a>: immutable.<span title="scala.collection.immutable.Map[D,scala.collection.immutable.Set[D]]">Map</span>[D, immutable.Set[D]]): mutable.<span title="scala.collection.mutable.Map[D,scala.collection.mutable.Set[D]]">Map</span>[D, mutable.Set[D]] =
+	{
+		<span class="keyword">val</span> <a title="Iterable[(D, scala.collection.mutable.Set[D])]" id="70250">mutableSets</a> = <a href="#69900" title="scala.collection.immutable.Map[D,scala.collection.immutable.Set[D]]">map</a>.<span title="(((D, scala.collection.immutable.Set[D])) =&gt; (D, scala.collection.mutable.Set[D]))Iterable[(D, scala.collection.mutable.Set[D])]">map</span> <a href="#70253" title="(D, scala.collection.mutable.Set[D])">{</a> <span title="(D, scala.collection.mutable.Set[D])" class="keyword">case</span> (<a title="D" id="70254">key</a>, <a title="scala.collection.immutable.Set[D]" id="70255">value</a>) =&gt;<span title="(D,scala.collection.mutable.Set[D])(D, scala.collection.mutable.Set[D])">(</span><a href="#70254" title="D">key</a>,  mutable.<a title="(D*)scala.collection.mutable.Set[D]" id="20038">HashSet</a>(<a href="#70255" title="scala.collection.immutable.Set[D]">value</a>.<span title="=&gt; Seq[D]">toSeq</span> : _*)) }
+		mutable.<span title="((D, scala.collection.mutable.Set[D])*)scala.collection.mutable.Map[D,scala.collection.mutable.Set[D]]">HashMap</span>(<a href="#70250" title="Iterable[(D, scala.collection.mutable.Set[D])]">mutableSets</a>.<span title="=&gt; Seq[(D, scala.collection.mutable.Set[D])]">toSeq</span> :_*)
+	}
+}
+<span class="comment">/** A scheduler that can get work from sub-schedulers.  The `schedulers` argument to the constructor
+* is a sequence of the initial schedulers and the key to provide to a client that uses the 'detailedComplete'
+* method when the scheduler completes its work.*/</span>
+<span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">class</span> <a title="class MultiScheduler[D, T] extends java.lang.Object with sbt.Scheduler[D] with ScalaObject" id="10677">MultiScheduler</a>[<a title="&gt;: Nothing &lt;: Any" id="13889">D</a>, <a title="&gt;: Nothing &lt;: Any" id="13890">T</a>](<a title="(sbt.Scheduler[D], T)*" id="70268">schedulers</a>: <a title="(sbt.Scheduler[D], T)*" id="2684">(</a>Scheduler[D], T)*) <span class="keyword">extends</span> <a href="#13446" title="sbt.Scheduler[D]">Scheduler</a>[D]
+{
+	<span class="comment">/** Returns a Run instance that represents a scheduler run.*/</span>
+	<span class="keyword">def</span> <a title="=&gt; MultiScheduler.this.MultiRun" id="70264">run</a> = <span title="MultiScheduler.this.MultiRun" class="keyword">new</span> <a href="#70265" title="MultiScheduler.this.MultiRun">MultiRun</a>
+	<span class="keyword">final</span> <span class="keyword">class</span> <a title="class MultiRun extends java.lang.Object with MultiScheduler.this.Run with ScalaObject" id="70265">MultiRun</a> <span class="keyword">extends</span> <a href="#69363" title="MultiScheduler.this.Run">Run</a>
+	{
+		<span class="keyword">val</span> <a title="scala.collection.mutable.HashMap[D,sbt.Scheduler[D]#Run]" id="70272">owners</a> = <span title="scala.collection.mutable.HashMap[D,sbt.Scheduler[D]#Run]" class="keyword">new</span> mutable.<span title="scala.collection.mutable.HashMap[D,sbt.Scheduler[D]#Run]">HashMap</span>[D, Scheduler[D]#Run]
+		<span class="keyword">val</span> <a title="scala.collection.mutable.ListBuffer[sbt.WorkFailure[D]]" id="70274">failures</a> = <span title="scala.collection.mutable.ListBuffer[sbt.WorkFailure[D]]" class="keyword">new</span> mutable.<span title="scala.collection.mutable.ListBuffer[sbt.WorkFailure[D]]">ListBuffer</span>[WorkFailure[D]]
+		<span class="keyword">val</span> <a title="scala.collection.mutable.Map[sbt.Scheduler[D]#Run,T]" id="70276">schedules</a> = mutable.<span title="((sbt.Scheduler[D]#Run, T)*)scala.collection.mutable.Map[sbt.Scheduler[D]#Run,T]">HashMap</span>[Scheduler[D]#<a href="#69363" title="sbt.Scheduler[D]#Run">Run</a>, <a href="#13890" title="T">T</a>](<a href="#70268" title="(sbt.Scheduler[D], T)*">schedulers</a>.<a title="(((sbt.Scheduler[D], T)) =&gt; (sbt.Scheduler[D]#Run, T))Seq[(sbt.Scheduler[D]#Run, T)]" id="15820">map</a> <a href="#70292" title="(sbt.Scheduler[D]#Run, T)">{</a> <span title="(scheduler.Run, T)" class="keyword">case</span> (<a title="sbt.Scheduler[D]" id="70293">scheduler</a>, <a title="T" id="70294">completeKey</a>) =&gt; <span title="(scheduler.Run,T)(scheduler.Run, T)">(</span><a href="#70293" title="sbt.Scheduler[D]">scheduler</a>.<a href="#69362" title="=&gt; scheduler.Run">run</a>, <a href="#70294" title="T">completeKey</a>)} : _*)
+		<span class="keyword">def</span> <a title="(sbt.Scheduler[D]#Run,T)Unit" id="70278">+=</a>(<a title="sbt.Scheduler[D]#Run" id="70299">schedule</a>: Scheduler[D]#<a href="#69363" title="sbt.Scheduler[D]#Run">Run</a>, <a title="T" id="70300">completeKey</a>: <a href="#13890" title="T">T</a>) { <a href="#70276" title="=&gt; scala.collection.mutable.Map[sbt.Scheduler[D]#Run,T]">schedules</a>(<a href="#70299" title="sbt.Scheduler[D]#Run">schedule</a>) = <a href="#70300" title="T">completeKey</a> }
+	
+		<span class="keyword">def</span> <a title="=&gt; Boolean" id="70279">isComplete</a> = <a href="#70276" title="=&gt; scala.collection.mutable.Map[sbt.Scheduler[D]#Run,T]">schedules</a>.<span title="=&gt; Iterator[sbt.Scheduler[D]#Run]">keys</span>.<a title="((sbt.Scheduler[D]#Run) =&gt; Boolean)Boolean" id="19656">forall</a>(<a href="#70308" title="sbt.Scheduler[D]#Run">_</a>.<a href="#69434" title="=&gt; Boolean">isComplete</a>)
+		<span class="keyword">def</span> <a title="=&gt; Boolean" id="70280">hasPending</a> = <a href="#70276" title="=&gt; scala.collection.mutable.Map[sbt.Scheduler[D]#Run,T]">schedules</a>.<span title="=&gt; Iterator[sbt.Scheduler[D]#Run]">keys</span>.<span title="((sbt.Scheduler[D]#Run) =&gt; Boolean)Boolean">exists</span>(<a href="#70312" title="sbt.Scheduler[D]#Run">_</a>.<a href="#69433" title="=&gt; Boolean">hasPending</a>)
+		<span class="keyword">def</span> <a title="(Int)Seq[D]" id="70281">next</a>(<a title="Int" id="70313">max</a>: <span title="Int">Int</span>) = <a href="#70282" title="(Int,List[sbt.Scheduler[D]#Run],List[D])Seq[D]">nextImpl</a>(<a href="#70313" title="Int">max</a>, <a href="#70276" title="=&gt; scala.collection.mutable.Map[sbt.Scheduler[D]#Run,T]">schedules</a>.<span title="=&gt; Iterator[sbt.Scheduler[D]#Run]">keys</span>.<a title="=&gt; List[sbt.Scheduler[D]#Run]" id="19688">toList</a>, <span title="object Nil">Nil</span>)
+	
+		<span class="keyword">private</span> <span class="keyword">def</span> <a title="(Int,List[sbt.Scheduler[D]#Run],List[D])Seq[D]" id="70282">nextImpl</a>(<a title="Int" id="70315">max</a>: <span title="Int">Int</span>, <a title="List[sbt.Scheduler[D]#Run]" id="70316">remaining</a>: <span title="List[sbt.Scheduler[D]#Run]">List</span>[Scheduler[D]#Run], <a title="List[D]" id="70317">accumulatedWork</a>: <span title="List[D]">List</span>[D]): <span title="Seq[D]">Seq</span>[D] =
+		{
+			<span title="Seq[D]" class="keyword">if</span>(<a href="#70315" title="Int">max</a> <span title="(Int)Boolean">==</span> <span title="Int(0)" class="int">0</span> <span title="(Boolean)Boolean">||</span> <a href="#70316" title="List[sbt.Scheduler[D]#Run]">remaining</a>.<span title="=&gt; Boolean">isEmpty</span>)
+				<a href="#70317" title="List[D]">accumulatedWork</a>
+			<span class="keyword">else</span>
+			{
+				<span class="keyword">val</span> <a title="sbt.Scheduler[D]#Run" id="70323">currentSchedule</a> = <a href="#70316" title="List[sbt.Scheduler[D]#Run]">remaining</a>.<a title="=&gt; sbt.Scheduler[D]#Run" id="15501">head</a>
+				<span title="Seq[D]" class="keyword">if</span>(<a href="#70323" title="sbt.Scheduler[D]#Run">currentSchedule</a>.<a href="#69433" title="=&gt; Boolean">hasPending</a>)
+				{
+					<span class="keyword">val</span> <a title="List[D]" id="70324">newWork</a> = <a href="#70323" title="sbt.Scheduler[D]#Run">currentSchedule</a>.<a href="#69435" title="(Int)Seq[D]">next</a>(<a href="#70315" title="Int">max</a>).<span title="=&gt; List[D]">toList</span>
+					<a href="#70324" title="List[D]">newWork</a>.<a title="((D) =&gt; Unit)Unit" id="15535">foreach</a>(<a title="D" id="70326">work</a> =&gt; <a href="#70272" title="=&gt; scala.collection.mutable.HashMap[D,sbt.Scheduler[D]#Run]">owners</a>.<a title="(D,sbt.Scheduler[D]#Run)Option[sbt.Scheduler[D]#Run]" id="37799">put</a>(<a href="#70326" title="D">work</a>, <a href="#70323" title="sbt.Scheduler[D]#Run">currentSchedule</a>))
+					<a href="#70282" title="(Int,List[sbt.Scheduler[D]#Run],List[D])Seq[D]">nextImpl</a>(<a href="#70315" title="Int">max</a> <span title="(Int)Int">-</span> <a href="#70324" title="List[D]">newWork</a>.<span title="=&gt; Int">size</span>, <a href="#70316" title="List[sbt.Scheduler[D]#Run]">remaining</a>.<span title="=&gt; List[sbt.Scheduler[D]#Run]">tail</span>, <a href="#70324" title="List[D]">newWork</a> <a href="#70341" title="(List[D])List[D]">:::</a> <a href="#70317" title="List[D]">accumulatedWork</a>)
+				}
+				<span class="keyword">else</span>
+					<a href="#70282" title="(Int,List[sbt.Scheduler[D]#Run],List[D])Seq[D]">nextImpl</a>(<a href="#70315" title="Int">max</a>, <a href="#70316" title="List[sbt.Scheduler[D]#Run]">remaining</a>.<span title="=&gt; List[sbt.Scheduler[D]#Run]">tail</span>, <a href="#70317" title="List[D]">accumulatedWork</a>)
+			}
+		}
+	
+		<span class="keyword">def</span> <a title="(D,Option[String])Unit" id="70283">complete</a>(<a title="D" id="70344">work</a>: <a href="#13889" title="D">D</a>, <a title="Option[String]" id="70345">result</a>: <span title="Option[String]">Option</span>[String]) { <a href="#70284" title="(D,Option[String])Option[(sbt.Scheduler[D]#Run, T)]">detailedComplete</a>(<a href="#70344" title="D">work</a>, <a href="#70345" title="Option[String]">result</a>) }
+		<span class="keyword">def</span> <a title="(D,Option[String])Option[(sbt.Scheduler[D]#Run, T)]" id="70284">detailedComplete</a>(<a title="D" id="70346">work</a>: <a href="#13889" title="D">D</a>, <a title="Option[String]" id="70347">result</a>: <span title="Option[String]">Option</span>[String]) =
+		{
+			<span class="keyword">def</span> <a title="(sbt.Scheduler[D]#Run)Option[(sbt.Scheduler[D]#Run, T)]" id="70349">complete</a>(<a title="sbt.Scheduler[D]#Run" id="70350">forOwner</a>: Scheduler[D]#<a href="#69363" title="sbt.Scheduler[D]#Run">Run</a>) =
+			{
+				<a href="#70350" title="sbt.Scheduler[D]#Run">forOwner</a>.<a href="#69432" title="(D,Option[String])Unit">complete</a>(<a href="#70346" title="D">work</a>, <a href="#70347" title="Option[String]">result</a>)
+				<span title="Option[(sbt.Scheduler[D]#Run, T)]" class="keyword">if</span>(<a href="#70350" title="sbt.Scheduler[D]#Run">forOwner</a>.<a href="#69434" title="=&gt; Boolean">isComplete</a>)
+				{
+					<a href="#70274" title="=&gt; scala.collection.mutable.ListBuffer[sbt.WorkFailure[D]]">failures</a> <a title="(Iterable[sbt.WorkFailure[D]])Unit" id="45009">++=</a> <a href="#70350" title="sbt.Scheduler[D]#Run">forOwner</a>.<a href="#69436" title="=&gt; Iterable[sbt.WorkFailure[D]]">failures</a>
+					<span title="((sbt.Scheduler[D]#Run, T))Some[(sbt.Scheduler[D]#Run, T)]">Some</span>(<a href="#70350" title="sbt.Scheduler[D]#Run">forOwner</a>, <a href="#70276" title="=&gt; scala.collection.mutable.Map[sbt.Scheduler[D]#Run,T]">schedules</a>.<span title="(sbt.Scheduler[D]#Run)Option[T]">removeKey</span>(<a href="#70350" title="sbt.Scheduler[D]#Run">forOwner</a>).<a title="=&gt; T" id="30326">get</a>)
+				}
+				<span class="keyword">else</span>
+					<span title="object None">None</span>
+			}
+			<a href="#70272" title="=&gt; scala.collection.mutable.HashMap[D,sbt.Scheduler[D]#Run]">owners</a>.<span title="(D)Option[sbt.Scheduler[D]#Run]">removeKey</span>(<a href="#70346" title="D">work</a>).<a title="((sbt.Scheduler[D]#Run) =&gt; Option[(sbt.Scheduler[D]#Run, T)])Option[(sbt.Scheduler[D]#Run, T)]" id="30333">flatMap</a>(<a href="#70349" title="(sbt.Scheduler[D]#Run)Option[(sbt.Scheduler[D]#Run, T)]">complete</a>)
+		}
+	}
+}
+<span class="comment">/** This scheduler allows a unit of work to provide nested work.
+*
+* When a unit of work that implements CompoundWork is returned for processing by `multi`, this scheduler will request the work's
+* nested scheduler that represents the nested work to be done.  The new scheduler will be added to `multi`.  When the new scheduler
+* is finished providing work, a final scheduler is run.*/</span>
+<span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">class</span> <a title="class CompoundScheduler[D] extends java.lang.Object with sbt.Scheduler[D] with ScalaObject" id="8103">CompoundScheduler</a>[<a title="&gt;: Nothing &lt;: Any" id="13891">D</a>](<a title="sbt.MultiScheduler[D,Option[sbt.FinalWork[D]]]" id="70402">multi</a>: <a href="#10677" title="sbt.MultiScheduler[D,Option[sbt.FinalWork[D]]]">MultiScheduler</a>[D, Option[FinalWork[D]]], <a title="sbt.ScheduleStrategy[D]" id="70403">finalWorkStrategy</a>: <a href="#9963" title="sbt.ScheduleStrategy[D]">ScheduleStrategy</a>[D]) <span class="keyword">extends</span> <a href="#13446" title="sbt.Scheduler[D]">Scheduler</a>[D]
+{
+	<span class="keyword">def</span> <a title="=&gt; CompoundScheduler.this.Run" id="70391">run</a>: <a href="#69363" title="CompoundScheduler.this.Run">Run</a> = <a title="template $anon extends java.lang.Object with CompoundScheduler.this.Run" id="70405" class="keyword">new</a> <a href="#69363" title="CompoundScheduler.this.Run">Run</a>
+	{
+		<span class="keyword">val</span> <a title="CompoundScheduler.this.multi.MultiRun" id="70407">multiRun</a> = <a href="#70402" title="sbt.MultiScheduler[D,Option[sbt.FinalWork[D]]]">multi</a>.<a href="#70264" title="=&gt; CompoundScheduler.this.multi.MultiRun">run</a>
+		<span class="keyword">val</span> <a title="CompoundScheduler.this.finalWorkStrategy.Run" id="70409">strategyRun</a> = <a href="#70403" title="sbt.ScheduleStrategy[D]">finalWorkStrategy</a>.<a href="#69349" title="=&gt; CompoundScheduler.this.finalWorkStrategy.Run">run</a>
+	
+		<span class="keyword">def</span> <a title="=&gt; Boolean" id="70411">isComplete</a> = <a href="#70407" title="=&gt; CompoundScheduler.this.multi.MultiRun">multiRun</a>.<a href="#70279" title="=&gt; Boolean">isComplete</a> <span title="(Boolean)Boolean">&amp;&amp;</span> <span title="=&gt; Boolean">!</span><a href="#70409" title="=&gt; CompoundScheduler.this.finalWorkStrategy.Run">strategyRun</a>.<a href="#69863" title="=&gt; Boolean">hasReady</a>
+		<span class="keyword">def</span> <a title="=&gt; Boolean" id="70412">hasPending</a> = <a href="#70409" title="=&gt; CompoundScheduler.this.finalWorkStrategy.Run">strategyRun</a>.<a href="#69863" title="=&gt; Boolean">hasReady</a> <span title="(Boolean)Boolean">||</span> <a href="#70407" title="=&gt; CompoundScheduler.this.multi.MultiRun">multiRun</a>.<a href="#70280" title="=&gt; Boolean">hasPending</a> <span title="(Boolean)Boolean">||</span> <a href="#70407" title="=&gt; CompoundScheduler.this.multi.MultiRun">multiRun</a>.<a href="#70276" title="=&gt; scala.collection.mutable.Map[sbt.Scheduler[D]#Run,Option[sbt.FinalWork[D]]]">schedules</a>.<a title="=&gt; Iterator[Option[sbt.FinalWork[D]]]" id="37840">values</a>.<span title="((Option[sbt.FinalWork[D]]) =&gt; Boolean)Boolean">exists</span>(<a href="#70426" title="Option[sbt.FinalWork[D]]">_</a>.<a title="=&gt; Boolean" id="30325">isDefined</a>)
+		<span class="keyword">def</span> <a title="(D,Option[String])Unit" id="70413">complete</a>(<a title="D" id="70427">work</a>: <a href="#13891" title="D">D</a>, <a title="Option[String]" id="70428">result</a>: <span title="Option[String]">Option</span>[String]) =
+		{
+			<span class="keyword">for</span>( <a href="#70431" title="(((sbt.Scheduler[D]#Run, Option[sbt.FinalWork[D]])) =&gt; Unit)Unit" id="30335">(</a><a title="sbt.Scheduler[D]#Run" id="70436">scheduler</a>, Some(<a title="sbt.FinalWork[D]" id="70437">finalWorkTodo</a>)) &lt;- <a href="#70407" title="=&gt; CompoundScheduler.this.multi.MultiRun">multiRun</a>.<a href="#70284" title="(D,Option[String])Option[(sbt.Scheduler[D]#Run, Option[sbt.FinalWork[D]])]">detailedComplete</a>(<a href="#70427" title="D">work</a>, <a href="#70428" title="Option[String]">result</a>) )
+			{
+				<a href="#70407" title="=&gt; CompoundScheduler.this.multi.MultiRun">multiRun</a> <a href="#70278" title="(sbt.Scheduler[D]#Run,Option[sbt.FinalWork[D]])Unit">+=</a> (<a href="#70437" title="sbt.FinalWork[D]">finalWorkTodo</a>.<a href="#70491" title="=&gt; sbt.Scheduler[D]">doFinally</a>.<a href="#69362" title="=&gt; finalWorkTodo.doFinally.Run">run</a>, <span title="object None">None</span>)
+				<span title="Unit" class="keyword">if</span>(<a href="#70436" title="sbt.Scheduler[D]#Run">scheduler</a>.<a href="#69436" title="=&gt; Iterable[sbt.WorkFailure[D]]">failures</a>.<a title="=&gt; Boolean" id="15986">isEmpty</a>)
+					<a href="#70409" title="=&gt; CompoundScheduler.this.finalWorkStrategy.Run">strategyRun</a> <a href="#69862" title="(D)Unit">workReady</a> <a href="#70437" title="sbt.FinalWork[D]">finalWorkTodo</a>.<a href="#70490" title="=&gt; D">compound</a>
+				<span class="keyword">else</span>
+					<a href="#70407" title="=&gt; CompoundScheduler.this.multi.MultiRun">multiRun</a>.<a href="#70283" title="(D,Option[String])Unit">complete</a>(<a href="#70437" title="sbt.FinalWork[D]">finalWorkTodo</a>.<a href="#70490" title="=&gt; D">compound</a>, <span title="(java.lang.String)Some[java.lang.String]">Some</span>(<span title="java.lang.String(&quot;One or more subtasks failed&quot;)" class="string">&quot;One or more subtasks failed&quot;</span>))
+			}
+		}
+		<span class="keyword">def</span> <a title="=&gt; scala.collection.mutable.ListBuffer[sbt.WorkFailure[D]]" id="70414">failures</a> = <a href="#70407" title="=&gt; CompoundScheduler.this.multi.MultiRun">multiRun</a>.<a href="#70274" title="=&gt; scala.collection.mutable.ListBuffer[sbt.WorkFailure[D]]">failures</a>
+		<span class="keyword">def</span> <a title="(Int)Seq[D]" id="70415">next</a>(<a title="Int" id="70441">max</a>: <span title="Int">Int</span>) = <a href="#70416" title="(Int,List[D])Seq[D]">nextImpl</a>(<a href="#70441" title="Int">max</a>, <span title="object Nil">Nil</span>)
+		<span class="keyword">private</span> <span class="keyword">def</span> <a title="(Int,List[D])Seq[D]" id="70416">nextImpl</a>(<a title="Int" id="70443">max</a>: <span title="Int">Int</span>, <a title="List[D]" id="70444">processedNextWork</a>: <span title="List[D]">List</span>[D]): <span title="Seq[D]">Seq</span>[D] =
+		{
+			<span title="Seq[D]" class="keyword">if</span>(<a href="#70443" title="Int">max</a> <span title="(Int)Boolean">&gt;</span> <span title="Int(0)" class="int">0</span>)
+			{
+				<span title="Seq[D]" class="keyword">if</span>(<a href="#70409" title="=&gt; CompoundScheduler.this.finalWorkStrategy.Run">strategyRun</a>.<a href="#69863" title="=&gt; Boolean">hasReady</a>)
+				{
+					<span class="keyword">val</span> <a title="List[D]" id="70446">newWork</a> = <a href="#70409" title="=&gt; CompoundScheduler.this.finalWorkStrategy.Run">strategyRun</a>.<a href="#69864" title="(Int)List[D]">next</a>(<a href="#70443" title="Int">max</a>)
+					<a href="#70416" title="(Int,List[D])Seq[D]">nextImpl</a>(<a href="#70443" title="Int">max</a> <span title="(Int)Int">-</span> <a href="#70446" title="List[D]">newWork</a>.<span title="=&gt; Int">size</span>, <a href="#70446" title="List[D]">newWork</a> <a href="#70461" title="(List[D])List[D]">:::</a> <a href="#70444" title="List[D]">processedNextWork</a>)
+				}
+				<span class="keyword">else</span> <span title="Seq[D]" class="keyword">if</span>(<a href="#70407" title="=&gt; CompoundScheduler.this.multi.MultiRun">multiRun</a>.<a href="#70280" title="=&gt; Boolean">hasPending</a>)
+				{
+					<span class="keyword">val</span> <a title="Seq[D]" id="70464">multiWork</a> = <a href="#70407" title="=&gt; CompoundScheduler.this.multi.MultiRun">multiRun</a>.<a href="#70281" title="(Int)Seq[D]">next</a>(<a href="#70443" title="Int">max</a>)
+					<span title="Seq[D]" class="keyword">if</span>(<a href="#70464" title="Seq[D]">multiWork</a>.<span title="=&gt; Boolean">isEmpty</span>)
+						<a href="#70444" title="List[D]">processedNextWork</a>
+					<span class="keyword">else</span>
+					{
+						<span class="keyword">val</span> <a title="List[D]" id="70465">expandedWork</a> = (<a href="#70444" title="List[D]">processedNextWork</a> <a href="#70467" title="(List[D])((List[D], D) =&gt; List[D])List[D]" id="15963">/:</a> <a href="#70464" title="Seq[D]">multiWork</a>)(<a href="#70417" title="(List[D],D)List[D]">expand</a>)
+						<span class="keyword">val</span> <a title="Int" id="70466">remaining</a> = <a href="#70443" title="Int">max</a> <span title="(Int)Int">-</span> (<a href="#70465" title="List[D]">expandedWork</a>.<span title="=&gt; Int">size</span> <span title="(Int)Int">-</span> <a href="#70444" title="List[D]">processedNextWork</a>.<span title="=&gt; Int">size</span>)
+						<a href="#70416" title="(Int,List[D])Seq[D]">nextImpl</a>(<a href="#70466" title="Int">remaining</a>, <a href="#70465" title="List[D]">expandedWork</a>)
+					}
+				}
+				<span class="keyword">else</span>
+					<a href="#70444" title="List[D]">processedNextWork</a>
+			}
+			<span class="keyword">else</span>
+				<a href="#70444" title="List[D]">processedNextWork</a>
+		}
+		<span class="keyword">private</span> <span class="keyword">def</span> <a title="(List[D],D)List[D]" id="70417">expand</a>(<a title="List[D]" id="70469">accumulate</a>: <span title="List[D]">List</span>[D], <a title="D" id="70470">work</a>: <a href="#13891" title="D">D</a>): <span title="List[D]">List</span>[D] =
+		{
+			<a href="#70470" title="D">work</a> <span title="List[D]" class="keyword">match</span>
+			{
+				<span title="List[D]" class="keyword">case</span> <a title="sbt.CompoundWork[D]" id="70476">c</a>: <a href="#8394" title="sbt.CompoundWork[D]">CompoundWork</a>[D] =&gt;
+					<span class="keyword">val</span> <a title="sbt.SubWork[D]" id="70478">subWork</a> = <a href="#70476" title="sbt.CompoundWork[D]">c</a>.<a href="#70477" title="=&gt; sbt.SubWork[D]">work</a>
+					<a href="#70418" title="(sbt.Scheduler[D],sbt.FinalWork[D])Unit">addFinal</a>(<a href="#70478" title="sbt.SubWork[D]">subWork</a>.<a href="#70506" title="=&gt; sbt.Scheduler[D]">scheduler</a>, <span title="sbt.FinalWork[D]" class="keyword">new</span> <a href="#11802" title="sbt.FinalWork[D]">FinalWork</a>(<a href="#70470" title="D">work</a>, <a href="#70478" title="sbt.SubWork[D]">subWork</a>.<a href="#70507" title="=&gt; sbt.Scheduler[D]">doFinally</a>))
+					<a href="#70469" title="List[D]">accumulate</a>
+				<span title="List[D]" class="keyword">case</span> _ =&gt; <a href="#70470" title="D">work</a> <a href="#70492" title="(D)List[D]">::</a> <a href="#70469" title="List[D]">accumulate</a>
+			}
+		}
+		<span class="keyword">private</span> <span class="keyword">def</span> <a title="(sbt.Scheduler[D],sbt.FinalWork[D])Unit" id="70418">addFinal</a>(<a title="sbt.Scheduler[D]" id="70487">schedule</a>: <a href="#13446" title="sbt.Scheduler[D]">Scheduler</a>[D], <a title="sbt.FinalWork[D]" id="70488">work</a>: <a href="#11802" title="sbt.FinalWork[D]">FinalWork</a>[D]) { <a href="#70407" title="=&gt; CompoundScheduler.this.multi.MultiRun">multiRun</a> <a href="#70278" title="(sbt.Scheduler[D]#Run,Option[sbt.FinalWork[D]])Unit">+=</a> (<a href="#70487" title="sbt.Scheduler[D]">schedule</a>.<a href="#69362" title="=&gt; schedule.Run">run</a>, <span title="(sbt.FinalWork[D])Some[sbt.FinalWork[D]]">Some</span>(<a href="#70488" title="sbt.FinalWork[D]">work</a>)) }
+	}
+}
+<span class="keyword">private</span> <span class="keyword">object</span> <a title="object sbt.CompoundScheduler" id="8104">CompoundScheduler</a>
+{
+	<span class="keyword">def</span> <a title="[D](sbt.Scheduler[D],sbt.ScheduleStrategy[D])sbt.Scheduler[D]" id="69356">apply</a>[<a title="&gt;: Nothing &lt;: Any" id="69358">D</a>](<a title="sbt.Scheduler[D]" id="69359">scheduler</a>: <a href="#13446" title="sbt.Scheduler[D]">Scheduler</a>[D], <a title="sbt.ScheduleStrategy[D]" id="69360">strategy</a>: <a href="#9963" title="sbt.ScheduleStrategy[D]">ScheduleStrategy</a>[D]) : <a href="#13446" title="sbt.Scheduler[D]">Scheduler</a>[D] =
+		<span title="sbt.CompoundScheduler[D]" class="keyword">new</span> <a href="#8103" title="sbt.CompoundScheduler[D]">CompoundScheduler</a>(<span title="sbt.MultiScheduler[D,Option[sbt.FinalWork[D]]]" class="keyword">new</span> <a href="#10677" title="sbt.MultiScheduler[D,Option[sbt.FinalWork[D]]]">MultiScheduler</a>[D, Option[FinalWork[D]]]( <span title="(sbt.Scheduler[D],object None)(sbt.Scheduler[D], object None)">(</span><a href="#69359" title="sbt.Scheduler[D]">scheduler</a>, <span title="object None">None</span>) ), <a href="#69360" title="sbt.ScheduleStrategy[D]">strategy</a>)
+}
+<span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">class</span> <a title="class FinalWork[D] extends java.lang.Object with NotNull with ScalaObject" id="11802">FinalWork</a>[<a title="&gt;: Nothing &lt;: Any" id="13892">D</a>](<span class="keyword">val</span> <a title="D" id="70490">compound</a>: <a href="#13892" title="D">D</a>, <span class="keyword">val</span> <a title="sbt.Scheduler[D]" id="70491">doFinally</a>: <a href="#13446" title="sbt.Scheduler[D]">Scheduler</a>[D]) <span class="keyword">extends</span> <span title="NotNull">NotNull</span>
+<span class="comment">/** This represents nested work.  The work provided by `scheduler` is processed first.  The work provided by `doFinally` is processed
+* after `scheduler` completes regardless of the success of `scheduler`.*/</span>
+<span class="keyword">final</span> <span class="keyword">class</span> <a title="class SubWork[D] extends java.lang.Object with NotNull with ScalaObject" id="10770">SubWork</a>[<a title="&gt;: Nothing &lt;: Any" id="13893">D</a>] <span class="keyword">private</span> (<span class="keyword">val</span> <a title="sbt.Scheduler[D]" id="70506">scheduler</a>: <a href="#13446" title="sbt.Scheduler[D]">Scheduler</a>[D], <span class="keyword">val</span> <a title="sbt.Scheduler[D]" id="70507">doFinally</a>: <a href="#13446" title="sbt.Scheduler[D]">Scheduler</a>[D]) <span class="keyword">extends</span> <span title="NotNull">NotNull</span>
+<span class="keyword">object</span> <a title="object sbt.SubWork" id="10771">SubWork</a>
+{
+	<span class="keyword">def</span> <a title="[D](sbt.Scheduler[D],sbt.Scheduler[D])sbt.SubWork[D]" id="70509">apply</a>[<a title="&gt;: Nothing &lt;: Any" id="70511">D</a>](<a title="sbt.Scheduler[D]" id="70522">scheduler</a>: <a href="#13446" title="sbt.Scheduler[D]">Scheduler</a>[D], <a title="sbt.Scheduler[D]" id="70523">doFinally</a>: <a href="#13446" title="sbt.Scheduler[D]">Scheduler</a>[D]): <a href="#10770" title="sbt.SubWork[D]">SubWork</a>[D] = <span title="sbt.SubWork[D]" class="keyword">new</span> <a href="#10770" title="sbt.SubWork[D]">SubWork</a>(<a href="#70522" title="sbt.Scheduler[D]">scheduler</a>, <a href="#70523" title="sbt.Scheduler[D]">doFinally</a>)
+	<span class="keyword">def</span> <a title="[D](sbt.Scheduler[D])sbt.SubWork[D]" id="70512">apply</a>[<a title="&gt;: Nothing &lt;: Any" id="70514">D</a>](<a title="sbt.Scheduler[D]" id="70525">scheduler</a>: <a href="#13446" title="sbt.Scheduler[D]">Scheduler</a>[D]): <a href="#10770" title="sbt.SubWork[D]">SubWork</a>[D] = <a href="#70509" title="(sbt.Scheduler[D],sbt.Scheduler[D])sbt.SubWork[D]">SubWork</a>(<a href="#70525" title="sbt.Scheduler[D]">scheduler</a>, <a href="#8446" title="object sbt.ParallelRunner">ParallelRunner</a>.<a href="#69297" title="sbt.Scheduler[D]">emptyScheduler</a>)
+	<span class="keyword">def</span> <a title="[D &lt;: sbt.Dag[D]](D)sbt.SubWork[D]" id="70515">apply</a>[<a title="&gt;: Nothing &lt;: sbt.Dag[D]" id="70517">D</a> &lt;: Dag[D]](<a title="D" id="70530">node</a>: <a href="#70517" title="D">D</a>): <a href="#10770" title="sbt.SubWork[D]">SubWork</a>[D] = <a href="#70512" title="(sbt.Scheduler[D])sbt.SubWork[D]">SubWork</a>(<a href="#8446" title="object sbt.ParallelRunner">ParallelRunner</a>.<a href="#69291" title="(D)sbt.DagScheduler[D]">dagScheduler</a>(<a href="#70530" title="D">node</a>))
+	<span class="keyword">def</span> <a title="[D &lt;: sbt.Dag[D]](D,D)sbt.SubWork[D]" id="70518">apply</a>[<a title="&gt;: Nothing &lt;: sbt.Dag[D]" id="70520">D</a> &lt;: Dag[D]](<a title="D" id="70528">node</a>: <a href="#70520" title="D">D</a>, <a title="D" id="70529">doFinally</a>: <a href="#70520" title="D">D</a>): <a href="#10770" title="sbt.SubWork[D]">SubWork</a>[D] = <a href="#70509" title="(sbt.Scheduler[D],sbt.Scheduler[D])sbt.SubWork[D]">SubWork</a>(<a href="#8446" title="object sbt.ParallelRunner">ParallelRunner</a>.<a href="#69291" title="(D)sbt.DagScheduler[D]">dagScheduler</a>(<a href="#70528" title="D">node</a>), <a href="#8446" title="object sbt.ParallelRunner">ParallelRunner</a>.<a href="#69291" title="(D)sbt.DagScheduler[D]">dagScheduler</a>(<a href="#70529" title="D">doFinally</a>))
+}
+<span class="comment">/** Work that implements this interface provides nested work to be done before this work is processed.*/</span>
+<span class="keyword">trait</span> <a title="trait CompoundWork[D] extends java.lang.Object with NotNull" id="8394">CompoundWork</a>[<a title="&gt;: Nothing &lt;: Any" id="13894">D</a>] <span class="keyword">extends</span> <span title="NotNull">NotNull</span>
+{
+	<span class="keyword">def</span> <a title="=&gt; sbt.SubWork[D]" id="70477">work</a>: <a href="#10770" title="sbt.SubWork[D]">SubWork</a>[D]
+}
+        </pre>
+    </body>
+</html>

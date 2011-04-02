@@ -1,0 +1,380 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+        <head><title>class DefaultWebstartProject in sbt</title>
+        <meta http-equiv="content-type" content="text/html; charset=UTF8"></meta><meta content="scaladoc (version 2.7.7.final)" name="generator"></meta><link href="../style.css" type="text/css" rel="stylesheet"></link><script type="text/javascript" src="../script.js"></script>
+        </head>
+        <body onload="init()">
+        <table summary="" class="navigation">
+        <tr>
+          <td class="navigation-links" valign="top">
+            <!-- <table><tr></tr></table> -->
+          </td>
+          <td align="right" valign="top" style="white-space:nowrap;" rowspan="2">
+            <div class="doctitle-larger">Simple Build Tool 0.7.5 API</div>
+          </td>
+        </tr>
+        <tr><td></td></tr>
+      </table>
+        
+      <div class="entity">
+        <a href="../sbt$package.html" target="_self">sbt</a>
+        <br></br>
+        <span class="entity">class  DefaultWebstartProject</span>
+      </div><hr></hr>
+      <div class="source">
+        [source: <a href="" class="sbt/DefaultWebstartProject"><code>sbt/DefaultWebstartProject.scala</code></a>]
+      </div><hr></hr>
+      <a name="DefaultWebstartProject"></a><dl>
+      <dt>
+        
+        <code>abstract</code>
+        <code>class</code>
+        <em>DefaultWebstartProject</em>(<code>val </code><em>info</em> : <a href="../sbt/ProjectInfo.html" target="_self">ProjectInfo</a>)
+      </dt>
+      <dd><code> extends </code><a href="../sbt/BasicWebstartProject.html" target="_self">BasicWebstartProject</a><code> with </code><a href="../sbt/MavenStyleWebstartPaths.html" target="_self">MavenStyleWebstartPaths</a></dd>
+    </dl>
+      <dl><dd>The default extension point for a webstart project.  There is one method that is required to be defined: jnlpXML.
+ 'webstartSignConfiguration', 'webstartPack200', and 'webstartGzip' are methods of interest.</dd></dl>
+      <dl></dl>
+    
+      
+
+<table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Values and Variables inherited from <a href="../sbt/BasicScalaProject.html" target="_self">BasicScalaProject</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="../sbt/BasicScalaProject.html#mainCompileConditional" target="_self">mainCompileConditional</a>, <a href="../sbt/BasicScalaProject.html#testCompileConditional" target="_self">testCompileConditional</a>, <a href="../sbt/BasicScalaProject.html#mainArtifact" target="_self">mainArtifact</a>, <a href="../sbt/BasicScalaProject.html#compile" target="_self">compile</a>, <a href="../sbt/BasicScalaProject.html#testCompile" target="_self">testCompile</a>, <a href="../sbt/BasicScalaProject.html#clean" target="_self">clean</a>, <a href="../sbt/BasicScalaProject.html#run" target="_self">run</a>, <a href="../sbt/BasicScalaProject.html#consoleQuick" target="_self">consoleQuick</a>, <a href="../sbt/BasicScalaProject.html#console" target="_self">console</a>, <a href="../sbt/BasicScalaProject.html#doc" target="_self">doc</a>, <a href="../sbt/BasicScalaProject.html#docTest" target="_self">docTest</a>, <a href="../sbt/BasicScalaProject.html#test" target="_self">test</a>, <a href="../sbt/BasicScalaProject.html#testRun" target="_self">testRun</a>, <a href="../sbt/BasicScalaProject.html#package" target="_self">package</a>, <a href="../sbt/BasicScalaProject.html#packageTest" target="_self">packageTest</a>, <a href="../sbt/BasicScalaProject.html#packageDocs" target="_self">packageDocs</a>, <a href="../sbt/BasicScalaProject.html#packageSrc" target="_self">packageSrc</a>, <a href="../sbt/BasicScalaProject.html#packageTestSrc" target="_self">packageTestSrc</a>, <a href="../sbt/BasicScalaProject.html#packageProject" target="_self">packageProject</a>, <a href="../sbt/BasicScalaProject.html#docAll" target="_self">docAll</a>, <a href="../sbt/BasicScalaProject.html#packageAll" target="_self">packageAll</a>, <a href="../sbt/BasicScalaProject.html#graphSrc" target="_self">graphSrc</a>, <a href="../sbt/BasicScalaProject.html#graphPkg" target="_self">graphPkg</a>, <a href="../sbt/BasicScalaProject.html#incrementVersion" target="_self">incrementVersion</a>, <a href="../sbt/BasicScalaProject.html#release" target="_self">release</a>, <a href="../sbt/BasicScalaProject.html#copyResources" target="_self">copyResources</a>, <a href="../sbt/BasicScalaProject.html#copyTestResources" target="_self">copyTestResources</a>, <a href="../sbt/BasicScalaProject.html#testQuick" target="_self">testQuick</a>, <a href="../sbt/BasicScalaProject.html#testFailed" target="_self">testFailed</a>, <a href="../sbt/BasicScalaProject.html#testOnly" target="_self">testOnly</a>, <a href="../sbt/BasicScalaProject.html#javap" target="_self">javap</a>, <a href="../sbt/BasicScalaProject.html#testJavap" target="_self">testJavap</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Values and Variables inherited from <a href="../sbt/BasicManagedProject.html" target="_self">BasicManagedProject</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="../sbt/BasicManagedProject.html#defaultPatterns" target="_self">defaultPatterns</a>, <a href="../sbt/BasicManagedProject.html#update" target="_self">update</a>, <a href="../sbt/BasicManagedProject.html#makePom" target="_self">makePom</a>, <a href="../sbt/BasicManagedProject.html#cleanLib" target="_self">cleanLib</a>, <a href="../sbt/BasicManagedProject.html#cleanCache" target="_self">cleanCache</a>, <a href="../sbt/BasicManagedProject.html#deliverLocal" target="_self">deliverLocal</a>, <a href="../sbt/BasicManagedProject.html#publishLocal" target="_self">publishLocal</a>, <a href="../sbt/BasicManagedProject.html#deliver" target="_self">deliver</a>, <a href="../sbt/BasicManagedProject.html#publish" target="_self">publish</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Values and Variables inherited from <a href="../sbt/ScalaProject.html" target="_self">ScalaProject</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="../sbt/ScalaProject.html#LinkSource" target="_self">LinkSource</a>, <a href="../sbt/ScalaProject.html#NoComment" target="_self">NoComment</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Values and Variables inherited from <a href="../sbt/Exec.html" target="_self">Exec</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="../sbt/Exec.html#sh" target="_self">sh</a>, <a href="../sbt/Exec.html#exec" target="_self">exec</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Values and Variables inherited from <a href="../sbt/SimpleScalaProject.html" target="_self">SimpleScalaProject</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="../sbt/SimpleScalaProject.html#Deprecation" target="_self">Deprecation</a>, <a href="../sbt/SimpleScalaProject.html#ExplainTypes" target="_self">ExplainTypes</a>, <a href="../sbt/SimpleScalaProject.html#Optimize" target="_self">Optimize</a>, <a href="../sbt/SimpleScalaProject.html#Verbose" target="_self">Verbose</a>, <a href="../sbt/SimpleScalaProject.html#Unchecked" target="_self">Unchecked</a>, <a href="../sbt/SimpleScalaProject.html#DisableWarnings" target="_self">DisableWarnings</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Values and Variables inherited from <a href="../sbt/Cleanable.html" target="_self">Cleanable</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="../sbt/Cleanable.html#cleanPlugins" target="_self">cleanPlugins</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Values and Variables inherited from <a href="../sbt/Project.html" target="_self">Project</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="../sbt/Project.html#log" target="_self">log</a>, <a href="../sbt/Project.html#projectVersion" target="_self">projectVersion</a>, <a href="../sbt/Project.html#projectName" target="_self">projectName</a>, <a href="../sbt/Project.html#projectOrganization" target="_self">projectOrganization</a>, <a href="../sbt/Project.html#defScalaVersion" target="_self">defScalaVersion</a>, <a href="../sbt/Project.html#sbtVersion" target="_self">sbtVersion</a>, <a href="../sbt/Project.html#projectInitialize" target="_self">projectInitialize</a>, <a href="../sbt/Project.html#projectScratch" target="_self">projectScratch</a>, <a href="../sbt/Project.html#offline" target="_self">offline</a>, <a href="../sbt/Project.html#buildScalaVersions" target="_self">buildScalaVersions</a>, <a href="../sbt/Project.html#localScalaInstances" target="_self">localScalaInstances</a>, <a href="../sbt/Project.html#buildCompiler" target="_self">buildCompiler</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Values and Variables inherited from <a href="../sbt/BasicEnvironment.html" target="_self">BasicEnvironment</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="../sbt/BasicEnvironment.html#IntFormat" target="_self">IntFormat</a>, <a href="../sbt/BasicEnvironment.html#LongFormat" target="_self">LongFormat</a>, <a href="../sbt/BasicEnvironment.html#DoubleFormat" target="_self">DoubleFormat</a>, <a href="../sbt/BasicEnvironment.html#BooleanFormat" target="_self">BooleanFormat</a>, <a href="../sbt/BasicEnvironment.html#StringFormat" target="_self">StringFormat</a>, <a href="../sbt/BasicEnvironment.html#NonEmptyStringFormat" target="_self">NonEmptyStringFormat</a>, <a href="../sbt/BasicEnvironment.html#VersionFormat" target="_self">VersionFormat</a>, <a href="../sbt/BasicEnvironment.html#FileFormat" target="_self">FileFormat</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Values and Variables inherited from <a href="../sbt/TaskManager.html" target="_self">TaskManager</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="../sbt/TaskManager.html#Empty" target="_self">Empty</a>
+        </td></tr>
+      </table>
+<table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="../sbt/MavenStyleWebstartPaths.html" target="_self">MavenStyleWebstartPaths</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="../sbt/MavenStyleWebstartPaths.html#jnlpPath" target="_self">jnlpPath</a>, <a href="../sbt/MavenStyleWebstartPaths.html#webstartMainJar" target="_self">webstartMainJar</a>, <a href="../sbt/MavenStyleWebstartPaths.html#jnlpFileName" target="_self">jnlpFileName</a>, <a href="../sbt/MavenStyleWebstartPaths.html#webstartZipName" target="_self">webstartZipName</a>, <a href="../sbt/MavenStyleWebstartPaths.html#DefaultJnlpFileName" target="_self">DefaultJnlpFileName</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="../sbt/MavenStyleScalaPaths.html" target="_self">MavenStyleScalaPaths</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="../sbt/MavenStyleScalaPaths.html#sourceDirectoryName" target="_self">sourceDirectoryName</a>, <a href="../sbt/MavenStyleScalaPaths.html#mainDirectoryName" target="_self">mainDirectoryName</a>, <a href="../sbt/MavenStyleScalaPaths.html#scalaDirectoryName" target="_self">scalaDirectoryName</a>, <a href="../sbt/MavenStyleScalaPaths.html#javaDirectoryName" target="_self">javaDirectoryName</a>, <a href="../sbt/MavenStyleScalaPaths.html#resourcesDirectoryName" target="_self">resourcesDirectoryName</a>, <a href="../sbt/MavenStyleScalaPaths.html#testDirectoryName" target="_self">testDirectoryName</a>, <a href="../sbt/MavenStyleScalaPaths.html#mainCompileDirectoryName" target="_self">mainCompileDirectoryName</a>, <a href="../sbt/MavenStyleScalaPaths.html#testCompileDirectoryName" target="_self">testCompileDirectoryName</a>, <a href="../sbt/MavenStyleScalaPaths.html#docDirectoryName" target="_self">docDirectoryName</a>, <a href="../sbt/MavenStyleScalaPaths.html#apiDirectoryName" target="_self">apiDirectoryName</a>, <a href="../sbt/MavenStyleScalaPaths.html#graphDirectoryName" target="_self">graphDirectoryName</a>, <a href="../sbt/MavenStyleScalaPaths.html#mainAnalysisDirectoryName" target="_self">mainAnalysisDirectoryName</a>, <a href="../sbt/MavenStyleScalaPaths.html#testAnalysisDirectoryName" target="_self">testAnalysisDirectoryName</a>, <a href="../sbt/MavenStyleScalaPaths.html#mainResourcesOutputDirectoryName" target="_self">mainResourcesOutputDirectoryName</a>, <a href="../sbt/MavenStyleScalaPaths.html#testResourcesOutputDirectoryName" target="_self">testResourcesOutputDirectoryName</a>, <a href="../sbt/MavenStyleScalaPaths.html#sourcePath" target="_self">sourcePath</a>, <a href="../sbt/MavenStyleScalaPaths.html#mainSourcePath" target="_self">mainSourcePath</a>, <a href="../sbt/MavenStyleScalaPaths.html#mainScalaSourcePath" target="_self">mainScalaSourcePath</a>, <a href="../sbt/MavenStyleScalaPaths.html#mainJavaSourcePath" target="_self">mainJavaSourcePath</a>, <a href="../sbt/MavenStyleScalaPaths.html#mainResourcesPath" target="_self">mainResourcesPath</a>, <a href="../sbt/MavenStyleScalaPaths.html#mainDocPath" target="_self">mainDocPath</a>, <a href="../sbt/MavenStyleScalaPaths.html#mainCompilePath" target="_self">mainCompilePath</a>, <a href="../sbt/MavenStyleScalaPaths.html#mainResourcesOutputPath" target="_self">mainResourcesOutputPath</a>, <a href="../sbt/MavenStyleScalaPaths.html#mainAnalysisPath" target="_self">mainAnalysisPath</a>, <a href="../sbt/MavenStyleScalaPaths.html#testSourcePath" target="_self">testSourcePath</a>, <a href="../sbt/MavenStyleScalaPaths.html#testJavaSourcePath" target="_self">testJavaSourcePath</a>, <a href="../sbt/MavenStyleScalaPaths.html#testScalaSourcePath" target="_self">testScalaSourcePath</a>, <a href="../sbt/MavenStyleScalaPaths.html#testResourcesPath" target="_self">testResourcesPath</a>, <a href="../sbt/MavenStyleScalaPaths.html#testDocPath" target="_self">testDocPath</a>, <a href="../sbt/MavenStyleScalaPaths.html#testCompilePath" target="_self">testCompilePath</a>, <a href="../sbt/MavenStyleScalaPaths.html#testResourcesOutputPath" target="_self">testResourcesOutputPath</a>, <a href="../sbt/MavenStyleScalaPaths.html#testAnalysisPath" target="_self">testAnalysisPath</a>, <a href="../sbt/MavenStyleScalaPaths.html#docPath" target="_self">docPath</a>, <a href="../sbt/MavenStyleScalaPaths.html#graphPath" target="_self">graphPath</a>, <a href="../sbt/MavenStyleScalaPaths.html#graphPackagesPath" target="_self">graphPackagesPath</a>, <a href="../sbt/MavenStyleScalaPaths.html#graphSourcesPath" target="_self">graphSourcesPath</a>, <a href="../sbt/MavenStyleScalaPaths.html#directoriesToCreate" target="_self">directoriesToCreate</a>, <a href="../sbt/MavenStyleScalaPaths.html#mainSourceRoots" target="_self">mainSourceRoots</a>, <a href="../sbt/MavenStyleScalaPaths.html#testSourceRoots" target="_self">testSourceRoots</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="../sbt/BasicPackagePaths.html" target="_self">BasicPackagePaths</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="../sbt/BasicPackagePaths.html#defaultJarBaseName" target="_self">defaultJarBaseName</a>, <a href="../sbt/BasicPackagePaths.html#defaultJarName" target="_self">defaultJarName</a>, <a href="../sbt/BasicPackagePaths.html#jarPath" target="_self">jarPath</a>, <a href="../sbt/BasicPackagePaths.html#packageTestJar" target="_self">packageTestJar</a>, <a href="../sbt/BasicPackagePaths.html#packageDocsJar" target="_self">packageDocsJar</a>, <a href="../sbt/BasicPackagePaths.html#packageSrcJar" target="_self">packageSrcJar</a>, <a href="../sbt/BasicPackagePaths.html#packageTestSrcJar" target="_self">packageTestSrcJar</a>, <a href="../sbt/BasicPackagePaths.html#packageProjectZip" target="_self">packageProjectZip</a>, <a href="../sbt/BasicPackagePaths.html#defaultJarPath%28String%29" target="_self">defaultJarPath</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="../sbt/BasicScalaPaths.html" target="_self">BasicScalaPaths</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="../sbt/BasicScalaPaths.html#sources%28sbt.PathFinder%29" target="_self">sources</a>, <a href="../sbt/BasicScalaPaths.html#sourceExtensions" target="_self">sourceExtensions</a>, <a href="../sbt/BasicScalaPaths.html#mainSources" target="_self">mainSources</a>, <a href="../sbt/BasicScalaPaths.html#testSources" target="_self">testSources</a>, <a href="../sbt/BasicScalaPaths.html#mainResources" target="_self">mainResources</a>, <a href="../sbt/BasicScalaPaths.html#testResources" target="_self">testResources</a>, <a href="../sbt/BasicScalaPaths.html#mainClasses" target="_self">mainClasses</a>, <a href="../sbt/BasicScalaPaths.html#testClasses" target="_self">testClasses</a>, <a href="../sbt/BasicScalaPaths.html#packagePaths" target="_self">packagePaths</a>, <a href="../sbt/BasicScalaPaths.html#packageTestPaths" target="_self">packageTestPaths</a>, <a href="../sbt/BasicScalaPaths.html#packageSourcePaths" target="_self">packageSourcePaths</a>, <a href="../sbt/BasicScalaPaths.html#packageTestSourcePaths" target="_self">packageTestSourcePaths</a>, <a href="../sbt/BasicScalaPaths.html#packageProjectPaths" target="_self">packageProjectPaths</a>, <a href="../sbt/BasicScalaPaths.html#packageProjectExcludes" target="_self">packageProjectExcludes</a>, <a href="../sbt/BasicScalaPaths.html#outputDirectories" target="_self">outputDirectories</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="../sbt/BasicWebstartProject.html" target="_self">BasicWebstartProject</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="../sbt/BasicWebstartProject.html#webstartSignConfiguration" target="_self">webstartSignConfiguration</a>, <a href="../sbt/BasicWebstartProject.html#webstartExtraLibraries" target="_self">webstartExtraLibraries</a>, <a href="../sbt/BasicWebstartProject.html#webstartLibraries" target="_self">webstartLibraries</a>, <a href="../sbt/BasicWebstartProject.html#webstartResources" target="_self">webstartResources</a>, <a href="../sbt/BasicWebstartProject.html#webstartPack200" target="_self">webstartPack200</a>, <a href="../sbt/BasicWebstartProject.html#webstartGzip" target="_self">webstartGzip</a>, <a href="../sbt/BasicWebstartProject.html#packageAction" target="_self">packageAction</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="../sbt/WebstartPaths.html" target="_self">WebstartPaths</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="../sbt/WebstartPaths.html#webstartOutputDirectory" target="_self">webstartOutputDirectory</a>, <a href="../sbt/WebstartPaths.html#jnlpFile" target="_self">jnlpFile</a>, <a href="../sbt/WebstartPaths.html#webstartLibDirectory" target="_self">webstartLibDirectory</a>, <a href="../sbt/WebstartPaths.html#webstartZip" target="_self">webstartZip</a>, <a href="../sbt/WebstartPaths.html#jnlpResourcesPath" target="_self">jnlpResourcesPath</a>, <a href="../sbt/WebstartPaths.html#webstartLibName" target="_self">webstartLibName</a>, <a href="../sbt/WebstartPaths.html#webstartDirectoryName" target="_self">webstartDirectoryName</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="../sbt/WebstartScalaProject.html" target="_self">WebstartScalaProject</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="../sbt/WebstartScalaProject.html#webstartTask%28sbt.WebstartOptions%29" target="_self">webstartTask</a>, <a href="../sbt/WebstartScalaProject.html#defaultElements%28Seq%5Bsbt.WebstartJarResource%5D%29" target="_self">defaultElements</a>, <a href="../sbt/WebstartScalaProject.html#defaultElement%28sbt.WebstartJarResource%29" target="_self">defaultElement</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="../sbt/BasicScalaProject.html" target="_self">BasicScalaProject</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="../sbt/BasicScalaProject.html#mainClass" target="_self">mainClass</a>, <a href="../sbt/BasicScalaProject.html#getMainClass%28Boolean%29" target="_self">getMainClass</a>, <a href="../sbt/BasicScalaProject.html#getMainClass%28Boolean%2Csbt.CompileConditional%2COption%5BString%5D%29" target="_self">getMainClass</a>, <a href="../sbt/BasicScalaProject.html#testMainClass" target="_self">testMainClass</a>, <a href="../sbt/BasicScalaProject.html#getTestMainClass%28Boolean%29" target="_self">getTestMainClass</a>, <a href="../sbt/BasicScalaProject.html#manifestClassPath" target="_self">manifestClassPath</a>, <a href="../sbt/BasicScalaProject.html#dependencies" target="_self">dependencies</a>, <a href="../sbt/BasicScalaProject.html#compileOrder" target="_self">compileOrder</a>, <a href="../sbt/BasicScalaProject.html#defaultMainArtifact" target="_self">defaultMainArtifact</a>, <a href="../sbt/BasicScalaProject.html#compileOptions" target="_self">compileOptions</a>, <a href="../sbt/BasicScalaProject.html#consoleOptions" target="_self">consoleOptions</a>, <a href="../sbt/BasicScalaProject.html#javaCompileOptions" target="_self">javaCompileOptions</a>, <a href="../sbt/BasicScalaProject.html#testCompileOptions" target="_self">testCompileOptions</a>, <a href="../sbt/BasicScalaProject.html#testJavaCompileOptions" target="_self">testJavaCompileOptions</a>, <a href="../sbt/BasicScalaProject.html#documentOptions" target="_self">documentOptions</a>, <a href="../sbt/BasicScalaProject.html#testOptions" target="_self">testOptions</a>, <a href="../sbt/BasicScalaProject.html#cleanOptions" target="_self">cleanOptions</a>, <a href="../sbt/BasicScalaProject.html#packageOptions" target="_self">packageOptions</a>, <a href="../sbt/BasicScalaProject.html#quickOptions%28Boolean%29" target="_self">quickOptions</a>, <a href="../sbt/BasicScalaProject.html#consoleInit" target="_self">consoleInit</a>, <a href="../sbt/BasicScalaProject.html#includeTest%28String%29" target="_self">includeTest</a>, <a href="../sbt/BasicScalaProject.html#initializeDirectories%28%29" target="_self">initializeDirectories</a>, <a href="../sbt/BasicScalaProject.html#consoleConfiguration" target="_self">consoleConfiguration</a>, <a href="../sbt/BasicScalaProject.html#docClasspath" target="_self">docClasspath</a>, <a href="../sbt/BasicScalaProject.html#compileClasspath" target="_self">compileClasspath</a>, <a href="../sbt/BasicScalaProject.html#testClasspath" target="_self">testClasspath</a>, <a href="../sbt/BasicScalaProject.html#runClasspath" target="_self">runClasspath</a>, <a href="../sbt/BasicScalaProject.html#consoleClasspath" target="_self">consoleClasspath</a>, <a href="../sbt/BasicScalaProject.html#optionalClasspath" target="_self">optionalClasspath</a>, <a href="../sbt/BasicScalaProject.html#providedClasspath" target="_self">providedClasspath</a>, <a href="../sbt/BasicScalaProject.html#publicClasspath" target="_self">publicClasspath</a>, <a href="../sbt/BasicScalaProject.html#fullUnmanagedClasspath%28sbt.Configuration%29" target="_self">fullUnmanagedClasspath</a>, <a href="../sbt/BasicScalaProject.html#mainUnmanagedClasspath" target="_self">mainUnmanagedClasspath</a>, <a href="../sbt/BasicScalaProject.html#runUnmanagedClasspath" target="_self">runUnmanagedClasspath</a>, <a href="../sbt/BasicScalaProject.html#testUnmanagedClasspath" target="_self">testUnmanagedClasspath</a>, <a href="../sbt/BasicScalaProject.html#scalaJars" target="_self">scalaJars</a>, <a href="../sbt/BasicScalaProject.html#mainDependencies" target="_self">mainDependencies</a>, <a href="../sbt/BasicScalaProject.html#testDependencies" target="_self">testDependencies</a>, <a href="../sbt/BasicScalaProject.html#testFrameworks" target="_self">testFrameworks</a>, <a href="../sbt/BasicScalaProject.html#testListeners" target="_self">testListeners</a>, <a href="../sbt/BasicScalaProject.html#mainLabel" target="_self">mainLabel</a>, <a href="../sbt/BasicScalaProject.html#testLabel" target="_self">testLabel</a>, <a href="../sbt/BasicScalaProject.html#mainCompileConfiguration" target="_self">mainCompileConfiguration</a>, <a href="../sbt/BasicScalaProject.html#testCompileConfiguration" target="_self">testCompileConfiguration</a>, <a href="../sbt/BasicScalaProject.html#fork" target="_self">fork</a>, <a href="../sbt/BasicScalaProject.html#forkRun" target="_self">forkRun</a>, <a href="../sbt/BasicScalaProject.html#forkRun%28java.io.File%29" target="_self">forkRun</a>, <a href="../sbt/BasicScalaProject.html#forkRun%28Seq%5BString%5D%29" target="_self">forkRun</a>, <a href="../sbt/BasicScalaProject.html#forkRun%28Option%5Bjava.io.File%5D%2CSeq%5BString%5D%29" target="_self">forkRun</a>, <a href="../sbt/BasicScalaProject.html#defaultRunner" target="_self">defaultRunner</a>, <a href="../sbt/BasicScalaProject.html#basicConsoleTask" target="_self">basicConsoleTask</a>, <a href="../sbt/BasicScalaProject.html#runTask%28String%29" target="_self">runTask</a>, <a href="../sbt/BasicScalaProject.html#compileAction" target="_self">compileAction</a>, <a href="../sbt/BasicScalaProject.html#testCompileAction" target="_self">testCompileAction</a>, <a href="../sbt/BasicScalaProject.html#cleanAction" target="_self">cleanAction</a>, <a href="../sbt/BasicScalaProject.html#testRunAction" target="_self">testRunAction</a>, <a href="../sbt/BasicScalaProject.html#runAction" target="_self">runAction</a>, <a href="../sbt/BasicScalaProject.html#consoleQuickAction" target="_self">consoleQuickAction</a>, <a href="../sbt/BasicScalaProject.html#consoleAction" target="_self">consoleAction</a>, <a href="../sbt/BasicScalaProject.html#docAction" target="_self">docAction</a>, <a href="../sbt/BasicScalaProject.html#docTestAction" target="_self">docTestAction</a>, <a href="../sbt/BasicScalaProject.html#testAction" target="_self">testAction</a>, <a href="../sbt/BasicScalaProject.html#testOnlyAction" target="_self">testOnlyAction</a>, <a href="../sbt/BasicScalaProject.html#testOnlyTask%28%3D%3ESeq%5BBasicScalaProject.this.TestOption%5D%29" target="_self">testOnlyTask</a>, <a href="../sbt/BasicScalaProject.html#testQuickAction" target="_self">testQuickAction</a>, <a href="../sbt/BasicScalaProject.html#testFailedAction" target="_self">testFailedAction</a>, <a href="../sbt/BasicScalaProject.html#defaultTestQuickMethod%28Boolean%2C%3D%3ESeq%5BBasicScalaProject.this.TestOption%5D%29" target="_self">defaultTestQuickMethod</a>, <a href="../sbt/BasicScalaProject.html#defaultTestTask%28%3D%3ESeq%5BBasicScalaProject.this.TestOption%5D%29" target="_self">defaultTestTask</a>, <a href="../sbt/BasicScalaProject.html#packageToPublishActions" target="_self">packageToPublishActions</a>, <a href="../sbt/BasicScalaProject.html#packageTestAction" target="_self">packageTestAction</a>, <a href="../sbt/BasicScalaProject.html#packageDocsAction" target="_self">packageDocsAction</a>, <a href="../sbt/BasicScalaProject.html#packageSrcAction" target="_self">packageSrcAction</a>, <a href="../sbt/BasicScalaProject.html#packageTestSrcAction" target="_self">packageTestSrcAction</a>, <a href="../sbt/BasicScalaProject.html#packageProjectAction" target="_self">packageProjectAction</a>, <a href="../sbt/BasicScalaProject.html#docAllAction" target="_self">docAllAction</a>, <a href="../sbt/BasicScalaProject.html#packageAllAction" target="_self">packageAllAction</a>, <a href="../sbt/BasicScalaProject.html#graphSourcesAction" target="_self">graphSourcesAction</a>, <a href="../sbt/BasicScalaProject.html#graphPackagesAction" target="_self">graphPackagesAction</a>, <a href="../sbt/BasicScalaProject.html#incrementVersionAction" target="_self">incrementVersionAction</a>, <a href="../sbt/BasicScalaProject.html#releaseAction" target="_self">releaseAction</a>, <a href="../sbt/BasicScalaProject.html#copyResourcesAction" target="_self">copyResourcesAction</a>, <a href="../sbt/BasicScalaProject.html#copyTestResourcesAction" target="_self">copyTestResourcesAction</a>, <a href="../sbt/BasicScalaProject.html#jarsOfProjectDependencies" target="_self">jarsOfProjectDependencies</a>, <a href="../sbt/BasicScalaProject.html#deliverScalaDependencies" target="_self">deliverScalaDependencies</a>, <a href="../sbt/BasicScalaProject.html#watchPaths" target="_self">watchPaths</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="../sbt/BasicDependencyProject.html" target="_self">BasicDependencyProject</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="../sbt/BasicDependencyProject.html#projectClasspath%28sbt.Configuration%29" target="_self">projectClasspath</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="../sbt/UnmanagedClasspathProject.html" target="_self">UnmanagedClasspathProject</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="../sbt/UnmanagedClasspathProject.html#unmanagedClasspath" target="_self">unmanagedClasspath</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="../sbt/BasicManagedProject.html" target="_self">BasicManagedProject</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="../sbt/BasicManagedProject.html#ivyUpdateConfiguration" target="_self">ivyUpdateConfiguration</a>, <a href="../sbt/BasicManagedProject.html#ivyUpdateLogging" target="_self">ivyUpdateLogging</a>, <a href="../sbt/BasicManagedProject.html#ivyLocalOnly" target="_self">ivyLocalOnly</a>, <a href="../sbt/BasicManagedProject.html#ivyRepositories" target="_self">ivyRepositories</a>, <a href="../sbt/BasicManagedProject.html#otherRepositories" target="_self">otherRepositories</a>, <a href="../sbt/BasicManagedProject.html#ivyValidate" target="_self">ivyValidate</a>, <a href="../sbt/BasicManagedProject.html#ivyScala" target="_self">ivyScala</a>, <a href="../sbt/BasicManagedProject.html#ivyCacheDirectory" target="_self">ivyCacheDirectory</a>, <a href="../sbt/BasicManagedProject.html#ivyPaths" target="_self">ivyPaths</a>, <a href="../sbt/BasicManagedProject.html#inlineIvyConfiguration" target="_self">inlineIvyConfiguration</a>, <a href="../sbt/BasicManagedProject.html#ivyConfiguration" target="_self">ivyConfiguration</a>, <a href="../sbt/BasicManagedProject.html#moduleSettings" target="_self">moduleSettings</a>, <a href="../sbt/BasicManagedProject.html#byIvyFile%28sbt.Path%29" target="_self">byIvyFile</a>, <a href="../sbt/BasicManagedProject.html#byPom%28sbt.Path%29" target="_self">byPom</a>, <a href="../sbt/BasicManagedProject.html#inlineSettings" target="_self">inlineSettings</a>, <a href="../sbt/BasicManagedProject.html#compatTestFramework" target="_self">compatTestFramework</a>, <a href="../sbt/BasicManagedProject.html#defaultModuleSettings" target="_self">defaultModuleSettings</a>, <a href="../sbt/BasicManagedProject.html#externalSettings" target="_self">externalSettings</a>, <a href="../sbt/BasicManagedProject.html#ivySbt" target="_self">ivySbt</a>, <a href="../sbt/BasicManagedProject.html#ivyModule" target="_self">ivyModule</a>, <a href="../sbt/BasicManagedProject.html#newIvyModule%28sbt.ModuleSettings%29" target="_self">newIvyModule</a>, <a href="../sbt/BasicManagedProject.html#outputPattern" target="_self">outputPattern</a>, <a href="../sbt/BasicManagedProject.html#ivyXML" target="_self">ivyXML</a>, <a href="../sbt/BasicManagedProject.html#pomExtra" target="_self">pomExtra</a>, <a href="../sbt/BasicManagedProject.html#ivyConfigurations" target="_self">ivyConfigurations</a>, <a href="../sbt/BasicManagedProject.html#extraDefaultConfigurations" target="_self">extraDefaultConfigurations</a>, <a href="../sbt/BasicManagedProject.html#useIntegrationTestConfiguration" target="_self">useIntegrationTestConfiguration</a>, <a href="../sbt/BasicManagedProject.html#defaultConfiguration" target="_self">defaultConfiguration</a>, <a href="../sbt/BasicManagedProject.html#useMavenConfigurations" target="_self">useMavenConfigurations</a>, <a href="../sbt/BasicManagedProject.html#useDefaultConfigurations" target="_self">useDefaultConfigurations</a>, <a href="../sbt/BasicManagedProject.html#managedStyle" target="_self">managedStyle</a>, <a href="../sbt/BasicManagedProject.html#updateModuleSettings" target="_self">updateModuleSettings</a>, <a href="../sbt/BasicManagedProject.html#updateIvyModule" target="_self">updateIvyModule</a>, <a href="../sbt/BasicManagedProject.html#deliverModuleSettings" target="_self">deliverModuleSettings</a>, <a href="../sbt/BasicManagedProject.html#deliverIvyModule" target="_self">deliverIvyModule</a>, <a href="../sbt/BasicManagedProject.html#publishModuleSettings" target="_self">publishModuleSettings</a>, <a href="../sbt/BasicManagedProject.html#publishIvyModule" target="_self">publishIvyModule</a>, <a href="../sbt/BasicManagedProject.html#defaultConfigurationExtensions" target="_self">defaultConfigurationExtensions</a>, <a href="../sbt/BasicManagedProject.html#checkExplicitScalaDependencies" target="_self">checkExplicitScalaDependencies</a>, <a href="../sbt/BasicManagedProject.html#filterScalaJars" target="_self">filterScalaJars</a>, <a href="../sbt/BasicManagedProject.html#checkScalaInConfigurations" target="_self">checkScalaInConfigurations</a>, <a href="../sbt/BasicManagedProject.html#defaultPublishRepository" target="_self">defaultPublishRepository</a>, <a href="../sbt/BasicManagedProject.html#managedClasspath%28sbt.Configuration%29" target="_self">managedClasspath</a>, <a href="../sbt/BasicManagedProject.html#updateAction" target="_self">updateAction</a>, <a href="../sbt/BasicManagedProject.html#cleanLibAction" target="_self">cleanLibAction</a>, <a href="../sbt/BasicManagedProject.html#cleanCacheAction" target="_self">cleanCacheAction</a>, <a href="../sbt/BasicManagedProject.html#deliverProjectDependencies" target="_self">deliverProjectDependencies</a>, <a href="../sbt/BasicManagedProject.html#pomIncludeRepository%28sbt.MavenRepository%29" target="_self">pomIncludeRepository</a>, <a href="../sbt/BasicManagedProject.html#pomPostProcess%28scala.xml.Node%29" target="_self">pomPostProcess</a>, <a href="../sbt/BasicManagedProject.html#makePomConfiguration" target="_self">makePomConfiguration</a>, <a href="../sbt/BasicManagedProject.html#makePomAction" target="_self">makePomAction</a>, <a href="../sbt/BasicManagedProject.html#deliverLocalAction" target="_self">deliverLocalAction</a>, <a href="../sbt/BasicManagedProject.html#publishLocalAction" target="_self">publishLocalAction</a>, <a href="../sbt/BasicManagedProject.html#publishLocalConfiguration" target="_self">publishLocalConfiguration</a>, <a href="../sbt/BasicManagedProject.html#deliverAction" target="_self">deliverAction</a>, <a href="../sbt/BasicManagedProject.html#publishAction" target="_self">publishAction</a>, <a href="../sbt/BasicManagedProject.html#publishConfiguration" target="_self">publishConfiguration</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="../sbt/BasicDependencyPaths.html" target="_self">BasicDependencyPaths</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="../sbt/BasicDependencyPaths.html#dependencyDirectoryName" target="_self">dependencyDirectoryName</a>, <a href="../sbt/BasicDependencyPaths.html#managedDirectoryName" target="_self">managedDirectoryName</a>, <a href="../sbt/BasicDependencyPaths.html#pomName" target="_self">pomName</a>, <a href="../sbt/BasicDependencyPaths.html#dependencyPath" target="_self">dependencyPath</a>, <a href="../sbt/BasicDependencyPaths.html#managedDependencyPath" target="_self">managedDependencyPath</a>, <a href="../sbt/BasicDependencyPaths.html#managedDependencyRootPath" target="_self">managedDependencyRootPath</a>, <a href="../sbt/BasicDependencyPaths.html#pomPath" target="_self">pomPath</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="../sbt/ReflectiveConfigurations.html" target="_self">ReflectiveConfigurations</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="../sbt/ReflectiveConfigurations.html#reflectiveIvyConfigurations" target="_self">reflectiveIvyConfigurations</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="../sbt/ReflectiveLibraryDependencies.html" target="_self">ReflectiveLibraryDependencies</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="../sbt/ReflectiveLibraryDependencies.html#excludeIDs" target="_self">excludeIDs</a>, <a href="../sbt/ReflectiveLibraryDependencies.html#libraryDependencies" target="_self">libraryDependencies</a>, <a href="../sbt/ReflectiveLibraryDependencies.html#reflectiveLibraryDependencies" target="_self">reflectiveLibraryDependencies</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="../sbt/ReflectiveRepositories.html" target="_self">ReflectiveRepositories</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="../sbt/ReflectiveRepositories.html#repositories" target="_self">repositories</a>, <a href="../sbt/ReflectiveRepositories.html#reflectiveRepositories" target="_self">reflectiveRepositories</a>, <a href="../sbt/ReflectiveRepositories.html#moduleConfigurations" target="_self">moduleConfigurations</a>, <a href="../sbt/ReflectiveRepositories.html#reflectiveModuleConfigurations" target="_self">reflectiveModuleConfigurations</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="../sbt/ReflectiveArtifacts.html" target="_self">ReflectiveArtifacts</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="../sbt/ReflectiveArtifacts.html#artifacts" target="_self">artifacts</a>, <a href="../sbt/ReflectiveArtifacts.html#reflectiveArtifacts" target="_self">reflectiveArtifacts</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="../sbt/ReflectiveMethods.html" target="_self">ReflectiveMethods</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="../sbt/ReflectiveMethods.html#methods" target="_self">methods</a>, <a href="../sbt/ReflectiveMethods.html#reflectiveMethodMappings" target="_self">reflectiveMethodMappings</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="../sbt/ReflectiveTasks.html" target="_self">ReflectiveTasks</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="../sbt/ReflectiveTasks.html#tasks" target="_self">tasks</a>, <a href="../sbt/ReflectiveTasks.html#reflectiveTaskMappings" target="_self">reflectiveTaskMappings</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="../sbt/ReflectiveModules.html" target="_self">ReflectiveModules</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="../sbt/ReflectiveModules.html#subProjects" target="_self">subProjects</a>, <a href="../sbt/ReflectiveModules.html#reflectiveModuleMappings" target="_self">reflectiveModuleMappings</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="../sbt/ManagedProject.html" target="_self">ManagedProject</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="../sbt/ManagedProject.html#moduleID" target="_self">moduleID</a>, <a href="../sbt/ManagedProject.html#projectID" target="_self">projectID</a>, <a href="../sbt/ManagedProject.html#artifactID" target="_self">artifactID</a>, <a href="../sbt/ManagedProject.html#artifactBaseName" target="_self">artifactBaseName</a>, <a href="../sbt/ManagedProject.html#configurationClasspath%28sbt.Configuration%29" target="_self">configurationClasspath</a>, <a href="../sbt/ManagedProject.html#configurationPath%28sbt.Configuration%29" target="_self">configurationPath</a>, <a href="../sbt/ManagedProject.html#toGroupID%28String%29" target="_self">toGroupID</a>, <a href="../sbt/ManagedProject.html#toRepositoryName%28String%29" target="_self">toRepositoryName</a>, <a href="../sbt/ManagedProject.html#moduleIDConfigurable%28sbt.ModuleID%29" target="_self">moduleIDConfigurable</a>, <a href="../sbt/ManagedProject.html#config%28String%29" target="_self">config</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="../sbt/IvyTasks.html" target="_self">IvyTasks</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="../sbt/IvyTasks.html#ivyTask%28%3D%3EUnit%29" target="_self">ivyTask</a>, <a href="../sbt/IvyTasks.html#updateTask%28%3D%3Esbt.IvySbt%23Module%2C%3D%3Esbt.UpdateConfiguration%29" target="_self">updateTask</a>, <a href="../sbt/IvyTasks.html#publishTask%28%3D%3Esbt.IvySbt%23Module%2C%3D%3Esbt.PublishConfiguration%29" target="_self">publishTask</a>, <a href="../sbt/IvyTasks.html#deliverTask%28%3D%3Esbt.IvySbt%23Module%2C%3D%3Esbt.PublishConfiguration%2C%3D%3Esbt.UpdateLogging.Value%29" target="_self">deliverTask</a>, <a href="../sbt/IvyTasks.html#makePomTask%28%3D%3Esbt.IvySbt%23Module%2C%3D%3Esbt.Path%2C%3D%3EIterable%5Bsbt.ModuleID%5D%2C%3D%3Escala.xml.NodeSeq%2C%3D%3EOption%5BIterable%5Bsbt.Configuration%5D%5D%29" target="_self">makePomTask</a>, <a href="../sbt/IvyTasks.html#makePomTask%28%3D%3Esbt.IvySbt%23Module%2C%3D%3Esbt.MakePomConfiguration%2C%3D%3Esbt.Path%29" target="_self">makePomTask</a>, <a href="../sbt/IvyTasks.html#installTask%28sbt.IvySbt%23Module%2Csbt.Resolver%2Csbt.Resolver%29" target="_self">installTask</a>, <a href="../sbt/IvyTasks.html#cleanCacheTask%28%3D%3Esbt.IvySbt%29" target="_self">cleanCacheTask</a>, <a href="../sbt/IvyTasks.html#cleanLibTask%28sbt.Path%29" target="_self">cleanLibTask</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="../sbt/ClasspathProject.html" target="_self">ClasspathProject</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="../sbt/ClasspathProject.html#fullClasspath%28sbt.Configuration%29" target="_self">fullClasspath</a>, <a href="../sbt/ClasspathProject.html#classpathFilter" target="_self">classpathFilter</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="../sbt/ScalaProject.html" target="_self">ScalaProject</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="../sbt/ScalaProject.html#TestArgument%28String*%29" target="_self">TestArgument</a>, <a href="../sbt/ScalaProject.html#TestArgument%28sbt.TestFramework%2CString*%29" target="_self">TestArgument</a>, <a href="../sbt/ScalaProject.html#ManifestAttributes%28%28String%2CString%29*%29" target="_self">ManifestAttributes</a>, <a href="../sbt/ScalaProject.html#access%28ScalaProject.this.Access.Value%29" target="_self">access</a>, <a href="../sbt/ScalaProject.html#documentBottom%28String%29" target="_self">documentBottom</a>, <a href="../sbt/ScalaProject.html#documentCharset%28String%29" target="_self">documentCharset</a>, <a href="../sbt/ScalaProject.html#documentTitle%28String%29" target="_self">documentTitle</a>, <a href="../sbt/ScalaProject.html#documentFooter%28String%29" target="_self">documentFooter</a>, <a href="../sbt/ScalaProject.html#documentHeader%28String%29" target="_self">documentHeader</a>, <a href="../sbt/ScalaProject.html#stylesheetFile%28sbt.Path%29" target="_self">stylesheetFile</a>, <a href="../sbt/ScalaProject.html#documentTop%28String%29" target="_self">documentTop</a>, <a href="../sbt/ScalaProject.html#windowTitle%28String%29" target="_self">windowTitle</a>, <a href="../sbt/ScalaProject.html#javapTask%28sbt.PathFinder%2C%3D%3Esbt.CompileConditional%2Csbt.Path%29" target="_self">javapTask</a>, <a href="../sbt/ScalaProject.html#consoleTask%28sbt.PathFinder%29" target="_self">consoleTask</a>, <a href="../sbt/ScalaProject.html#consoleTask%28sbt.PathFinder%2C%3D%3ESeq%5BScalaProject.this.CompileOption%5D%2C%3D%3EString%29" target="_self">consoleTask</a>, <a href="../sbt/ScalaProject.html#runTask%28%3D%3EOption%5BString%5D%2Csbt.PathFinder%2CString*%29" target="_self">runTask</a>, <a href="../sbt/ScalaProject.html#runTask%28%3D%3EOption%5BString%5D%2Csbt.PathFinder%2C%3D%3ESeq%5BString%5D%29" target="_self">runTask</a>, <a href="../sbt/ScalaProject.html#syncPathsTask%28sbt.PathFinder%2Csbt.Path%29" target="_self">syncPathsTask</a>, <a href="../sbt/ScalaProject.html#syncTask%28sbt.Path%2Csbt.Path%29" target="_self">syncTask</a>, <a href="../sbt/ScalaProject.html#copyTask%28sbt.PathFinder%2Csbt.Path%29" target="_self">copyTask</a>, <a href="../sbt/ScalaProject.html#testTask%28Seq%5Bsbt.TestFramework%5D%2Csbt.PathFinder%2Csbt.CompileAnalysis%2CScalaProject.this.TestOption*%29" target="_self">testTask</a>, <a href="../sbt/ScalaProject.html#testTask%28Seq%5Bsbt.TestFramework%5D%2Csbt.PathFinder%2Csbt.CompileAnalysis%2C%3D%3ESeq%5BScalaProject.this.TestOption%5D%29" target="_self">testTask</a>, <a href="../sbt/ScalaProject.html#graphSourcesTask%28sbt.Path%2Csbt.PathFinder%2C%3D%3Esbt.CompileAnalysis%29" target="_self">graphSourcesTask</a>, <a href="../sbt/ScalaProject.html#graphPackagesTask%28sbt.Path%2Csbt.PathFinder%2C%3D%3Esbt.CompileAnalysis%29" target="_self">graphPackagesTask</a>, <a href="../sbt/ScalaProject.html#scaladocTask%28String%2Csbt.PathFinder%2Csbt.Path%2Csbt.PathFinder%2CScalaProject.this.ScaladocOption*%29" target="_self">scaladocTask</a>, <a href="../sbt/ScalaProject.html#scaladocTask%28String%2Csbt.PathFinder%2Csbt.Path%2Csbt.PathFinder%2C%3D%3ESeq%5BScalaProject.this.ScaladocOption%5D%29" target="_self">scaladocTask</a>, <a href="../sbt/ScalaProject.html#packageTask%28sbt.PathFinder%2Csbt.Path%2C%3D%3EString%2CScalaProject.this.PackageOption*%29" target="_self">packageTask</a>, <a href="../sbt/ScalaProject.html#packageTask%28sbt.PathFinder%2Csbt.Path%2C%3D%3EString%2C%3D%3ESeq%5BScalaProject.this.PackageOption%5D%29" target="_self">packageTask</a>, <a href="../sbt/ScalaProject.html#packageTask%28sbt.PathFinder%2C%3D%3Esbt.Path%2CScalaProject.this.PackageOption*%29" target="_self">packageTask</a>, <a href="../sbt/ScalaProject.html#packageTask%28sbt.PathFinder%2C%3D%3Esbt.Path%2C%3D%3ESeq%5BScalaProject.this.PackageOption%5D%29" target="_self">packageTask</a>, <a href="../sbt/ScalaProject.html#zipTask%28sbt.PathFinder%2Csbt.Path%2C%3D%3EString%29" target="_self">zipTask</a>, <a href="../sbt/ScalaProject.html#zipTask%28sbt.PathFinder%2C%3D%3Esbt.Path%29" target="_self">zipTask</a>, <a href="../sbt/ScalaProject.html#incrementVersionNumber%28%29" target="_self">incrementVersionNumber</a>, <a href="../sbt/ScalaProject.html#incrementImpl%28sbt.BasicVersion%29" target="_self">incrementImpl</a>, <a href="../sbt/ScalaProject.html#testTasks%28Seq%5Bsbt.TestFramework%5D%2Csbt.PathFinder%2Csbt.CompileAnalysis%2C%3D%3ESeq%5BScalaProject.this.TestOption%5D%29" target="_self">testTasks</a>, <a href="../sbt/ScalaProject.html#testQuickMethod%28sbt.CompileAnalysis%2C%3D%3ESeq%5BScalaProject.this.TestOption%5D%29" target="_self">testQuickMethod</a>, <a href="../sbt/ScalaProject.html#maximumErrors%28Seq%5BT%5D%29" target="_self">maximumErrors</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="../sbt/MultiTaskProject.html" target="_self">MultiTaskProject</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="../sbt/MultiTaskProject.html#multiTask%28%3D%3EList%5BString%5D%29" target="_self">multiTask</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="../sbt/FileTasks.html" target="_self">FileTasks</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="../sbt/FileTasks.html#wrapProduct%28%3D%3Esbt.Path%29" target="_self">wrapProduct</a>, <a href="../sbt/FileTasks.html#wrapProducts%28%3D%3EIterable%5Bsbt.Path%5D%29" target="_self">wrapProducts</a>, <a href="../sbt/FileTasks.html#fileTask%28String%2Csbt.ProductsSources%29" target="_self">fileTask</a>, <a href="../sbt/FileTasks.html#fileTask%28String%2C%3D%3EIterable%5Bsbt.Path%5D%29" target="_self">fileTask</a>, <a href="../sbt/FileTasks.html#fileTask%28sbt.ProductsSources%29" target="_self">fileTask</a>, <a href="../sbt/FileTasks.html#fileTask%28%3D%3EIterable%5Bsbt.Path%5D%29" target="_self">fileTask</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="../sbt/SimpleScalaProject.html" target="_self">SimpleScalaProject</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="../sbt/SimpleScalaProject.html#errorTask%28String%29" target="_self">errorTask</a>, <a href="../sbt/SimpleScalaProject.html#compileOptions%28String*%29" target="_self">compileOptions</a>, <a href="../sbt/SimpleScalaProject.html#javaCompileOptions%28String*%29" target="_self">javaCompileOptions</a>, <a href="../sbt/SimpleScalaProject.html#Optimise" target="_self">Optimise</a>, <a href="../sbt/SimpleScalaProject.html#target%28SimpleScalaProject.this.Target.Value%29" target="_self">target</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="../sbt/Cleanable.html" target="_self">Cleanable</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="../sbt/Cleanable.html#cleanTask%28sbt.PathFinder%2CCleanable.this.CleanOption*%29" target="_self">cleanTask</a>, <a href="../sbt/Cleanable.html#cleanTask%28sbt.PathFinder%2C%3D%3ESeq%5BCleanable.this.CleanOption%5D%29" target="_self">cleanTask</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="../sbt/ExecProject.html" target="_self">ExecProject</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="../sbt/ExecProject.html#execOut%28%3D%3Esbt.ProcessBuilder%29" target="_self">execOut</a>, <a href="../sbt/ExecProject.html#execTask%28%3D%3Esbt.ProcessBuilder%29" target="_self">execTask</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="../sbt/Project.html" target="_self">Project</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="../sbt/Project.html#logImpl" target="_self">logImpl</a>, <a href="../sbt/Project.html#defaultLoggingLevel" target="_self">defaultLoggingLevel</a>, <a href="../sbt/Project.html#name" target="_self">name</a>, <a href="../sbt/Project.html#version" target="_self">version</a>, <a href="../sbt/Project.html#organization" target="_self">organization</a>, <a href="../sbt/Project.html#scratch" target="_self">scratch</a>, <a href="../sbt/Project.html#taskNames" target="_self">taskNames</a>, <a href="../sbt/Project.html#methodNames" target="_self">methodNames</a>, <a href="../sbt/Project.html#methodList" target="_self">methodList</a>, <a href="../sbt/Project.html#taskList" target="_self">taskList</a>, <a href="../sbt/Project.html#taskName%28Project.this.Task%29" target="_self">taskName</a>, <a href="../sbt/Project.html#taskAndMethodList" target="_self">taskAndMethodList</a>, <a href="../sbt/Project.html#tasksAndMethods" target="_self">tasksAndMethods</a>, <a href="../sbt/Project.html#projectClosure" target="_self">projectClosure</a>, <a href="../sbt/Project.html#call%28String%2CArray%5BString%5D%29" target="_self">call</a>, <a href="../sbt/Project.html#act%28String%29" target="_self">act</a>, <a href="../sbt/Project.html#path%28String%29" target="_self">path</a>, <a href="../sbt/Project.html#filter%28String%29" target="_self">filter</a>, <a href="../sbt/Project.html#project%28sbt.Path%2Csbt.Project*%29" target="_self">project</a>, <a href="../sbt/Project.html#project%28sbt.Path%2CString%2Csbt.Project*%29" target="_self">project</a>, <a href="../sbt/Project.html#project%28sbt.Path%2CString%2CClass%5BP%5D%2Csbt.Project*%29" target="_self">project</a>, <a href="../sbt/Project.html#project%28sbt.Path%2CString%2C%28sbt.ProjectInfo%29%3D%3EP%2Csbt.Project*%29" target="_self">project</a>, <a href="../sbt/Project.html#parallelExecution" target="_self">parallelExecution</a>, <a href="../sbt/Project.html#shouldCheckOutputDirectories" target="_self">shouldCheckOutputDirectories</a>, <a href="../sbt/Project.html#rootProject" target="_self">rootProject</a>, <a href="../sbt/Project.html#envBackingPath" target="_self">envBackingPath</a>, <a href="../sbt/Project.html#historyPath" target="_self">historyPath</a>, <a href="../sbt/Project.html#outputPath" target="_self">outputPath</a>, <a href="../sbt/Project.html#outputRootPath" target="_self">outputRootPath</a>, <a href="../sbt/Project.html#outputDirectoryName" target="_self">outputDirectoryName</a>, <a href="../sbt/Project.html#buildScalaVersion" target="_self">buildScalaVersion</a>, <a href="../sbt/Project.html#componentManager" target="_self">componentManager</a>, <a href="../sbt/Project.html#buildScalaInstance" target="_self">buildScalaInstance</a>, <a href="../sbt/Project.html#buildLibraryJar" target="_self">buildLibraryJar</a>, <a href="../sbt/Project.html#buildCompilerJar" target="_self">buildCompilerJar</a>, <a href="../sbt/Project.html#buildScalaJars" target="_self">buildScalaJars</a>, <a href="../sbt/Project.html#buildScalaInstance0" target="_self">buildScalaInstance0</a>, <a href="../sbt/Project.html#getScalaInstance%28String%29" target="_self">getScalaInstance</a>, <a href="../sbt/Project.html#localScala" target="_self">localScala</a>, <a href="../sbt/Project.html#defineScala%28java.io.File%29" target="_self">defineScala</a>, <a href="../sbt/Project.html#defineScala%28String%2Cjava.io.File%29" target="_self">defineScala</a>, <a href="../sbt/Project.html#crossPath%28sbt.Path%29" target="_self">crossPath</a>, <a href="../sbt/Project.html#crossScalaVersionString" target="_self">crossScalaVersionString</a>, <a href="../sbt/Project.html#disableCrossPaths" target="_self">disableCrossPaths</a>, <a href="../sbt/Project.html#crossScalaVersions" target="_self">crossScalaVersions</a>, <a href="../sbt/Project.html#terminateWatch%28Int%29" target="_self">terminateWatch</a>, <a href="../sbt/Project.html#parentEnvironment" target="_self">parentEnvironment</a>, <a href="../sbt/Project.html#defaultExcludes" target="_self">defaultExcludes</a>, <a href="../sbt/Project.html#descendents%28sbt.PathFinder%2Csbt.FileFilter%29" target="_self">descendents</a>, <a href="../sbt/Project.html#toString%28%29" target="_self">toString</a>, <a href="../sbt/Project.html#normalizedName" target="_self">normalizedName</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="../sbt/BasicEnvironment.html" target="_self">BasicEnvironment</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="../sbt/BasicEnvironment.html#environmentLabel" target="_self">environmentLabel</a>, <a href="../sbt/BasicEnvironment.html#system%28String%29" target="_self">system</a>, <a href="../sbt/BasicEnvironment.html#systemOptional%28String%2C%3D%3ET%29" target="_self">systemOptional</a>, <a href="../sbt/BasicEnvironment.html#property%28scala.reflect.Manifest%5BT%5D%2Csbt.Format%5BT%5D%29" target="_self">property</a>, <a href="../sbt/BasicEnvironment.html#propertyLocal%28scala.reflect.Manifest%5BT%5D%2Csbt.Format%5BT%5D%29" target="_self">propertyLocal</a>, <a href="../sbt/BasicEnvironment.html#propertyOptional%28%3D%3ET%29" target="_self">propertyOptional</a>, <a href="../sbt/BasicEnvironment.html#propertyOptional%28%3D%3ET%2CBoolean%29" target="_self">propertyOptional</a>, <a href="../sbt/BasicEnvironment.html#propertyNames" target="_self">propertyNames</a>, <a href="../sbt/BasicEnvironment.html#getPropertyNamed%28String%29" target="_self">getPropertyNamed</a>, <a href="../sbt/BasicEnvironment.html#propertyNamed%28String%29" target="_self">propertyNamed</a>, <a href="../sbt/BasicEnvironment.html#saveEnvironment%28%29" target="_self">saveEnvironment</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="../sbt/Environment.html" target="_self">Environment</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="../sbt/Environment.html#propertyF%28sbt.Format%5BT%5D%29" target="_self">propertyF</a>, <a href="../sbt/Environment.html#propertyLocalF%28sbt.Format%5BT%5D%29" target="_self">propertyLocalF</a>, <a href="../sbt/Environment.html#propertyOptionalF%28%3D%3ET%2Csbt.Format%5BT%5D%29" target="_self">propertyOptionalF</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="../sbt/Dag.html" target="_self">Dag</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="../sbt/Dag.html#topologicalSort" target="_self">topologicalSort</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="../sbt/TaskManager.html" target="_self">TaskManager</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="../sbt/TaskManager.html#task%28%3D%3EOption%5BString%5D%29" target="_self">task</a>, <a href="../sbt/TaskManager.html#interactiveTask%28%3D%3EOption%5BString%5D%29" target="_self">interactiveTask</a>, <a href="../sbt/TaskManager.html#task%28%28Array%5BString%5D%29%3D%3ETaskManager.this.ManagedTask%29" target="_self">task</a>, <a href="../sbt/TaskManager.html#taskNameString%28TaskManager.this.Task%29" target="_self">taskNameString</a>, <a href="../sbt/TaskManager.html#dynamic%28%3D%3Esbt.Project%23Task%29" target="_self">dynamic</a>, <a href="../sbt/TaskManager.html#compoundTask%28%3D%3Esbt.Project%23Task%29" target="_self">compoundTask</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html" target="_self">AnyRef</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#getClass%28%29" target="_self">getClass</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#hashCode%28%29" target="_self">hashCode</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#equals%28Any%29" target="_self">equals</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#clone%28%29" target="_self">clone</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#notify%28%29" target="_self">notify</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#notifyAll%28%29" target="_self">notifyAll</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#wait%28Long%29" target="_self">wait</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#wait%28Long%2CInt%29" target="_self">wait</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#wait%28%29" target="_self">wait</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#finalize%28%29" target="_self">finalize</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#%3D%3D%28AnyRef%29" target="_self">==</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#%21%3D%28AnyRef%29" target="_self">!=</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#eq%28AnyRef%29" target="_self">eq</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#ne%28AnyRef%29" target="_self">ne</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/AnyRef.html#synchronized%28T0%29" target="_self">synchronized</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html" target="_self">Any</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html#%3D%3D%28Any%29" target="_self">==</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html#%21%3D%28Any%29" target="_self">!=</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html#isInstanceOf" target="_self">isInstanceOf</a>, <a href="http://www.scala-lang.org/docu/files/api/scala/Any.html#asInstanceOf" target="_self">asInstanceOf</a>
+        </td></tr>
+      </table><table summary="" cellpadding="3" class="inherited">
+        <tr><td class="title" colspan="2">
+          Methods inherited from <a href="../sbt/WebstartOptions.html" target="_self">WebstartOptions</a>
+        </td></tr>
+        <tr><td class="signature" colspan="2">
+          <a href="../sbt/WebstartOptions.html#jnlpXML%28Seq%5Bsbt.WebstartJarResource%5D%29" target="_self">jnlpXML</a> (abstract)
+        </td></tr>
+      </table>
+
+
+      
+
+
+
+
+
+    <hr></hr>
+        <table summary="" class="navigation">
+        <tr>
+          <td class="navigation-links" valign="top">
+            <!-- <table><tr></tr></table> -->
+          </td>
+          <td align="right" valign="top" style="white-space:nowrap;" rowspan="2">
+            <div class="doctitle-larger">Simple Build Tool 0.7.5 API</div>
+          </td>
+        </tr>
+        <tr><td></td></tr>
+      </table>
+      </body>
+      </html>

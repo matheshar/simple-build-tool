@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+			<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" ></meta>
+        <title>sbt/AutoCompilerPlugins.scala</title>
+        <script type="text/javascript" src="../jquery-all.js"></script>
+        <script type="text/javascript" src="../linked.js"></script>
+        <link rel="stylesheet" type="text/css" href="../style.css" title="Style"></link>
+    </head>
+    <body>
+        <pre>
+<span class="comment">/* sbt -- Simple Build Tool
+ * Copyright 2009 Mark Harrah
+ */</span>
+<span class="keyword">package</span> sbt
+
+<span class="keyword">trait</span> <a title="trait AutoCompilerPlugins extends sbt.BasicScalaProject with ScalaObject" id="10347">AutoCompilerPlugins</a> <span class="keyword">extends</span> <a href="DefaultProject.scala.html#12438" title="sbt.BasicScalaProject">BasicScalaProject</a>
+{
+	<span class="keyword">import</span> Configurations.CompilerPlugin
+	<span class="keyword">abstract</span> <span class="keyword">override</span> <span class="keyword">def</span> <a title="=&gt; List[sbt.Configuration]" id="51237">extraDefaultConfigurations</a> =
+		<a href="../IvyInterface.scala.html#44696" title="=&gt; sbt.Configuration">CompilerPlugin</a> <a href="#51597" title="(sbt.Configuration)List[sbt.Configuration]" id="15504">::</a> <span class="keyword">super</span>.<a href="BasicProjectTypes.scala.html#51404" title="=&gt; List[sbt.Configuration]">extraDefaultConfigurations</a>
+	<span class="keyword">abstract</span> <span class="keyword">override</span> <span class="keyword">def</span> <a title="=&gt; List[AutoCompilerPlugins.this.CompileOption]" id="51238">compileOptions</a> = <a href="#51240" title="=&gt; List[AutoCompilerPlugins.this.CompileOption]">compilerPlugins</a> <a title="(Iterable[AutoCompilerPlugins.this.CompileOption])List[AutoCompilerPlugins.this.CompileOption]" id="15510">++</a> <span class="keyword">super</span>.<a href="DefaultProject.scala.html#51092" title="=&gt; Seq[AutoCompilerPlugins.this.CompileOption]">compileOptions</a>
+
+	<span class="comment">/** A PathFinder that provides the classpath to search for compiler plugins. */</span>
+	<span class="keyword">def</span> <a title="=&gt; sbt.PathFinder" id="51239">pluginClasspath</a> = <a href="BasicProjectTypes.scala.html#51358" title="(sbt.Configuration)sbt.PathFinder">fullClasspath</a>(<a href="../IvyInterface.scala.html#44696" title="=&gt; sbt.Configuration">CompilerPlugin</a>)
+	<span class="keyword">protected</span> <span class="keyword">def</span> <a title="=&gt; List[AutoCompilerPlugins.this.CompileOption]" id="51240">compilerPlugins</a>: <a title="List[AutoCompilerPlugins.this.CompileOption]" id="499">List</a>[CompileOption] =
+		<a href="ClasspathUtilities.scala.html#13105" title="object sbt.ClasspathUtilities">ClasspathUtilities</a>.<a href="ClasspathUtilities.scala.html#51761" title="(Iterable[sbt.Path])Iterable[java.io.File]">compilerPlugins</a>(<a href="#51239" title="=&gt; sbt.PathFinder">pluginClasspath</a>.<a href="Path.scala.html#49335" title="=&gt; scala.collection.Set[sbt.Path]">get</a>).<a title="((java.io.File) =&gt; AutoCompilerPlugins.this.CompileOption)Iterable[AutoCompilerPlugins.this.CompileOption]" id="15942">map</a>(<a title="java.io.File" id="51778">plugin</a> =&gt; <span title="AutoCompilerPlugins.this.CompileOption" class="keyword">new</span> <a href="ScalaProject.scala.html#50958" title="AutoCompilerPlugins.this.CompileOption">CompileOption</a>(<span title="java.lang.String(&quot;-Xplugin:&quot;)" class="string">&quot;-Xplugin:&quot;</span> <a title="(Any)java.lang.String" id="6025">+</a> <a href="#51778" title="java.io.File">plugin</a>.<a title="()java.lang.String" id="16764">getAbsolutePath</a>)).<a title="=&gt; List[AutoCompilerPlugins.this.CompileOption]" id="15975">toList</a>
+
+	<span class="keyword">def</span> <a title="(sbt.ModuleID)sbt.ModuleID" id="51241">compilerPlugin</a>(<a title="sbt.ModuleID" id="51780">dependency</a>: <a href="../IvyInterface.scala.html#13008" title="sbt.ModuleID">ModuleID</a>) = <a href="BasicProjectTypes.scala.html#51373" title="implicit sbt.ManagedProject.moduleIDConfigurable : (sbt.ModuleID)sbt.ModuleIDConfigurable">dependency</a> <a href="BasicProjectTypes.scala.html#51792" title="(String)sbt.ModuleID">%</a> <span title="java.lang.String(&quot;plugin-&gt;default(compile)&quot;)" class="string">&quot;plugin-&gt;default(compile)&quot;</span>
+}
+        </pre>
+    </body>
+</html>

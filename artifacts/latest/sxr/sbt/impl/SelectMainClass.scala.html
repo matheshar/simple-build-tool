@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+			<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" ></meta>
+        <title>sbt/impl/SelectMainClass.scala</title>
+        <script type="text/javascript" src="../../jquery-all.js"></script>
+        <script type="text/javascript" src="../../linked.js"></script>
+        <link rel="stylesheet" type="text/css" href="../../style.css" title="Style"></link>
+    </head>
+    <body>
+        <pre>
+<span class="comment">/* sbt -- Simple Build Tool
+ * Copyright 2009 Mark Harrah
+ */</span>
+<span class="keyword">package</span> sbt.impl
+<span class="keyword">import</span> sbt._
+
+<span class="keyword">private</span>[sbt] <span class="keyword">object</span> <a title="object sbt.impl.SelectMainClass" id="14375">SelectMainClass</a>
+{
+	<span class="keyword">def</span> <a title="(Boolean,List[String])Option[String]" id="57195">apply</a>(<a title="Boolean" id="57198">promptIfMultipleChoices</a>: <a title="Boolean" id="2110">Boolean</a>, <a title="List[String]" id="57199">mainClasses</a>: <a title="List[String]" id="499">List</a>[String]) =
+	{
+		<a href="#57199" title="List[String]">mainClasses</a> <span title="Option[String]" class="keyword">match</span>
+		{
+			<span title="None.type" class="keyword">case</span> <span title="object Nil">Nil</span> =&gt; <span title="object None">None</span>
+			<span title="Some[String]" class="keyword">case</span> <a title="String" id="57201">head</a> <a id="1">::</a> <span title="object Nil">Nil</span> =&gt; <span title="(String)Some[String]">Some</span>(<a href="#57201" title="String">head</a>)
+			<span title="Option[String]" class="keyword">case</span> <a title="List[String]" id="57203">multiple</a> =&gt;
+				<span title="Option[String]" class="keyword">if</span>(<a href="#57198" title="Boolean">promptIfMultipleChoices</a>)
+				{
+					<span title="(Any)Unit">println</span>(<span title="java.lang.String(&quot;\012Multiple main classes detected, select one to run:\012&quot;)" class="string">&quot;\nMultiple main classes detected, select one to run:\n&quot;</span>)
+					<span class="keyword">for</span>( <a href="#57208" title="(((String, Int)) =&gt; Unit)Unit" id="15536">(</a><a title="String" id="57214">className</a>, <a title="Int" id="57215">index</a>) &lt;- <a href="#57203" title="List[String]">multiple</a>.<a title="=&gt; List[(String, Int)]" id="15557">zipWithIndex</a> )
+						<span title="(Any)Unit">println</span>(<span title="java.lang.String(&quot; [&quot;)" class="string">&quot; [&quot;</span> <span title="(Any)java.lang.String">+</span> (<a href="#57215" title="Int">index</a><a title="(Int)Int" id="3090">+</a><span title="Int(1)" class="int">1</span>) <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot;] &quot;)" class="string">&quot;] &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#57214" title="String">className</a>)
+					<span class="keyword">val</span> <a title="String" id="57204">line</a> = <a href="#57196" title="(Option[String])String">trim</a>(<a href="../LineReader.scala.html#9583" title="object sbt.SimpleReader">SimpleReader</a>.<a href="../LineReader.scala.html#57225" title="(String)Option[java.lang.String]">readLine</a>(<span title="java.lang.String(&quot;\012Enter number: &quot;)" class="string">&quot;\nEnter number: &quot;</span>))
+					<span title="(Any)Unit">println</span>(<span title="java.lang.String(&quot;&quot;)" class="string">&quot;&quot;</span>)
+					<a href="#57197" title="(String,Int)Option[Int]">toInt</a>(<a href="#57204" title="String">line</a>, <a href="#57203" title="List[String]">multiple</a>.<a title="=&gt; Int" id="15514">length</a>) <a title="((Int) =&gt; String)Option[String]" id="30331">map</a> <a href="#57203" title="List[String]">multiple</a>.<a href="#57552" title="(Int)String" id="15530">apply</a>
+				}
+				<span class="keyword">else</span>
+					<span title="object None">None</span>
+		}
+	}
+	<span class="keyword">private</span> <span class="keyword">def</span> <a title="(Option[String])String" id="57196">trim</a>(<a title="Option[String]" id="57218">s</a>: <a title="Option[String]" id="901">Option</a>[String]) = <a href="#57218" title="Option[String]">s</a>.<a title="(=&gt; String)String" id="30329">getOrElse</a>(<span title="java.lang.String(&quot;&quot;)" class="string">&quot;&quot;</span>)
+	<span class="keyword">private</span> <span class="keyword">def</span> <a title="(String,Int)Option[Int]" id="57197">toInt</a>(<a title="String" id="57508">s</a>: <a title="String" id="1804">String</a>, <a title="Int" id="57509">size</a>: <a title="Int" id="2346">Int</a>) =
+		<span class="keyword">try</span>
+		{
+			<span class="keyword">val</span> <a title="Int" id="57511">i</a> = <a href="#57508" title="implicit scala.Predef.stringWrapper : (String)scala.runtime.RichString" id="6615">s</a>.<a title="=&gt; Int" id="17327">toInt</a>
+			<span title="Option[Int]" class="keyword">if</span>(<a href="#57511" title="Int">i</a> <a title="(Int)Boolean" id="3088">&gt;</a> <span title="Int(0)" class="int">0</span> <a title="(Boolean)Boolean" id="2694">&amp;&amp;</a> <a href="#57511" title="Int">i</a> <a title="(Int)Boolean" id="3087">&lt;=</a> <a href="#57509" title="Int">size</a>)
+				<span title="(Int)Some[Int]">Some</span>(<a href="#57511" title="Int">i</a><a title="(Int)Int" id="3091">-</a><span title="Int(1)" class="int">1</span>)
+			<span class="keyword">else</span>
+			{
+				<span title="(Any)Unit">println</span>(<span title="java.lang.String(&quot;Number out of range: was &quot;)" class="string">&quot;Number out of range: was &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#57511" title="Int">i</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot;, expected number between 1 and &quot;)" class="string">&quot;, expected number between 1 and &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#57509" title="Int">size</a>)
+				<span title="object None">None</span>
+			}
+		}
+		<span class="keyword">catch</span>
+		{
+			<span title="None.type" class="keyword">case</span> <a title="NumberFormatException" id="57540">nfe</a>: <a title="NumberFormatException" id="2044">NumberFormatException</a> =&gt;
+				<span title="(Any)Unit">println</span>(<span title="java.lang.String(&quot;Invalid number: &quot;)" class="string">&quot;Invalid number: &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#57540" title="NumberFormatException">nfe</a>.<a title="()java.lang.String" id="17833">toString</a>)
+				<span title="object None">None</span>
+		}
+}
+        </pre>
+    </body>
+</html>
