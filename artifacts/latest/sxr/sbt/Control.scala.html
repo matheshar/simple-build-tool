@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+			<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" ></meta>
+        <title>sbt/Control.scala</title>
+        <script type="text/javascript" src="../jquery-all.js"></script>
+        <script type="text/javascript" src="../linked.js"></script>
+        <link rel="stylesheet" type="text/css" href="../style.css" title="Style"></link>
+    </head>
+    <body>
+        <pre>
+<span class="comment">/* sbt -- Simple Build Tool
+ * Copyright 2008, 2009 Mark Harrah
+ */</span>
+<span class="keyword">package</span> sbt
+
+<span class="comment">/** The trap methods execute the provided code in a try block and handle a thrown exception.*/</span>
+<span class="keyword">object</span> <a title="object sbt.Control" id="13546">Control</a>
+{
+	<span class="keyword">def</span> <a title="[T](=&gt; String,sbt.Logger)(=&gt; Either[String,T])Either[String,T]" id="50228">trap</a>[<a title="&gt;: Nothing &lt;: Any" id="50230">T</a>](<a title="=&gt; String" id="56897">errorMessagePrefix</a>: =&gt; String, <a title="sbt.Logger" id="56898">log</a>: <a href="Logger.scala.html#13533" title="sbt.Logger">Logger</a>)(<a title="=&gt; Either[String,T]" id="56899">execute</a>: =&gt; Either[String, T]): <span title="Either[String,T]">Either</span>[String, T] =
+		<span class="keyword">try</span> { <a href="#56899" title="=&gt; Either[String,T]">execute</a> }
+		<span class="keyword">catch</span> { <span title="Left[java.lang.String,Nothing]" class="keyword">case</span> <a title="java.lang.Throwable" id="56900">e</a> =&gt; <a href="#56898" title="sbt.Logger">log</a>.<a href="Logger.scala.html#49382" title="(=&gt; Throwable)Unit">trace</a>(<a href="#56900" title="java.lang.Throwable">e</a>); <span title="(java.lang.String)Left[java.lang.String,Nothing]">Left</span>(<a href="#56897" title="=&gt; String">errorMessagePrefix</a> <span title="(Any)java.lang.String">+</span> <a href="#56900" title="java.lang.Throwable">e</a>.<span title="()java.lang.String">toString</span>) }
+		
+	<span class="keyword">def</span> <a title="[T](=&gt; String,sbt.Logger)(=&gt; Either[String,T])(=&gt; Unit)Either[String,T]" id="50231">trapAndFinally</a>[<a title="&gt;: Nothing &lt;: Any" id="50233">T</a>](<a title="=&gt; String" id="56904">errorMessagePrefix</a>: =&gt; String, <a title="sbt.Logger" id="56905">log</a>: <a href="Logger.scala.html#13533" title="sbt.Logger">Logger</a>)(<a title="=&gt; Either[String,T]" id="56906">execute</a>: =&gt; Either[String, T])(<a title="=&gt; Unit" id="56907">doFinally</a>: =&gt; Unit): <span title="Either[String,T]">Either</span>[String, T] =
+		<span class="keyword">try</span> { <a href="#56906" title="=&gt; Either[String,T]">execute</a> }
+		<span class="keyword">catch</span> { <span title="Left[java.lang.String,Nothing]" class="keyword">case</span> <a title="java.lang.Throwable" id="56908">e</a> =&gt; <a href="#56905" title="sbt.Logger">log</a>.<a href="Logger.scala.html#49382" title="(=&gt; Throwable)Unit">trace</a>(<a href="#56908" title="java.lang.Throwable">e</a>); <span title="(java.lang.String)Left[java.lang.String,Nothing]">Left</span>(<a href="#56904" title="=&gt; String">errorMessagePrefix</a> <span title="(Any)java.lang.String">+</span> <a href="#56908" title="java.lang.Throwable">e</a>.<span title="()java.lang.String">toString</span>) }
+		<span class="keyword">finally</span> { <a href="#50237" title="(sbt.Logger)(=&gt; Unit)Unit">trapAndLog</a>(<a href="#56905" title="sbt.Logger">log</a>)(<a href="#56907" title="=&gt; Unit">doFinally</a>) }
+		
+	<span class="keyword">def</span> <a title="(=&gt; String,sbt.Logger)(=&gt; Option[String])Option[String]" id="50234">trapUnit</a>(<a title="=&gt; String" id="56914">errorMessagePrefix</a>: =&gt; String, <a title="sbt.Logger" id="56915">log</a>: <a href="Logger.scala.html#13533" title="sbt.Logger">Logger</a>)(<a title="=&gt; Option[String]" id="56916">execute</a>: =&gt; Option[String]): <span title="Option[String]">Option</span>[String] =
+		<span class="keyword">try</span> { <a href="#56916" title="=&gt; Option[String]">execute</a> }
+		<span class="keyword">catch</span> { <span title="Some[java.lang.String]" class="keyword">case</span> <a title="java.lang.Throwable" id="56917">e</a> =&gt; <a href="#56915" title="sbt.Logger">log</a>.<a href="Logger.scala.html#49382" title="(=&gt; Throwable)Unit">trace</a>(<a href="#56917" title="java.lang.Throwable">e</a>); <span title="(java.lang.String)Some[java.lang.String]">Some</span>(<a href="#56914" title="=&gt; String">errorMessagePrefix</a> <span title="(Any)java.lang.String">+</span> <a href="#56917" title="java.lang.Throwable">e</a>.<span title="()java.lang.String">toString</span>) }
+		
+	<span class="keyword">def</span> <a title="(=&gt; String,sbt.Logger)(=&gt; Option[String])(=&gt; Unit)Option[String]" id="50235">trapUnitAndFinally</a>(<a title="=&gt; String" id="56920">errorMessagePrefix</a>: =&gt; String, <a title="sbt.Logger" id="56921">log</a>: <a href="Logger.scala.html#13533" title="sbt.Logger">Logger</a>)(<a title="=&gt; Option[String]" id="56922">execute</a>: =&gt; Option[String])(<a title="=&gt; Unit" id="56923">doFinally</a>: =&gt; Unit): <span title="Option[String]">Option</span>[String] =
+		<span class="keyword">try</span> { <a href="#56922" title="=&gt; Option[String]">execute</a> }
+		<span class="keyword">catch</span> { <span title="Some[java.lang.String]" class="keyword">case</span> <a title="java.lang.Throwable" id="56924">e</a> =&gt; <a href="#56921" title="sbt.Logger">log</a>.<a href="Logger.scala.html#49382" title="(=&gt; Throwable)Unit">trace</a>(<a href="#56924" title="java.lang.Throwable">e</a>); <span title="(java.lang.String)Some[java.lang.String]">Some</span>(<a href="#56920" title="=&gt; String">errorMessagePrefix</a> <span title="(Any)java.lang.String">+</span> <a href="#56924" title="java.lang.Throwable">e</a>.<span title="()java.lang.String">toString</span>) }
+		<span class="keyword">finally</span> { <a href="#50237" title="(sbt.Logger)(=&gt; Unit)Unit">trapAndLog</a>(<a href="#56921" title="sbt.Logger">log</a>)(<a href="#56923" title="=&gt; Unit">doFinally</a>) }
+		
+	<span class="keyword">def</span> <a title="(=&gt; Unit)Unit" id="50236">trap</a>(<a title="=&gt; Unit" id="56927">execute</a>: =&gt; Unit)
+	{
+		<span class="keyword">try</span> { <a href="#56927" title="=&gt; Unit">execute</a> }
+		<span class="keyword">catch</span> { <span title="Unit" class="keyword">case</span> <a title="Exception" id="56928">e</a>: <span title="Exception">Exception</span> =&gt; <span title="Unit">(</span>) }
+	}
+	<span class="keyword">def</span> <a title="(sbt.Logger)(=&gt; Unit)Unit" id="50237">trapAndLog</a>(<a title="sbt.Logger" id="56912">log</a>: <a href="Logger.scala.html#13533" title="sbt.Logger">Logger</a>)(<a title="=&gt; Unit" id="56913">execute</a>: =&gt; Unit)
+	{
+		<span class="keyword">try</span> { <a href="#56913" title="=&gt; Unit">execute</a> }
+		<span class="keyword">catch</span> { <span title="Unit" class="keyword">case</span> <a title="java.lang.Throwable" id="56929">e</a> =&gt; <a href="#56912" title="sbt.Logger">log</a>.<a href="Logger.scala.html#49382" title="(=&gt; Throwable)Unit">trace</a>(<a href="#56929" title="java.lang.Throwable">e</a>); <a href="#56912" title="sbt.Logger">log</a>.<a href="Logger.scala.html#49387" title="(=&gt; String)Unit">error</a>(<a href="#56929" title="java.lang.Throwable">e</a>.<span title="()java.lang.String">toString</span>) }
+	}
+	<span class="keyword">def</span> <a title="[T](=&gt; T)Either[Exception,T]" id="50238">convertException</a>[<a title="&gt;: Nothing &lt;: Any" id="50240">T</a>](<a title="=&gt; T" id="56932">t</a>: =&gt; T): <span title="Either[Exception,T]">Either</span>[Exception, T] =
+	{
+		<span class="keyword">try</span> { <span title="(T)Right[Nothing,T]">Right</span>(<a href="#56932" title="=&gt; T">t</a>) }
+		<span class="keyword">catch</span> { <span title="Left[Exception,Nothing]" class="keyword">case</span> <a title="Exception" id="56935">e</a>: <span title="Exception">Exception</span> =&gt; <span title="(Exception)Left[Exception,Nothing]">Left</span>(<a href="#56935" title="Exception">e</a>) }
+	}
+	<span class="keyword">def</span> <a title="[T](sbt.Logger)(=&gt; T)Either[String,T]" id="50241">convertErrorMessage</a>[<a title="&gt;: Nothing &lt;: Any" id="50243">T</a>](<a title="sbt.Logger" id="56938">log</a>: <a href="Logger.scala.html#13533" title="sbt.Logger">Logger</a>)(<a title="=&gt; T" id="56939">t</a>: =&gt; T): <span title="Either[String,T]">Either</span>[String, T] =
+	{
+		<span class="keyword">try</span> { <span title="(T)Right[Nothing,T]">Right</span>(<a href="#56939" title="=&gt; T">t</a>) }
+		<span class="keyword">catch</span> { <span title="Left[java.lang.String,Nothing]" class="keyword">case</span> <a title="Exception" id="56942">e</a>: <span title="Exception">Exception</span> =&gt; <a href="#56938" title="sbt.Logger">log</a>.<a href="Logger.scala.html#49382" title="(=&gt; Throwable)Unit">trace</a>(<a href="#56942" title="Exception">e</a>); <span title="(java.lang.String)Left[java.lang.String,Nothing]">Left</span>(<a href="#56942" title="Exception">e</a>.<span title="()java.lang.String">toString</span>) }
+	}
+	
+	<span class="keyword">def</span> <a title="[T](Either[String,T])T" id="50244">getOrError</a>[<a title="&gt;: Nothing &lt;: Any" id="50246">T</a>](<a title="Either[String,T]" id="56946">result</a>: <span title="Either[String,T]">Either</span>[String, T]): <a href="#50246" title="T">T</a> = <a href="#56946" title="Either[String,T]">result</a>.<a title="((String) =&gt; T,(T) =&gt; T)T" id="50353">fold</a>(<a href="#56949" title="(String)Nothing" id="791">error</a>, <a title="T" id="56951">x</a>=&gt;<a href="#56951" title="T">x</a>)
+	<span class="keyword">final</span> <span class="keyword">def</span> <a title="[T](List[T])((T) =&gt; Option[String])Option[String]" id="50247">lazyFold</a>[<a title="&gt;: Nothing &lt;: Any" id="50249">T</a>](<a title="List[T]" id="50360">list</a>: <span title="List[T]">List</span>[T])(<a title="(T) =&gt; Option[String]" id="50361">f</a>: T =&gt; Option[String]): <span title="Option[String]">Option</span>[String] =
+		<a href="#50360" title="List[T]">list</a> <span title="Option[String]" class="keyword">match</span>
+		{
+			<span title="None.type" class="keyword">case</span> <span title="object Nil">Nil</span> =&gt; <span title="object None">None</span>
+			<span title="Option[String]" class="keyword">case</span> <a title="T" id="56952">head</a> :: <a title="List[T]" id="56953">tail</a> =&gt;
+				<a href="#50361" title="(T)Option[String]">f</a>(<a href="#56952" title="T">head</a>) <span title="Option[String]" class="keyword">match</span>
+				{
+					<span title="Option[String]" class="keyword">case</span> <span title="object None">None</span> =&gt; <a href="#50247" title="(List[T])((T) =&gt; Option[String])Option[String]">lazyFold</a>(<a href="#56953" title="List[T]">tail</a>)(<a href="#50361" title="(T) =&gt; Option[String]">f</a>)
+					<span title="Option[String]" class="keyword">case</span> <a title="Option[String]" id="56959">x</a> =&gt; <a href="#56959" title="Option[String]">x</a>
+				}
+		}
+	<span class="keyword">final</span> <span class="keyword">def</span> <a title="[T, S](List[T],S)((S, T) =&gt; Either[String,S])Either[String,S]" id="50250">lazyFold</a>[<a title="&gt;: Nothing &lt;: Any" id="50253">T</a>, <a title="&gt;: Nothing &lt;: Any" id="50254">S</a>](<a title="List[T]" id="50259">list</a>: <span title="List[T]">List</span>[T], <a title="S" id="50260">value</a>: <a href="#50254" title="S">S</a>)(<a title="(S, T) =&gt; Either[String,S]" id="50261">f</a>: (S,T) =&gt; Either[String, S]): <span title="Either[String,S]">Either</span>[String, S] =
+		<a href="#50259" title="List[T]">list</a> <span title="Either[String,S]" class="keyword">match</span>
+		{
+			<span title="Right[Nothing,S]" class="keyword">case</span> <span title="object Nil">Nil</span> =&gt; <span title="(S)Right[Nothing,S]">Right</span>(<a href="#50260" title="S">value</a>)
+			<span title="Either[String,S]" class="keyword">case</span> <a title="T" id="56962">head</a> :: <a title="List[T]" id="56963">tail</a> =&gt;
+				<a href="#50261" title="(S,T)Either[String,S]" id="19598">f</a>(<a href="#50260" title="S">value</a>, <a href="#56962" title="T">head</a>) <span title="Either[String,S]" class="keyword">match</span>
+				{
+					<span title="Either[String,S]" class="keyword">case</span> Right(<a title="S" id="56964">newValue</a>) =&gt; <a href="#50250" title="(List[T],S)((S, T) =&gt; Either[String,S])Either[String,S]">lazyFold</a>(<a href="#56963" title="List[T]">tail</a>, <a href="#56964" title="S">newValue</a>)(<a href="#50261" title="(S, T) =&gt; Either[String,S]">f</a>)
+					<span title="Either[String,S]" class="keyword">case</span> <a title="Either[String,S]" id="56982">x</a> =&gt; <a href="#56982" title="Either[String,S]">x</a>
+				}
+		}
+	<span class="keyword">def</span> <a title="[T](Either[String,T])((T) =&gt; Option[String])Option[String]" id="50255">thread</a>[<a title="&gt;: Nothing &lt;: Any" id="50257">T</a>](<a title="Either[String,T]" id="54517">e</a>: <span title="Either[String,T]">Either</span>[String, T])(<a title="(T) =&gt; Option[String]" id="54518">f</a>: T =&gt; Option[String]): <span title="Option[String]">Option</span>[String] =
+		<a href="#54517" title="Either[String,T]">e</a>.<a title="=&gt; Either.RightProjection[String,T]" id="50352">right</a>.<a title="((T) =&gt; Either[String,Unit])Either[String,Unit]" id="50316">flatMap</a>( <a title="T" id="56988">t</a> =&gt; <a href="#54518" title="(T)Option[String]">f</a>(<a href="#56988" title="T">t</a>).<a title="(=&gt; Unit)Either[String,Unit] with Product" id="30343">toLeft</a>(<span title="Unit">(</span>)) ).<a title="=&gt; Either.LeftProjection[String,Unit]" id="50265">left</a>.<a title="=&gt; Option[String]" id="50287">toOption</a>
+}
+        </pre>
+    </body>
+</html>

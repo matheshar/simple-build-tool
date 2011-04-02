@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+			<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" ></meta>
+        <title>sbt/IntegrationTesting.scala</title>
+        <script type="text/javascript" src="../jquery-all.js"></script>
+        <script type="text/javascript" src="../linked.js"></script>
+        <link rel="stylesheet" type="text/css" href="../style.css" title="Style"></link>
+    </head>
+    <body>
+        <pre>
+<span class="comment">/* sbt -- Simple Build Tool
+ * Copyright 2009  Steven Blundy, Mark Harrah, Josh Cough
+ */</span>
+<span class="keyword">package</span> sbt
+
+<span class="keyword">import</span> ScalaProject.{optionsAsString, javaOptionsAsString}
+
+<span class="keyword">trait</span> <a title="trait IntegrationTesting extends java.lang.Object with NotNull with ScalaObject" id="9267">IntegrationTesting</a> <span class="keyword">extends</span> <a title="NotNull" id="193">NotNull</a>
+{
+	<span class="comment">/** Override to provide pre-test setup. */</span>
+	<span class="keyword">protected</span> <span class="keyword">def</span> <a title="=&gt; Option[String]" id="63469">pretests</a>: <span title="Option[String]">Option</span>[String] = <span title="object None">None</span>
+	<span class="comment">/** Override to provide post-test cleanup. */</span>
+	<span class="keyword">protected</span> <span class="keyword">def</span> <a title="=&gt; Option[String]" id="63470">posttests</a>: <span title="Option[String]">Option</span>[String] = <span title="object None">None</span>
+}
+<span class="keyword">trait</span> <a title="trait ScalaIntegrationTesting extends java.lang.Object with sbt.IntegrationTesting with ScalaObject" id="9594">ScalaIntegrationTesting</a> <span class="keyword">extends</span> <a href="#9267" title="sbt.IntegrationTesting">IntegrationTesting</a>
+{ self: ScalaProject =&gt;
+
+	<span class="keyword">protected</span> <span class="keyword">def</span> <a title="(Seq[sbt.TestFramework],sbt.PathFinder,sbt.CompileAnalysis,=&gt; Seq[ScalaIntegrationTesting.this.TestOption])ScalaIntegrationTesting.this.Task" id="63477">integrationTestTask</a>(<a title="Seq[sbt.TestFramework]" id="63481">frameworks</a>: <span title="Seq[sbt.TestFramework]">Seq</span>[TestFramework], <a title="sbt.PathFinder" id="63482">classpath</a>: <a href="Path.scala.html#10419" title="sbt.PathFinder">PathFinder</a>, <a title="sbt.CompileAnalysis" id="63483">analysis</a>: <a href="Analysis.scala.html#8628" title="sbt.CompileAnalysis">CompileAnalysis</a>, <a title="=&gt; Seq[ScalaIntegrationTesting.this.TestOption]" id="63484">options</a>: =&gt; Seq[TestOption]) =
+		<a href="ScalaProject.scala.html#51053" title="(Seq[sbt.TestFramework],sbt.PathFinder,sbt.CompileAnalysis,=&gt; Seq[ScalaIntegrationTesting.this.TestOption])ScalaIntegrationTesting.this.Task">testTask</a>(<a href="#63481" title="Seq[sbt.TestFramework]">frameworks</a>, <a href="#63482" title="sbt.PathFinder">classpath</a>, <a href="#63483" title="sbt.CompileAnalysis">analysis</a>, <a href="#63484" title="=&gt; Seq[ScalaIntegrationTesting.this.TestOption]">options</a>)
+}
+
+<span class="keyword">trait</span> <a title="trait BasicScalaIntegrationTesting extends java.lang.Object with sbt.BasicIntegrationTesting with sbt.MavenStyleIntegrationTestPaths" id="12498">BasicScalaIntegrationTesting</a> <span class="keyword">extends</span> <a href="#9174" title="sbt.BasicIntegrationTesting">BasicIntegrationTesting</a> <span class="keyword">with</span> <a href="ProjectPaths.scala.html#13527" title="sbt.MavenStyleIntegrationTestPaths">MavenStyleIntegrationTestPaths</a>
+{ self: BasicScalaProject =&gt; }
+<span class="comment">/** A fully featured integration testing that may be mixed in with any subclass of &lt;code&gt;BasicScalaProject&lt;/code&gt;.
+ * Pre-suite setup and post-suite cleanup are provide by overriding &lt;code&gt;pretests&lt;/code&gt; and &lt;code&gt;posttests&lt;/code&gt; respectively.*/</span>
+<span class="keyword">trait</span> <a title="trait BasicIntegrationTesting extends java.lang.Object with sbt.ScalaIntegrationTesting with sbt.IntegrationTestPaths with sbt.BasicDependencyProject with ScalaObject" id="9174">BasicIntegrationTesting</a> <span class="keyword">extends</span> <a href="#9594" title="sbt.ScalaIntegrationTesting">ScalaIntegrationTesting</a> <span class="keyword">with</span> <a href="ProjectPaths.scala.html#10590" title="sbt.IntegrationTestPaths">IntegrationTestPaths</a> <span class="keyword">with</span> <a href="BasicProjectTypes.scala.html#12786" title="sbt.BasicDependencyProject">BasicDependencyProject</a>
+{
+	self: BasicScalaProject =&gt;
+
+	<span class="keyword">import</span> BasicScalaIntegrationTesting._
+
+	<span class="keyword">lazy</span> <span class="keyword">val</span> <a title="BasicIntegrationTesting.this.Task" id="63491">integrationTestCompile</a> = <a href="#63497" title="=&gt; BasicIntegrationTesting.this.Task">integrationTestCompileAction</a>
+	<span class="keyword">lazy</span> <span class="keyword">val</span> <a title="BasicIntegrationTesting.this.Task" id="63493">integrationTest</a> = <a href="#63496" title="=&gt; BasicIntegrationTesting.this.Task">integrationTestAction</a>
+
+	<span class="keyword">val</span> <a title="sbt.CompileConditional" id="63494">integrationTestCompileConditional</a> = <span title="sbt.CompileConditional" class="keyword">new</span> <a href="Conditional.scala.html#9678" title="sbt.CompileConditional">CompileConditional</a>(<a href="#63505" title="=&gt; BasicIntegrationTesting.this.IntegrationTestCompileConfig">integrationTestCompileConfiguration</a>, <a href="Project.scala.html#50937" title="=&gt; xsbt.AnalyzingCompiler">buildCompiler</a>)
+
+	<span class="keyword">protected</span> <span class="keyword">def</span> <a title="=&gt; BasicIntegrationTesting.this.Task" id="63496">integrationTestAction</a> = <a href="#63477" title="(Seq[sbt.TestFramework],sbt.PathFinder,sbt.CompileAnalysis,=&gt; Seq[BasicIntegrationTesting.this.TestOption])BasicIntegrationTesting.this.Task">integrationTestTask</a>(<a href="#63507" title="=&gt; Seq[sbt.TestFramework]">integrationTestFrameworks</a>, <a href="#63503" title="=&gt; sbt.PathFinder">integrationTestClasspath</a>, <a href="#63494" title="=&gt; sbt.CompileConditional">integrationTestCompileConditional</a>.<a href="Conditional.scala.html#53726" title="=&gt; BasicIntegrationTesting.this.integrationTestCompileConditional.AnalysisType">analysis</a>, <a href="#63499" title="=&gt; Seq[BasicIntegrationTesting.this.TestOption]">integrationTestOptions</a>) <a href="TaskManager.scala.html#52218" title="(BasicIntegrationTesting.this.ManagedTask*)BasicIntegrationTesting.this.Task">dependsOn</a> <a href="#63490" title="=&gt; BasicIntegrationTesting.this.Task">integrationTestCompile</a> <a href="TaskManager.scala.html#52220" title="(String)BasicIntegrationTesting.this.Task">describedAs</a> <a href="#63538" title="=&gt; java.lang.String">IntegrationTestCompileDescription</a>
+	<span class="keyword">protected</span> <span class="keyword">def</span> <a title="=&gt; BasicIntegrationTesting.this.Task" id="63497">integrationTestCompileAction</a> = <a href="#63498" title="()BasicIntegrationTesting.this.Task">integrationTestCompileTask</a>() <a href="TaskManager.scala.html#52218" title="(BasicIntegrationTesting.this.ManagedTask*)BasicIntegrationTesting.this.Task">dependsOn</a> <a href="DefaultProject.scala.html#51173" title="=&gt; BasicIntegrationTesting.this.Task">compile</a> <a href="TaskManager.scala.html#52220" title="(String)BasicIntegrationTesting.this.Task">describedAs</a> <a href="#63540" title="=&gt; java.lang.String">IntegrationTestDescription</a>
+
+	<span class="keyword">protected</span> <span class="keyword">def</span> <a title="()BasicIntegrationTesting.this.Task" id="63498">integrationTestCompileTask</a>() = <a href="TaskManager.scala.html#50837" title="(=&gt; Option[String])BasicIntegrationTesting.this.Task">task</a>{ <a href="#63494" title="=&gt; sbt.CompileConditional">integrationTestCompileConditional</a>.<a href="Conditional.scala.html#53743" title="=&gt; Option[String]">run</a> }
+
+	<span class="keyword">def</span> <a title="=&gt; Seq[BasicIntegrationTesting.this.TestOption]" id="63499">integrationTestOptions</a>: <span title="Seq[BasicIntegrationTesting.this.TestOption]">Seq</span>[TestOption] =
+		<a href="ScalaProject.scala.html#63572" title="(() =&gt; Option[String])BasicIntegrationTesting.this.TestSetup">TestSetup</a>(() =&gt; <a href="#63469" title="=&gt; Option[String]">pretests</a>) <a href="#63570" title="(BasicIntegrationTesting.this.TestOption)List[BasicIntegrationTesting.this.TestOption]">::</a>
+		<a href="ScalaProject.scala.html#63598" title="(() =&gt; Option[String])BasicIntegrationTesting.this.TestCleanup">TestCleanup</a>(() =&gt; <a href="#63470" title="=&gt; Option[String]">posttests</a>) <a href="#63596" title="(BasicIntegrationTesting.this.TestOption)List[BasicIntegrationTesting.this.TestOption]">::</a>
+		<a href="DefaultProject.scala.html#51099" title="=&gt; Seq[BasicIntegrationTesting.this.TestOption]">testOptions</a>.<a title="=&gt; List[BasicIntegrationTesting.this.TestOption]" id="15975">toList</a>
+	<span class="keyword">def</span> <a title="=&gt; Seq[BasicIntegrationTesting.this.CompileOption]" id="63500">integrationTestCompileOptions</a> = <a href="DefaultProject.scala.html#51095" title="=&gt; Seq[BasicIntegrationTesting.this.CompileOption]">testCompileOptions</a>
+	<span class="keyword">def</span> <a title="=&gt; Seq[BasicIntegrationTesting.this.JavaCompileOption]" id="63501">javaIntegrationTestCompileOptions</a>: <span title="Seq[BasicIntegrationTesting.this.JavaCompileOption]">Seq</span>[JavaCompileOption] = <a href="DefaultProject.scala.html#51096" title="=&gt; Seq[BasicIntegrationTesting.this.JavaCompileOption]">testJavaCompileOptions</a>
+
+	<span class="keyword">def</span> <a title="=&gt; sbt.Configuration" id="63502">integrationTestConfiguration</a> = <span title="sbt.Configuration" class="keyword">if</span>(<a href="#63508" title="=&gt; Boolean">useIntegrationTestConfiguration</a>) <a href="../IvyInterface.scala.html#10978" title="object sbt.Configurations">Configurations</a>.<a href="../IvyInterface.scala.html#44680" title="=&gt; sbt.Configuration">IntegrationTest</a> <span class="keyword">else</span> <a href="../IvyInterface.scala.html#10978" title="object sbt.Configurations">Configurations</a>.<a href="../IvyInterface.scala.html#44688" title="=&gt; sbt.Configuration">Test</a>
+	<span class="keyword">def</span> <a title="=&gt; sbt.PathFinder" id="63503">integrationTestClasspath</a> = <a href="BasicProjectTypes.scala.html#51358" title="(sbt.Configuration)sbt.PathFinder">fullClasspath</a>(<a href="#63502" title="=&gt; sbt.Configuration">integrationTestConfiguration</a>) <a href="Path.scala.html#49326" title="(sbt.PathFinder)sbt.PathFinder">+++</a> <a href="DefaultProject.scala.html#51114" title="=&gt; sbt.PathFinder">optionalClasspath</a>
+
+	<span class="keyword">def</span> <a title="=&gt; java.lang.String" id="63504">integrationTestLabel</a> = <span title="java.lang.String(&quot;integration-test&quot;)" class="string">&quot;integration-test&quot;</span>
+	<span class="keyword">def</span> <a title="=&gt; BasicIntegrationTesting.this.IntegrationTestCompileConfig" id="63505">integrationTestCompileConfiguration</a> = <span title="BasicIntegrationTesting.this.IntegrationTestCompileConfig" class="keyword">new</span> <a href="#63511" title="BasicIntegrationTesting.this.IntegrationTestCompileConfig">IntegrationTestCompileConfig</a>
+
+	<span class="keyword">protected</span> <span class="keyword">def</span> <a title="=&gt; sbt.LibraryDependencies" id="63506">integrationTestDependencies</a> = <span title="sbt.LibraryDependencies" class="keyword">new</span> <a href="DefaultProject.scala.html#12420" title="sbt.LibraryDependencies">LibraryDependencies</a>(<a href="#9174" title="&lt;refinement&gt; extends sbt.BasicIntegrationTesting with sbt.BasicScalaProject" class="keyword">this</a>, <a href="#63494" title="=&gt; sbt.CompileConditional">integrationTestCompileConditional</a>)
+
+	<span class="keyword">def</span> <a title="=&gt; Seq[sbt.TestFramework]" id="63507">integrationTestFrameworks</a> = <a href="DefaultProject.scala.html#51124" title="=&gt; Seq[sbt.TestFramework]">testFrameworks</a>
+	<span class="keyword">override</span> <span class="keyword">def</span> <a title="=&gt; Boolean" id="63508">useIntegrationTestConfiguration</a> = <span title="Boolean(false)" class="keyword">false</span>
+	<span class="keyword">abstract</span> <span class="keyword">override</span> <span class="keyword">def</span> <a title="=&gt; List[sbt.Configuration]" id="63509">extraDefaultConfigurations</a> =
+	{
+		<span class="keyword">val</span> <a title="List[sbt.Configuration]" id="63633">superConfigurations</a> = <span class="keyword">super</span>.<a href="BasicProjectTypes.scala.html#51404" title="=&gt; List[sbt.Configuration]">extraDefaultConfigurations</a>
+		<span title="List[sbt.Configuration]" class="keyword">if</span>(<a href="#63508" title="=&gt; Boolean">useIntegrationTestConfiguration</a>)
+			<a href="#63502" title="=&gt; sbt.Configuration">integrationTestConfiguration</a> <a href="#63635" title="(sbt.Configuration)List[sbt.Configuration]">::</a> <a href="#63633" title="List[sbt.Configuration]">superConfigurations</a>
+		<span class="keyword">else</span>
+			<a href="#63633" title="List[sbt.Configuration]">superConfigurations</a>
+	}
+	<span class="keyword">abstract</span> <span class="keyword">override</span> <span class="keyword">def</span> <a title="(sbt.Configuration)sbt.PathFinder" id="63510">fullUnmanagedClasspath</a>(<a title="sbt.Configuration" id="63638">config</a>: <a href="../IvyInterface.scala.html#13320" title="sbt.Configuration">Configuration</a>) =
+	{
+		<span class="keyword">val</span> <a title="sbt.PathFinder" id="63640">superClasspath</a> = <span class="keyword">super</span>.<a href="BasicProjectTypes.scala.html#51510" title="(sbt.Configuration)sbt.PathFinder">fullUnmanagedClasspath</a>(<a href="#63638" title="sbt.Configuration">config</a>)
+		<span title="sbt.PathFinder" class="keyword">if</span>(<a href="#63638" title="sbt.Configuration">config</a> <a title="(AnyRef)Boolean" id="3452">==</a> <a href="#63502" title="=&gt; sbt.Configuration">integrationTestConfiguration</a>)
+			<a href="ProjectPaths.scala.html#63517" title="=&gt; sbt.Path">integrationTestCompilePath</a> <a href="Path.scala.html#49326" title="(sbt.PathFinder)sbt.PathFinder">+++</a> <a href="ProjectPaths.scala.html#63516" title="=&gt; sbt.Path">integrationTestResourcesPath</a> <a href="Path.scala.html#49326" title="(sbt.PathFinder)sbt.PathFinder">+++</a> <a href="#63640" title="sbt.PathFinder">superClasspath</a>
+		<span class="keyword">else</span>
+			<a href="#63640" title="sbt.PathFinder">superClasspath</a>
+	}
+
+	<span class="keyword">class</span> <a title="class IntegrationTestCompileConfig extends BasicIntegrationTesting.this.BaseCompileConfig with ScalaObject" id="63511">IntegrationTestCompileConfig</a> <span class="keyword">extends</span> <a href="DefaultProject.scala.html#51130" title="BasicIntegrationTesting.this.BaseCompileConfig">BaseCompileConfig</a>
+	{
+		<span class="keyword">def</span> <a title="=&gt; java.lang.String" id="63545">label</a> = <a href="#63504" title="=&gt; java.lang.String">integrationTestLabel</a>
+		<span class="keyword">def</span> <a title="=&gt; sbt.PathFinder" id="63546">sourceRoots</a> = <a href="ProjectPaths.scala.html#63515" title="=&gt; sbt.PathFinder">integrationTestScalaSourceRoots</a>
+		<span class="keyword">def</span> <a title="=&gt; sbt.PathFinder" id="63547">sources</a> = <a href="ProjectPaths.scala.html#63514" title="=&gt; sbt.PathFinder">integrationTestSources</a>
+		<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="63548">outputDirectory</a> = <a href="ProjectPaths.scala.html#63517" title="=&gt; sbt.Path">integrationTestCompilePath</a>
+		<span class="keyword">def</span> <a title="=&gt; sbt.PathFinder" id="63549">classpath</a> = <a href="#63503" title="=&gt; sbt.PathFinder">integrationTestClasspath</a>
+		<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="63550">analysisPath</a> = <a href="ProjectPaths.scala.html#63518" title="=&gt; sbt.Path">integrationTestAnalysisPath</a>
+		<span class="keyword">def</span> <a title="=&gt; Seq[BasicIntegrationTesting.this.CompileOption]" id="63551">baseCompileOptions</a> = <a href="#63500" title="=&gt; Seq[BasicIntegrationTesting.this.CompileOption]">integrationTestCompileOptions</a>
+		<span class="keyword">def</span> <a title="=&gt; Seq[String]" id="63552">javaOptions</a> = <a href="ScalaProject.scala.html#51657" title="(Seq[sbt.ScalaProject#JavaCompileOption])Seq[String]">javaOptionsAsString</a>(<a href="DefaultProject.scala.html#51094" title="=&gt; Seq[BasicIntegrationTesting.this.JavaCompileOption]">javaCompileOptions</a>)
+		<span class="keyword">def</span> <a title="=&gt; sbt.Fingerprints" id="63553">fingerprints</a> = <a href="DefaultProject.scala.html#58084" title="(Seq[sbt.TestFramework])sbt.Fingerprints">getFingerprints</a>(<a href="#63507" title="=&gt; Seq[sbt.TestFramework]">integrationTestFrameworks</a>)
+	}
+}
+
+<span class="keyword">object</span> <a title="object sbt.BasicScalaIntegrationTesting" id="12499">BasicScalaIntegrationTesting</a>
+{
+	<span class="keyword">val</span> <a title="java.lang.String" id="63538">IntegrationTestCompileDescription</a> = <span title="java.lang.String(&quot;Compiles integration test sources.&quot;)" class="string">&quot;Compiles integration test sources.&quot;</span>
+	<span class="keyword">val</span> <a title="java.lang.String" id="63540">IntegrationTestDescription</a> = <span title="java.lang.String(&quot;Runs all integration tests detected during compilation.&quot;)" class="string">&quot;Runs all integration tests detected during compilation.&quot;</span>
+}
+
+        </pre>
+    </body>
+</html>
