@@ -97,6 +97,12 @@ or if no keyfile password is required or if you want to be prompted for it:
   val sshRepo = Resolver.ssh("my-ssh-repo", "example.org") as("user", keyFile)
 }}}
 
+To specify the permissions used when publishing to the server:
+{{{
+  val sshRepo = Resolver.ssh("my-ssh-repo", "example.org") withPermissions("0644")
+}}}
+This is a chmod-like mode specification.
+
 == Custom Layout ==
 
 These examples specify custom repository layouts using patterns.  The factory methods accept an implicit `Patterns` instance that defines the patterns to use.  The patterns are first resolved against the base file or URL.  The implicit normally supplied gives the default Maven-style layout.  Provide a different Patterns object to use a different layout.  For example:
