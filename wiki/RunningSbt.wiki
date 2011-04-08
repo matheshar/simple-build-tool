@@ -186,11 +186,11 @@ scala>
   Show all previous commands.
  * `!:n`
   Show the last n commands.
-  * `!n`
+ * `!n`
   Execute the command with index `n`, as shown by the `!:` command.
-  * `!-n`
+ * `!-n`
   Execute the nth command before this one.
-  * `!string`
+ * `!string`
   Execute the most recent command starting with 'string'
-  * `!?string`
+ * `!?string`
   Execute the most recent command containing 'string'
