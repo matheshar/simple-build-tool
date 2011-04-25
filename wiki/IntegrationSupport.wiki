@@ -49,6 +49,10 @@ sbt plugin/processor: [https://github.com/mpeltonen/sbt-idea]
 
 IDEA plugin: [http://plugins.intellij.net/plugin/?idea&id=5007]
 
+= Netbeans =
+
+[https://github.com/remeniuk/sbt-netbeans-plugin]
+
 = Eclipse =
 
 There are currently three options for Eclipse integration.
