@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+			<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" ></meta>
+        <title>sbt/processor/Info.scala</title>
+        <script type="text/javascript" src="../../jquery-all.js"></script>
+        <script type="text/javascript" src="../../linked.js"></script>
+        <link rel="stylesheet" type="text/css" href="../../style.css" title="Style"></link>
+    </head>
+    <body>
+        <pre>
+<span class="comment">/* sbt -- Simple Build Tool
+ * Copyright 2010  Mark Harrah
+ */</span>
+<span class="keyword">package</span> sbt.processor
+
+<span class="keyword">class</span> <a title="class InfoImpl extends java.lang.Object with sbt.processor.Info with ScalaObject" id="14948">InfoImpl</a>(<a title="sbt.processor.Manager" id="90578">manager</a>: <a href="Processor.scala.html#14798" title="sbt.processor.Manager">Manager</a>, <a title="String" id="90579">prefix</a>: <a title="String" id="1800">String</a>, <a title="sbt.processor.CommandParser" id="90580">parser</a>: <a href="Parser.scala.html#14900" title="sbt.processor.CommandParser">CommandParser</a>, <a title="(String) =&gt; Unit" id="90581">print</a>: String =&gt; Unit) <span class="keyword">extends</span> <a href="Processor.scala.html#14855" title="sbt.processor.Info">Info</a>
+{
+	<span class="keyword">def</span> <a title="()Unit" id="90576">show</a>()
+	{
+		<a href="#90581" title="(String)Unit">print</a>(<span title="java.lang.String(&quot;Processors:\012\011&quot;)" class="string">&quot;Processors:\n\t&quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#90578" title="sbt.processor.Manager">manager</a>.<a href="Processor.scala.html#69641" title="=&gt; Map[String,sbt.processor.ProcessorDefinition]">processors</a>.<span title="=&gt; Iterator[sbt.processor.ProcessorDefinition]">values</span>.<span title="(String)String">mkString</span>(<span title="java.lang.String(&quot;\012\011&quot;)" class="string">&quot;\n\t&quot;</span>))
+		<a href="#90581" title="(String)Unit">print</a>(<span title="java.lang.String(&quot;\012Processor repositories:\012\011&quot;)" class="string">&quot;\nProcessor repositories:\n\t&quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#90578" title="sbt.processor.Manager">manager</a>.<a href="Processor.scala.html#69642" title="=&gt; Map[String,sbt.processor.RepositoryDefinition]">repositories</a>.<span title="=&gt; Iterator[sbt.processor.RepositoryDefinition]">values</span>.<span title="(String)String">mkString</span>(<span title="java.lang.String(&quot;\012\011&quot;)" class="string">&quot;\n\t&quot;</span>))
+	}
+	<span class="keyword">def</span> <a title="()Unit" id="90577">help</a>()
+	{
+		<span class="keyword">import</span> parser.{ShowCommand, HelpCommand, ProcessorCommand, RemoveCommand, RepositoryCommand}
+		<span class="keyword">val</span> <a title="List[(java.lang.String, java.lang.String)]" id="90708">usage</a> =
+			(<a href="Parser.scala.html#90551" title="(java.lang.String)ArrowAssoc[java.lang.String]">HelpCommand</a> <span title="(java.lang.String)(java.lang.String, java.lang.String)">-&gt;</span> <span title="java.lang.String(&quot;Display this help message&quot;)" class="string">&quot;Display this help message&quot;</span>) <a href="#90709" title="((java.lang.String, java.lang.String))List[(java.lang.String, java.lang.String)]">::</a>
+			(<a href="Parser.scala.html#90549" title="(java.lang.String)ArrowAssoc[java.lang.String]">ShowCommand</a> <span title="(java.lang.String)(java.lang.String, java.lang.String)">-&gt;</span> <span title="java.lang.String(&quot;Display defined processors and repositories&quot;)" class="string">&quot;Display defined processors and repositories&quot;</span>) <a href="#90722" title="((java.lang.String, java.lang.String))List[(java.lang.String, java.lang.String)]">::</a>
+			(<a href="Parser.scala.html#90553" title="(java.lang.String)ArrowAssoc[java.lang.String]">ProcessorCommand</a> <span title="(java.lang.String)(java.lang.String, java.lang.String)">-&gt;</span> <span title="java.lang.String(&quot;Define 'label' to be the processor with the given ID&quot;)" class="string">&quot;Define 'label' to be the processor with the given ID&quot;</span>) <a href="#90734" title="((java.lang.String, java.lang.String))List[(java.lang.String, java.lang.String)]">::</a>
+			(<a href="Parser.scala.html#90555" title="(java.lang.String)ArrowAssoc[java.lang.String]">RepositoryCommand</a> <span title="(java.lang.String)(java.lang.String, java.lang.String)">-&gt;</span> <span title="java.lang.String(&quot;Add a repository for searching for processors&quot;)" class="string">&quot;Add a repository for searching for processors&quot;</span>) <a href="#90746" title="((java.lang.String, java.lang.String))List[(java.lang.String, java.lang.String)]">::</a>
+			(<a href="Parser.scala.html#90557" title="(java.lang.String)ArrowAssoc[java.lang.String]">RemoveCommand</a> <span title="(java.lang.String)(java.lang.String, java.lang.String)">-&gt;</span> <span title="java.lang.String(&quot;Undefine the repository or processor with the given 'label'&quot;)" class="string">&quot;Undefine the repository or processor with the given 'label'&quot;</span>) <a href="#90758" title="((java.lang.String, java.lang.String))List[(java.lang.String, java.lang.String)]">::</a>
+			<a title="object Nil" id="310">Nil</a>
+		
+		<a href="#90581" title="(String)Unit">print</a>(<span title="java.lang.String(&quot;Processor management commands:\012   &quot;)" class="string">&quot;Processor management commands:\n   &quot;</span> <span title="(Any)java.lang.String">+</span> (<a href="#90708" title="List[(java.lang.String, java.lang.String)]">usage</a>.<a title="(((java.lang.String, java.lang.String)) =&gt; java.lang.String)List[java.lang.String]" id="15727">map</a><a href="#90782" title="java.lang.String">{</a> <span title="java.lang.String" class="keyword">case</span> <a id="1">(</a><a title="java.lang.String" id="90783">c</a>,<a title="java.lang.String" id="90784">d</a>) =&gt; <a href="#90579" title="String">prefix</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot;&quot;)" class="string">&quot;&quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#90783" title="java.lang.String">c</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot;    &quot;)" class="string">&quot;    &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#90784" title="java.lang.String">d</a>}).<a title="(String)String" id="16175">mkString</a>(<span title="java.lang.String(&quot;\012   &quot;)" class="string">&quot;\n   &quot;</span>))
+	}
+}
+        </pre>
+    </body>
+</html>

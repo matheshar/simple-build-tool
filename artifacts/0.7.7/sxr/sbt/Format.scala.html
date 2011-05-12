@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+			<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" ></meta>
+        <title>sbt/Format.scala</title>
+        <script type="text/javascript" src="../jquery-all.js"></script>
+        <script type="text/javascript" src="../linked.js"></script>
+        <link rel="stylesheet" type="text/css" href="../style.css" title="Style"></link>
+    </head>
+    <body>
+        <pre>
+<span class="comment">/* sbt -- Simple Build Tool
+ * Copyright 2008 Mark Harrah, David MacIver
+ */</span>
+<span class="keyword">package</span> sbt
+
+<span class="keyword">import</span> java.io.File
+<span class="keyword">import</span> scala.collection.mutable.{HashSet, Set}
+
+<span class="keyword">trait</span> <a title="trait Format[T] extends java.lang.Object with NotNull" id="11438">Format</a>[<a title="&gt;: Nothing &lt;: Any" id="14016">T</a>] <span class="keyword">extends</span> <a title="NotNull" id="189">NotNull</a>
+{
+	<span class="keyword">def</span> <a title="(T)String" id="52138">toString</a>(<a title="T" id="62943">t</a>: <a href="#14016" title="T">T</a>): <span title="String">String</span>
+	<span class="keyword">def</span> <a title="(String)T" id="52139">fromString</a>(<a title="String" id="62671">s</a>: <span title="String">String</span>): <a href="#14016" title="T">T</a>
+}
+<span class="keyword">abstract</span> <span class="keyword">class</span> <a title="class SimpleFormat[T] extends java.lang.Object with sbt.Format[T] with ScalaObject" id="12239">SimpleFormat</a>[<a title="&gt;: Nothing &lt;: Any" id="14017">T</a>] <span class="keyword">extends</span> <a href="#11438" title="sbt.Format[T]">Format</a>[T]
+{
+	<span class="keyword">def</span> <a title="(T)java.lang.String" id="62666">toString</a>(<a title="T" id="66073">t</a>: <a href="#14017" title="T">T</a>) = <a href="#66073" title="T">t</a>.<a title="()java.lang.String" id="3439">toString</a>
+}
+<span class="keyword">object</span> <a title="object sbt.Format" id="11439">Format</a>
+{
+	<span class="keyword">def</span> <a title="(sbt.Path)sbt.Format[sbt.Path]" id="52126">path</a>(<a title="sbt.Path" id="52626">basePath</a>: <a href="Path.scala.html#11861" title="sbt.Path">Path</a>): <a href="#11438" title="sbt.Format[sbt.Path]">Format</a>[Path] = <a title="template $anon extends java.lang.Object with sbt.Format[sbt.Path]" id="66077" class="keyword">new</a> <a href="#11438" title="sbt.Format[sbt.Path]">Format</a>[Path]
+	{
+		<span class="keyword">def</span> <a title="(sbt.Path)String" id="66079">toString</a>(<a title="sbt.Path" id="66083">path</a>: <a href="Path.scala.html#11861" title="sbt.Path">Path</a>) = <a href="Path.scala.html#11862" title="object sbt.Path">Path</a>.<a href="Path.scala.html#52304" title="(java.io.File,java.io.File)Option[String]">relativize</a>(<a href="#52626" title="sbt.Path">basePath</a>.<a href="Path.scala.html#52349" title="=&gt; java.io.File">asFile</a>, <a href="#66083" title="sbt.Path">path</a>.<a href="Path.scala.html#52349" title="=&gt; java.io.File">asFile</a>).<a title="(=&gt; String)String" id="30531">getOrElse</a>(<span title="(String)Nothing">error</span>(<span title="java.lang.String(&quot;Path &quot;)" class="string">&quot;Path &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#66083" title="sbt.Path">path</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot; not in &quot;)" class="string">&quot; not in &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#52626" title="sbt.Path">basePath</a>))
+		<span class="keyword">def</span> <a title="(String)sbt.Path" id="66080">fromString</a>(<a title="String" id="66090">s</a>: <span title="String">String</span>) = <a href="Path.scala.html#11862" title="object sbt.Path">Path</a>.<a href="Path.scala.html#52299" title="(sbt.Path,String)sbt.Path">fromString</a>(<a href="#52626" title="sbt.Path">basePath</a>, <a href="#66090" title="String">s</a>)
+	}
+	<span class="keyword">implicit</span> <span class="keyword">val</span> <a title="sbt.Format[java.io.File]" id="52127">file</a>: <a href="#11438" title="sbt.Format[java.io.File]">Format</a>[File] = <a title="template $anon extends java.lang.Object with sbt.Format[java.io.File]" id="66092" class="keyword">new</a> <a href="#11438" title="sbt.Format[java.io.File]">Format</a>[File]
+	{
+		<span class="keyword">def</span> <a title="(java.io.File)java.lang.String" id="66094">toString</a>(<a title="java.io.File" id="66098">file</a>: <span title="java.io.File">File</span>) = <a href="#66098" title="java.io.File">file</a>.<a title="()java.lang.String" id="16960">getAbsolutePath</a>
+		<span class="keyword">def</span> <a title="(String)java.io.File" id="66095">fromString</a>(<a title="String" id="66101">s</a>: <span title="String">String</span>) = (<span title="java.io.File" class="keyword">new</span> <span title="java.io.File">File</span>(<a href="#66101" title="String">s</a>)).<a title="()java.io.File" id="16961">getAbsoluteFile</a>
+	}
+	<span class="keyword">implicit</span> <span class="keyword">val</span> <a title="sbt.Format[Array[Byte]]" id="52129">hash</a>: <a href="#11438" title="sbt.Format[Array[Byte]]">Format</a>[Array[Byte]] = <a title="template $anon extends java.lang.Object with sbt.Format[Array[Byte]]" id="66105" class="keyword">new</a> <a href="#11438" title="sbt.Format[Array[Byte]]">Format</a>[Array[Byte]]
+	{
+		<span class="keyword">def</span> <a title="(Array[Byte])String" id="66107">toString</a>(<a title="Array[Byte]" id="66111">hash</a>: <a title="Array[Byte]" id="1032">Array</a>[Byte]) = <a href="Hash.scala.html#11685" title="object sbt.Hash">Hash</a>.<a href="Hash.scala.html#59774" title="(Array[Byte])String">toHex</a>(<a href="#66111" title="Array[Byte]">hash</a>)
+		<span class="keyword">def</span> <a title="(String)Array[Byte]" id="66108">fromString</a>(<a title="String" id="66115">hash</a>: <span title="String">String</span>) = <a href="Hash.scala.html#11685" title="object sbt.Hash">Hash</a>.<a href="Hash.scala.html#59775" title="(String)Array[Byte]">fromHex</a>(<a href="#66115" title="String">hash</a>)
+	}
+	<span class="keyword">def</span> <a title="[T](implicit sbt.Format[T])sbt.Format[scala.collection.mutable.Set[T]]" id="52131">set</a>[<a title="&gt;: Nothing &lt;: Any" id="52133">T</a>](<span class="keyword">implicit</span> <a title="sbt.Format[T]" id="52627">format</a>: <a href="#11438" title="sbt.Format[T]">Format</a>[T]): <a href="#11438" title="sbt.Format[scala.collection.mutable.Set[T]]">Format</a>[Set[T]] = <a title="template $anon extends java.lang.Object with sbt.Format[scala.collection.mutable.Set[T]]" id="66119" class="keyword">new</a> <a href="#11438" title="sbt.Format[scala.collection.mutable.Set[T]]">Format</a>[Set[T]]
+	{
+		<span class="keyword">def</span> <a title="(scala.collection.mutable.Set[T])String" id="66121">toString</a>(<a title="scala.collection.mutable.Set[T]" id="66125">set</a>: <a title="scala.collection.mutable.Set[T]" id="20483">Set</a>[T]) = <a href="#66125" title="scala.collection.mutable.Set[T]">set</a>.<a title="=&gt; List[T]" id="16171">toList</a>.<a title="((T) =&gt; String)List[String]" id="15727">map</a>(<a href="#52627" title="sbt.Format[T]">format</a>.<a href="#52138" title="(T)String">toString</a>).<a title="(String)String" id="16175">mkString</a>(<a title="object java.io.File" id="3630">File</a>.<a title="java.lang.String" id="16948">pathSeparator</a>)
+		<span class="keyword">def</span> <a title="(String)scala.collection.mutable.Set[T]" id="66122">fromString</a>(<a title="String" id="66135">s</a>: <span title="String">String</span>) = (<span title="scala.collection.mutable.HashSet[T]" class="keyword">new</span> <a title="scala.collection.mutable.HashSet[T]" id="20234">HashSet</a>[T]) <a title="(Iterable[T])scala.collection.mutable.Set[T]" id="30900">++</a> <a href="FileUtilities.scala.html#10716" title="object sbt.FileUtilities">FileUtilities</a>.<a href="FileUtilities.scala.html#52148" title="(String)Array[java.lang.String]">pathSplit</a>(<a href="#66135" title="String">s</a>).<span title="((java.lang.String) =&gt; java.lang.String)Array[java.lang.String]">map</span>(<a href="#66159" title="java.lang.String">_</a>.<a title="()java.lang.String" id="6399">trim</a>).<a title="((java.lang.String) =&gt; Boolean)Array[java.lang.String]" id="15878">filter</a>(<a title="=&gt; Boolean" id="2686">!</a><a href="#66162" title="java.lang.String">_</a>.<a title="()Boolean" id="6349">isEmpty</a>).<span title="((java.lang.String) =&gt; T)Array[T]">map</span>(<a href="#52627" title="sbt.Format[T]">format</a>.<a href="#52139" title="(String)T">fromString</a>)
+	}
+	<span class="keyword">implicit</span> <span class="keyword">val</span> <a title="sbt.Format[String]" id="52134">string</a>: <a href="#11438" title="sbt.Format[String]">Format</a>[String] = <a title="template $anon extends sbt.SimpleFormat[String]" id="66167" class="keyword">new</a> <a href="#12239" title="sbt.SimpleFormat[String]">SimpleFormat</a>[String] { <span class="keyword">def</span> <a title="(String)String" id="66169">fromString</a>(<a title="String" id="66171">s</a>: <span title="String">String</span>) = <a href="#66171" title="String">s</a> }
+	<span class="keyword">implicit</span> <span class="keyword">val</span> <a title="sbt.Format[sbt.Discovered]" id="52136">test</a>: <a href="#11438" title="sbt.Format[sbt.Discovered]">Format</a>[Discovered] = <a title="template $anon extends sbt.SimpleFormat[sbt.Discovered]" id="66172" class="keyword">new</a> <a href="#12239" title="sbt.SimpleFormat[sbt.Discovered]">SimpleFormat</a>[Discovered]
+	{
+		<span class="keyword">def</span> <a title="(String)sbt.Discovered" id="66174">fromString</a>(<a title="String" id="66176">s</a>: <span title="String">String</span>) = <a href="impl/TestParser.scala.html#11184" title="object sbt.DiscoveredParser">DiscoveredParser</a>.<a href="impl/TestParser.scala.html#52641" title="(String)Either[String,sbt.Discovered]">parse</a>(<a href="#66176" title="String">s</a>).<a title="((String) =&gt; sbt.Discovered,(sbt.Discovered) =&gt; sbt.Discovered)sbt.Discovered" id="53343">fold</a>(<a href="#66180" title="(String)Nothing">error</a>, <a title="sbt.Discovered" id="66182">x</a> =&gt; <a href="#66182" title="sbt.Discovered">x</a>)
+	}
+}
+        </pre>
+    </body>
+</html>

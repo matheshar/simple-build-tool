@@ -1,0 +1,488 @@
+<?xml version="1.0" encoding="utf-8"?>
+			<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" ></meta>
+        <title>sbt/impl/ProcessImpl.scala</title>
+        <script type="text/javascript" src="../../jquery-all.js"></script>
+        <script type="text/javascript" src="../../linked.js"></script>
+        <link rel="stylesheet" type="text/css" href="../../style.css" title="Style"></link>
+    </head>
+    <body>
+        <pre>
+<span class="comment">/* sbt -- Simple Build Tool
+ * Copyright 2009  Mark Harrah, Vesa Vilhonen
+ */</span>
+<span class="keyword">package</span> sbt
+
+<span class="keyword">import</span> java.lang.{Process =&gt; JProcess, ProcessBuilder =&gt; JProcessBuilder}
+<span class="keyword">import</span> java.io.{BufferedReader, Closeable, InputStream, InputStreamReader, IOException, OutputStream, PrintStream}
+<span class="keyword">import</span> java.io.{FilterInputStream, FilterOutputStream, PipedInputStream, PipedOutputStream}
+<span class="keyword">import</span> java.io.{File, FileInputStream, FileOutputStream}
+<span class="keyword">import</span> java.net.URL
+
+<span class="keyword">import</span> scala.concurrent.SyncVar
+
+<span class="comment">/** Runs provided code in a new Thread and returns the Thread instance. */</span>
+<span class="keyword">private</span> <span class="keyword">object</span> <a title="object sbt.Spawn" id="13389">Spawn</a>
+{
+	<span class="keyword">def</span> <a title="(=&gt; Unit)java.lang.Thread" id="86170">apply</a>(<a title="=&gt; Unit" id="86173">f</a>: =&gt; Unit): <span title="java.lang.Thread">Thread</span> = <a href="#86171" title="(=&gt; Unit,Boolean)java.lang.Thread">apply</a>(<a href="#86173" title="=&gt; Unit">f</a>, <span title="Boolean(false)" class="keyword">false</span>)
+	<span class="keyword">def</span> <a title="(=&gt; Unit,Boolean)java.lang.Thread" id="86171">apply</a>(<a title="=&gt; Unit" id="86175">f</a>: =&gt; Unit, <a title="Boolean" id="86176">daemon</a>: <span title="Boolean">Boolean</span>): <span title="java.lang.Thread">Thread</span> =
+	{
+		<span class="keyword">val</span> <a title="java.lang.Thread" id="86182">thread</a> = <a title="template $anon extends java.lang.Thread" id="86183" class="keyword">new</a> <span title="java.lang.Thread">Thread</span>() { <span class="keyword">override</span> <span class="keyword">def</span> <a title="()Unit" id="86185">run</a>() = { <a href="#86175" title="=&gt; Unit">f</a> } }
+		<a href="#86182" title="java.lang.Thread">thread</a>.<a title="(Boolean)Unit" id="62307">setDaemon</a>(<a href="#86176" title="Boolean">daemon</a>)
+		<a href="#86182" title="java.lang.Thread">thread</a>.<span title="()Unit">start</span>()
+		<a href="#86182" title="java.lang.Thread">thread</a>
+	}
+}
+<span class="keyword">private</span> <span class="keyword">object</span> <a title="object sbt.Future" id="11154">Future</a>
+{
+	<span class="keyword">def</span> <a title="[T](=&gt; T)() =&gt; T" id="86198">apply</a>[<a title="&gt;: Nothing &lt;: Any" id="86200">T</a>](<a title="=&gt; T" id="86202">f</a>: =&gt; T): () =&gt; T =
+	{
+		<span class="keyword">val</span> <a title="scala.concurrent.SyncVar[Either[Throwable,T]]" id="86203">result</a> = <span title="scala.concurrent.SyncVar[Either[Throwable,T]]" class="keyword">new</span> <span title="scala.concurrent.SyncVar[Either[Throwable,T]]">SyncVar</span>[Either[Throwable, T]]
+		<span class="keyword">def</span> <a title="=&gt; Unit" id="86204">run</a>: <span title="Unit">Unit</span> =
+			<span class="keyword">try</span> { <a href="#86203" title="scala.concurrent.SyncVar[Either[Throwable,T]]">result</a>.<span title="(Either[Throwable,T])Unit">set</span>(<span title="(T)Right[Nothing,T]">Right</span>(<a href="#86202" title="=&gt; T">f</a>)) }
+			<span class="keyword">catch</span> { <span title="Unit" class="keyword">case</span> <a title="Exception" id="86226">e</a>: <a title="Exception" id="2067">Exception</a> =&gt; <a href="#86203" title="scala.concurrent.SyncVar[Either[Throwable,T]]">result</a>.<span title="(Either[Throwable,T])Unit">set</span>(<span title="(Exception)Left[Exception,Nothing]">Left</span>(<a href="#86226" title="Exception">e</a>)) }
+		<a href="#86170" title="(=&gt; Unit)java.lang.Thread">Spawn</a>(<a href="#86204" title="=&gt; Unit">run</a>)
+		() =&gt;
+			<a href="#86203" title="scala.concurrent.SyncVar[Either[Throwable,T]]">result</a>.<span title="=&gt; Either[Throwable,T]">get</span> <span title="T" class="keyword">match</span>
+			{
+				<span title="T" class="keyword">case</span> Right(<a title="T" id="86234">value</a>) =&gt; <a href="#86234" title="T">value</a>
+				<span title="Nothing" class="keyword">case</span> Left(<a title="Throwable" id="86235">exception</a>) =&gt; <span title="Nothing" class="keyword">throw</span> <a href="#86235" title="Throwable">exception</a>
+			}
+	}
+}
+
+<span class="keyword">private</span> <span class="keyword">object</span> <a title="object sbt.BasicIO" id="8469">BasicIO</a>
+{
+	<span class="keyword">def</span> <a title="(java.lang.StringBuffer,Option[sbt.Logger],Boolean)sbt.ProcessIO" id="86237">apply</a>(<a title="java.lang.StringBuffer" id="86260">buffer</a>: <span title="java.lang.StringBuffer">StringBuffer</span>, <a title="Option[sbt.Logger]" id="86261">log</a>: <span title="Option[sbt.Logger]">Option</span>[Logger], <a title="Boolean" id="86262">withIn</a>: <span title="Boolean">Boolean</span>) = <span title="sbt.ProcessIO" class="keyword">new</span> <a href="../Process.scala.html#13523" title="sbt.ProcessIO">ProcessIO</a>(<a href="#86251" title="(Boolean)(java.io.OutputStream) =&gt; Unit">input</a>(<a href="#86262" title="Boolean">withIn</a>), <a href="#86247" title="(java.lang.Appendable)(java.io.InputStream) =&gt; Unit">processFully</a>(<a href="#86260" title="java.lang.StringBuffer">buffer</a>), <a href="#86239" title="(Option[sbt.Logger])(java.io.InputStream) =&gt; Unit">getErr</a>(<a href="#86261" title="Option[sbt.Logger]">log</a>))
+	<span class="keyword">def</span> <a title="(sbt.Logger,Boolean)sbt.ProcessIO" id="86238">apply</a>(<a title="sbt.Logger" id="86349">log</a>: <a href="../Logger.scala.html#13532" title="sbt.Logger">Logger</a>, <a title="Boolean" id="86350">withIn</a>: <span title="Boolean">Boolean</span>) = <span title="sbt.ProcessIO" class="keyword">new</span> <a href="../Process.scala.html#13523" title="sbt.ProcessIO">ProcessIO</a>(<a href="#86251" title="(Boolean)(java.io.OutputStream) =&gt; Unit">input</a>(<a href="#86350" title="Boolean">withIn</a>), <a href="#86246" title="(sbt.Logger,sbt.Level.Value)(java.io.InputStream) =&gt; Unit">processFully</a>(<a href="#86349" title="sbt.Logger">log</a>, <a href="../Logger.scala.html#9888" title="object sbt.Level">Level</a>.<a href="../Logger.scala.html#56505" title="=&gt; sbt.Level.Value">Info</a>), <a href="#86246" title="(sbt.Logger,sbt.Level.Value)(java.io.InputStream) =&gt; Unit">processFully</a>(<a href="#86349" title="sbt.Logger">log</a>, <a href="../Logger.scala.html#9888" title="object sbt.Level">Level</a>.<a href="../Logger.scala.html#56509" title="=&gt; sbt.Level.Value">Error</a>))
+
+	<span class="keyword">def</span> <a title="(Option[sbt.Logger])(java.io.InputStream) =&gt; Unit" id="86239">getErr</a>(<a title="Option[sbt.Logger]" id="86330">log</a>: <span title="Option[sbt.Logger]">Option</span>[Logger]) = <a href="#86330" title="Option[sbt.Logger]">log</a> <span title="(java.io.InputStream) =&gt; Unit" class="keyword">match</span> { <span title="(java.io.InputStream) =&gt; Unit" class="keyword">case</span> Some(<a title="sbt.Logger" id="86332">lg</a>) =&gt; <a href="#86246" title="(sbt.Logger,sbt.Level.Value)(java.io.InputStream) =&gt; Unit">processFully</a>(<a href="#86332" title="sbt.Logger">lg</a>, <a href="../Logger.scala.html#9888" title="object sbt.Level">Level</a>.<a href="../Logger.scala.html#56509" title="=&gt; sbt.Level.Value">Error</a>); <span title="(java.io.InputStream) =&gt; Unit" class="keyword">case</span> <span title="object None">None</span> =&gt; <a href="#86254" title="=&gt; (java.io.InputStream) =&gt; Unit">toStdErr</a> }
+
+	<span class="keyword">def</span> <a title="=&gt; (java.io.OutputStream) =&gt; Unit" id="86240">ignoreOut</a> = (<a title="java.io.OutputStream" id="86373">i</a>: <span title="java.io.OutputStream">OutputStream</span>) =&gt; <span title="Unit">(</span>)
+	<span class="keyword">final</span> <span class="keyword">val</span> <a title="Int(8192)" id="86241">BufferSize</a> = <span title="Int(8192)" class="int">8192</span>
+	<span class="keyword">final</span> <span class="keyword">val</span> <a title="java.lang.String" id="86243">Newline</a> = <a href="../FileUtilities.scala.html#10716" title="object sbt.FileUtilities">FileUtilities</a>.<a href="../FileUtilities.scala.html#52144" title="=&gt; java.lang.String">Newline</a>
+
+	<span class="keyword">def</span> <a title="(java.io.Closeable)Unit" id="86245">close</a>(<a title="java.io.Closeable" id="86374">c</a>: java.io.<a title="java.io.Closeable" id="3605">Closeable</a>) = <span class="keyword">try</span> { <a href="#86374" title="java.io.Closeable">c</a>.<a title="()Unit" id="40518">close</a>() } <span class="keyword">catch</span> { <span title="Unit" class="keyword">case</span> _: java.io.<span title="java.io.IOException">IOException</span> =&gt; <span title="Unit">(</span>) }
+	<span class="keyword">def</span> <a title="(sbt.Logger,sbt.Level.Value)(java.io.InputStream) =&gt; Unit" id="86246">processFully</a>(<a title="sbt.Logger" id="86268">log</a>: <a href="../Logger.scala.html#13532" title="sbt.Logger">Logger</a>, <a title="sbt.Level.Value" id="86269">level</a>: Level.<a title="sbt.Level.Value" id="34036">Value</a>): InputStream =&gt; Unit = <a href="#86248" title="((String) =&gt; Unit)(java.io.InputStream) =&gt; Unit">processFully</a>(<a title="String" id="86378">line</a> =&gt; <a href="#86268" title="sbt.Logger">log</a>.<a href="../Logger.scala.html#52379" title="(sbt.Level.Value,=&gt; String)Unit">log</a>(<a href="#86269" title="sbt.Level.Value">level</a>, <a href="#86378" title="String">line</a>))
+	<span class="keyword">def</span> <a title="(java.lang.Appendable)(java.io.InputStream) =&gt; Unit" id="86247">processFully</a>(<a title="java.lang.Appendable" id="86267">buffer</a>: <span title="java.lang.Appendable">Appendable</span>): InputStream =&gt; Unit = <a href="#86248" title="((String) =&gt; Unit)(java.io.InputStream) =&gt; Unit">processFully</a>(<a href="#86257" title="(java.lang.Appendable)(String) =&gt; Unit">appendLine</a>(<a href="#86267" title="java.lang.Appendable">buffer</a>))
+	<span class="keyword">def</span> <a title="((String) =&gt; Unit)(java.io.InputStream) =&gt; Unit" id="86248">processFully</a>(<a title="(String) =&gt; Unit" id="86266">processLine</a>: String =&gt; Unit): InputStream =&gt; Unit =
+		<a title="java.io.InputStream" id="86389">in</a> =&gt;
+		{
+			<span class="keyword">val</span> <a title="java.io.BufferedReader" id="86390">reader</a> = <a title="(java.io.Reader)java.io.BufferedReader" id="64991" class="keyword">new</a> <a title="java.io.BufferedReader" id="3494">BufferedReader</a>(<span title="java.io.InputStreamReader" class="keyword">new</span> <a title="java.io.InputStreamReader" id="3710">InputStreamReader</a>(<a href="#86389" title="java.io.InputStream">in</a>))
+			<a href="#86249" title="((String) =&gt; Unit)(() =&gt; String)Unit">processLinesFully</a>(<a href="#86266" title="(String) =&gt; Unit">processLine</a>)(<a href="#86390" title="java.io.BufferedReader">reader</a>.<a title="()java.lang.String" id="64995">readLine</a>)
+		}
+	<span class="keyword">def</span> <a title="((String) =&gt; Unit)(() =&gt; String)Unit" id="86249">processLinesFully</a>(<a title="(String) =&gt; Unit" id="86393">processLine</a>: String =&gt; Unit)(<a title="() =&gt; String" id="86394">readLine</a>: () =&gt; String)
+	{
+		<span class="keyword">def</span> <a title="()Unit" id="86398">readFully</a>()
+		{
+			<span class="keyword">val</span> <a title="String" id="86399">line</a> = <a href="#86394" title="()String">readLine</a>()
+			<span title="Unit" class="keyword">if</span>(<a href="#86399" title="String">line</a> <span title="(AnyRef)Boolean">!=</span> <span title="Null(null)" class="keyword">null</span>)
+			{
+				<a href="#86393" title="(String)Unit">processLine</a>(<a href="#86399" title="String">line</a>)
+				<a href="#86398" title="()Unit">readFully</a>()
+			}
+		}
+		<a href="#86398" title="()Unit">readFully</a>()
+	}
+	<span class="keyword">def</span> <a title="(java.io.OutputStream)Unit" id="86250">connectToIn</a>(<a title="java.io.OutputStream" id="86401">o</a>: <span title="java.io.OutputStream">OutputStream</span>) { <a href="#86256" title="(java.io.InputStream,java.io.OutputStream)Unit">transferFully</a>(<span title="object java.lang.System">System</span>.<span title="java.io.InputStream">in</span>, <a href="#86401" title="java.io.OutputStream">o</a>) }
+	<span class="keyword">def</span> <a title="(Boolean)(java.io.OutputStream) =&gt; Unit" id="86251">input</a>(<a title="Boolean" id="86264">connect</a>: <span title="Boolean">Boolean</span>): OutputStream =&gt; Unit = <span title="(java.io.OutputStream) =&gt; Unit" class="keyword">if</span>(<a href="#86264" title="Boolean">connect</a>) <a href="#86250" title="(java.io.OutputStream)Unit">connectToIn</a> <span class="keyword">else</span> <a href="#86240" title="=&gt; (java.io.OutputStream) =&gt; Unit">ignoreOut</a>
+	<span class="keyword">def</span> <a title="(Boolean)sbt.ProcessIO" id="86252">standard</a>(<a title="Boolean" id="86404">connectInput</a>: <span title="Boolean">Boolean</span>): <a href="../Process.scala.html#13523" title="sbt.ProcessIO">ProcessIO</a> = <a href="#86253" title="((java.io.OutputStream) =&gt; Unit)sbt.ProcessIO">standard</a>(<a href="#86251" title="(Boolean)(java.io.OutputStream) =&gt; Unit">input</a>(<a href="#86404" title="Boolean">connectInput</a>))
+	<span class="keyword">def</span> <a title="((java.io.OutputStream) =&gt; Unit)sbt.ProcessIO" id="86253">standard</a>(<a title="(java.io.OutputStream) =&gt; Unit" id="86406">in</a>: OutputStream =&gt; Unit): <a href="../Process.scala.html#13523" title="sbt.ProcessIO">ProcessIO</a> = <span title="sbt.ProcessIO" class="keyword">new</span> <a href="../Process.scala.html#13523" title="sbt.ProcessIO">ProcessIO</a>(<a href="#86406" title="(java.io.OutputStream) =&gt; Unit">in</a>, <a href="#86255" title="=&gt; (java.io.InputStream) =&gt; Unit">toStdOut</a>, <a href="#86254" title="=&gt; (java.io.InputStream) =&gt; Unit">toStdErr</a>)
+
+	<span class="keyword">def</span> <a title="=&gt; (java.io.InputStream) =&gt; Unit" id="86254">toStdErr</a> = (<a title="java.io.InputStream" id="86346">in</a>: <span title="java.io.InputStream">InputStream</span>) =&gt; <a href="#86256" title="(java.io.InputStream,java.io.OutputStream)Unit">transferFully</a>(<a href="#86346" title="java.io.InputStream">in</a>, <span title="object java.lang.System">System</span>.<span title="java.io.PrintStream">err</span>)
+	<span class="keyword">def</span> <a title="=&gt; (java.io.InputStream) =&gt; Unit" id="86255">toStdOut</a> = (<a title="java.io.InputStream" id="86410">in</a>: <span title="java.io.InputStream">InputStream</span>) =&gt; <a href="#86256" title="(java.io.InputStream,java.io.OutputStream)Unit">transferFully</a>(<a href="#86410" title="java.io.InputStream">in</a>, <span title="object java.lang.System">System</span>.<span title="java.io.PrintStream">out</span>)
+
+	<span class="keyword">def</span> <a title="(java.io.InputStream,java.io.OutputStream)Unit" id="86256">transferFully</a>(<a title="java.io.InputStream" id="86347">in</a>: <span title="java.io.InputStream">InputStream</span>, <a title="java.io.OutputStream" id="86348">out</a>: <span title="java.io.OutputStream">OutputStream</span>): <span title="Unit">Unit</span> =
+		<span class="keyword">try</span> { <a href="#86258" title="(java.io.InputStream,java.io.OutputStream)Unit">transferFullyImpl</a>(<a href="#86347" title="java.io.InputStream">in</a>, <a href="#86348" title="java.io.OutputStream">out</a>) }
+		<span class="keyword">catch</span> { <span title="Unit" class="keyword">case</span>  _: <span title="java.lang.InterruptedException">InterruptedException</span> =&gt; <span title="Unit">(</span>) }
+
+	<span class="keyword">private</span>[<span class="keyword">this</span>] <span class="keyword">def</span> <a title="(java.lang.Appendable)(String) =&gt; Unit" id="86257">appendLine</a>(<a title="java.lang.Appendable" id="86387">buffer</a>: <span title="java.lang.Appendable">Appendable</span>): String =&gt; Unit =
+		<a title="String" id="86414">line</a> =&gt;
+		{
+			<a href="#86387" title="java.lang.Appendable">buffer</a>.<span title="(java.lang.CharSequence)java.lang.Appendable">append</span>(<a href="#86414" title="String">line</a>)
+			<a href="#86387" title="java.lang.Appendable">buffer</a>.<span title="(java.lang.CharSequence)java.lang.Appendable">append</span>(<a href="#86243" title="=&gt; java.lang.String">Newline</a>)
+		}
+
+	<span class="keyword">private</span>[<span class="keyword">this</span>] <span class="keyword">def</span> <a title="(java.io.InputStream,java.io.OutputStream)Unit" id="86258">transferFullyImpl</a>(<a title="java.io.InputStream" id="86411">in</a>: <span title="java.io.InputStream">InputStream</span>, <a title="java.io.OutputStream" id="86412">out</a>: <span title="java.io.OutputStream">OutputStream</span>)
+	{
+		<span class="keyword">val</span> <a title="Int" id="86419">continueCount</a> = <span title="Int(1)" class="int">1</span><span class="comment">//if(in.isInstanceOf[PipedInputStream]) 1 else 0</span>
+		<span class="keyword">val</span> <a title="Array[Byte]" id="86420">buffer</a> = <span title="Array[Byte]" class="keyword">new</span> <a title="Array[Byte]" id="1032">Array</a>[Byte](<span title="Int(8192)">BufferSize</span>)
+		<span class="keyword">def</span> <a title="=&gt; Unit" id="86421">read</a>
+		{
+			<span class="keyword">val</span> <a title="Int" id="86423">byteCount</a> = <a href="#86411" title="java.io.InputStream">in</a>.<a title="(Array[Byte])Int" id="20893">read</a>(<a href="#86420" title="Array[Byte]">buffer</a>)
+			<span title="Unit" class="keyword">if</span>(<a href="#86423" title="Int">byteCount</a> <a title="(Int)Boolean" id="3085">&gt;=</a> <a href="#86419" title="Int">continueCount</a>)
+			{
+				<a href="#86412" title="java.io.OutputStream">out</a>.<a title="(Array[Byte],Int,Int)Unit" id="46704">write</a>(<a href="#86420" title="Array[Byte]">buffer</a>, <span title="Int(0)" class="int">0</span>, <a href="#86423" title="Int">byteCount</a>)
+				<a href="#86412" title="java.io.OutputStream">out</a>.<a title="()Unit" id="46705">flush</a>()
+				<a href="#86421" title="=&gt; Unit">read</a>
+			}
+		}
+		<a href="#86421" title="=&gt; Unit">read</a>
+	}
+}
+
+
+<span class="keyword">private</span> <span class="keyword">abstract</span> <span class="keyword">class</span> <a title="class AbstractProcessBuilder extends java.lang.Object with sbt.ProcessBuilder with sbt.SinkPartialBuilder with sbt.SourcePartialBuilder with ScalaObject" id="10331">AbstractProcessBuilder</a> <span class="keyword">extends</span> <a href="../Process.scala.html#11240" title="sbt.ProcessBuilder">ProcessBuilder</a> <span class="keyword">with</span> <a href="../Process.scala.html#10970" title="sbt.SinkPartialBuilder">SinkPartialBuilder</a> <span class="keyword">with</span> <a href="../Process.scala.html#11987" title="sbt.SourcePartialBuilder">SourcePartialBuilder</a>
+{
+	<span class="keyword">def</span> <a title="(sbt.ProcessBuilder)sbt.ProcessBuilder" id="74572">#&amp;&amp;</a>(<a title="sbt.ProcessBuilder" id="86448">other</a>: <a href="../Process.scala.html#11240" title="sbt.ProcessBuilder">ProcessBuilder</a>): <a href="../Process.scala.html#11240" title="sbt.ProcessBuilder">ProcessBuilder</a> = <span title="sbt.AndProcessBuilder" class="keyword">new</span> <a href="#10751" title="sbt.AndProcessBuilder">AndProcessBuilder</a>(<a href="#10331" title="sbt.AbstractProcessBuilder" class="keyword">this</a>, <a href="#86448" title="sbt.ProcessBuilder">other</a>)
+	<span class="keyword">def</span> <a title="(sbt.ProcessBuilder)sbt.ProcessBuilder" id="74573">#||</a>(<a title="sbt.ProcessBuilder" id="86457">other</a>: <a href="../Process.scala.html#11240" title="sbt.ProcessBuilder">ProcessBuilder</a>): <a href="../Process.scala.html#11240" title="sbt.ProcessBuilder">ProcessBuilder</a> = <span title="sbt.OrProcessBuilder" class="keyword">new</span> <a href="#9740" title="sbt.OrProcessBuilder">OrProcessBuilder</a>(<a href="#10331" title="sbt.AbstractProcessBuilder" class="keyword">this</a>, <a href="#86457" title="sbt.ProcessBuilder">other</a>)
+	<span class="keyword">def</span> <a title="(sbt.ProcessBuilder)sbt.ProcessBuilder" id="74574">#|</a>(<a title="sbt.ProcessBuilder" id="86466">other</a>: <a href="../Process.scala.html#11240" title="sbt.ProcessBuilder">ProcessBuilder</a>): <a href="../Process.scala.html#11240" title="sbt.ProcessBuilder">ProcessBuilder</a> =
+	{
+		<span title="(Boolean,Any)Unit">require</span>(<a href="#86466" title="sbt.ProcessBuilder">other</a>.<a href="../Process.scala.html#59254" title="=&gt; Boolean">canPipeTo</a>, <span title="java.lang.String(&quot;Piping to multiple processes is not supported.&quot;)" class="string">&quot;Piping to multiple processes is not supported.&quot;</span>)
+		<span title="sbt.PipedProcessBuilder" class="keyword">new</span> <a href="#12449" title="sbt.PipedProcessBuilder">PipedProcessBuilder</a>(<a href="#10331" title="sbt.AbstractProcessBuilder" class="keyword">this</a>, <a href="#86466" title="sbt.ProcessBuilder">other</a>, <span title="Boolean(false)" class="keyword">false</span>)
+	}
+	<span class="keyword">def</span> <a title="(sbt.ProcessBuilder)sbt.ProcessBuilder" id="74575">##</a>(<a title="sbt.ProcessBuilder" id="86474">other</a>: <a href="../Process.scala.html#11240" title="sbt.ProcessBuilder">ProcessBuilder</a>): <a href="../Process.scala.html#11240" title="sbt.ProcessBuilder">ProcessBuilder</a> = <span title="sbt.SequenceProcessBuilder" class="keyword">new</span> <a href="#11294" title="sbt.SequenceProcessBuilder">SequenceProcessBuilder</a>(<a href="#10331" title="sbt.AbstractProcessBuilder" class="keyword">this</a>, <a href="#86474" title="sbt.ProcessBuilder">other</a>)
+	
+	<span class="keyword">protected</span> <span class="keyword">def</span> <a title="=&gt; sbt.AbstractProcessBuilder" id="74576">toSource</a> = <a href="#10331" title="sbt.AbstractProcessBuilder" class="keyword">this</a>
+	<span class="keyword">protected</span> <span class="keyword">def</span> <a title="=&gt; sbt.AbstractProcessBuilder" id="74577">toSink</a> = <a href="#10331" title="sbt.AbstractProcessBuilder" class="keyword">this</a>
+	
+	<span class="keyword">def</span> <a title="()sbt.Process" id="74578">run</a>(): <a href="../Process.scala.html#12947" title="sbt.Process">Process</a> = <a href="#74579" title="(Boolean)sbt.Process">run</a>(<span title="Boolean(false)" class="keyword">false</span>)
+	<span class="keyword">def</span> <a title="(Boolean)sbt.Process" id="74579">run</a>(<a title="Boolean" id="86487">connectInput</a>: <span title="Boolean">Boolean</span>): <a href="../Process.scala.html#12947" title="sbt.Process">Process</a> = <a href="../Process.scala.html#59247" title="(sbt.ProcessIO)sbt.Process">run</a>(<a href="#8469" title="object sbt.BasicIO">BasicIO</a>.<a href="#86252" title="(Boolean)sbt.ProcessIO">standard</a>(<a href="#86487" title="Boolean">connectInput</a>))
+	<span class="keyword">def</span> <a title="(sbt.Logger)sbt.Process" id="74580">run</a>(<a title="sbt.Logger" id="86488">log</a>: <a href="../Logger.scala.html#13532" title="sbt.Logger">Logger</a>): <a href="../Process.scala.html#12947" title="sbt.Process">Process</a> = <a href="#74581" title="(sbt.Logger,Boolean)sbt.Process">run</a>(<a href="#86488" title="sbt.Logger">log</a>, <span title="Boolean(false)" class="keyword">false</span>)
+	<span class="keyword">def</span> <a title="(sbt.Logger,Boolean)sbt.Process" id="74581">run</a>(<a title="sbt.Logger" id="86489">log</a>: <a href="../Logger.scala.html#13532" title="sbt.Logger">Logger</a>, <a title="Boolean" id="86490">connectInput</a>: <span title="Boolean">Boolean</span>): <a href="../Process.scala.html#12947" title="sbt.Process">Process</a> = <a href="../Process.scala.html#59247" title="(sbt.ProcessIO)sbt.Process">run</a>(<a href="#86238" title="(sbt.Logger,Boolean)sbt.ProcessIO">BasicIO</a>(<a href="#86489" title="sbt.Logger">log</a>, <a href="#86490" title="Boolean">connectInput</a>))
+
+	<span class="keyword">private</span>[<span class="keyword">this</span>] <span class="keyword">def</span> <a title="(Option[sbt.Logger],Boolean)String" id="74582">getString</a>(<a title="Option[sbt.Logger]" id="86517">log</a>: <span title="Option[sbt.Logger]">Option</span>[Logger], <a title="Boolean" id="86518">withIn</a>: <span title="Boolean">Boolean</span>): <span title="String">String</span> =
+	{
+		<span class="keyword">val</span> <a title="java.lang.StringBuffer" id="86519">buffer</a> = <span title="java.lang.StringBuffer" class="keyword">new</span> <span title="java.lang.StringBuffer">StringBuffer</span>
+		<span class="keyword">val</span> <a title="Int" id="86520">code</a> = <a href="#10331" title="AbstractProcessBuilder.this.type" class="keyword">this</a> <a href="#74597" title="(sbt.ProcessIO)Int">!</a> <a href="#86237" title="(java.lang.StringBuffer,Option[sbt.Logger],Boolean)sbt.ProcessIO">BasicIO</a>(<a href="#86519" title="java.lang.StringBuffer">buffer</a>, <a href="#86517" title="Option[sbt.Logger]">log</a>, <a href="#86518" title="Boolean">withIn</a>)
+		<span title="String" class="keyword">if</span>(<a href="#86520" title="Int">code</a> <span title="(Int)Boolean">==</span> <span title="Int(0)" class="int">0</span>) <a href="#86519" title="java.lang.StringBuffer">buffer</a>.<a title="()java.lang.String" id="71009">toString</a> <span class="keyword">else</span> <span title="(String)Nothing">error</span>(<span title="java.lang.String(&quot;Nonzero exit value: &quot;)" class="string">&quot;Nonzero exit value: &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#86520" title="Int">code</a>)
+	}
+	<span class="keyword">def</span> <a title="=&gt; String" id="74583">!!</a> = <a href="#74582" title="(Option[sbt.Logger],Boolean)String">getString</a>(<span title="object None">None</span>, <span title="Boolean(false)" class="keyword">false</span>)
+	<span class="keyword">def</span> <a title="(sbt.Logger)String" id="74584">!!</a>(<a title="sbt.Logger" id="86571">log</a>: <a href="../Logger.scala.html#13532" title="sbt.Logger">Logger</a>) = <a href="#74582" title="(Option[sbt.Logger],Boolean)String">getString</a>(<span title="(sbt.Logger)Some[sbt.Logger]">Some</span>(<a href="#86571" title="sbt.Logger">log</a>), <span title="Boolean(false)" class="keyword">false</span>)
+	<span class="keyword">def</span> <a title="=&gt; String" id="74585">!!&lt;</a> = <a href="#74582" title="(Option[sbt.Logger],Boolean)String">getString</a>(<span title="object None">None</span>, <span title="Boolean(true)" class="keyword">true</span>)
+	<span class="keyword">def</span> <a title="(sbt.Logger)String" id="74586">!!&lt;</a>(<a title="sbt.Logger" id="86577">log</a>: <a href="../Logger.scala.html#13532" title="sbt.Logger">Logger</a>) = <a href="#74582" title="(Option[sbt.Logger],Boolean)String">getString</a>(<span title="(sbt.Logger)Some[sbt.Logger]">Some</span>(<a href="#86577" title="sbt.Logger">log</a>), <span title="Boolean(true)" class="keyword">true</span>)
+
+	<span class="keyword">def</span> <a title="=&gt; Stream[String]" id="74587">lines</a>: <span title="Stream[String]">Stream</span>[String] = <a href="#74591" title="(Boolean,Boolean,Option[sbt.Logger])Stream[String]">lines</a>(<span title="Boolean(false)" class="keyword">false</span>, <span title="Boolean(true)" class="keyword">true</span>, <span title="object None">None</span>)
+	<span class="keyword">def</span> <a title="(sbt.Logger)Stream[String]" id="74588">lines</a>(<a title="sbt.Logger" id="86582">log</a>: <a href="../Logger.scala.html#13532" title="sbt.Logger">Logger</a>): <span title="Stream[String]">Stream</span>[String] = <a href="#74591" title="(Boolean,Boolean,Option[sbt.Logger])Stream[String]">lines</a>(<span title="Boolean(false)" class="keyword">false</span>, <span title="Boolean(true)" class="keyword">true</span>, <span title="(sbt.Logger)Some[sbt.Logger]">Some</span>(<a href="#86582" title="sbt.Logger">log</a>))
+	<span class="keyword">def</span> <a title="=&gt; Stream[String]" id="74589">lines_!</a> : <span title="Stream[String]">Stream</span>[String] = <a href="#74591" title="(Boolean,Boolean,Option[sbt.Logger])Stream[String]">lines</a>(<span title="Boolean(false)" class="keyword">false</span>, <span title="Boolean(false)" class="keyword">false</span>, <span title="object None">None</span>)
+	<span class="keyword">def</span> <a title="(sbt.Logger)Stream[String]" id="74590">lines_!</a>(<a title="sbt.Logger" id="86625">log</a>: <a href="../Logger.scala.html#13532" title="sbt.Logger">Logger</a>): <span title="Stream[String]">Stream</span>[String] = <a href="#74591" title="(Boolean,Boolean,Option[sbt.Logger])Stream[String]">lines</a>(<span title="Boolean(false)" class="keyword">false</span>, <span title="Boolean(false)" class="keyword">false</span>, <span title="(sbt.Logger)Some[sbt.Logger]">Some</span>(<a href="#86625" title="sbt.Logger">log</a>))
+
+	<span class="keyword">private</span>[<span class="keyword">this</span>] <span class="keyword">def</span> <a title="(Boolean,Boolean,Option[sbt.Logger])Stream[String]" id="74591">lines</a>(<a title="Boolean" id="86584">withInput</a>: <span title="Boolean">Boolean</span>, <a title="Boolean" id="86585">nonZeroException</a>: <span title="Boolean">Boolean</span>, <a title="Option[sbt.Logger]" id="86586">log</a>: <span title="Option[sbt.Logger]">Option</span>[Logger]): <span title="Stream[String]">Stream</span>[String] =
+	{
+		<span class="keyword">val</span> <a title="sbt.Streamed[String]" id="86639">streamed</a> = <a href="#86642" title="(Boolean)sbt.Streamed[String]">Streamed</a>[<span title="String">String</span>](<a href="#86585" title="Boolean">nonZeroException</a>)
+		<span class="keyword">val</span> <a title="sbt.Process" id="86640">process</a> = <a href="../Process.scala.html#59247" title="(sbt.ProcessIO)sbt.Process">run</a>(<span title="sbt.ProcessIO" class="keyword">new</span> <a href="../Process.scala.html#13523" title="sbt.ProcessIO">ProcessIO</a>(<a href="#8469" title="object sbt.BasicIO">BasicIO</a>.<a href="#86251" title="(Boolean)(java.io.OutputStream) =&gt; Unit">input</a>(<a href="#86584" title="Boolean">withInput</a>), <a href="#8469" title="object sbt.BasicIO">BasicIO</a>.<a href="#86248" title="((String) =&gt; Unit)(java.io.InputStream) =&gt; Unit">processFully</a>(<a href="#86639" title="sbt.Streamed[String]">streamed</a>.<a href="#87209" title="=&gt; (String) =&gt; Unit">process</a>), <a href="#8469" title="object sbt.BasicIO">BasicIO</a>.<a href="#86239" title="(Option[sbt.Logger])(java.io.InputStream) =&gt; Unit">getErr</a>(<a href="#86586" title="Option[sbt.Logger]">log</a>)))
+		<a href="#86170" title="(=&gt; Unit)java.lang.Thread">Spawn</a> { <a href="#86639" title="sbt.Streamed[String]">streamed</a>.<a href="#87210" title="(Int)Unit">done</a>(<a href="#86640" title="sbt.Process">process</a>.<a href="../Process.scala.html#66001" title="()Int">exitValue</a>()) }
+		<a href="#86639" title="sbt.Streamed[String]">streamed</a>.<a href="#87211" title="()Stream[String]">stream</a>()
+	}
+
+	<span class="keyword">def</span> <a title="=&gt; Int" id="74592">!</a> = <a href="#74579" title="(Boolean)sbt.Process">run</a>(<span title="Boolean(false)" class="keyword">false</span>).<a href="../Process.scala.html#66001" title="()Int">exitValue</a>()
+	<span class="keyword">def</span> <a title="=&gt; Int" id="74593">!&lt;</a> = <a href="#74579" title="(Boolean)sbt.Process">run</a>(<span title="Boolean(true)" class="keyword">true</span>).<a href="../Process.scala.html#66001" title="()Int">exitValue</a>()
+	<span class="keyword">def</span> <a title="(sbt.Logger)Int" id="74594">!</a>(<a title="sbt.Logger" id="86532">log</a>: <a href="../Logger.scala.html#13532" title="sbt.Logger">Logger</a>) = <a href="#74596" title="(sbt.Logger,Boolean)Int">runBuffered</a>(<a href="#86532" title="sbt.Logger">log</a>, <span title="Boolean(false)" class="keyword">false</span>)
+	<span class="keyword">def</span> <a title="(sbt.Logger)Int" id="74595">!&lt;</a>(<a title="sbt.Logger" id="86670">log</a>: <a href="../Logger.scala.html#13532" title="sbt.Logger">Logger</a>) = <a href="#74596" title="(sbt.Logger,Boolean)Int">runBuffered</a>(<a href="#86670" title="sbt.Logger">log</a>, <span title="Boolean(true)" class="keyword">true</span>)
+	<span class="keyword">private</span>[<span class="keyword">this</span>] <span class="keyword">def</span> <a title="(sbt.Logger,Boolean)Int" id="74596">runBuffered</a>(<a title="sbt.Logger" id="86535">log</a>: <a href="../Logger.scala.html#13532" title="sbt.Logger">Logger</a>, <a title="Boolean" id="86536">connectInput</a>: <span title="Boolean">Boolean</span>) =
+	{
+		<span class="keyword">val</span> <a title="sbt.BufferedLogger" id="86538">log2</a> = <span title="sbt.BufferedLogger" class="keyword">new</span> <a href="../Logger.scala.html#8060" title="sbt.BufferedLogger">BufferedLogger</a>(<a href="#86535" title="sbt.Logger">log</a>)
+		<a href="#86538" title="sbt.BufferedLogger">log2</a>.<a href="../Logger.scala.html#67897" title="(=&gt; Int)Int">bufferAll</a> {  <a href="#74581" title="(sbt.Logger,Boolean)sbt.Process">run</a>(<a href="#86538" title="sbt.BufferedLogger">log2</a>, <a href="#86536" title="Boolean">connectInput</a>).<a href="../Process.scala.html#66001" title="()Int">exitValue</a>() }
+	}
+	<span class="keyword">def</span> <a title="(sbt.ProcessIO)Int" id="74597">!</a>(<a title="sbt.ProcessIO" id="86556">io</a>: <a href="../Process.scala.html#13523" title="sbt.ProcessIO">ProcessIO</a>) = <a href="../Process.scala.html#59247" title="(sbt.ProcessIO)sbt.Process">run</a>(<a href="#86556" title="sbt.ProcessIO">io</a>).<a href="../Process.scala.html#66001" title="()Int">exitValue</a>()
+
+	<span class="keyword">def</span> <a title="=&gt; Boolean" id="74598">canPipeTo</a> = <span title="Boolean(false)" class="keyword">false</span>
+}
+
+<span class="keyword">private</span>[sbt] <span class="keyword">class</span> <a title="class URLBuilder extends java.lang.Object with sbt.URLPartialBuilder with sbt.SourcePartialBuilder with ScalaObject" id="9395">URLBuilder</a>(<a title="java.net.URL" id="74794">url</a>: <span title="java.net.URL">URL</span>) <span class="keyword">extends</span> <a href="../Process.scala.html#11114" title="sbt.URLPartialBuilder">URLPartialBuilder</a> <span class="keyword">with</span> <a href="../Process.scala.html#11987" title="sbt.SourcePartialBuilder">SourcePartialBuilder</a>
+{
+	<span class="keyword">protected</span> <span class="keyword">def</span> <a title="=&gt; sbt.URLInput" id="74793">toSource</a> = <span title="sbt.URLInput" class="keyword">new</span> <a href="#8768" title="sbt.URLInput">URLInput</a>(<a href="#74794" title="java.net.URL">url</a>)
+}
+<span class="keyword">private</span>[sbt] <span class="keyword">class</span> <a title="class FileBuilder extends java.lang.Object with sbt.FilePartialBuilder with sbt.SinkPartialBuilder with sbt.SourcePartialBuilder with ScalaObject" id="8840">FileBuilder</a>(<a title="java.io.File" id="74789">base</a>: <span title="java.io.File">File</span>) <span class="keyword">extends</span> <a href="../Process.scala.html#8843" title="sbt.FilePartialBuilder">FilePartialBuilder</a> <span class="keyword">with</span> <a href="../Process.scala.html#10970" title="sbt.SinkPartialBuilder">SinkPartialBuilder</a> <span class="keyword">with</span> <a href="../Process.scala.html#11987" title="sbt.SourcePartialBuilder">SourcePartialBuilder</a>
+{
+	<span class="keyword">protected</span> <span class="keyword">def</span> <a title="=&gt; sbt.FileInput" id="74783">toSource</a> = <span title="sbt.FileInput" class="keyword">new</span> <a href="#12533" title="sbt.FileInput">FileInput</a>(<a href="#74789" title="java.io.File">base</a>)
+	<span class="keyword">protected</span> <span class="keyword">def</span> <a title="=&gt; sbt.FileOutput" id="74784">toSink</a> = <span title="sbt.FileOutput" class="keyword">new</span> <a href="#11048" title="sbt.FileOutput">FileOutput</a>(<a href="#74789" title="java.io.File">base</a>, <span title="Boolean(false)" class="keyword">false</span>)
+	<span class="keyword">def</span> <a title="(java.io.File)sbt.ProcessBuilder" id="74785">#&lt;&lt;</a>(<a title="java.io.File" id="86685">f</a>: <span title="java.io.File">File</span>): <a href="../Process.scala.html#11240" title="sbt.ProcessBuilder">ProcessBuilder</a> = <a href="#74788" title="(sbt.ProcessBuilder)sbt.ProcessBuilder">#&lt;&lt;</a>(<span title="sbt.FileInput" class="keyword">new</span> <a href="#12533" title="sbt.FileInput">FileInput</a>(<a href="#86685" title="java.io.File">f</a>))
+	<span class="keyword">def</span> <a title="(java.net.URL)sbt.ProcessBuilder" id="74786">#&lt;&lt;</a>(<a title="java.net.URL" id="86686">u</a>: <span title="java.net.URL">URL</span>): <a href="../Process.scala.html#11240" title="sbt.ProcessBuilder">ProcessBuilder</a> = <a href="#74788" title="(sbt.ProcessBuilder)sbt.ProcessBuilder">#&lt;&lt;</a>(<span title="sbt.URLInput" class="keyword">new</span> <a href="#8768" title="sbt.URLInput">URLInput</a>(<a href="#86686" title="java.net.URL">u</a>))
+	<span class="keyword">def</span> <a title="(=&gt; java.io.InputStream)sbt.ProcessBuilder" id="74787">#&lt;&lt;</a>(<a title="=&gt; java.io.InputStream" id="86687">s</a>: =&gt; InputStream): <a href="../Process.scala.html#11240" title="sbt.ProcessBuilder">ProcessBuilder</a> = <a href="#74788" title="(sbt.ProcessBuilder)sbt.ProcessBuilder">#&lt;&lt;</a>(<a href="#74954" title="(=&gt; java.io.InputStream)sbt.InputStreamBuilder" class="keyword">new</a> <a href="#10667" title="sbt.InputStreamBuilder">InputStreamBuilder</a>(<a href="#86687" title="=&gt; java.io.InputStream">s</a>))
+	<span class="keyword">def</span> <a title="(sbt.ProcessBuilder)sbt.ProcessBuilder" id="74788">#&lt;&lt;</a>(<a title="sbt.ProcessBuilder" id="86688">b</a>: <a href="../Process.scala.html#11240" title="sbt.ProcessBuilder">ProcessBuilder</a>): <a href="../Process.scala.html#11240" title="sbt.ProcessBuilder">ProcessBuilder</a> = <span title="sbt.PipedProcessBuilder" class="keyword">new</span> <a href="#12449" title="sbt.PipedProcessBuilder">PipedProcessBuilder</a>(<a href="#86688" title="sbt.ProcessBuilder">b</a>, <span title="sbt.FileOutput" class="keyword">new</span> <a href="#11048" title="sbt.FileOutput">FileOutput</a>(<a href="#74789" title="java.io.File">base</a>, <span title="Boolean(true)" class="keyword">true</span>), <span title="Boolean(false)" class="keyword">false</span>)
+}
+
+<span class="keyword">private</span> <span class="keyword">abstract</span> <span class="keyword">class</span> <a title="class BasicBuilder extends sbt.AbstractProcessBuilder with ScalaObject" id="10688">BasicBuilder</a> <span class="keyword">extends</span> <a href="#10331" title="sbt.AbstractProcessBuilder">AbstractProcessBuilder</a>
+{
+	<span class="keyword">protected</span>[<span class="keyword">this</span>] <span class="keyword">def</span> <a title="(sbt.ProcessBuilder)Unit" id="74920">checkNotThis</a>(<a title="sbt.ProcessBuilder" id="86694">a</a>: <a href="../Process.scala.html#11240" title="sbt.ProcessBuilder">ProcessBuilder</a>) = <span title="(Boolean,Any)Unit">require</span>(<a href="#86694" title="sbt.ProcessBuilder">a</a> <span title="(AnyRef)Boolean">!=</span> <a href="#10688" title="sbt.BasicBuilder" class="keyword">this</a>, <span title="java.lang.String(&quot;Compound process '&quot;)" class="string">&quot;Compound process '&quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#86694" title="sbt.ProcessBuilder">a</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot;' cannot contain itself.&quot;)" class="string">&quot;' cannot contain itself.&quot;</span>)
+	<span class="keyword">final</span> <span class="keyword">def</span> <a title="(sbt.ProcessIO)sbt.Process" id="74921">run</a>(<a title="sbt.ProcessIO" id="86704">io</a>: <a href="../Process.scala.html#13523" title="sbt.ProcessIO">ProcessIO</a>): <a href="../Process.scala.html#12947" title="sbt.Process">Process</a> =
+	{
+		<span class="keyword">val</span> <a title="sbt.BasicProcess" id="86705">p</a> = <a href="#74922" title="(sbt.ProcessIO)sbt.BasicProcess">createProcess</a>(<a href="#86704" title="sbt.ProcessIO">io</a>)
+		<a href="#86705" title="sbt.BasicProcess">p</a>.<a href="#86708" title="()Unit">start</a>()
+		<a href="#86705" title="sbt.BasicProcess">p</a>
+	}
+	<span class="keyword">protected</span>[<span class="keyword">this</span>] <span class="keyword">def</span> <a title="(sbt.ProcessIO)sbt.BasicProcess" id="74922">createProcess</a>(<a title="sbt.ProcessIO" id="86706">io</a>: <a href="../Process.scala.html#13523" title="sbt.ProcessIO">ProcessIO</a>): <a href="#8249" title="sbt.BasicProcess">BasicProcess</a>
+}
+<span class="keyword">private</span> <span class="keyword">abstract</span> <span class="keyword">class</span> <a title="class BasicProcess extends java.lang.Object with sbt.Process with ScalaObject" id="8249">BasicProcess</a> <span class="keyword">extends</span> <a href="../Process.scala.html#12947" title="sbt.Process">Process</a>
+{
+	<span class="keyword">def</span> <a title="()Unit" id="86708">start</a>(): <span title="Unit">Unit</span>
+}
+
+<span class="keyword">private</span> <span class="keyword">abstract</span> <span class="keyword">class</span> <a title="class CompoundProcess extends sbt.BasicProcess with ScalaObject" id="10085">CompoundProcess</a> <span class="keyword">extends</span> <a href="#8249" title="sbt.BasicProcess">BasicProcess</a>
+{
+	<span class="keyword">def</span> <a title="()Unit" id="86711">destroy</a>() { <a href="#86718" title="()Unit">destroyer</a>() }
+	<span class="keyword">def</span> <a title="()Int" id="86712">exitValue</a>() = <a href="#86716" title="()Option[Int]">getExitValue</a>().<a title="(=&gt; Int)Int" id="30531">getOrElse</a>(<span title="(String)Nothing">error</span>(<span title="java.lang.String(&quot;No exit code: process destroyed.&quot;)" class="string">&quot;No exit code: process destroyed.&quot;</span>))
+
+	<span class="keyword">def</span> <a title="()Unit" id="86713">start</a>() = <a href="#86716" title="=&gt; () =&gt; Option[Int]">getExitValue</a>
+	
+	<span class="keyword">protected</span> <span class="keyword">lazy</span> <span class="keyword">val</span> <a href="#17992" title="(() =&gt; Option[Int], () =&gt; Unit)" id="86715">(</a><a href="#86714" title="() =&gt; Option[Int]" id="17992">getExitValue</a>, <a href="#86714" title="() =&gt; Unit" id="17994">destroyer</a>) =
+	{
+		<span class="keyword">val</span> <a title="scala.concurrent.SyncVar[Option[Int]]" id="86725">code</a> = <span title="scala.concurrent.SyncVar[Option[Int]]" class="keyword">new</span> <span title="scala.concurrent.SyncVar[Option[Int]]">SyncVar</span>[Option[Int]]()
+		<a href="#86725" title="scala.concurrent.SyncVar[Option[Int]]">code</a>.<span title="(Option[Int])Unit">set</span>(<span title="object None">None</span>)
+		<span class="keyword">val</span> <a title="java.lang.Thread" id="86726">thread</a> = <a href="#86170" title="(=&gt; Unit)java.lang.Thread">Spawn</a>(<a href="#86725" title="scala.concurrent.SyncVar[Option[Int]]">code</a>.<span title="(Option[Int])Unit">set</span>(<a href="#86720" title="()Option[Int]">runAndExitValue</a>()))
+		
+		<span title="(() =&gt; Option[Int],() =&gt; Unit)(() =&gt; Option[Int], () =&gt; Unit)">(</span>
+			<a href="#86198" title="(=&gt; Option[Int])() =&gt; Option[Int]">Future</a> { <a href="#86726" title="java.lang.Thread">thread</a>.<span title="()Unit">join</span>(); <a href="#86725" title="scala.concurrent.SyncVar[Option[Int]]">code</a>.<span title="=&gt; Option[Int]">get</span> },
+			() =&gt; <a href="#86726" title="java.lang.Thread">thread</a>.<span title="()Unit">interrupt</span>()
+		)
+	}
+	
+	<span class="comment">/** Start and block until the exit value is available and then return it in Some.  Return None if destroyed (use 'run')*/</span>
+	<span class="keyword">protected</span>[<span class="keyword">this</span>] <span class="keyword">def</span> <a title="()Option[Int]" id="86720">runAndExitValue</a>(): <span title="Option[Int]">Option</span>[Int]
+
+	<span class="keyword">protected</span>[<span class="keyword">this</span>] <span class="keyword">def</span> <a title="[T](=&gt; T)(=&gt; Unit)Option[T]" id="86721">runInterruptible</a>[<a title="&gt;: Nothing &lt;: Any" id="86723">T</a>](<a title="=&gt; T" id="86746">action</a>: =&gt; T)(<a title="=&gt; Unit" id="86747">destroyImpl</a>: =&gt; Unit): <span title="Option[T]">Option</span>[T] =
+	{
+		<span class="keyword">try</span> { <span title="(T)Some[T]">Some</span>(<a href="#86746" title="=&gt; T">action</a>) }
+		<span class="keyword">catch</span> { <span title="None.type" class="keyword">case</span> _: <span title="java.lang.InterruptedException">InterruptedException</span> =&gt; <a href="#86747" title="=&gt; Unit">destroyImpl</a>; <span title="object None">None</span> }
+	}
+}
+
+<span class="keyword">private</span> <span class="keyword">abstract</span> <span class="keyword">class</span> <a title="class SequentialProcessBuilder extends sbt.BasicBuilder with ScalaObject" id="13346">SequentialProcessBuilder</a>(<a title="sbt.ProcessBuilder" id="86753">a</a>: <a href="../Process.scala.html#11240" title="sbt.ProcessBuilder">ProcessBuilder</a>, <a title="sbt.ProcessBuilder" id="86754">b</a>: <a href="../Process.scala.html#11240" title="sbt.ProcessBuilder">ProcessBuilder</a>, <a title="String" id="86755">operatorString</a>: <span title="String">String</span>) <span class="keyword">extends</span> <a href="#10688" title="sbt.BasicBuilder">BasicBuilder</a>
+{
+	<a href="#74920" title="(sbt.ProcessBuilder)Unit">checkNotThis</a>(<a href="#86753" title="sbt.ProcessBuilder">a</a>)
+	<a href="#74920" title="(sbt.ProcessBuilder)Unit">checkNotThis</a>(<a href="#86754" title="sbt.ProcessBuilder">b</a>)
+	<span class="keyword">override</span> <span class="keyword">def</span> <a title="()java.lang.String" id="74930">toString</a> = <span title="java.lang.String(&quot; ( &quot;)" class="string">&quot; ( &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#86753" title="sbt.ProcessBuilder">a</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot; &quot;)" class="string">&quot; &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#86755" title="String">operatorString</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot; &quot;)" class="string">&quot; &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#86754" title="sbt.ProcessBuilder">b</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot; ) &quot;)" class="string">&quot; ) &quot;</span>
+}
+<span class="keyword">private</span> <span class="keyword">class</span> <a title="class PipedProcessBuilder extends sbt.SequentialProcessBuilder with ScalaObject" id="12449">PipedProcessBuilder</a>(<a title="sbt.ProcessBuilder" id="74939">first</a>: <a href="../Process.scala.html#11240" title="sbt.ProcessBuilder">ProcessBuilder</a>, <a title="sbt.ProcessBuilder" id="74940">second</a>: <a href="../Process.scala.html#11240" title="sbt.ProcessBuilder">ProcessBuilder</a>, <a title="Boolean" id="74941">toError</a>: <span title="Boolean">Boolean</span>) <span class="keyword">extends</span> <a href="#13346" title="sbt.SequentialProcessBuilder">SequentialProcessBuilder</a>(<a href="#74939" title="sbt.ProcessBuilder">first</a>, <a href="#74940" title="sbt.ProcessBuilder">second</a>, <span title="String" class="keyword">if</span>(<a href="#74941" title="Boolean">toError</a>) <span title="java.lang.String(&quot;#|!&quot;)" class="string">&quot;#|!&quot;</span> <span class="keyword">else</span> <span title="java.lang.String(&quot;#|&quot;)" class="string">&quot;#|&quot;</span>)
+{
+	<span class="keyword">override</span> <span class="keyword">def</span> <a title="(sbt.ProcessIO)sbt.PipedProcesses" id="74938">createProcess</a>(<a title="sbt.ProcessIO" id="86762">io</a>: <a href="../Process.scala.html#13523" title="sbt.ProcessIO">ProcessIO</a>) = <span title="sbt.PipedProcesses" class="keyword">new</span> <a href="#10511" title="sbt.PipedProcesses">PipedProcesses</a>(<a href="#74939" title="sbt.ProcessBuilder">first</a>, <a href="#74940" title="sbt.ProcessBuilder">second</a>, <a href="#86762" title="sbt.ProcessIO">io</a>, <a href="#74941" title="Boolean">toError</a>)
+}
+<span class="keyword">private</span> <span class="keyword">class</span> <a title="class AndProcessBuilder extends sbt.SequentialProcessBuilder with ScalaObject" id="10751">AndProcessBuilder</a>(<a title="sbt.ProcessBuilder" id="86455">first</a>: <a href="../Process.scala.html#11240" title="sbt.ProcessBuilder">ProcessBuilder</a>, <a title="sbt.ProcessBuilder" id="86456">second</a>: <a href="../Process.scala.html#11240" title="sbt.ProcessBuilder">ProcessBuilder</a>) <span class="keyword">extends</span> <a href="#13346" title="sbt.SequentialProcessBuilder">SequentialProcessBuilder</a>(<a href="#86455" title="sbt.ProcessBuilder">first</a>, <a href="#86456" title="sbt.ProcessBuilder">second</a>, <span title="java.lang.String(&quot;#&amp;&amp;&quot;)" class="string">&quot;#&amp;&amp;&quot;</span>)
+{
+	<span class="keyword">override</span> <span class="keyword">def</span> <a title="(sbt.ProcessIO)sbt.AndProcess" id="86454">createProcess</a>(<a title="sbt.ProcessIO" id="86781">io</a>: <a href="../Process.scala.html#13523" title="sbt.ProcessIO">ProcessIO</a>) = <span title="sbt.AndProcess" class="keyword">new</span> <a href="#11477" title="sbt.AndProcess">AndProcess</a>(<a href="#86455" title="sbt.ProcessBuilder">first</a>, <a href="#86456" title="sbt.ProcessBuilder">second</a>, <a href="#86781" title="sbt.ProcessIO">io</a>)
+}
+<span class="keyword">private</span> <span class="keyword">class</span> <a title="class OrProcessBuilder extends sbt.SequentialProcessBuilder with ScalaObject" id="9740">OrProcessBuilder</a>(<a title="sbt.ProcessBuilder" id="86464">first</a>: <a href="../Process.scala.html#11240" title="sbt.ProcessBuilder">ProcessBuilder</a>, <a title="sbt.ProcessBuilder" id="86465">second</a>: <a href="../Process.scala.html#11240" title="sbt.ProcessBuilder">ProcessBuilder</a>) <span class="keyword">extends</span> <a href="#13346" title="sbt.SequentialProcessBuilder">SequentialProcessBuilder</a>(<a href="#86464" title="sbt.ProcessBuilder">first</a>, <a href="#86465" title="sbt.ProcessBuilder">second</a>, <span title="java.lang.String(&quot;#||&quot;)" class="string">&quot;#||&quot;</span>)
+{
+	<span class="keyword">override</span> <span class="keyword">def</span> <a title="(sbt.ProcessIO)sbt.OrProcess" id="86463">createProcess</a>(<a title="sbt.ProcessIO" id="86806">io</a>: <a href="../Process.scala.html#13523" title="sbt.ProcessIO">ProcessIO</a>) = <span title="sbt.OrProcess" class="keyword">new</span> <a href="#9722" title="sbt.OrProcess">OrProcess</a>(<a href="#86464" title="sbt.ProcessBuilder">first</a>, <a href="#86465" title="sbt.ProcessBuilder">second</a>, <a href="#86806" title="sbt.ProcessIO">io</a>)
+}
+<span class="keyword">private</span> <span class="keyword">class</span> <a title="class SequenceProcessBuilder extends sbt.SequentialProcessBuilder with ScalaObject" id="11294">SequenceProcessBuilder</a>(<a title="sbt.ProcessBuilder" id="86481">first</a>: <a href="../Process.scala.html#11240" title="sbt.ProcessBuilder">ProcessBuilder</a>, <a title="sbt.ProcessBuilder" id="86482">second</a>: <a href="../Process.scala.html#11240" title="sbt.ProcessBuilder">ProcessBuilder</a>) <span class="keyword">extends</span> <a href="#13346" title="sbt.SequentialProcessBuilder">SequentialProcessBuilder</a>(<a href="#86481" title="sbt.ProcessBuilder">first</a>, <a href="#86482" title="sbt.ProcessBuilder">second</a>, <span title="java.lang.String(&quot;##&quot;)" class="string">&quot;##&quot;</span>)
+{
+	<span class="keyword">override</span> <span class="keyword">def</span> <a title="(sbt.ProcessIO)sbt.ProcessSequence" id="86480">createProcess</a>(<a title="sbt.ProcessIO" id="86821">io</a>: <a href="../Process.scala.html#13523" title="sbt.ProcessIO">ProcessIO</a>) = <span title="sbt.ProcessSequence" class="keyword">new</span> <a href="#12185" title="sbt.ProcessSequence">ProcessSequence</a>(<a href="#86481" title="sbt.ProcessBuilder">first</a>, <a href="#86482" title="sbt.ProcessBuilder">second</a>, <a href="#86821" title="sbt.ProcessIO">io</a>)
+}
+
+<span class="keyword">private</span> <span class="keyword">class</span> <a title="class SequentialProcess extends sbt.CompoundProcess with ScalaObject" id="12008">SequentialProcess</a>(<a title="sbt.ProcessBuilder" id="86838">a</a>: <a href="../Process.scala.html#11240" title="sbt.ProcessBuilder">ProcessBuilder</a>, <a title="sbt.ProcessBuilder" id="86839">b</a>: <a href="../Process.scala.html#11240" title="sbt.ProcessBuilder">ProcessBuilder</a>, <a title="sbt.ProcessIO" id="86840">io</a>: <a href="../Process.scala.html#13523" title="sbt.ProcessIO">ProcessIO</a>, <a title="(Int) =&gt; Boolean" id="86841">evaluateSecondProcess</a>: Int =&gt; Boolean) <span class="keyword">extends</span> <a href="#10085" title="sbt.CompoundProcess">CompoundProcess</a>
+{
+	<span class="keyword">protected</span>[<span class="keyword">this</span>] <span class="keyword">override</span> <span class="keyword">def</span> <a title="()Option[Int]" id="86792">runAndExitValue</a>() =
+	{
+		<span class="keyword">val</span> <a title="sbt.Process" id="86843">first</a> = <a href="#86838" title="sbt.ProcessBuilder">a</a>.<a href="../Process.scala.html#59247" title="(sbt.ProcessIO)sbt.Process">run</a>(<a href="#86840" title="sbt.ProcessIO">io</a>)
+		<a href="#86721" title="(=&gt; Int)(=&gt; Unit)Option[Int]">runInterruptible</a>(<a href="#86843" title="sbt.Process">first</a>.<a href="../Process.scala.html#66001" title="()Int">exitValue</a>)(<a href="#86843" title="sbt.Process">first</a>.<a href="../Process.scala.html#66002" title="()Unit">destroy</a>()) <a title="((Int) =&gt; Option[Int])Option[Int]" id="30535">flatMap</a>
+		{ <a title="Int" id="86849">codeA</a> =&gt;
+			<span title="Option[Int]" class="keyword">if</span>(<a href="#86841" title="(Int)Boolean">evaluateSecondProcess</a>(<a href="#86849" title="Int">codeA</a>))
+			{
+				<span class="keyword">val</span> <a title="sbt.Process" id="86850">second</a> = <a href="#86839" title="sbt.ProcessBuilder">b</a>.<a href="../Process.scala.html#59247" title="(sbt.ProcessIO)sbt.Process">run</a>(<a href="#86840" title="sbt.ProcessIO">io</a>)
+				<a href="#86721" title="(=&gt; Int)(=&gt; Unit)Option[Int]">runInterruptible</a>(<a href="#86850" title="sbt.Process">second</a>.<a href="../Process.scala.html#66001" title="()Int">exitValue</a>)(<a href="#86850" title="sbt.Process">second</a>.<a href="../Process.scala.html#66002" title="()Unit">destroy</a>())
+			}
+			<span class="keyword">else</span>
+				<span title="(Int)Some[Int]">Some</span>(<a href="#86849" title="Int">codeA</a>)
+		}
+	}
+}
+<span class="keyword">private</span> <span class="keyword">class</span> <a title="class AndProcess extends sbt.SequentialProcess with ScalaObject" id="11477">AndProcess</a>(<a title="sbt.ProcessBuilder" id="86800">a</a>: <a href="../Process.scala.html#11240" title="sbt.ProcessBuilder">ProcessBuilder</a>, <a title="sbt.ProcessBuilder" id="86801">b</a>: <a href="../Process.scala.html#11240" title="sbt.ProcessBuilder">ProcessBuilder</a>, <a title="sbt.ProcessIO" id="86802">io</a>: <a href="../Process.scala.html#13523" title="sbt.ProcessIO">ProcessIO</a>) <span class="keyword">extends</span> <a href="#12008" title="sbt.SequentialProcess">SequentialProcess</a>(<a href="#86800" title="sbt.ProcessBuilder">a</a>, <a href="#86801" title="sbt.ProcessBuilder">b</a>, <a href="#86802" title="sbt.ProcessIO">io</a>, <a href="#86860" title="Int">_</a> <span title="(Int)Boolean">==</span> <span title="Int(0)" class="int">0</span>)
+<span class="keyword">private</span> <span class="keyword">class</span> <a title="class OrProcess extends sbt.SequentialProcess with ScalaObject" id="9722">OrProcess</a>(<a title="sbt.ProcessBuilder" id="86815">a</a>: <a href="../Process.scala.html#11240" title="sbt.ProcessBuilder">ProcessBuilder</a>, <a title="sbt.ProcessBuilder" id="86816">b</a>: <a href="../Process.scala.html#11240" title="sbt.ProcessBuilder">ProcessBuilder</a>, <a title="sbt.ProcessIO" id="86817">io</a>: <a href="../Process.scala.html#13523" title="sbt.ProcessIO">ProcessIO</a>) <span class="keyword">extends</span> <a href="#12008" title="sbt.SequentialProcess">SequentialProcess</a>(<a href="#86815" title="sbt.ProcessBuilder">a</a>, <a href="#86816" title="sbt.ProcessBuilder">b</a>, <a href="#86817" title="sbt.ProcessIO">io</a>, <a href="#86867" title="Int">_</a> <a title="(Int)Boolean" id="3081">!=</a> <span title="Int(0)" class="int">0</span>)
+<span class="keyword">private</span> <span class="keyword">class</span> <a title="class ProcessSequence extends sbt.SequentialProcess with ScalaObject" id="12185">ProcessSequence</a>(<a title="sbt.ProcessBuilder" id="86830">a</a>: <a href="../Process.scala.html#11240" title="sbt.ProcessBuilder">ProcessBuilder</a>, <a title="sbt.ProcessBuilder" id="86831">b</a>: <a href="../Process.scala.html#11240" title="sbt.ProcessBuilder">ProcessBuilder</a>, <a title="sbt.ProcessIO" id="86832">io</a>: <a href="../Process.scala.html#13523" title="sbt.ProcessIO">ProcessIO</a>) <span class="keyword">extends</span> <a href="#12008" title="sbt.SequentialProcess">SequentialProcess</a>(<a href="#86830" title="sbt.ProcessBuilder">a</a>, <a href="#86831" title="sbt.ProcessBuilder">b</a>, <a href="#86832" title="sbt.ProcessIO">io</a>, <a title="Int" id="86874">ignore</a> =&gt; <span title="Boolean(true)" class="keyword">true</span>)
+
+
+<span class="keyword">private</span> <span class="keyword">class</span> <a title="class PipedProcesses extends sbt.CompoundProcess with ScalaObject" id="10511">PipedProcesses</a>(<a title="sbt.ProcessBuilder" id="86774">a</a>: <a href="../Process.scala.html#11240" title="sbt.ProcessBuilder">ProcessBuilder</a>, <a title="sbt.ProcessBuilder" id="86775">b</a>: <a href="../Process.scala.html#11240" title="sbt.ProcessBuilder">ProcessBuilder</a>, <a title="sbt.ProcessIO" id="86776">defaultIO</a>: <a href="../Process.scala.html#13523" title="sbt.ProcessIO">ProcessIO</a>, <a title="Boolean" id="86777">toError</a>: <span title="Boolean">Boolean</span>) <span class="keyword">extends</span> <a href="#10085" title="sbt.CompoundProcess">CompoundProcess</a>
+{
+	<span class="keyword">protected</span>[<span class="keyword">this</span>] <span class="keyword">override</span> <span class="keyword">def</span> <a title="()Option[Int]" id="86773">runAndExitValue</a>() =
+	{
+		<span class="keyword">val</span> <a title="scala.concurrent.SyncVar[Option[java.io.InputStream]]" id="86881">currentSource</a> = <span title="scala.concurrent.SyncVar[Option[java.io.InputStream]]" class="keyword">new</span> <span title="scala.concurrent.SyncVar[Option[java.io.InputStream]]">SyncVar</span>[Option[InputStream]]
+		<span class="keyword">val</span> <a title="java.io.PipedOutputStream" id="86882">pipeOut</a> = <a title="()java.io.PipedOutputStream" id="86893" class="keyword">new</a> <span title="java.io.PipedOutputStream">PipedOutputStream</span>
+		<span class="keyword">val</span> <a title="sbt.PipeSource" id="86883">source</a> = <span title="sbt.PipeSource" class="keyword">new</span> <a href="#12197" title="sbt.PipeSource">PipeSource</a>(<a href="#86881" title="scala.concurrent.SyncVar[Option[java.io.InputStream]]">currentSource</a>, <a href="#86882" title="java.io.PipedOutputStream">pipeOut</a>, <a href="#86774" title="sbt.ProcessBuilder">a</a>.<span title="()java.lang.String">toString</span>)
+		<a href="#86883" title="sbt.PipeSource">source</a>.<span title="()Unit">start</span>()
+		
+		<span class="keyword">val</span> <a title="java.io.PipedInputStream" id="86884">pipeIn</a> = <span title="java.io.PipedInputStream" class="keyword">new</span> <span title="java.io.PipedInputStream">PipedInputStream</span>(<a href="#86882" title="java.io.PipedOutputStream">pipeOut</a>)
+		<span class="keyword">val</span> <a title="scala.concurrent.SyncVar[Option[java.io.OutputStream]]" id="86885">currentSink</a> = <span title="scala.concurrent.SyncVar[Option[java.io.OutputStream]]" class="keyword">new</span> <span title="scala.concurrent.SyncVar[Option[java.io.OutputStream]]">SyncVar</span>[Option[OutputStream]]
+		<span class="keyword">val</span> <a title="sbt.PipeSink" id="86886">sink</a> = <span title="sbt.PipeSink" class="keyword">new</span> <a href="#13541" title="sbt.PipeSink">PipeSink</a>(<a href="#86884" title="java.io.PipedInputStream">pipeIn</a>, <a href="#86885" title="scala.concurrent.SyncVar[Option[java.io.OutputStream]]">currentSink</a>, <a href="#86775" title="sbt.ProcessBuilder">b</a>.<span title="()java.lang.String">toString</span>)
+		<a href="#86886" title="sbt.PipeSink">sink</a>.<span title="()Unit">start</span>()
+
+		<span class="keyword">def</span> <a title="(java.io.InputStream)Unit" id="86887">handleOutOrError</a>(<a title="java.io.InputStream" id="86949">fromOutput</a>: <span title="java.io.InputStream">InputStream</span>) = <a href="#86881" title="scala.concurrent.SyncVar[Option[java.io.InputStream]]">currentSource</a>.<span title="(Option[java.io.InputStream])Unit">put</span>(<span title="(java.io.InputStream)Some[java.io.InputStream]">Some</span>(<a href="#86949" title="java.io.InputStream">fromOutput</a>))
+
+		<span class="keyword">val</span> <a title="sbt.ProcessIO" id="86888">firstIO</a> =
+			<span title="sbt.ProcessIO" class="keyword">if</span>(<a href="#86777" title="Boolean">toError</a>)
+				<a href="#86776" title="sbt.ProcessIO">defaultIO</a>.<a href="../Process.scala.html#65997" title="((java.io.InputStream) =&gt; Unit)sbt.ProcessIO">withError</a>(<a href="#86887" title="(java.io.InputStream)Unit">handleOutOrError</a>)
+			<span class="keyword">else</span>
+				<a href="#86776" title="sbt.ProcessIO">defaultIO</a>.<a href="../Process.scala.html#65996" title="((java.io.InputStream) =&gt; Unit)sbt.ProcessIO">withOutput</a>(<a href="#86887" title="(java.io.InputStream)Unit">handleOutOrError</a>)
+		<span class="keyword">val</span> <a title="sbt.ProcessIO" id="86889">secondIO</a> = <a href="#86776" title="sbt.ProcessIO">defaultIO</a>.<a href="../Process.scala.html#65998" title="((java.io.OutputStream) =&gt; Unit)sbt.ProcessIO">withInput</a>(<a title="java.io.OutputStream" id="86956">toInput</a> =&gt; <a href="#86885" title="scala.concurrent.SyncVar[Option[java.io.OutputStream]]">currentSink</a>.<span title="(Option[java.io.OutputStream])Unit">put</span>(<span title="(java.io.OutputStream)Some[java.io.OutputStream]">Some</span>(<a href="#86956" title="java.io.OutputStream">toInput</a>)) )
+		
+		<span class="keyword">val</span> <a title="sbt.Process" id="86890">second</a> = <a href="#86775" title="sbt.ProcessBuilder">b</a>.<a href="../Process.scala.html#59247" title="(sbt.ProcessIO)sbt.Process">run</a>(<a href="#86889" title="sbt.ProcessIO">secondIO</a>)
+		<span class="keyword">val</span> <a title="sbt.Process" id="86891">first</a> = <a href="#86774" title="sbt.ProcessBuilder">a</a>.<a href="../Process.scala.html#59247" title="(sbt.ProcessIO)sbt.Process">run</a>(<a href="#86888" title="sbt.ProcessIO">firstIO</a>)
+		<span class="keyword">try</span>
+		{
+			<a href="#86721" title="(=&gt; Int)(=&gt; Unit)Option[Int]">runInterruptible</a> {
+				<a href="#86891" title="sbt.Process">first</a>.<a href="../Process.scala.html#66001" title="()Int">exitValue</a>
+				<a href="#86881" title="scala.concurrent.SyncVar[Option[java.io.InputStream]]">currentSource</a>.<span title="(Option[java.io.InputStream])Unit">put</span>(<span title="object None">None</span>)
+				<a href="#86885" title="scala.concurrent.SyncVar[Option[java.io.OutputStream]]">currentSink</a>.<span title="(Option[java.io.OutputStream])Unit">put</span>(<span title="object None">None</span>)
+				<span class="keyword">val</span> <a title="Int" id="86963">result</a> = <a href="#86890" title="sbt.Process">second</a>.<a href="../Process.scala.html#66001" title="()Int">exitValue</a>
+				<a href="#86963" title="Int">result</a>
+			} {
+				<a href="#86891" title="sbt.Process">first</a>.<a href="../Process.scala.html#66002" title="()Unit">destroy</a>()
+				<a href="#86890" title="sbt.Process">second</a>.<a href="../Process.scala.html#66002" title="()Unit">destroy</a>()
+			}
+		}
+		<span class="keyword">finally</span>
+		{
+			<a href="#8469" title="object sbt.BasicIO">BasicIO</a>.<a href="#86245" title="(java.io.Closeable)Unit">close</a>(<a href="#86884" title="java.io.PipedInputStream">pipeIn</a>)
+			<a href="#8469" title="object sbt.BasicIO">BasicIO</a>.<a href="#86245" title="(java.io.Closeable)Unit">close</a>(<a href="#86882" title="java.io.PipedOutputStream">pipeOut</a>)
+		}
+	}
+}
+<span class="keyword">private</span> <span class="keyword">class</span> <a title="class PipeSource extends java.lang.Thread with ScalaObject" id="12197">PipeSource</a>(<a title="scala.concurrent.SyncVar[Option[java.io.InputStream]]" id="86933">currentSource</a>: <span title="scala.concurrent.SyncVar[Option[java.io.InputStream]]">SyncVar</span>[Option[InputStream]], <a title="java.io.PipedOutputStream" id="86934">pipe</a>: <span title="java.io.PipedOutputStream">PipedOutputStream</span>, <a title="=&gt; String" id="86935">label</a>: =&gt; String) <span class="keyword">extends</span> <span title="java.lang.Thread">Thread</span>
+{
+	<span class="keyword">final</span> <span class="keyword">override</span> <span class="keyword">def</span> <a title="()Unit" id="86932">run</a>()
+	{
+		<a href="#86933" title="scala.concurrent.SyncVar[Option[java.io.InputStream]]">currentSource</a>.<span title="=&gt; Option[java.io.InputStream]">get</span> <span title="Unit" class="keyword">match</span>
+		{
+			<span title="Unit" class="keyword">case</span> Some(<a title="java.io.InputStream" id="86972">source</a>) =&gt;
+				<span class="keyword">try</span> { <a href="#8469" title="object sbt.BasicIO">BasicIO</a>.<a href="#86256" title="(java.io.InputStream,java.io.OutputStream)Unit">transferFully</a>(<a href="#86972" title="java.io.InputStream">source</a>, <a href="#86934" title="java.io.PipedOutputStream">pipe</a>) }
+				<span class="keyword">catch</span> { <span title="Unit" class="keyword">case</span> <a title="java.io.IOException" id="86973">e</a>: <span title="java.io.IOException">IOException</span> =&gt; <span title="(Any)Unit">println</span>(<span title="java.lang.String(&quot;I/O error &quot;)" class="string">&quot;I/O error &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#86973" title="java.io.IOException">e</a>.<span title="()java.lang.String">getMessage</span> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot; for process: &quot;)" class="string">&quot; for process: &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#86935" title="=&gt; String">label</a>); <a href="#86973" title="java.io.IOException">e</a>.<span title="()Unit">printStackTrace</span>() }
+				<span class="keyword">finally</span>
+				{
+					<a href="#8469" title="object sbt.BasicIO">BasicIO</a>.<a href="#86245" title="(java.io.Closeable)Unit">close</a>(<a href="#86972" title="java.io.InputStream">source</a>)
+					<a href="#86933" title="scala.concurrent.SyncVar[Option[java.io.InputStream]]">currentSource</a>.<span title="()Unit">unset</span>()
+				}
+				<a href="#86932" title="()Unit">run</a>()
+			<span title="Unit" class="keyword">case</span> <span title="object None">None</span> =&gt;
+				<a href="#86933" title="scala.concurrent.SyncVar[Option[java.io.InputStream]]">currentSource</a>.<span title="()Unit">unset</span>()
+				<a href="#8469" title="object sbt.BasicIO">BasicIO</a>.<a href="#86245" title="(java.io.Closeable)Unit">close</a>(<a href="#86934" title="java.io.PipedOutputStream">pipe</a>)
+		}
+	}
+}
+<span class="keyword">private</span> <span class="keyword">class</span> <a title="class PipeSink extends java.lang.Thread with ScalaObject" id="13541">PipeSink</a>(<a title="java.io.PipedInputStream" id="86946">pipe</a>: <span title="java.io.PipedInputStream">PipedInputStream</span>, <a title="scala.concurrent.SyncVar[Option[java.io.OutputStream]]" id="86947">currentSink</a>: <span title="scala.concurrent.SyncVar[Option[java.io.OutputStream]]">SyncVar</span>[Option[OutputStream]], <a title="=&gt; String" id="86948">label</a>: =&gt; String) <span class="keyword">extends</span> <span title="java.lang.Thread">Thread</span>
+{
+	<span class="keyword">final</span> <span class="keyword">override</span> <span class="keyword">def</span> <a title="()Unit" id="86945">run</a>()
+	{
+		<a href="#86947" title="scala.concurrent.SyncVar[Option[java.io.OutputStream]]">currentSink</a>.<span title="=&gt; Option[java.io.OutputStream]">get</span> <span title="Unit" class="keyword">match</span>
+		{
+			<span title="Unit" class="keyword">case</span> Some(<a title="java.io.OutputStream" id="86984">sink</a>) =&gt;
+				<span class="keyword">try</span> { <a href="#8469" title="object sbt.BasicIO">BasicIO</a>.<a href="#86256" title="(java.io.InputStream,java.io.OutputStream)Unit">transferFully</a>(<a href="#86946" title="java.io.PipedInputStream">pipe</a>, <a href="#86984" title="java.io.OutputStream">sink</a>) }
+				<span class="keyword">catch</span> { <span title="Unit" class="keyword">case</span> <a title="java.io.IOException" id="86985">e</a>: <span title="java.io.IOException">IOException</span> =&gt; <span title="(Any)Unit">println</span>(<span title="java.lang.String(&quot;I/O error &quot;)" class="string">&quot;I/O error &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#86985" title="java.io.IOException">e</a>.<span title="()java.lang.String">getMessage</span> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot; for process: &quot;)" class="string">&quot; for process: &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#86948" title="=&gt; String">label</a>); <a href="#86985" title="java.io.IOException">e</a>.<span title="()Unit">printStackTrace</span>() }
+				<span class="keyword">finally</span>
+				{
+					<a href="#8469" title="object sbt.BasicIO">BasicIO</a>.<a href="#86245" title="(java.io.Closeable)Unit">close</a>(<a href="#86984" title="java.io.OutputStream">sink</a>)
+					<a href="#86947" title="scala.concurrent.SyncVar[Option[java.io.OutputStream]]">currentSink</a>.<span title="()Unit">unset</span>()
+				}
+				<a href="#86945" title="()Unit">run</a>()
+			<span title="Unit" class="keyword">case</span> <span title="object None">None</span> =&gt;
+				<a href="#86947" title="scala.concurrent.SyncVar[Option[java.io.OutputStream]]">currentSink</a>.<span title="()Unit">unset</span>()
+		}
+	}
+}
+
+<span class="keyword">private</span>[sbt] <span class="keyword">class</span> <a title="class DummyProcessBuilder extends sbt.AbstractProcessBuilder with ScalaObject" id="12761">DummyProcessBuilder</a>(<span class="keyword">override</span> <span class="keyword">val</span> <a title="String" id="74858">toString</a>: <span title="String">String</span>, <a title="=&gt; Int" id="74859">exitValue</a> : =&gt; Int) <span class="keyword">extends</span> <a href="#10331" title="sbt.AbstractProcessBuilder">AbstractProcessBuilder</a>
+{
+	<span class="keyword">override</span> <span class="keyword">def</span> <a title="(sbt.ProcessIO)sbt.Process" id="74856">run</a>(<a title="sbt.ProcessIO" id="86991">io</a>: <a href="../Process.scala.html#13523" title="sbt.ProcessIO">ProcessIO</a>): <a href="../Process.scala.html#12947" title="sbt.Process">Process</a> = <span title="sbt.DummyProcess" class="keyword">new</span> <a href="#8582" title="sbt.DummyProcess">DummyProcess</a>(<a href="#74859" title="=&gt; Int">exitValue</a>)
+	<span class="keyword">override</span> <span class="keyword">def</span> <a title="=&gt; Boolean" id="74857">canPipeTo</a> = <span title="Boolean(true)" class="keyword">true</span>
+}
+<span class="comment">/** A thin wrapper around a java.lang.Process.  `ioThreads` are the Threads created to do I/O.
+* The implementation of `exitValue` waits until these threads die before returning. */</span>
+<span class="keyword">private</span> <span class="keyword">class</span> <a title="class DummyProcess extends java.lang.Object with sbt.Process with ScalaObject" id="8582">DummyProcess</a>(<a title="=&gt; Int" id="86998">action</a>: =&gt; Int) <span class="keyword">extends</span> <a href="../Process.scala.html#12947" title="sbt.Process">Process</a>
+{
+	<span class="keyword">private</span>[<span class="keyword">this</span>] <span class="keyword">val</span> <a title="() =&gt; Int" id="86995">exitCode</a> = <a href="#86198" title="(=&gt; Int)() =&gt; Int">Future</a>(<a href="#86998" title="=&gt; Int">action</a>)
+	<span class="keyword">override</span> <span class="keyword">def</span> <a title="()Int" id="86996">exitValue</a>() = <a href="#86995" title="()Int">exitCode</a>()
+	<span class="keyword">override</span> <span class="keyword">def</span> <a title="()Unit" id="86997">destroy</a>() <span title="Unit">{</span>}
+}
+<span class="comment">/** Represents a simple command without any redirection or combination. */</span>
+<span class="keyword">private</span>[sbt] <span class="keyword">class</span> <a title="class SimpleProcessBuilder extends sbt.AbstractProcessBuilder with ScalaObject" id="8726">SimpleProcessBuilder</a>(<a title="java.lang.ProcessBuilder" id="74605">p</a>: <a title="java.lang.ProcessBuilder" id="1836">JProcessBuilder</a>) <span class="keyword">extends</span> <a href="#10331" title="sbt.AbstractProcessBuilder">AbstractProcessBuilder</a>
+{
+	<span class="keyword">override</span> <span class="keyword">def</span> <a title="(sbt.ProcessIO)sbt.Process" id="74602">run</a>(<a title="sbt.ProcessIO" id="87007">io</a>: <a href="../Process.scala.html#13523" title="sbt.ProcessIO">ProcessIO</a>): <a href="../Process.scala.html#12947" title="sbt.Process">Process</a> =
+	{
+		<span class="keyword">val</span> <a title="java.lang.Process" id="87008">process</a> = <a href="#74605" title="java.lang.ProcessBuilder">p</a>.<a title="()java.lang.Process" id="59145">start</a>() <span class="comment">// start the external process</span>
+		<span class="keyword">import</span> io.{writeInput, processOutput, processError}
+		<span class="comment">// spawn threads that process the input, output, and error streams using the functions defined in `io`</span>
+		<span class="keyword">val</span> <a title="java.lang.Thread" id="87010">inThread</a> = <a href="#86171" title="(=&gt; Unit,Boolean)java.lang.Thread">Spawn</a>(<a href="../Process.scala.html#65989" title="(java.io.OutputStream)Unit">writeInput</a>(<a href="#87008" title="java.lang.Process">process</a>.<a title="()java.io.OutputStream" id="87014">getOutputStream</a>), <span title="Boolean(true)" class="keyword">true</span>)
+		<span class="keyword">val</span> <a title="java.lang.Thread" id="87011">outThread</a> = <a href="#86170" title="(=&gt; Unit)java.lang.Thread">Spawn</a>(<a href="../Process.scala.html#65991" title="(java.io.InputStream)Unit">processOutput</a>(<a href="#87008" title="java.lang.Process">process</a>.<a title="()java.io.InputStream" id="87015">getInputStream</a>))
+		<span class="keyword">val</span> <a title="List[java.lang.Thread]" id="87012">errorThread</a> =
+			<span title="List[java.lang.Thread]" class="keyword">if</span>(<a title="=&gt; Boolean" id="2686">!</a><a href="#74605" title="java.lang.ProcessBuilder">p</a>.<a title="()Boolean" id="59143">redirectErrorStream</a>)
+				<a href="#86170" title="(=&gt; Unit)java.lang.Thread">Spawn</a>(<a href="../Process.scala.html#65993" title="(java.io.InputStream)Unit">processError</a>(<a href="#87008" title="java.lang.Process">process</a>.<a title="()java.io.InputStream" id="87016">getErrorStream</a>)) <a href="#87033" title="(java.lang.Thread)List[java.lang.Thread]">::</a> <span title="object Nil">Nil</span>
+			<span class="keyword">else</span>
+				<span title="object Nil">Nil</span>
+		<span title="sbt.SimpleProcess" class="keyword">new</span> <a href="#9320" title="sbt.SimpleProcess">SimpleProcess</a>(<a href="#87008" title="java.lang.Process">process</a>, <a href="#87010" title="java.lang.Thread">inThread</a>, <a href="#87011" title="java.lang.Thread">outThread</a> <a href="#87052" title="(java.lang.Thread)List[java.lang.Thread]">::</a> <a href="#87012" title="List[java.lang.Thread]">errorThread</a>)
+	}
+	<span class="keyword">override</span> <span class="keyword">def</span> <a title="()java.lang.String" id="74603">toString</a> = <a href="#74605" title="java.lang.ProcessBuilder">p</a>.<a title="()java.util.List[java.lang.String]" id="59136">command</a>.<span title="()java.lang.String">toString</span>
+	<span class="keyword">override</span> <span class="keyword">def</span> <a title="=&gt; Boolean" id="74604">canPipeTo</a> = <span title="Boolean(true)" class="keyword">true</span>
+}
+<span class="comment">/** A thin wrapper around a java.lang.Process.  `outputThreads` are the Threads created to read from the
+* output and error streams of the process.  `inputThread` is the Thread created to write to the input stream of
+* the process.
+* The implementation of `exitValue` interrupts `inputThread` and then waits until all I/O threads die before
+* returning. */</span>
+<span class="keyword">private</span> <span class="keyword">class</span> <a title="class SimpleProcess extends java.lang.Object with sbt.Process with ScalaObject" id="9320">SimpleProcess</a>(<a title="java.lang.Process" id="87049">p</a>: <a title="java.lang.Process" id="1860">JProcess</a>, <a title="java.lang.Thread" id="87050">inputThread</a>: <span title="java.lang.Thread">Thread</span>, <a title="List[java.lang.Thread]" id="87051">outputThreads</a>: <a title="List[java.lang.Thread]" id="495">List</a>[Thread]) <span class="keyword">extends</span> <a href="../Process.scala.html#12947" title="sbt.Process">Process</a>
+{
+	<span class="keyword">override</span> <span class="keyword">def</span> <a title="()Int" id="87047">exitValue</a>() =
+	{
+		<span class="keyword">try</span> { <a href="#87049" title="java.lang.Process">p</a>.<a title="()Int" id="87017">waitFor</a>() }<span class="comment">// wait for the process to terminate</span>
+		<span class="keyword">finally</span> { <a href="#87050" title="java.lang.Thread">inputThread</a>.<span title="()Unit">interrupt</span>() } <span class="comment">// we interrupt the input thread to notify it that it can terminate</span>
+		<a href="#87051" title="List[java.lang.Thread]">outputThreads</a>.<a title="((java.lang.Thread) =&gt; Unit)Unit" id="15731">foreach</a>(<a href="#87067" title="java.lang.Thread">_</a>.<span title="()Unit">join</span>()) <span class="comment">// this ensures that all output is complete before returning (waitFor does not ensure this)</span>
+		<a href="#87049" title="java.lang.Process">p</a>.<a title="()Int" id="87018">exitValue</a>()
+	}
+	<span class="keyword">override</span> <span class="keyword">def</span> <a title="()Unit" id="87048">destroy</a>() =
+	{
+		<span class="keyword">try</span> { <a href="#87049" title="java.lang.Process">p</a>.<a title="()Unit" id="87019">destroy</a>() }
+		<span class="keyword">finally</span> { <a href="#87050" title="java.lang.Thread">inputThread</a>.<span title="()Unit">interrupt</span>() }
+	}
+}
+
+<span class="keyword">private</span> <span class="keyword">class</span> <a title="class FileOutput extends sbt.OutputStreamBuilder with ScalaObject" id="11048">FileOutput</a>(<a title="java.io.File" id="74904">file</a>: <span title="java.io.File">File</span>, <a title="Boolean" id="74905">append</a>: <span title="Boolean">Boolean</span>) <span class="keyword">extends</span> <a href="#12170" title="sbt.OutputStreamBuilder">OutputStreamBuilder</a>(<a title="(java.io.File,Boolean)java.io.FileOutputStream" id="48503" class="keyword">new</a> <a title="java.io.FileOutputStream" id="3770">FileOutputStream</a>(<a href="#74904" title="java.io.File">file</a>, <a href="#74905" title="Boolean">append</a>), <a href="#74904" title="java.io.File">file</a>.<span title="()java.lang.String">getAbsolutePath</span>)
+<span class="keyword">private</span> <span class="keyword">class</span> <a title="class URLInput extends sbt.InputStreamBuilder with ScalaObject" id="8768">URLInput</a>(<a title="java.net.URL" id="74963">url</a>: <span title="java.net.URL">URL</span>) <span class="keyword">extends</span> <a href="#10667" title="sbt.InputStreamBuilder">InputStreamBuilder</a>(<a href="#74963" title="java.net.URL">url</a>.<a title="()java.io.InputStream" id="19280">openStream</a>, <a href="#74963" title="java.net.URL">url</a>.<a title="()java.lang.String" id="19275">toString</a>)
+<span class="keyword">private</span> <span class="keyword">class</span> <a title="class FileInput extends sbt.InputStreamBuilder with ScalaObject" id="12533">FileInput</a>(<a title="java.io.File" id="74958">file</a>: <span title="java.io.File">File</span>) <span class="keyword">extends</span> <a href="#10667" title="sbt.InputStreamBuilder">InputStreamBuilder</a>(<a title="(java.io.File)java.io.FileInputStream" id="64063" class="keyword">new</a> <a title="java.io.FileInputStream" id="3782">FileInputStream</a>(<a href="#74958" title="java.io.File">file</a>), <a href="#74958" title="java.io.File">file</a>.<span title="()java.lang.String">getAbsolutePath</span>)
+
+<span class="keyword">import</span> Uncloseable.protect
+<span class="keyword">private</span> <span class="keyword">class</span> <a title="class OutputStreamBuilder extends sbt.ThreadProcessBuilder with ScalaObject" id="12170">OutputStreamBuilder</a>(<a title="=&gt; java.io.OutputStream" id="74917">stream</a>: =&gt; OutputStream, <a title="String" id="74918">label</a>: <span title="String">String</span>) <span class="keyword">extends</span> <a href="#10916" title="sbt.ThreadProcessBuilder">ThreadProcessBuilder</a>(<a href="#74918" title="String">label</a>, <a href="#87125" title="sbt.ProcessIO">_</a>.<a href="../Process.scala.html#65989" title="(java.io.OutputStream)Unit">writeInput</a>(<a href="#74914" title="(java.io.OutputStream)java.io.OutputStream">protect</a>(<a href="#74917" title="=&gt; java.io.OutputStream">stream</a>)))
+{
+	<span class="keyword">def</span> <a title="(=&gt; java.io.OutputStream)sbt.OutputStreamBuilder" id="74898" class="keyword">this</a>(<a title="=&gt; java.io.OutputStream" id="74909">stream</a>: =&gt; OutputStream) = <a href="#12170" title="OutputStreamBuilder.this.type" class="keyword">this</a>(<a href="#74909" title="=&gt; java.io.OutputStream">stream</a>, <span title="java.lang.String(&quot;&lt;output stream&gt;&quot;)" class="string">&quot;&lt;output stream&gt;&quot;</span>)
+}
+<span class="keyword">private</span> <span class="keyword">class</span> <a title="class InputStreamBuilder extends sbt.ThreadProcessBuilder with ScalaObject" id="10667">InputStreamBuilder</a>(<a title="=&gt; java.io.InputStream" id="74967">stream</a>: =&gt; InputStream, <a title="String" id="74968">label</a>: <span title="String">String</span>) <span class="keyword">extends</span> <a href="#10916" title="sbt.ThreadProcessBuilder">ThreadProcessBuilder</a>(<a href="#74968" title="String">label</a>, <a href="#87143" title="sbt.ProcessIO">_</a>.<a href="../Process.scala.html#65991" title="(java.io.InputStream)Unit">processOutput</a>(<a href="#74913" title="(java.io.InputStream)java.io.InputStream">protect</a>(<a href="#74967" title="=&gt; java.io.InputStream">stream</a>)))
+{
+	<span class="keyword">def</span> <a title="(=&gt; java.io.InputStream)sbt.InputStreamBuilder" id="74954" class="keyword">this</a>(<a title="=&gt; java.io.InputStream" id="74966">stream</a>: =&gt; InputStream) = <a href="#10667" title="InputStreamBuilder.this.type" class="keyword">this</a>(<a href="#74966" title="=&gt; java.io.InputStream">stream</a>, <span title="java.lang.String(&quot;&lt;input stream&gt;&quot;)" class="string">&quot;&lt;input stream&gt;&quot;</span>)
+}
+
+<span class="keyword">private</span> <span class="keyword">abstract</span> <span class="keyword">class</span> <a title="class ThreadProcessBuilder extends sbt.AbstractProcessBuilder with ScalaObject" id="10916">ThreadProcessBuilder</a>(<span class="keyword">override</span> <span class="keyword">val</span> <a title="String" id="87122">toString</a>: <span title="String">String</span>, <a title="(sbt.ProcessIO) =&gt; Unit" id="87123">runImpl</a>: ProcessIO =&gt; Unit) <span class="keyword">extends</span> <a href="#10331" title="sbt.AbstractProcessBuilder">AbstractProcessBuilder</a>
+{
+	<span class="keyword">override</span> <span class="keyword">def</span> <a title="(sbt.ProcessIO)sbt.Process" id="74892">run</a>(<a title="sbt.ProcessIO" id="87156">io</a>: <a href="../Process.scala.html#13523" title="sbt.ProcessIO">ProcessIO</a>): <a href="../Process.scala.html#12947" title="sbt.Process">Process</a> =
+	{
+		<span class="keyword">val</span> <a title="scala.concurrent.SyncVar[Boolean]" id="87157">success</a> = <span title="scala.concurrent.SyncVar[Boolean]" class="keyword">new</span> <span title="scala.concurrent.SyncVar[Boolean]">SyncVar</span>[Boolean]
+		<a href="#87157" title="scala.concurrent.SyncVar[Boolean]">success</a>.<span title="(Boolean)Unit">put</span>(<span title="Boolean(false)" class="keyword">false</span>)
+		<span title="sbt.ThreadProcess" class="keyword">new</span> <a href="#8690" title="sbt.ThreadProcess">ThreadProcess</a>(<a href="#86170" title="(=&gt; Unit)java.lang.Thread">Spawn</a> {<a href="#87123" title="(sbt.ProcessIO)Unit">runImpl</a>(<a href="#87156" title="sbt.ProcessIO">io</a>); <a href="#87157" title="scala.concurrent.SyncVar[Boolean]">success</a>.<span title="(Boolean)Unit">set</span>(<span title="Boolean(true)" class="keyword">true</span>) }, <a href="#87157" title="scala.concurrent.SyncVar[Boolean]">success</a>)
+	}
+}
+<span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">class</span> <a title="class ThreadProcess extends java.lang.Object with sbt.Process with ScalaObject" id="8690">ThreadProcess</a>(<a title="java.lang.Thread" id="87165">thread</a>: <span title="java.lang.Thread">Thread</span>, <a title="scala.concurrent.SyncVar[Boolean]" id="87166">success</a>: <span title="scala.concurrent.SyncVar[Boolean]">SyncVar</span>[Boolean]) <span class="keyword">extends</span> <a href="../Process.scala.html#12947" title="sbt.Process">Process</a>
+{
+	<span class="keyword">override</span> <span class="keyword">def</span> <a title="()Int" id="87163">exitValue</a>() =
+	{
+		<a href="#87165" title="java.lang.Thread">thread</a>.<span title="()Unit">join</span>()
+		<span title="Int" class="keyword">if</span>(<a href="#87166" title="scala.concurrent.SyncVar[Boolean]">success</a>.<span title="=&gt; Boolean">get</span>) <span title="Int(0)" class="int">0</span> <span class="keyword">else</span> <span title="Int(1)" class="int">1</span>
+	}
+	<span class="keyword">override</span> <span class="keyword">def</span> <a title="()Unit" id="87164">destroy</a>() { <a href="#87165" title="java.lang.Thread">thread</a>.<span title="()Unit">interrupt</span>() }
+}
+
+<span class="keyword">object</span> <a title="object sbt.Uncloseable" id="7935">Uncloseable</a>
+{
+	<span class="keyword">def</span> <a title="(java.io.InputStream)java.io.InputStream" id="74911">apply</a>(<a title="java.io.InputStream" id="87180">in</a>: <span title="java.io.InputStream">InputStream</span>): <span title="java.io.InputStream">InputStream</span> = <a title="template $anon extends java.io.FilterInputStream" id="87181" class="keyword">new</a> <a title="java.io.FilterInputStream" id="3764">FilterInputStream</a>(<a href="#87180" title="java.io.InputStream">in</a>) { <span class="keyword">override</span> <span class="keyword">def</span> <a title="()Unit" id="87183">close</a>() <span title="Unit">{</span>} }
+	<span class="keyword">def</span> <a title="(java.io.OutputStream)java.io.OutputStream" id="74912">apply</a>(<a title="java.io.OutputStream" id="87185">out</a>: <span title="java.io.OutputStream">OutputStream</span>): <span title="java.io.OutputStream">OutputStream</span> = <a title="template $anon extends java.io.FilterOutputStream" id="87186" class="keyword">new</a> <a title="java.io.FilterOutputStream" id="3614">FilterOutputStream</a>(<a href="#87185" title="java.io.OutputStream">out</a>) { <span class="keyword">override</span> <span class="keyword">def</span> <a title="()Unit" id="87188">close</a>() <span title="Unit">{</span>} }
+	<span class="keyword">def</span> <a title="(java.io.InputStream)java.io.InputStream" id="74913">protect</a>(<a title="java.io.InputStream" id="87128">in</a>: <span title="java.io.InputStream">InputStream</span>): <span title="java.io.InputStream">InputStream</span> = <span title="java.io.InputStream" class="keyword">if</span>(<a href="#87128" title="java.io.InputStream">in</a> <span title="(AnyRef)Boolean">eq</span> <span title="object java.lang.System">System</span>.<span title="java.io.InputStream">in</span>) <a href="#74911" title="(java.io.InputStream)java.io.InputStream">Uncloseable</a>(<a href="#87128" title="java.io.InputStream">in</a>) <span class="keyword">else</span> <a href="#87128" title="java.io.InputStream">in</a>
+	<span class="keyword">def</span> <a title="(java.io.OutputStream)java.io.OutputStream" id="74914">protect</a>(<a title="java.io.OutputStream" id="87127">out</a>: <span title="java.io.OutputStream">OutputStream</span>): <span title="java.io.OutputStream">OutputStream</span> = <span title="java.io.OutputStream" class="keyword">if</span>( (<a href="#87127" title="java.io.OutputStream">out</a> <span title="(AnyRef)Boolean">eq</span> <span title="object java.lang.System">System</span>.<span title="java.io.PrintStream">out</span>) <a title="(Boolean)Boolean" id="2689">||</a> (<a href="#87127" title="java.io.OutputStream">out</a> <span title="(AnyRef)Boolean">eq</span> <span title="object java.lang.System">System</span>.<span title="java.io.PrintStream">err</span>)) <a href="#74912" title="(java.io.OutputStream)java.io.OutputStream">Uncloseable</a>(<a href="#87127" title="java.io.OutputStream">out</a>) <span class="keyword">else</span> <a href="#87127" title="java.io.OutputStream">out</a>
+}
+<span class="keyword">private</span> <span class="keyword">object</span> <a title="object sbt.Streamed" id="12237">Streamed</a>
+{
+	<span class="keyword">def</span> <a title="[T](Boolean)sbt.Streamed[T]" id="86642">apply</a>[<a title="&gt;: Nothing &lt;: Any" id="86644">T</a>](<a title="Boolean" id="86645">nonzeroException</a>: <span title="Boolean">Boolean</span>): <a href="#12236" title="sbt.Streamed[T]">Streamed</a>[T] =
+	{
+		<span class="keyword">val</span> <a title="java.util.concurrent.LinkedBlockingQueue[Either[Int,T]]" id="87199">q</a> = <span title="java.util.concurrent.LinkedBlockingQueue[Either[Int,T]]" class="keyword">new</span> java.util.concurrent.<a title="java.util.concurrent.LinkedBlockingQueue[Either[Int,T]]" id="15237">LinkedBlockingQueue</a>[Either[Int, T]]
+		<span class="keyword">def</span> <a title="()Stream[T]" id="87200">next</a>(): <span title="Stream[T]">Stream</span>[T] =
+			<a href="#87199" title="java.util.concurrent.LinkedBlockingQueue[Either[Int,T]]">q</a>.<a title="()Either[Int,T]" id="72489">take</a> <span title="Stream[T]" class="keyword">match</span>
+			{
+				<span title="Stream[Nothing]" class="keyword">case</span> Left(<span title="Int(0)" class="int">0</span>) =&gt; <span title="object Stream">Stream</span>.<span title="=&gt; Stream[Nothing]">empty</span>
+				<span title="Stream[T]" class="keyword">case</span> Left(<a title="Int" id="87205">code</a>) =&gt; <span title="Stream[T]" class="keyword">if</span>(<a href="#86645" title="Boolean">nonzeroException</a>) <span title="(String)Nothing">error</span>(<span title="java.lang.String(&quot;Nonzero exit code: &quot;)" class="string">&quot;Nonzero exit code: &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#87205" title="Int">code</a>) <span class="keyword">else</span> <span title="object Stream">Stream</span>.<span title="=&gt; Stream[Nothing]">empty</span>
+				<span title="Stream[T]" class="keyword">case</span> Right(<a title="T" id="87206">s</a>) =&gt; <span title="object Stream">Stream</span>.<a title="(T,=&gt; Stream[T])Stream[T]" id="17175">cons</a>(<a href="#87206" title="T">s</a>, <a href="#87200" title="()Stream[T]">next</a>)
+			}
+		<span title="sbt.Streamed[T]" class="keyword">new</span> <a href="#12236" title="sbt.Streamed[T]">Streamed</a>((<a title="T" id="87213">s</a>: <a href="#86644" title="T">T</a>) =&gt; <a href="#87199" title="java.util.concurrent.LinkedBlockingQueue[Either[Int,T]]">q</a>.<span title="(Either[Int,T])Unit">put</span>(<span title="(T)Right[Nothing,T]">Right</span>(<a href="#87213" title="T">s</a>)), <a title="Int" id="87217">code</a> =&gt; <a href="#87199" title="java.util.concurrent.LinkedBlockingQueue[Either[Int,T]]">q</a>.<span title="(Either[Int,T])Unit">put</span>(<span title="(Int)Left[Int,Nothing]">Left</span>(<a href="#87217" title="Int">code</a>)), () =&gt; <a href="#87200" title="()Stream[T]">next</a>())
+	}
+}
+
+<span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">class</span> <a title="class Streamed[T] extends java.lang.Object with NotNull with ScalaObject" id="12236">Streamed</a>[<a title="&gt;: Nothing &lt;: Any" id="14751">T</a>](<span class="keyword">val</span> <a title="(T) =&gt; Unit" id="87209">process</a>: T =&gt; Unit, <span class="keyword">val</span> <a title="(Int) =&gt; Unit" id="87210">done</a>: Int =&gt; Unit, <span class="keyword">val</span> <a title="() =&gt; Stream[T]" id="87211">stream</a>: () =&gt; Stream[T]) <span class="keyword">extends</span> <a title="NotNull" id="189">NotNull</a>
+        </pre>
+    </body>
+</html>

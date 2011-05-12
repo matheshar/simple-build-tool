@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+			<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" ></meta>
+        <title>IPC.scala</title>
+        <script type="text/javascript" src="jquery-all.js"></script>
+        <script type="text/javascript" src="linked.js"></script>
+        <link rel="stylesheet" type="text/css" href="style.css" title="Style"></link>
+    </head>
+    <body>
+        <pre>
+<span class="comment">/* sbt -- Simple Build Tool
+ * Copyright 2009 Mark Harrah
+ */</span>
+<span class="keyword">package</span> xsbt
+
+<span class="keyword">import</span> java.io.{BufferedReader, BufferedWriter, InputStream, InputStreamReader, OutputStreamWriter, OutputStream}
+<span class="keyword">import</span> java.net.{InetAddress, ServerSocket, Socket}
+
+<span class="keyword">object</span> <a title="object xsbt.IPC" id="7183">IPC</a>
+{
+	<span class="keyword">private</span> <span class="keyword">val</span> <a title="Int" id="69828">portMin</a> = <span title="Int(1025)" class="int">1025</span>
+	<span class="keyword">private</span> <span class="keyword">val</span> <a title="Int" id="69830">portMax</a> = <span title="Int(65536)" class="int">65536</span>
+	<span class="keyword">private</span> <span class="keyword">val</span> <a title="java.net.InetAddress" id="69832">loopback</a> = <a title="object java.net.InetAddress" id="4713">InetAddress</a>.<a title="(java.lang.String)java.net.InetAddress" id="93069">getByName</a>(<span title="Null(null)" class="keyword">null</span>) <span class="comment">// loopback</span>
+	
+	<span class="keyword">def</span> <a title="[T](Int)((xsbt.IPC) =&gt; T)T" id="69834">client</a>[<a title="&gt;: Nothing &lt;: Any" id="69836">T</a>](<a title="Int" id="69854">port</a>: <span title="Int">Int</span>)(<a title="(xsbt.IPC) =&gt; T" id="69855">f</a>: IPC =&gt; T): <a href="#69836" title="T">T</a> =
+		<a href="#69850" title="(java.net.Socket)((xsbt.IPC) =&gt; T)T">ipc</a>(<a title="(java.net.InetAddress,Int)java.net.Socket" id="69878" class="keyword">new</a> <span title="java.net.Socket">Socket</span>(<a href="#69832" title="=&gt; java.net.InetAddress">loopback</a>, <a href="#69854" title="Int">port</a>))(<a href="#69855" title="(xsbt.IPC) =&gt; T">f</a>)
+	
+	<span class="keyword">def</span> <a title="[T]((xsbt.IPC.Server) =&gt; T)T" id="69837">pullServer</a>[<a title="&gt;: Nothing &lt;: Any" id="69839">T</a>](<a title="(xsbt.IPC.Server) =&gt; T" id="93090">f</a>: Server =&gt; T): <a href="#69839" title="T">T</a> =
+	{
+		<span class="keyword">val</span> <a title="java.net.ServerSocket" id="93091">server</a> = <a href="#69840" title="=&gt; java.net.ServerSocket">makeServer</a>
+		<span class="keyword">try</span> { <a href="#93090" title="(xsbt.IPC.Server)T">f</a>(<span title="xsbt.IPC.Server" class="keyword">new</span> <a href="#69853" title="xsbt.IPC.Server">Server</a>(<a href="#93091" title="java.net.ServerSocket">server</a>)) } 
+		<span class="keyword">finally</span> { <a href="#93091" title="java.net.ServerSocket">server</a>.<span title="()Unit">close</span>() }
+	}
+	<span class="keyword">def</span> <a title="=&gt; java.net.ServerSocket" id="69840">makeServer</a>: <span title="java.net.ServerSocket">ServerSocket</span> =
+	{
+		<span class="keyword">val</span> <a title="java.util.Random" id="93132">random</a> = <span title="java.util.Random" class="keyword">new</span> java.util.<a title="java.util.Random" id="5936">Random</a>
+		<span class="keyword">def</span> <a title="=&gt; Int" id="93133">nextPort</a> = <a href="#93132" title="java.util.Random">random</a>.<a title="(Int)Int" id="63645">nextInt</a>(<a href="#69830" title="=&gt; Int">portMax</a> <span title="(Int)Int">-</span> <a href="#69828" title="=&gt; Int">portMin</a> <span title="(Int)Int">+</span> <span title="Int(1)" class="int">1</span>) <span title="(Int)Int">+</span> <a href="#69828" title="=&gt; Int">portMin</a>
+		<span class="keyword">def</span> <a title="(Int)java.net.ServerSocket" id="93134">createServer</a>(<a title="Int" id="93159">attempts</a>: <span title="Int">Int</span>): <span title="java.net.ServerSocket">ServerSocket</span> =
+			<span title="java.net.ServerSocket" class="keyword">if</span>(<a href="#93159" title="Int">attempts</a> <a title="(Int)Boolean" id="3084">&gt;</a> <span title="Int(0)" class="int">0</span>)
+				<span class="keyword">try</span> { <span title="(Int,Int,java.net.InetAddress)java.net.ServerSocket" class="keyword">new</span> <span title="java.net.ServerSocket">ServerSocket</span>(<a href="#93133" title="=&gt; Int">nextPort</a>, <span title="Int(1)" class="int">1</span>, <a href="#69832" title="=&gt; java.net.InetAddress">loopback</a>) }
+				<span class="keyword">catch</span> { <span title="java.net.ServerSocket" class="keyword">case</span> _: <a title="Exception" id="2067">Exception</a> =&gt; <a href="#93134" title="(Int)java.net.ServerSocket">createServer</a>(<a href="#93159" title="Int">attempts</a> <span title="(Int)Int">-</span> <span title="Int(1)" class="int">1</span>) }
+			<span class="keyword">else</span>
+				<a title="(String)Nothing" id="787">error</a>(<span title="java.lang.String(&quot;Could not connect to socket: maximum attempts exceeded&quot;)" class="string">&quot;Could not connect to socket: maximum attempts exceeded&quot;</span>)
+		<a href="#93134" title="(Int)java.net.ServerSocket">createServer</a>(<span title="Int(10)" class="int">10</span>)
+	}
+	<span class="keyword">def</span> <a title="[T]((xsbt.IPC) =&gt; Option[T])T" id="69841">server</a>[<a title="&gt;: Nothing &lt;: Any" id="69843">T</a>](<a title="(xsbt.IPC) =&gt; Option[T]" id="93182">f</a>: IPC =&gt; Option[T]): <a href="#69843" title="T">T</a> = <a href="#69847" title="(java.net.ServerSocket,(xsbt.IPC) =&gt; Option[T])T">serverImpl</a>(<a href="#69840" title="=&gt; java.net.ServerSocket">makeServer</a>, <a href="#93182" title="(xsbt.IPC) =&gt; Option[T]">f</a>)
+	<span class="keyword">def</span> <a title="[T](Int)((xsbt.IPC) =&gt; Option[T])T" id="69844">server</a>[<a title="&gt;: Nothing &lt;: Any" id="69846">T</a>](<a title="Int" id="93186">port</a>: <span title="Int">Int</span>)(<a title="(xsbt.IPC) =&gt; Option[T]" id="93187">f</a>: IPC =&gt; Option[T]): <a href="#69846" title="T">T</a> =
+		<a href="#69847" title="(java.net.ServerSocket,(xsbt.IPC) =&gt; Option[T])T">serverImpl</a>(<span title="(Int,Int,java.net.InetAddress)java.net.ServerSocket" class="keyword">new</span> <span title="java.net.ServerSocket">ServerSocket</span>(<a href="#93186" title="Int">port</a>, <span title="Int(1)" class="int">1</span>, <a href="#69832" title="=&gt; java.net.InetAddress">loopback</a>), <a href="#93187" title="(xsbt.IPC) =&gt; Option[T]">f</a>)
+	<span class="keyword">private</span> <span class="keyword">def</span> <a title="[T](java.net.ServerSocket,(xsbt.IPC) =&gt; Option[T])T" id="69847">serverImpl</a>[<a title="&gt;: Nothing &lt;: Any" id="69849">T</a>](<a title="java.net.ServerSocket" id="93183">server</a>: <span title="java.net.ServerSocket">ServerSocket</span>, <a title="(xsbt.IPC) =&gt; Option[T]" id="93184">f</a>: IPC =&gt; Option[T]): <a href="#69849" title="T">T</a> =
+	{
+		<span class="keyword">def</span> <a title="()T" id="93196">listen</a>(): <a href="#69849" title="T">T</a> =
+		{
+			<a href="#69850" title="(java.net.Socket)((xsbt.IPC) =&gt; Option[T])Option[T]">ipc</a>(<a href="#93183" title="java.net.ServerSocket">server</a>.<span title="()java.net.Socket">accept</span>())(<a href="#93184" title="(xsbt.IPC) =&gt; Option[T]">f</a>) <span title="T" class="keyword">match</span>
+			{
+				<span title="T" class="keyword">case</span> <a id="1">Some</a>(<a title="T" id="93198">done</a>) =&gt; <a href="#93198" title="T">done</a>
+				<span title="T" class="keyword">case</span> <a title="object None" id="505">None</a> =&gt; <a href="#93196" title="()T">listen</a>()
+			}
+		}
+		
+		<span class="keyword">try</span> { <a href="#93196" title="()T">listen</a>() }
+		<span class="keyword">finally</span> { <a href="#93183" title="java.net.ServerSocket">server</a>.<span title="()Unit">close</span>() }
+	}
+	<span class="keyword">private</span> <span class="keyword">def</span> <a title="[T](java.net.Socket)((xsbt.IPC) =&gt; T)T" id="69850">ipc</a>[<a title="&gt;: Nothing &lt;: Any" id="69852">T</a>](<a title="java.net.Socket" id="93077">s</a>: <span title="java.net.Socket">Socket</span>)(<a title="(xsbt.IPC) =&gt; T" id="93078">f</a>: IPC =&gt; T): <a href="#69852" title="T">T</a> =
+		<span class="keyword">try</span> { <a href="#93078" title="(xsbt.IPC)T">f</a>(<span title="xsbt.IPC" class="keyword">new</span> <a href="#7182" title="xsbt.IPC">IPC</a>(<a href="#93077" title="java.net.Socket">s</a>)) }
+		<span class="keyword">finally</span> { <a href="#93077" title="java.net.Socket">s</a>.<a title="()Unit" id="69921">close</a>() }
+		
+	<span class="keyword">final</span> <span class="keyword">class</span> <a title="class Server extends java.lang.Object with NotNull with ScalaObject" id="69853">Server</a> <span class="keyword">private</span>[IPC](<a title="java.net.ServerSocket" id="93131">s</a>: <span title="java.net.ServerSocket">ServerSocket</span>) <span class="keyword">extends</span> <span title="NotNull">NotNull</span>
+	{
+		<span class="keyword">def</span> <a title="=&gt; Int" id="93126">port</a> = <a href="#93131" title="java.net.ServerSocket">s</a>.<a title="()Int" id="93101">getLocalPort</a>
+		<span class="keyword">def</span> <a title="()Unit" id="93127">close</a>() = <a href="#93131" title="java.net.ServerSocket">s</a>.<span title="()Unit">close</span>()
+		<span class="keyword">def</span> <a title="[T]((xsbt.IPC) =&gt; T)T" id="93128">connection</a>[<a title="&gt;: Nothing &lt;: Any" id="93130">T</a>](<a title="(xsbt.IPC) =&gt; T" id="93205">f</a>: IPC =&gt; T): <a href="#93130" title="T">T</a> = <a href="#7183" title="object xsbt.IPC">IPC</a>.<a href="#69850" title="(java.net.Socket)((xsbt.IPC) =&gt; T)T">ipc</a>(<a href="#93131" title="java.net.ServerSocket">s</a>.<span title="()java.net.Socket">accept</span>())(<a href="#93205" title="(xsbt.IPC) =&gt; T">f</a>)
+	}
+}
+<span class="keyword">final</span> <span class="keyword">class</span> <a title="class IPC extends java.lang.Object with NotNull with ScalaObject" id="7182">IPC</a> <span class="keyword">private</span>(<a title="java.net.Socket" id="93199">s</a>: <span title="java.net.Socket">Socket</span>) <span class="keyword">extends</span> <span title="NotNull">NotNull</span>
+{
+	<span class="keyword">def</span> <a title="=&gt; Int" id="69862">port</a> = <a href="#93199" title="java.net.Socket">s</a>.<a title="()Int" id="69896">getLocalPort</a>
+	<span class="keyword">private</span> <span class="keyword">val</span> <a title="java.io.BufferedReader" id="69863">in</a> = <a title="(java.io.Reader)java.io.BufferedReader" id="64991" class="keyword">new</a> <a title="java.io.BufferedReader" id="3494">BufferedReader</a>(<span title="java.io.InputStreamReader" class="keyword">new</span> <a title="java.io.InputStreamReader" id="3710">InputStreamReader</a>(<a href="#93199" title="java.net.Socket">s</a>.<a title="()java.io.InputStream" id="69900">getInputStream</a>))
+	<span class="keyword">private</span> <span class="keyword">val</span> <a title="java.io.BufferedWriter" id="69865">out</a> = <span title="java.io.BufferedWriter" class="keyword">new</span> <a title="java.io.BufferedWriter" id="3779">BufferedWriter</a>(<a title="(java.io.OutputStream)java.io.OutputStreamWriter" id="48457" class="keyword">new</a> <a title="java.io.OutputStreamWriter" id="3821">OutputStreamWriter</a>(<a href="#93199" title="java.net.Socket">s</a>.<a title="()java.io.OutputStream" id="69901">getOutputStream</a>))
+	
+	<span class="keyword">def</span> <a title="(String)Unit" id="69867">send</a>(<a title="String" id="69869">s</a>: <span title="String">String</span>) = { <a href="#69865" title="=&gt; java.io.BufferedWriter">out</a>.<a title="(java.lang.String)Unit" id="48442">write</a>(<a href="#69869" title="String">s</a>); <a href="#69865" title="=&gt; java.io.BufferedWriter">out</a>.<a title="()Unit" id="48432">newLine</a>(); <a href="#69865" title="=&gt; java.io.BufferedWriter">out</a>.<a title="()Unit" id="48433">flush</a>() }
+	<span class="keyword">def</span> <a title="=&gt; String" id="69868">receive</a>: <span title="String">String</span> = <a href="#69863" title="=&gt; java.io.BufferedReader">in</a>.<a title="()java.lang.String" id="64995">readLine</a>()
+}
+        </pre>
+    </body>
+</html>
