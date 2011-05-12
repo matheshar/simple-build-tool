@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+			<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" ></meta>
+        <title>Command.scala</title>
+        <script type="text/javascript" src="jquery-all.js"></script>
+        <script type="text/javascript" src="linked.js"></script>
+        <link rel="stylesheet" type="text/css" href="style.css" title="Style"></link>
+    </head>
+    <body>
+        <pre>
+<span class="comment">/* sbt -- Simple Build Tool
+ * Copyright 2010  Jason Zaugg
+ */</span>
+<span class="keyword">package</span> xsbt
+
+	<span class="keyword">import</span> scala.tools.nsc.{CompilerCommand, Settings}
+
+<span class="keyword">object</span> <a title="object xsbt.Command" id="6811">Command</a>
+{
+	<span class="comment">/**
+		* Construct a CompilerCommand using reflection, to be compatible with Scalac before and after
+		* &lt;a href=&quot;https://lampsvn.epfl.ch/trac/scala/changeset/21274&quot;&gt;r21274&lt;/a&gt;
+		*/</span>
+	<span class="keyword">def</span> <a title="(List[String],scala.tools.nsc.Settings)scala.tools.nsc.CompilerCommand" id="34421">apply</a>(<a title="List[String]" id="34424">arguments</a>: <a title="List[String]" id="495">List</a>[String], <a title="scala.tools.nsc.Settings" id="34425">settings</a>: <span title="scala.tools.nsc.Settings">Settings</span>): <a title="scala.tools.nsc.CompilerCommand" id="21369">CompilerCommand</a> = {
+		<span class="keyword">def</span> <a title="(Class[_]*)java.lang.reflect.Constructor[scala.tools.nsc.CompilerCommand]" id="34454">constr</a>(<a title="Class[_]*" id="34455">params</a>: <a title="Class[_]*" id="2680">Class</a>[_]*) = <span title="java.lang.Class[scala.tools.nsc.CompilerCommand]">classOf</span>[CompilerCommand].<a title="(java.lang.Class[_]*)java.lang.reflect.Constructor[scala.tools.nsc.CompilerCommand]" id="4324">getConstructor</a>(<a href="#34455" title="Class[_]*">params</a>: _*)
+		<span class="keyword">try</span> {
+			<a href="#34454" title="(Class[_]*)java.lang.reflect.Constructor[scala.tools.nsc.CompilerCommand]">constr</a>(<span title="java.lang.Class[List[_]]">classOf</span>[List[_]], <span title="java.lang.Class[scala.tools.nsc.Settings]">classOf</span>[Settings]).<span title="(java.lang.Object*)scala.tools.nsc.CompilerCommand">newInstance</span>(<a href="#34424" title="List[String]">arguments</a>, <a href="#34425" title="scala.tools.nsc.Settings">settings</a>)
+		} <span class="keyword">catch</span> {
+		<span title="scala.tools.nsc.CompilerCommand" class="keyword">case</span> <a title="java.lang.NoSuchMethodException" id="34465">e</a>: <a title="java.lang.NoSuchMethodException" id="2025">NoSuchMethodException</a> =&gt;
+			<a href="#34454" title="(Class[_]*)java.lang.reflect.Constructor[scala.tools.nsc.CompilerCommand]">constr</a>(<span title="java.lang.Class[List[_]]">classOf</span>[List[_]], <span title="java.lang.Class[scala.tools.nsc.Settings]">classOf</span>[Settings], <span title="java.lang.Class[Function1[_, _]]">classOf</span>[Function1[_, _]], <span title="java.lang.Class[Boolean]">classOf</span>[Boolean]).<span title="(java.lang.Object*)scala.tools.nsc.CompilerCommand">newInstance</span>(<a href="#34424" title="List[String]">arguments</a>, <a href="#34425" title="scala.tools.nsc.Settings">settings</a>, <a href="#34481" title="(String)Nothing" id="787">error</a> _, <span title="Boolean(false)" class="keyword">false</span>.<a title="AnyRef" id="3442">asInstanceOf</a>[<a title="AnyRef" id="1953">AnyRef</a>])
+		}
+	}
+	
+	<span class="keyword">def</span> <a title="(scala.tools.nsc.Settings)Boolean" id="34422">getWarnFatal</a>(<a title="scala.tools.nsc.Settings" id="34482">settings</a>: <span title="scala.tools.nsc.Settings">Settings</span>): <a title="Boolean" id="2106">Boolean</a> =
+	{
+		<span class="keyword">implicit</span> <span class="keyword">def</span> <a title="implicit xsbt.Command.compat27 : (scala.tools.nsc.Settings)SettingsCompat" id="34483">compat27</a>(<a title="scala.tools.nsc.Settings" id="34485">settings</a>: <span title="scala.tools.nsc.Settings">Settings</span>): <a href="#34484" title="SettingsCompat">SettingsCompat</a> = <span title="SettingsCompat" class="keyword">new</span> <a href="#34484" title="SettingsCompat">SettingsCompat</a>
+		<span class="keyword">class</span> <a title="class SettingsCompat extends java.lang.Object with ScalaObject" id="34484">SettingsCompat</a> { <span class="keyword">def</span> <a title="=&gt; SettingsCompat" id="34487">Xwarnfatal</a> = <a href="#34484" title="SettingsCompat" class="keyword">this</a>; <span class="keyword">def</span> <a title="=&gt; Boolean" id="34488">value</a> = <span title="Boolean(false)" class="keyword">false</span> }
+		<a href="#34483" title="implicit xsbt.Command.compat27 : (scala.tools.nsc.Settings)SettingsCompat">settings</a>.<a href="#34487" title="=&gt; SettingsCompat">Xwarnfatal</a>.<a href="#34488" title="=&gt; Boolean">value</a>
+	}
+}
+        </pre>
+    </body>
+</html>
