@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+			<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" ></meta>
+        <title>ScaladocInterface.scala</title>
+        <script type="text/javascript" src="jquery-all.js"></script>
+        <script type="text/javascript" src="linked.js"></script>
+        <link rel="stylesheet" type="text/css" href="style.css" title="Style"></link>
+    </head>
+    <body>
+        <pre>
+<span class="comment">/* sbt -- Simple Build Tool
+ * Copyright 2008, 2009 Mark Harrah
+ */</span>
+<span class="keyword">package</span> xsbt
+
+<span class="keyword">import</span> xsbti.Logger
+<span class="keyword">import</span> Log.debug
+
+<span class="keyword">class</span> <a title="class ScaladocInterface extends java.lang.Object with ScalaObject" id="6858">ScaladocInterface</a>
+{
+	<span class="keyword">def</span> <a title="(Array[String],Int,xsbti.Logger)Unit" id="38287">run</a>(<a title="Array[String]" id="38289">args</a>: <span title="Array[String]">Array</span>[String], <a title="Int" id="38290">maximumErrors</a>: <span title="Int">Int</span>, <a title="xsbti.Logger" id="38291">log</a>: <a href="xsbti/Logger.java.html#7618" title="xsbti.Logger">Logger</a>) = (<span title="xsbt.Runner" class="keyword">new</span> <a href="#7413" title="xsbt.Runner">Runner</a>(<a href="#38289" title="Array[String]">args</a>, <a href="#38290" title="Int">maximumErrors</a>, <a href="#38291" title="xsbti.Logger">log</a>)).<a href="#38309" title="()Unit">run</a>
+}
+<span class="keyword">private</span> <span class="keyword">class</span> <a title="class Runner extends java.lang.Object with ScalaObject" id="7413">Runner</a>(<a title="Array[String]" id="38312">args</a>: <span title="Array[String]">Array</span>[String], <a title="Int" id="38313">maximumErrors</a>: <span title="Int">Int</span>, <a title="xsbti.Logger" id="38314">log</a>: <a href="xsbti/Logger.java.html#7618" title="xsbti.Logger">Logger</a>)
+{
+	<span class="keyword">import</span> scala.tools.nsc.{doc, Global}
+	<span class="keyword">val</span> <a title="scala.tools.nsc.doc.Settings" id="38301">docSettings</a>: doc.<span title="scala.tools.nsc.doc.Settings">Settings</span> = <span title="scala.tools.nsc.doc.Settings" class="keyword">new</span> doc.<span title="scala.tools.nsc.doc.Settings">Settings</span>(<a href="Log.scala.html#7270" title="object xsbt.Log">Log</a>.<a href="Log.scala.html#34504" title="(xsbti.Logger)(String) =&gt; Unit">settingsError</a>(<a href="#38314" title="xsbti.Logger">log</a>))
+	<span class="keyword">val</span> <a title="scala.tools.nsc.CompilerCommand" id="38303">command</a> = <a href="Command.scala.html#34421" title="(List[String],scala.tools.nsc.Settings)scala.tools.nsc.CompilerCommand">Command</a>(<a href="#38312" title="Array[String]">args</a>.<a title="=&gt; List[String]" id="16171">toList</a>, <a href="#38301" title="=&gt; scala.tools.nsc.doc.Settings">docSettings</a>)
+	<span class="keyword">val</span> <a title="xsbt.LoggerReporter" id="38305">reporter</a> = <a href="LoggerReporter.scala.html#34568" title="(scala.tools.nsc.Settings,Int,xsbti.Logger)xsbt.LoggerReporter">LoggerReporter</a>(<a href="#38301" title="=&gt; scala.tools.nsc.doc.Settings">docSettings</a>, <a href="#38313" title="Int">maximumErrors</a>, <a href="#38314" title="xsbti.Logger">log</a>)
+	<span class="keyword">def</span> <a title="=&gt; Boolean" id="38307">noErrors</a> = <span title="=&gt; Boolean">!</span><a href="#38305" title="=&gt; xsbt.LoggerReporter">reporter</a>.<a title="=&gt; Boolean" id="34629">hasErrors</a> <a title="(Boolean)Boolean" id="2690">&amp;&amp;</a> <a href="#38303" title="=&gt; scala.tools.nsc.CompilerCommand">command</a>.<a title="=&gt; Boolean" id="34450">ok</a>
+
+	<span class="keyword">import</span> forScope._
+	<span class="keyword">def</span> <a title="()Unit" id="38309">run</a>()
+	{
+		<a href="Log.scala.html#34503" title="(xsbti.Logger,=&gt; String)Unit">debug</a>(<a href="#38314" title="xsbti.Logger">log</a>, <span title="java.lang.String(&quot;Calling Scaladoc with arguments:\012\011&quot;)" class="string">&quot;Calling Scaladoc with arguments:\n\t&quot;</span> <a title="(Any)java.lang.String" id="6021">+</a> <a href="#38312" title="Array[String]">args</a>.<a title="(String)String" id="16175">mkString</a>(<span title="java.lang.String(&quot;\012\011&quot;)" class="string">&quot;\n\t&quot;</span>))
+		<span title="Unit" class="keyword">if</span>(<a href="#38307" title="=&gt; Boolean">noErrors</a>)
+		{
+			<span class="keyword">import</span> doc._ <span class="comment">// 2.8 trunk and Beta1-RC4 have doc.DocFactory.  For other Scala versions, the next line creates forScope.DocFactory</span>
+			<span class="keyword">val</span> <a title="Runner.this.forScope.DocFactory" id="38847">processor</a> = <span title="Runner.this.forScope.DocFactory" class="keyword">new</span> <a href="#38844" title="Runner.this.forScope.DocFactory">DocFactory</a>(<a href="#38305" title="=&gt; xsbt.LoggerReporter">reporter</a>, <a href="#38301" title="=&gt; scala.tools.nsc.doc.Settings">docSettings</a>)
+			<a href="#38847" title="Runner.this.forScope.DocFactory">processor</a>.<a href="#38855" title="(Seq[String])Unit">document</a>(<a href="#38303" title="=&gt; scala.tools.nsc.CompilerCommand">command</a>.<span title="=&gt; List[String]">files</span>)
+		}
+		<a href="#38305" title="=&gt; xsbt.LoggerReporter">reporter</a>.<a href="LoggerReporter.scala.html#34658" title="()Unit">printSummary</a>()
+		<span title="Unit" class="keyword">if</span>(<span title="=&gt; Boolean">!</span><a href="#38307" title="=&gt; Boolean">noErrors</a>) <span title="Nothing" class="keyword">throw</span> <span title="xsbt.InterfaceCompileFailed" class="keyword">new</span> <a href="CompilerInterface.scala.html#6813" title="xsbt.InterfaceCompileFailed">InterfaceCompileFailed</a>(<a href="#38312" title="Array[String]">args</a>, <span title="java.lang.String(&quot;Scaladoc generation failed&quot;)" class="string">&quot;Scaladoc generation failed&quot;</span>)
+	}
+
+	<span class="keyword">object</span> <a title="object Runner.this.forScope" id="38310">forScope</a>
+	{
+		<span class="keyword">class</span> <a title="class DocFactory extends java.lang.Object with ScalaObject" id="38844">DocFactory</a>(<a title="xsbt.LoggerReporter" id="38856">reporter</a>: <a href="LoggerReporter.scala.html#7158" title="xsbt.LoggerReporter">LoggerReporter</a>, <a title="scala.tools.nsc.doc.Settings" id="38857">docSettings</a>: doc.<span title="scala.tools.nsc.doc.Settings">Settings</span>) <span class="comment">// 2.7 compatibility</span>
+		{
+			<span class="keyword">object</span> <a title="object DocFactory.this.compiler" id="38853">compiler</a> <span class="keyword">extends</span> <a title="scala.tools.nsc.Global" id="21693">Global</a>(<a href="#38303" title="=&gt; scala.tools.nsc.CompilerCommand">command</a>.<a title="=&gt; scala.tools.nsc.Settings" id="34427">settings</a>, <a href="#38856" title="xsbt.LoggerReporter">reporter</a>)
+			{
+				<span class="keyword">override</span> <span class="keyword">def</span> <a title="=&gt; Boolean" id="38864">onlyPresentation</a> = <span title="Boolean(true)" class="keyword">true</span>
+				<span class="keyword">class</span> <a title="class DefaultDocDriver extends java.lang.Object with ScalaObject" id="38865">DefaultDocDriver</a>  <span class="comment">// 2.8 source compatibility</span>
+				{
+					<a title="(Boolean)Unit" id="787">assert</a>(<span title="Boolean(false)" class="keyword">false</span>)
+					<span class="keyword">def</span> <a title="(Iterator[xsbt.Runner.forScope.DocFactory.compiler.CompilationUnit])Unit" id="38881">process</a>(<a title="Iterator[xsbt.Runner.forScope.DocFactory.compiler.CompilationUnit]" id="38884">units</a>: <a title="Iterator[xsbt.Runner.forScope.DocFactory.compiler.CompilationUnit]" id="1287">Iterator</a>[CompilationUnit]) = <a title="(String)Unit" id="24448">error</a>(<span title="java.lang.String(&quot;for 2.8 compatibility only&quot;)" class="string">&quot;for 2.8 compatibility only&quot;</span>)
+				}
+			}
+			<span class="keyword">def</span> <a title="(Seq[String])Unit" id="38855">document</a>(<a title="Seq[String]" id="38858">ignore</a>: <a title="Seq[String]" id="729">Seq</a>[String])
+			{
+				<span class="keyword">import</span> compiler._
+				<span class="keyword">val</span> <a title="DocFactory.this.compiler.Run" id="38887">run</a> = <span title="DocFactory.this.compiler.Run" class="keyword">new</span> <a href="#38853" title="DocFactory.this.compiler.Run" id="24648">Run</a>
+				<a href="#38887" title="DocFactory.this.compiler.Run">run</a> <a title="(List[String])Unit" id="24713">compile</a> <a href="#38303" title="=&gt; scala.tools.nsc.CompilerCommand">command</a>.<span title="=&gt; List[String]">files</span>
+
+				<span class="keyword">val</span> <a title="&lt;refinement&gt; extends scala.tools.nsc.doc.DefaultDocDriver" id="38888">generator</a> =
+				{
+					<span class="keyword">import</span> doc._
+					<a title="template $anon extends scala.tools.nsc.doc.DefaultDocDriver" id="38890" class="keyword">new</a> <a title="scala.tools.nsc.doc.DefaultDocDriver" id="38781">DefaultDocDriver</a>
+					{
+						<span class="keyword">lazy</span> <span class="keyword">val</span> <a title="DocFactory.this.compiler.type" id="38932">global</a>: compiler.<span class="keyword">type</span> = <a href="#38853" title="object DocFactory.this.compiler">compiler</a>
+						<span class="keyword">lazy</span> <span class="keyword">val</span> <a title="scala.tools.nsc.doc.Settings" id="38934">settings</a> = <a href="#38857" title="scala.tools.nsc.doc.Settings">docSettings</a>
+					}
+				}
+				<a href="#38888" title="&lt;refinement&gt; extends scala.tools.nsc.doc.DefaultDocDriver">generator</a>.<a title="(Iterator[generator.global.CompilationUnit])Unit" id="38899">process</a>(<a href="#38887" title="DocFactory.this.compiler.Run">run</a>.<a title="=&gt; Iterator[DocFactory.this.compiler.CompilationUnit]" id="24704">units</a>)
+			}
+		}
+	}
+}
+        </pre>
+    </body>
+</html>

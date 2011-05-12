@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+			<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" ></meta>
+        <title>CompilerInterface.scala</title>
+        <script type="text/javascript" src="jquery-all.js"></script>
+        <script type="text/javascript" src="linked.js"></script>
+        <link rel="stylesheet" type="text/css" href="style.css" title="Style"></link>
+    </head>
+    <body>
+        <pre>
+<span class="comment">/* sbt -- Simple Build Tool
+ * Copyright 2008, 2009 Mark Harrah
+ */</span>
+<span class="keyword">package</span> xsbt
+
+<span class="keyword">import</span> xsbti.{AnalysisCallback,Logger}
+<span class="keyword">import</span> scala.tools.nsc.{Phase, SubComponent}
+<span class="keyword">import</span> Log.debug
+
+<span class="keyword">class</span> <a title="class CompilerInterface extends java.lang.Object with ScalaObject" id="7029">CompilerInterface</a>
+{
+	<span class="keyword">def</span> <a title="(Array[String],xsbti.AnalysisCallback,Int,xsbti.Logger)Unit" id="34506">run</a>(<a title="Array[String]" id="34508">args</a>: <span title="Array[String]">Array</span>[String], <a title="xsbti.AnalysisCallback" id="34509">callback</a>: <a href="xsbti/AnalysisCallback.java.html#7615" title="xsbti.AnalysisCallback">AnalysisCallback</a>, <a title="Int" id="34510">maximumErrors</a>: <a title="Int" id="2342">Int</a>, <a title="xsbti.Logger" id="34511">log</a>: <a href="xsbti/Logger.java.html#7618" title="xsbti.Logger">Logger</a>)
+	{
+			<span class="keyword">import</span> scala.tools.nsc.{Global, Settings}
+
+		<a href="Log.scala.html#34503" title="(xsbti.Logger,=&gt; String)Unit">debug</a>(<a href="#34511" title="xsbti.Logger">log</a>, <span title="java.lang.String(&quot;Interfacing (CompilerInterface) with Scala compiler &quot;)" class="string">&quot;Interfacing (CompilerInterface) with Scala compiler &quot;</span> <a title="(Any)java.lang.String" id="6021">+</a> scala.tools.nsc.<a title="object scala.tools.nsc.Properties" id="22096">Properties</a>.<a title="=&gt; String" id="34545">versionString</a>)
+
+		<span class="keyword">val</span> <a title="scala.tools.nsc.Settings" id="34513">settings</a> = <span title="scala.tools.nsc.Settings" class="keyword">new</span> <a title="scala.tools.nsc.Settings" id="22038">Settings</a>(<a href="Log.scala.html#7270" title="object xsbt.Log">Log</a>.<a href="Log.scala.html#34504" title="(xsbti.Logger)(String) =&gt; Unit">settingsError</a>(<a href="#34511" title="xsbti.Logger">log</a>))
+		<span class="keyword">val</span> <a title="scala.tools.nsc.CompilerCommand" id="34514">command</a> = <a href="Command.scala.html#34421" title="(List[String],scala.tools.nsc.Settings)scala.tools.nsc.CompilerCommand">Command</a>(<a href="#34508" title="Array[String]">args</a>.<a title="=&gt; List[String]" id="16171">toList</a>, <a href="#34513" title="scala.tools.nsc.Settings">settings</a>)
+		<span class="keyword">val</span> <a title="xsbt.LoggerReporter" id="34515">reporter</a> = <a href="LoggerReporter.scala.html#34568" title="(scala.tools.nsc.Settings,Int,xsbti.Logger)xsbt.LoggerReporter">LoggerReporter</a>(<a href="#34513" title="scala.tools.nsc.Settings">settings</a>, <a href="#34510" title="Int">maximumErrors</a>, <a href="#34511" title="xsbti.Logger">log</a>)
+		<span class="keyword">def</span> <a title="=&gt; Boolean" id="34516">noErrors</a> = <span title="=&gt; Boolean">!</span><a href="#34515" title="xsbt.LoggerReporter">reporter</a>.<a title="=&gt; Boolean" id="34629">hasErrors</a> <a title="(Boolean)Boolean" id="2690">&amp;&amp;</a> <a href="#34514" title="scala.tools.nsc.CompilerCommand">command</a>.<a title="=&gt; Boolean" id="34450">ok</a>
+
+		<span class="keyword">val</span> <a title="scala.collection.mutable.HashSet[Any]" id="34517">phasesSet</a> = <span title="scala.collection.mutable.HashSet[Any]" class="keyword">new</span> scala.collection.mutable.<a title="scala.collection.mutable.HashSet[Any]" id="20234">HashSet</a>[Any] <span class="comment">// 2.7 compatibility</span>
+		<span class="keyword">object</span> <a title="object compiler" id="34518">compiler</a> <span class="keyword">extends</span> <a title="scala.tools.nsc.Global" id="21693">Global</a>(<a href="#34514" title="scala.tools.nsc.CompilerCommand">command</a>.<a title="=&gt; scala.tools.nsc.Settings" id="34427">settings</a>, <a href="#34515" title="xsbt.LoggerReporter">reporter</a>)
+		{
+			<span class="keyword">object</span> <a title="object xsbt.CompilerInterface.compiler.dummy" id="34672">dummy</a> <span class="comment">// temporary fix for #4426</span>
+			<span class="keyword">object</span> <a title="object xsbt.CompilerInterface.compiler.sbtAnalyzer" id="34674">sbtAnalyzer</a> <span class="keyword">extends</span>
+			{
+				<span class="keyword">val</span> <a title="compiler.type" id="34758">global</a>: compiler.<span class="keyword">type</span> = <a href="#34518" title="object compiler">compiler</a>
+				<span class="keyword">val</span> <a title="java.lang.String" id="34759">phaseName</a> = <a href="Analyzer.scala.html#7288" title="object xsbt.Analyzer">Analyzer</a>.<a href="Analyzer.scala.html#30016" title="=&gt; java.lang.String">name</a>
+				<span class="keyword">val</span> <a title="List[java.lang.String]" id="34760">runsAfter</a> = <span title="(java.lang.String*)List[java.lang.String]">List</span>(<span title="java.lang.String(&quot;jvm&quot;)" class="string">&quot;jvm&quot;</span>)
+				<span class="keyword">override</span> <span class="keyword">val</span> <a title="List[java.lang.String]" id="34761">runsBefore</a> = <span title="(java.lang.String*)List[java.lang.String]">List</span>(<span title="java.lang.String(&quot;terminal&quot;)" class="string">&quot;terminal&quot;</span>)
+				<span class="keyword">val</span> <a title="None.type" id="34762">runsRightAfter</a> = <a title="object None" id="505">None</a>
+			}
+			<span class="keyword">with</span> <span title="scala.tools.nsc.SubComponent">SubComponent</span> <span class="keyword">with</span> <a href="#34681" title="xsbt.CompilerInterface.compiler.Compat27">Compat27</a>
+			{
+				<span class="keyword">val</span> <a title="xsbt.Analyzer" id="34738">analyzer</a> = <span title="xsbt.Analyzer" class="keyword">new</span> <a href="Analyzer.scala.html#7287" title="xsbt.Analyzer">Analyzer</a>(<a href="#34758" title="=&gt; compiler.type">global</a>, <a href="#34509" title="xsbti.AnalysisCallback">callback</a>)
+				<span class="keyword">def</span> <a title="(scala.tools.nsc.Phase)scala.tools.nsc.Phase" id="34740">newPhase</a>(<a title="scala.tools.nsc.Phase" id="34765">prev</a>: <span title="scala.tools.nsc.Phase">Phase</span>) = <a href="#34738" title="=&gt; xsbt.Analyzer">analyzer</a>.<a href="Analyzer.scala.html#30029" title="(scala.tools.nsc.Phase)scala.tools.nsc.Phase">newPhase</a>(<a href="#34765" title="scala.tools.nsc.Phase">prev</a>)
+				<span class="keyword">def</span> <a title="=&gt; java.lang.String" id="34741">name</a> = <a href="#34759" title="=&gt; java.lang.String">phaseName</a>
+			}
+			<span class="keyword">object</span> <a title="object xsbt.CompilerInterface.compiler.apiExtractor" id="34676">apiExtractor</a> <span class="keyword">extends</span>
+			{
+				<span class="keyword">val</span> <a title="compiler.type" id="34811">global</a>: compiler.<span class="keyword">type</span> = <a href="#34518" title="object compiler">compiler</a>
+				<span class="keyword">val</span> <a title="java.lang.String" id="34812">phaseName</a> = <a href="API.scala.html#7006" title="object xsbt.API">API</a>.<a href="API.scala.html#24358" title="=&gt; java.lang.String">name</a>
+				<span class="keyword">val</span> <a title="List[java.lang.String]" id="34813">runsAfter</a> = <span title="(java.lang.String*)List[java.lang.String]">List</span>(<span title="java.lang.String(&quot;typer&quot;)" class="string">&quot;typer&quot;</span>)
+				<span class="keyword">override</span> <span class="keyword">val</span> <a title="List[java.lang.String]" id="34814">runsBefore</a> = <span title="(java.lang.String*)List[java.lang.String]">List</span>(<span title="java.lang.String(&quot;erasure&quot;)" class="string">&quot;erasure&quot;</span>)
+				<span class="keyword">val</span> <a title="Some[java.lang.String]" id="34815">runsRightAfter</a> = <a title="(java.lang.String)Some[java.lang.String]" id="286">Some</a>(<span title="java.lang.String(&quot;typer&quot;)" class="string">&quot;typer&quot;</span>)
+			}
+			<span class="keyword">with</span> <span title="scala.tools.nsc.SubComponent">SubComponent</span> <span class="keyword">with</span> <a href="#34681" title="xsbt.CompilerInterface.compiler.Compat27">Compat27</a>
+			{
+				<span class="keyword">val</span> <a title="xsbt.API" id="34793">api</a> = <span title="xsbt.API" class="keyword">new</span> <a href="API.scala.html#7005" title="xsbt.API">API</a>(<a href="#34811" title="=&gt; compiler.type">global</a>, <a href="#34509" title="xsbti.AnalysisCallback">callback</a>)
+				<span class="keyword">def</span> <a title="(scala.tools.nsc.Phase)xsbt.CompilerInterface.compiler.apiExtractor.api.ApiPhase" id="34795">newPhase</a>(<a title="scala.tools.nsc.Phase" id="34819">prev</a>: <span title="scala.tools.nsc.Phase">Phase</span>) = <a href="#34793" title="=&gt; xsbt.API">api</a>.<a href="API.scala.html#24370" title="(scala.tools.nsc.Phase)xsbt.CompilerInterface.compiler.apiExtractor.api.ApiPhase">newPhase</a>(<a href="#34819" title="scala.tools.nsc.Phase">prev</a>)
+				<span class="keyword">def</span> <a title="=&gt; java.lang.String" id="34796">name</a> = <a href="#34812" title="=&gt; java.lang.String">phaseName</a>
+			}
+			
+			<span class="keyword">override</span> <span class="keyword">lazy</span> <span class="keyword">val</span> <a title="List[scala.tools.nsc.SubComponent]" id="34679">phaseDescriptors</a> = <span class="comment">// done this way for compatibility between 2.7 and 2.8</span>
+			{
+				<a href="#34517" title="scala.collection.mutable.HashSet[Any]">phasesSet</a> <span title="(Any)Unit">+=</span> <a href="#34674" title="object xsbt.CompilerInterface.compiler.sbtAnalyzer">sbtAnalyzer</a>
+				<a href="#34517" title="scala.collection.mutable.HashSet[Any]">phasesSet</a> <span title="(Any)Unit">+=</span> <a href="#34676" title="object xsbt.CompilerInterface.compiler.apiExtractor">apiExtractor</a>
+				<span class="keyword">val</span> <a title="List[scala.tools.nsc.SubComponent]" id="34823">superd</a> = <a href="#34680" title="()List[scala.tools.nsc.SubComponent]">superComputePhaseDescriptors</a>
+				<span title="List[scala.tools.nsc.SubComponent]" class="keyword">if</span>(<a href="#34823" title="List[scala.tools.nsc.SubComponent]">superd</a>.<a title="(Any)Boolean" id="16028">contains</a>(<a href="#34674" title="object xsbt.CompilerInterface.compiler.sbtAnalyzer">sbtAnalyzer</a>))
+					<a href="#34823" title="List[scala.tools.nsc.SubComponent]">superd</a>
+				<span class="keyword">else</span>
+				{
+					<span class="keyword">val</span> <a title="Int" id="34828">typerIndex</a> = <a href="#34823" title="List[scala.tools.nsc.SubComponent]">superd</a>.<a title="(scala.tools.nsc.SubComponent)Int" id="16014">indexOf</a>(<a title="object xsbt.CompilerInterface.compiler.analyzer" id="24518">analyzer</a>.<a title="object xsbt.CompilerInterface.compiler.analyzer.typerFactory" id="36584">typerFactory</a>)
+					<a title="(Boolean)Unit" id="787">assert</a>(<a href="#34828" title="Int">typerIndex</a> <a title="(Int)Boolean" id="3085">&gt;=</a> <span title="Int(0)" class="int">0</span>)
+					<a href="#34823" title="List[scala.tools.nsc.SubComponent]">superd</a>.<a title="(Int)List[scala.tools.nsc.SubComponent]" id="15716">take</a>(<a href="#34828" title="Int">typerIndex</a><span title="(Int)Int">+</span><span title="Int(1)" class="int">1</span>) <a href="#37218" title="(List[scala.tools.nsc.SubComponent])List[scala.tools.nsc.SubComponent]">:::</a> <a href="#34676" title="object xsbt.CompilerInterface.compiler.apiExtractor">apiExtractor</a> <a href="#37402" title="(scala.tools.nsc.SubComponent)List[scala.tools.nsc.SubComponent]" id="15700">::</a> <a href="#34823" title="List[scala.tools.nsc.SubComponent]">superd</a>.<a title="(Int)List[scala.tools.nsc.SubComponent]" id="15718">drop</a>(<a href="#34828" title="Int">typerIndex</a><span title="(Int)Int">+</span><span title="Int(1)" class="int">1</span>) <a href="#37403" title="(List[scala.tools.nsc.SubComponent])List[scala.tools.nsc.SubComponent]">:::</a> <span title="(object xsbt.CompilerInterface.compiler.sbtAnalyzer*)List[object xsbt.CompilerInterface.compiler.sbtAnalyzer]">List</span>(<a href="#34674" title="object xsbt.CompilerInterface.compiler.sbtAnalyzer">sbtAnalyzer</a>)
+				}
+			}
+			<span class="keyword">private</span> <span class="keyword">def</span> <a title="()List[scala.tools.nsc.SubComponent]" id="34680">superComputePhaseDescriptors</a>() = <span class="comment">// required because 2.8 makes computePhaseDescriptors private</span>
+			{
+				<span class="keyword">val</span> <a title="java.lang.reflect.Method" id="34827">meth</a> = <span title="java.lang.Class[scala.tools.nsc.Global]">classOf</span>[Global].<a title="(java.lang.String,java.lang.Class[_]*)java.lang.reflect.Method" id="4336">getDeclaredMethod</a>(<span title="java.lang.String(&quot;computePhaseDescriptors&quot;)" class="string">&quot;computePhaseDescriptors&quot;</span>)
+				<a href="#34827" title="java.lang.reflect.Method">meth</a>.<a title="(Boolean)Unit" id="19613">setAccessible</a>(<span title="Boolean(true)" class="keyword">true</span>)
+				<a href="#34827" title="java.lang.reflect.Method">meth</a>.<a title="(Any,java.lang.Object*)java.lang.Object" id="19595">invoke</a>(<span class="keyword">this</span>).<a title="List[scala.tools.nsc.SubComponent]" id="3442">asInstanceOf</a>[<span title="List[scala.tools.nsc.SubComponent]">List</span>[SubComponent]]
+			}
+			<span class="keyword">trait</span> <a title="trait Compat27 extends java.lang.Object with ScalaObject" id="34681">Compat27</a> { <span class="keyword">val</span> <a title="List[String]" id="34756">runsBefore</a>: <span title="List[String]">List</span>[String] = <a title="object Nil" id="310">Nil</a> }
+		}
+		<span title="Unit" class="keyword">if</span>(<a href="#34516" title="=&gt; Boolean">noErrors</a>)
+		{
+			<span class="keyword">val</span> <a title="compiler.Run" id="37431">run</a> = <span title="compiler.Run" class="keyword">new</span> <a href="#34518" title="object compiler">compiler</a>.<a title="compiler.Run" id="24648">Run</a>
+			<a href="Log.scala.html#34503" title="(xsbti.Logger,=&gt; String)Unit">debug</a>(<a href="#34511" title="xsbti.Logger">log</a>, <a href="#34508" title="Array[String]">args</a>.<a title="(String,String,String)String" id="16174">mkString</a>(<span title="java.lang.String(&quot;Calling Scala compiler with arguments  (CompilerInterface):\012\011&quot;)" class="string">&quot;Calling Scala compiler with arguments  (CompilerInterface):\n\t&quot;</span>, <span title="java.lang.String(&quot;\012\011&quot;)" class="string">&quot;\n\t&quot;</span>, <span title="java.lang.String(&quot;&quot;)" class="string">&quot;&quot;</span>))
+			<a href="#37431" title="compiler.Run">run</a> <a title="(List[String])Unit" id="24713">compile</a> <a href="#34514" title="scala.tools.nsc.CompilerCommand">command</a>.<a title="=&gt; List[String]" id="34435">files</a>
+		}
+		<a href="#34515" title="xsbt.LoggerReporter">reporter</a>.<a href="LoggerReporter.scala.html#34658" title="()Unit">printSummary</a>()
+		<span title="Unit" class="keyword">if</span>(<span title="=&gt; Boolean">!</span><a href="#34516" title="=&gt; Boolean">noErrors</a>)
+		{
+			<a href="Log.scala.html#34503" title="(xsbti.Logger,=&gt; String)Unit">debug</a>(<a href="#34511" title="xsbti.Logger">log</a>, <span title="java.lang.String(&quot;Compilation failed (CompilerInterface)&quot;)" class="string">&quot;Compilation failed (CompilerInterface)&quot;</span>)
+			<span title="Nothing" class="keyword">throw</span> <span title="xsbt.InterfaceCompileFailed" class="keyword">new</span> <a href="#6813" title="xsbt.InterfaceCompileFailed">InterfaceCompileFailed</a>(<a href="#34508" title="Array[String]">args</a>, <span title="java.lang.String(&quot;Compilation failed&quot;)" class="string">&quot;Compilation failed&quot;</span>)
+		}
+	}
+}
+<span class="keyword">class</span> <a title="class InterfaceCompileFailed extends xsbti.CompileFailed with ScalaObject" id="6813">InterfaceCompileFailed</a>(<span class="keyword">val</span> <a title="Array[String]" id="37444">arguments</a>: <span title="Array[String]">Array</span>[String], <span class="keyword">override</span> <span class="keyword">val</span> <a title="String" id="37445">toString</a>: <a title="String" id="1800">String</a>) <span class="keyword">extends</span> xsbti.<a href="xsbti/CompileFailed.java.html#7639" title="xsbti.CompileFailed">CompileFailed</a>
+
+        </pre>
+    </body>
+</html>
