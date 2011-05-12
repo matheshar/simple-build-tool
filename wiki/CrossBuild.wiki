@@ -30,7 +30,7 @@ Or, for a fixed version of Scala:
 
 Define the versions of Scala to build against in the `build.scala.versions` property as a space-delimited list.  Versions of Scala 2.7.2 or later are allowed.  Scala 2.8 versions will usually work, including [LocalScala locally built versions].  For example:
 {{{
-> set build.scala.versions 2.7.7 2.8.0.Beta1 2.7.5 2.7.3 2.7.2
+> set build.scala.versions 2.9.0 2.7.7 2.8.0 2.8.1
 > reload
 }}}
 
