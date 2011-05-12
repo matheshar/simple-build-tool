@@ -1,0 +1,358 @@
+<?xml version="1.0" encoding="utf-8"?>
+			<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html;charset=utf-8" ></meta>
+        <title>sbt/Environment.scala</title>
+        <script type="text/javascript" src="../jquery-all.js"></script>
+        <script type="text/javascript" src="../linked.js"></script>
+        <link rel="stylesheet" type="text/css" href="../style.css" title="Style"></link>
+    </head>
+    <body>
+        <pre>
+<span class="comment">/* sbt -- Simple Build Tool
+ * Copyright 2008 Mark Harrah, David MacIver
+ */</span>
+<span class="keyword">package</span> sbt
+
+<span class="keyword">import</span> impl.PropertiesUtilities
+<span class="keyword">import</span> scala.reflect.Manifest
+
+<span class="keyword">trait</span> <a title="trait Environment extends java.lang.Object with ScalaObject" id="13373">Environment</a>
+{
+	<span class="keyword">abstract</span> <span class="keyword">class</span> <a title="class Property[T] extends java.lang.Object with NotNull with ScalaObject" id="54238">Property</a>[<a title="&gt;: Nothing &lt;: Any" id="54239">T</a>] <span class="keyword">extends</span> <span title="NotNull">NotNull</span>
+	{
+		<span class="comment">/** Explicitly sets the value of this property to 'v'.*/</span>
+		<span class="keyword">def</span> <a title="(T)Unit" id="55117">update</a>(<a title="T" id="57611">v</a>: <a href="#54239" title="T">T</a>): <span title="Unit">Unit</span>
+		<span class="comment">/** Returns the current value of this property or throws an exception if the value could not be obtained.*/</span>
+		<span class="keyword">def</span> <a title="=&gt; T" id="55118">value</a>: <a href="#54239" title="T">T</a> = <a href="#55120" title="=&gt; sbt.PropertyResolution[T]">resolve</a>.<a href="#62622" title="=&gt; T">value</a>
+		<span class="comment">/** Returns the current value of this property in an 'Option'.  'None' is used to indicate that the
+		* value could not obtained.*/</span>
+		<span class="keyword">def</span> <a title="=&gt; Option[T]" id="55119">get</a>: <span title="Option[T]">Option</span>[T] = <a href="#55120" title="=&gt; sbt.PropertyResolution[T]">resolve</a>.<a href="#62626" title="=&gt; Option[T]">toOption</a>
+		<span class="comment">/** Returns full information about this property's current value. */</span>
+		<span class="keyword">def</span> <a title="=&gt; sbt.PropertyResolution[T]" id="55120">resolve</a>: <a href="#10907" title="sbt.PropertyResolution[T]">PropertyResolution</a>[T]
+
+		<span class="keyword">def</span> <a title="((T) =&gt; Unit)Unit" id="55121">foreach</a>(<a title="(T) =&gt; Unit" id="62637">f</a>: T =&gt; Unit): <span title="Unit">Unit</span> = <a href="#55120" title="=&gt; sbt.PropertyResolution[T]">resolve</a>.<a href="#62627" title="((T) =&gt; Unit)Unit">foreach</a>(<a href="#62637" title="(T) =&gt; Unit">f</a>)
+	}
+
+	<span class="comment">/** Creates a system property with the given name and no default value.*/</span>
+	<span class="keyword">def</span> <a title="[T](String)(implicit sbt.Format[T])Environment.this.Property[T]" id="54240">system</a>[<a title="&gt;: Nothing &lt;: Any" id="54242">T</a>](<a title="String" id="62639">propName</a>: <span title="String">String</span>)(<span class="keyword">implicit</span> <a title="sbt.Format[T]" id="62640">format</a>: <a href="Format.scala.html#11438" title="sbt.Format[T]">Format</a>[T]): <a href="#54238" title="Environment.this.Property[T]">Property</a>[T]
+	<span class="comment">/** Creates a system property with the given name and the given default value to use if no value is explicitly specified.*/</span>
+	<span class="keyword">def</span> <a title="[T](String,=&gt; T)(implicit sbt.Format[T])Environment.this.Property[T]" id="54243">systemOptional</a>[<a title="&gt;: Nothing &lt;: Any" id="54245">T</a>](<a title="String" id="62641">propName</a>: <span title="String">String</span>, <a title="=&gt; T" id="62642">defaultValue</a>: =&gt; T)(<span class="keyword">implicit</span> <a title="sbt.Format[T]" id="62643">format</a>: <a href="Format.scala.html#11438" title="sbt.Format[T]">Format</a>[T]): <a href="#54238" title="Environment.this.Property[T]">Property</a>[T]
+	<span class="comment">/** Creates a user-defined property that has no default value.  The property will try to inherit its value
+	* from a parent environment (if one exists) if its value is not explicitly specified.  An explicitly specified
+	* value will persist between builds if the object returned by this method is assigned to a 'val' in this
+	* 'Environment'.*/</span>
+	<span class="keyword">def</span> <a title="[T](implicit scala.reflect.Manifest[T],sbt.Format[T])Environment.this.Property[T]" id="54246">property</a>[<a title="&gt;: Nothing &lt;: Any" id="54248">T</a>](<span class="keyword">implicit</span> <a title="scala.reflect.Manifest[T]" id="57614">manifest</a>: <span title="scala.reflect.Manifest[T]">Manifest</span>[T], <a title="sbt.Format[T]" id="57615">format</a>: <a href="Format.scala.html#11438" title="sbt.Format[T]">Format</a>[T]): <a href="#54238" title="Environment.this.Property[T]">Property</a>[T]
+	<span class="comment">/** Creates a user-defined property that has no default value.  The property will try to inherit its value
+	* from a parent environment (if one exists) if its value is not explicitly specified.  An explicitly specified
+	* value will persist between builds if the object returned by this method is assigned to a 'val' in this
+	* 'Environment'.  The given 'format' is used to convert an instance of 'T' to and from the 'String' representation
+	* used for persistence.*/</span>
+	<span class="keyword">def</span> <a title="[T](sbt.Format[T])(implicit scala.reflect.Manifest[T])Environment.this.Property[T]" id="54249">propertyF</a>[<a title="&gt;: Nothing &lt;: Any" id="54251">T</a>](<a title="sbt.Format[T]" id="62644">format</a>: <a href="Format.scala.html#11438" title="sbt.Format[T]">Format</a>[T])(<span class="keyword">implicit</span> <a title="scala.reflect.Manifest[T]" id="62645">manifest</a>: <span title="scala.reflect.Manifest[T]">Manifest</span>[T]): <a href="#54238" title="Environment.this.Property[T]">Property</a>[T] = <a href="#54246" title="(implicit scala.reflect.Manifest[T],sbt.Format[T])Environment.this.Property[T]">property</a>(<a href="#62645" title="scala.reflect.Manifest[T]">manifest</a>, <a href="#62644" title="sbt.Format[T]">format</a>)
+	<span class="comment">/** Creates a user-defined property with no default value and no value inheritance from a parent environment.
+	* Its value will persist between builds if the returned object is assigned to a 'val' in this 'Environment'.*/</span>
+	<span class="keyword">def</span> <a title="[T](implicit scala.reflect.Manifest[T],sbt.Format[T])Environment.this.Property[T]" id="54252">propertyLocal</a>[<a title="&gt;: Nothing &lt;: Any" id="54254">T</a>](<span class="keyword">implicit</span> <a title="scala.reflect.Manifest[T]" id="62647">manifest</a>: <span title="scala.reflect.Manifest[T]">Manifest</span>[T], <a title="sbt.Format[T]" id="62648">format</a>: <a href="Format.scala.html#11438" title="sbt.Format[T]">Format</a>[T]): <a href="#54238" title="Environment.this.Property[T]">Property</a>[T]
+	<span class="comment">/** Creates a user-defined property with no default value and no value inheritance from a parent environment.
+	* The property's value will persist between builds if the object returned by this method is assigned to a
+	* 'val' in this 'Environment'.  The given 'format' is used to convert an instance of 'T' to and from the
+	* 'String' representation used for persistence.*/</span>
+	<span class="keyword">def</span> <a title="[T](sbt.Format[T])(implicit scala.reflect.Manifest[T])Environment.this.Property[T]" id="54255">propertyLocalF</a>[<a title="&gt;: Nothing &lt;: Any" id="54257">T</a>](<a title="sbt.Format[T]" id="57607">format</a>: <a href="Format.scala.html#11438" title="sbt.Format[T]">Format</a>[T])(<span class="keyword">implicit</span> <a title="scala.reflect.Manifest[T]" id="57608">manifest</a>: <span title="scala.reflect.Manifest[T]">Manifest</span>[T]): <a href="#54238" title="Environment.this.Property[T]">Property</a>[T] = <a href="#54252" title="(implicit scala.reflect.Manifest[T],sbt.Format[T])Environment.this.Property[T]">propertyLocal</a>(<a href="#57608" title="scala.reflect.Manifest[T]">manifest</a>, <a href="#57607" title="sbt.Format[T]">format</a>)
+	<span class="comment">/** Creates a user-defined property that uses the given default value if no value is explicitly specified for this property.  The property's value will persist between builds
+	* if the object returned by this method is assigned to a 'val' in this 'Environment'.*/</span>
+	<span class="keyword">def</span> <a title="[T](=&gt; T)(implicit scala.reflect.Manifest[T],sbt.Format[T])Environment.this.Property[T]" id="54258">propertyOptional</a>[<a title="&gt;: Nothing &lt;: Any" id="54260">T</a>](<a title="=&gt; T" id="55103">defaultValue</a>: =&gt; T)(<span class="keyword">implicit</span> <a title="scala.reflect.Manifest[T]" id="55104">manifest</a>: <span title="scala.reflect.Manifest[T]">Manifest</span>[T], <a title="sbt.Format[T]" id="55105">format</a>: <a href="Format.scala.html#11438" title="sbt.Format[T]">Format</a>[T]): <a href="#54238" title="Environment.this.Property[T]">Property</a>[T]
+	<span class="comment">/** Creates a user-defined property with no value inheritance from a parent environment but with the given default
+	* value if no value is explicitly specified for this property.  The property's value will persist between builds
+	* if the object returned by this method is assigned to a 'val' in this 'Environment'.  The given 'format' is used
+	* to convert an instance of 'T' to and from the 'String' representation used for persistence.*/</span>
+	<span class="keyword">def</span> <a title="[T](=&gt; T,sbt.Format[T])(implicit scala.reflect.Manifest[T])Environment.this.Property[T]" id="54261">propertyOptionalF</a>[<a title="&gt;: Nothing &lt;: Any" id="54263">T</a>](<a title="=&gt; T" id="62650">defaultValue</a>: =&gt; T, <a title="sbt.Format[T]" id="62651">format</a>: <a href="Format.scala.html#11438" title="sbt.Format[T]">Format</a>[T])(<span class="keyword">implicit</span> <a title="scala.reflect.Manifest[T]" id="62652">manifest</a>: <span title="scala.reflect.Manifest[T]">Manifest</span>[T]): <a href="#54238" title="Environment.this.Property[T]">Property</a>[T] =
+		<a href="#54258" title="(=&gt; T)(implicit scala.reflect.Manifest[T],sbt.Format[T])Environment.this.Property[T]">propertyOptional</a>(<a href="#62650" title="=&gt; T">defaultValue</a>)(<a href="#62652" title="scala.reflect.Manifest[T]">manifest</a>, <a href="#62651" title="sbt.Format[T]">format</a>)
+}
+
+<span class="keyword">import</span> scala.collection.Map
+<span class="keyword">trait</span> <a title="trait BasicEnvironment extends java.lang.Object with sbt.Environment with ScalaObject" id="9071">BasicEnvironment</a> <span class="keyword">extends</span> <a href="#13373" title="sbt.Environment">Environment</a>
+{
+	<span class="keyword">protected</span> <span class="keyword">def</span> <a title="=&gt; sbt.Logger" id="54265">log</a>: <a href="Logger.scala.html#13532" title="sbt.Logger">Logger</a>
+	<span class="comment">/** The location of the properties file that backs the user-defined properties. */</span>
+	<span class="keyword">def</span> <a title="=&gt; sbt.Path" id="54266">envBackingPath</a>: <a href="Path.scala.html#11861" title="sbt.Path">Path</a>
+	<span class="comment">/** The environment from which user-defined properties inherit (if enabled). */</span>
+	<span class="keyword">protected</span> <span class="keyword">def</span> <a title="=&gt; Option[sbt.BasicEnvironment]" id="54267">parentEnvironment</a>: <span title="Option[sbt.BasicEnvironment]">Option</span>[BasicEnvironment] = <span title="object None">None</span>
+	<span class="comment">/** The identifier used in messages to refer to this environment. */</span>
+	<span class="keyword">def</span> <a title="=&gt; String" id="54268">environmentLabel</a> = <a href="#54266" title="=&gt; sbt.Path">envBackingPath</a>.<a href="Path.scala.html#52356" title="=&gt; String">absolutePath</a>
+
+	<span class="keyword">private</span>[<span class="keyword">this</span>] <span class="keyword">var</span> <a title="Boolean" id="54269">isModified</a> = <span title="Boolean(false)" class="keyword">false</span>
+	<span class="keyword">private</span>[sbt] <span class="keyword">def</span> <a title="(Boolean)Unit" id="54270">setEnvironmentModified</a>(<a title="Boolean" id="62659">modified</a>: <span title="Boolean">Boolean</span>) { <a href="#9071" title="(Unit)Unit">synchronized</a> { <a href="#54269" title="Boolean">isModified</a> = <a href="#62659" title="Boolean">modified</a> } }
+	<span class="keyword">private</span>[<span class="keyword">this</span>] <span class="keyword">def</span> <a title="=&gt; Boolean" id="54271">isEnvironmentModified</a> = <a href="#9071" title="(Boolean)Boolean">synchronized</a> { <a href="#54269" title="Boolean">isModified</a> }
+
+
+	<span class="keyword">implicit</span> <span class="keyword">val</span> <a title="sbt.Format[Int]" id="54272">IntFormat</a>: <a href="Format.scala.html#11438" title="sbt.Format[Int]">Format</a>[Int] = <a title="template $anon extends sbt.SimpleFormat[Int]" id="62664" class="keyword">new</a> <a href="Format.scala.html#12239" title="sbt.SimpleFormat[Int]">SimpleFormat</a>[Int] { <span class="keyword">def</span> <a title="(String)Int" id="62668">fromString</a>(<a title="String" id="62670">s</a>: <span title="String">String</span>) = java.lang.<a title="object java.lang.Integer" id="1729">Integer</a>.<a title="(java.lang.String)Int" id="17074">parseInt</a>(<a href="#62670" title="String">s</a>) }
+	<span class="keyword">implicit</span> <span class="keyword">val</span> <a title="sbt.Format[Long]" id="54274">LongFormat</a>: <a href="Format.scala.html#11438" title="sbt.Format[Long]">Format</a>[Long] = <a title="template $anon extends sbt.SimpleFormat[Long]" id="62673" class="keyword">new</a> <a href="Format.scala.html#12239" title="sbt.SimpleFormat[Long]">SimpleFormat</a>[Long] { <span class="keyword">def</span> <a title="(String)Long" id="62675">fromString</a>(<a title="String" id="62677">s</a>: <span title="String">String</span>) = java.lang.<a title="object java.lang.Long" id="1891">Long</a>.<a title="(java.lang.String)Long" id="37351">parseLong</a>(<a href="#62677" title="String">s</a>) }
+	<span class="keyword">implicit</span> <span class="keyword">val</span> <a title="sbt.Format[Double]" id="54276">DoubleFormat</a>: <a href="Format.scala.html#11438" title="sbt.Format[Double]">Format</a>[Double] = <a title="template $anon extends sbt.SimpleFormat[Double]" id="62679" class="keyword">new</a> <a href="Format.scala.html#12239" title="sbt.SimpleFormat[Double]">SimpleFormat</a>[Double] { <span class="keyword">def</span> <a title="(String)Double" id="62681">fromString</a>(<a title="String" id="62683">s</a>: <span title="String">String</span>) = java.lang.<a title="object java.lang.Double" id="2071">Double</a>.<a title="(java.lang.String)Double" id="37235">parseDouble</a>(<a href="#62683" title="String">s</a>) }
+	<span class="keyword">implicit</span> <span class="keyword">val</span> <a title="sbt.Format[Boolean]" id="54278">BooleanFormat</a>: <a href="Format.scala.html#11438" title="sbt.Format[Boolean]">Format</a>[Boolean] = <a title="template $anon extends sbt.SimpleFormat[Boolean]" id="62684" class="keyword">new</a> <a href="Format.scala.html#12239" title="sbt.SimpleFormat[Boolean]">SimpleFormat</a>[Boolean] { <span class="keyword">def</span> <a title="(String)Boolean" id="62686">fromString</a>(<a title="String" id="62688">s</a>: <span title="String">String</span>) = java.lang.<a title="object java.lang.Boolean" id="1963">Boolean</a>.<a title="(java.lang.String)java.lang.Boolean" id="16225">valueOf</a>(<a href="#62688" title="String">s</a>).<a title="()Boolean" id="16223">booleanValue</a> }
+	<span class="keyword">implicit</span> <span class="keyword">val</span> <a title="sbt.Format[String]" id="54280">StringFormat</a>: <a href="Format.scala.html#11438" title="sbt.Format[String]">Format</a>[String] = <a href="Format.scala.html#11439" title="object sbt.Format">Format</a>.<a href="Format.scala.html#52134" title="=&gt; sbt.Format[String]">string</a>
+	<span class="keyword">val</span> <a title="sbt.Format[String]" id="54282">NonEmptyStringFormat</a>: <a href="Format.scala.html#11438" title="sbt.Format[String]">Format</a>[String] = <a title="template $anon extends sbt.SimpleFormat[String]" id="62690" class="keyword">new</a> <a href="Format.scala.html#12239" title="sbt.SimpleFormat[String]">SimpleFormat</a>[String]
+	{
+		<span class="keyword">def</span> <a title="(String)java.lang.String" id="62692">fromString</a>(<a title="String" id="62694">s</a>: <span title="String">String</span>) =
+		{
+			<span class="keyword">val</span> <a title="java.lang.String" id="62695">trimmed</a> = <a href="#62694" title="String">s</a>.<a title="()java.lang.String" id="6399">trim</a>
+			<span title="Unit" class="keyword">if</span>(<a href="#62695" title="java.lang.String">trimmed</a>.<a title="()Boolean" id="6349">isEmpty</a>)
+				<span title="(String)Nothing">error</span>(<span title="java.lang.String(&quot;The empty string is not allowed.&quot;)" class="string">&quot;The empty string is not allowed.&quot;</span>)
+			<a href="#62695" title="java.lang.String">trimmed</a>
+		}
+	}
+	<span class="keyword">implicit</span> <span class="keyword">val</span> <a title="sbt.Format[sbt.Version]" id="54284">VersionFormat</a>: <a href="Format.scala.html#11438" title="sbt.Format[sbt.Version]">Format</a>[Version] =
+		<a title="template $anon extends sbt.SimpleFormat[sbt.Version]" id="62696" class="keyword">new</a> <a href="Format.scala.html#12239" title="sbt.SimpleFormat[sbt.Version]">SimpleFormat</a>[Version]
+		{
+			<span class="keyword">def</span> <a title="(String)sbt.Version" id="62698">fromString</a>(<a title="String" id="62700">s</a>: <span title="String">String</span>) = <a href="Version.scala.html#12138" title="object sbt.Version">Version</a>.<a href="Version.scala.html#57623" title="(String)Either[String,sbt.Version]">fromString</a>(<a href="#62700" title="String">s</a>).<a title="((String) =&gt; sbt.Version,(sbt.Version) =&gt; sbt.Version)sbt.Version" id="53343">fold</a>(<a title="String" id="62704">msg</a> =&gt; <span title="(String)Nothing">error</span>(<a href="#62704" title="String">msg</a>), <a title="sbt.Version" id="62706">x</a> =&gt; <a href="#62706" title="sbt.Version">x</a>)
+		}
+	<span class="keyword">implicit</span> <span class="keyword">val</span> <a title="sbt.Format[java.io.File]" id="54286">FileFormat</a> = <a href="Format.scala.html#11439" title="object sbt.Format">Format</a>.<a href="Format.scala.html#52127" title="=&gt; sbt.Format[java.io.File]">file</a>
+
+
+	<span class="comment">/** Implementation of 'Property' for user-defined properties. */</span>
+	<span class="keyword">private</span>[sbt] <span class="keyword">class</span> <a title="class UserProperty[T] extends BasicEnvironment.this.Property[T] with ScalaObject" id="54288">UserProperty</a>[<a title="&gt;: Nothing &lt;: Any" id="54289">T</a>](<a title="=&gt; Option[T]" id="62769">lazyDefaultValue</a>: =&gt; Option[T], <a title="sbt.Format[T]" id="62770">format</a>: <a href="Format.scala.html#11438" title="sbt.Format[T]">Format</a>[T], <a title="Boolean" id="62771">inheritEnabled</a>: <span title="Boolean">Boolean</span>,
+		<a title="Boolean" id="62772">inheritFirst</a>: <span title="Boolean">Boolean</span>, <span class="keyword">private</span>[BasicEnvironment] <span class="keyword">val</span> <a title="scala.reflect.Manifest[T]" id="62773">manifest</a>: <span title="scala.reflect.Manifest[T]">Manifest</span>[T]) <span class="keyword">extends</span> <a href="#54238" title="BasicEnvironment.this.Property[T]">Property</a>[T]
+	{
+		<span class="comment">/** The name of this property is used for persistence in the properties file and as an identifier in messages.*/</span>
+		<span class="keyword">lazy</span> <span class="keyword">val</span> <a title="Option[String]" id="62720">name</a> = <a href="#54311" title="=&gt; scala.collection.Map[String,BasicEnvironment.this.AnyUserProperty]">propertyMap</a>.<a title="(((String, BasicEnvironment.this.AnyUserProperty)) =&gt; Boolean)Option[(String, BasicEnvironment.this.AnyUserProperty)]" id="16151">find</a>( <a title="(String, BasicEnvironment.this.AnyUserProperty)" id="62751">p</a> =&gt; <a href="#62751" title="(String, BasicEnvironment.this.AnyUserProperty)">p</a>.<span title="=&gt; BasicEnvironment.this.AnyUserProperty">_2</span> <span title="(AnyRef)Boolean">eq</span> <a href="#54288" title="BasicEnvironment.this.UserProperty[T]" class="keyword">this</a> ).<span title="(((String, BasicEnvironment.this.AnyUserProperty)) =&gt; String)Option[String]">map</span>(<a href="#62754" title="(String, BasicEnvironment.this.AnyUserProperty)">_</a>.<a title="=&gt; String" id="17992">_1</a>)
+		<span class="comment">/** Gets the name of this property or an alternative if the name is not available.*/</span>
+		<span class="keyword">private</span> <span class="keyword">def</span> <a title="=&gt; String" id="62721">nameString</a> = <a href="#62719" title="=&gt; Option[String]">name</a>.<span title="(=&gt; String)String">getOrElse</span>(<span title="java.lang.String(&quot;&lt;unnamed&gt;&quot;)" class="string">&quot;&lt;unnamed&gt;&quot;</span>)
+		<span class="comment">/** The lazily evaluated default value for this property.*/</span>
+		<span class="keyword">private</span> <span class="keyword">lazy</span> <span class="keyword">val</span> <a title="Option[T]" id="62723">defaultValue</a> = <a href="#62769" title="=&gt; Option[T]">lazyDefaultValue</a>
+		<span class="comment">/** The explicitly set value for this property.*/</span>
+		<span class="keyword">private</span>[BasicEnvironment] <span class="keyword">var</span> <a title="sbt.LazyVar[Option[T]]" id="62768">explicitValue</a> =
+		{
+			<span class="keyword">def</span> <a title="=&gt; Option[T]" id="62747">initialValue</a> = <span class="keyword">for</span>(<a title="((String) =&gt; Option[T])Option[T]" id="62757">n</a> &lt;- <a href="#62719" title="=&gt; Option[String]">name</a>; <a title="((String) =&gt; T)Option[T]" id="62760">stringValue</a> &lt;- <a href="#54313" title="=&gt; scala.collection.Map[String,String]">initialValues</a>.<span title="(String)Option[String]">get</span>(<a href="#62757" title="String">n</a>)) <span class="keyword">yield</span> <a href="#62770" title="sbt.Format[T]">format</a>.<a href="Format.scala.html#52139" title="(String)T">fromString</a>(<a href="#62760" title="String">stringValue</a>)
+			<span title="sbt.LazyVar[Option[T]]" class="keyword">new</span> <a href="#13085" title="sbt.LazyVar[Option[T]]">LazyVar</a>[Option[T]](<a href="#62747" title="=&gt; Option[T]">initialValue</a>) <span class="comment">// ensure propertyMap is initialized before a read occurs</span>
+		}
+		<span class="keyword">def</span> <a title="(T)Unit" id="62727">update</a>(<a title="T" id="62778">v</a>: <a href="#54289" title="T">T</a>): <span title="Unit">Unit</span> = <a href="#54288" title="(Unit)Unit">synchronized</a> { <a href="#62768" title="=&gt; sbt.LazyVar[Option[T]]">explicitValue</a>() = <span title="(T)Some[T]">Some</span>(<a href="#62778" title="T">v</a>); <a href="#54270" title="(Boolean)Unit">setEnvironmentModified</a>(<span title="Boolean(true)" class="keyword">true</span>) }
+		<span class="keyword">def</span> <a title="=&gt; sbt.PropertyResolution[T]" id="62728">resolve</a>: <a href="#10907" title="sbt.PropertyResolution[T]">PropertyResolution</a>[T] =
+			<a href="#54288" title="(sbt.PropertyResolution[T])sbt.PropertyResolution[T]">synchronized</a>
+			{
+				<span title="sbt.PropertyResolution[T]" class="keyword">if</span>(<a href="#62772" title="Boolean">inheritFirst</a>) <a href="#62729" title="=&gt; sbt.PropertyResolution[T]">resolveInheritFirst</a>
+				<span class="keyword">else</span> <a href="#62730" title="=&gt; sbt.PropertyResolution[T]">resolveDefaultFirst</a>
+			}
+		<span class="keyword">private</span> <span class="keyword">def</span> <a title="=&gt; sbt.PropertyResolution[T]" id="62729">resolveInheritFirst</a> =
+			<a href="#62765" title="()Option[T]">explicitValue</a>() <span title="sbt.PropertyResolution[T]" class="keyword">match</span>
+			{
+				<span title="sbt.DefinedValue[T]" class="keyword">case</span> Some(<a title="T" id="62794">v</a>) =&gt; <a href="#62796" title="(T,Boolean,Boolean)sbt.DefinedValue[T]">DefinedValue</a>(<a href="#62794" title="T">v</a>, <span title="Boolean(false)" class="keyword">false</span>, <span title="Boolean(false)" class="keyword">false</span>)
+				<span title="sbt.PropertyResolution[T]" class="keyword">case</span> <span title="object None">None</span> =&gt;
+					<span class="keyword">val</span> <a title="sbt.PropertyResolution[T]" id="62827">inherited</a> = <a href="#62732" title="=&gt; sbt.PropertyResolution[T]">inheritedValue</a>
+					 <span class="comment">// note that the following means the default value will not be used if an exception occurs inheriting</span>
+					<a href="#62827" title="sbt.PropertyResolution[T]">inherited</a> <a href="#62623" title="(=&gt; sbt.PropertyResolution[T])sbt.PropertyResolution[T]">orElse</a> <a href="#62731" title="(=&gt; sbt.PropertyResolution[T])sbt.PropertyResolution[T]">getDefault</a>(<a href="#62827" title="sbt.PropertyResolution[T]">inherited</a>)
+			}
+		<span class="keyword">private</span> <span class="keyword">def</span> <a title="=&gt; sbt.PropertyResolution[T]" id="62730">resolveDefaultFirst</a> =
+			<a href="#62765" title="()Option[T]">explicitValue</a>() <span title="sbt.PropertyResolution[T]" class="keyword">match</span>
+			{
+				<span title="sbt.DefinedValue[T]" class="keyword">case</span> Some(<a title="T" id="62835">v</a>) =&gt; <a href="#62796" title="(T,Boolean,Boolean)sbt.DefinedValue[T]">DefinedValue</a>(<a href="#62835" title="T">v</a>, <span title="Boolean(false)" class="keyword">false</span>, <span title="Boolean(false)" class="keyword">false</span>)
+				<span title="sbt.PropertyResolution[T]" class="keyword">case</span> <span title="object None">None</span> =&gt; <a href="#62731" title="(=&gt; sbt.PropertyResolution[T])sbt.PropertyResolution[T]">getDefault</a>(<a href="#62732" title="=&gt; sbt.PropertyResolution[T]">inheritedValue</a>)
+			}
+		<span class="keyword">private</span> <span class="keyword">def</span> <a title="(=&gt; sbt.PropertyResolution[T])sbt.PropertyResolution[T]" id="62731">getDefault</a>(<a title="=&gt; sbt.PropertyResolution[T]" id="62832">orElse</a>: =&gt; PropertyResolution[T]): <a href="#10907" title="sbt.PropertyResolution[T]">PropertyResolution</a>[T] =
+			<span class="keyword">try</span>
+			{
+				<a href="#62722" title="=&gt; Option[T]">defaultValue</a> <span title="sbt.PropertyResolution[T]" class="keyword">match</span>
+				{
+					<span title="sbt.DefinedValue[T]" class="keyword">case</span> Some(<a title="T" id="62837">v</a>) =&gt; <a href="#62796" title="(T,Boolean,Boolean)sbt.DefinedValue[T]">DefinedValue</a>(<a href="#62837" title="T">v</a>, <span title="Boolean(false)" class="keyword">false</span>, <span title="Boolean(true)" class="keyword">true</span>)
+					<span title="sbt.PropertyResolution[T]" class="keyword">case</span> <span title="object None">None</span> =&gt; <a href="#62832" title="=&gt; sbt.PropertyResolution[T]">orElse</a>
+				}
+			} <span class="keyword">catch</span> { <span title="sbt.ResolutionException" class="keyword">case</span> <a title="Exception" id="62839">e</a>: <a title="Exception" id="2067">Exception</a> =&gt;
+				<a href="#62841" title="(String,Option[Throwable])sbt.ResolutionException">ResolutionException</a>(<span title="java.lang.String(&quot;Error while evaluating default value for property&quot;)" class="string">&quot;Error while evaluating default value for property&quot;</span>, <span title="(Exception)Some[Exception]">Some</span>(<a href="#62839" title="Exception">e</a>))
+			}
+
+		<span class="keyword">private</span> <span class="keyword">def</span> <a title="=&gt; sbt.PropertyResolution[T]" id="62732">inheritedValue</a>: <a href="#10907" title="sbt.PropertyResolution[T]">PropertyResolution</a>[T] =
+		{
+			<span class="keyword">val</span> <a title="Option[sbt.BasicEnvironment#UserProperty[_]]" id="62867">propOption</a> = <span title="Option[sbt.BasicEnvironment#UserProperty[_]]" class="keyword">if</span>(<a href="#62771" title="Boolean">inheritEnabled</a>) <a href="#62733" title="=&gt; Option[sbt.BasicEnvironment#UserProperty[_]]">parentProperty</a> <span class="keyword">else</span> <span title="object None">None</span>
+			<a href="#62867" title="Option[sbt.BasicEnvironment#UserProperty[_]]">propOption</a> <span title="sbt.PropertyResolution[T]" class="keyword">match</span>
+			{
+				<span title="sbt.PropertyResolution[T]" class="keyword">case</span> Some(<a title="sbt.BasicEnvironment#UserProperty[?]" id="62887">prop</a>) =&gt; <a href="#62734" title="(sbt.BasicEnvironment#UserProperty[Nothing])sbt.PropertyResolution[T]">tryToInherit</a>(<a href="#62887" title="sbt.BasicEnvironment#UserProperty[?]">prop</a>)
+				<span title="sbt.UndefinedValue" class="keyword">case</span> <span title="object None">None</span> =&gt; <a href="#62903" title="(String,String)sbt.UndefinedValue">UndefinedValue</a>(<a href="#62721" title="=&gt; String">nameString</a>, <a href="#54268" title="=&gt; String">environmentLabel</a>)
+			}
+		}
+		<span class="keyword">private</span> <span class="keyword">def</span> <a title="=&gt; Option[sbt.BasicEnvironment#UserProperty[_]]" id="62733">parentProperty</a> = <span class="keyword">for</span>(<a title="((sbt.BasicEnvironment) =&gt; Option[sbt.BasicEnvironment#UserProperty[_]])Option[sbt.BasicEnvironment#UserProperty[_]]" id="62872">parent</a> &lt;- <a href="#54267" title="=&gt; Option[sbt.BasicEnvironment]">parentEnvironment</a>; <a title="((String) =&gt; Option[parent.UserProperty[_]])Option[parent.UserProperty[_]]" id="62875">n</a> &lt;- <a href="#62719" title="=&gt; Option[String]">name</a>; <a title="((parent.AnyUserProperty) =&gt; parent.UserProperty[_])Option[parent.UserProperty[_]]" id="62878">prop</a> &lt;- <a href="#62872" title="sbt.BasicEnvironment">parent</a>.<a href="#54311" title="=&gt; scala.collection.Map[String,parent.AnyUserProperty]">propertyMap</a>.<span title="(String)Option[parent.AnyUserProperty]">get</span>(<a href="#62875" title="String">n</a>)) <span class="keyword">yield</span> <a href="#62878" title="parent.AnyUserProperty">prop</a>
+
+		<span class="keyword">private</span> <span class="keyword">def</span> <a title="[R](sbt.BasicEnvironment#UserProperty[R])sbt.PropertyResolution[T]" id="62734">tryToInherit</a>[<a title="&gt;: Nothing &lt;: Any" id="62736">R</a>](<a title="sbt.BasicEnvironment#UserProperty[R]" id="62889">prop</a>: BasicEnvironment#<a href="#54288" title="sbt.BasicEnvironment#UserProperty[R]">UserProperty</a>[R]): <a href="#10907" title="sbt.PropertyResolution[T]">PropertyResolution</a>[T] =
+		{
+			<span title="sbt.PropertyResolution[T]" class="keyword">if</span>(<a href="#62889" title="sbt.BasicEnvironment#UserProperty[R]">prop</a>.<a href="#62773" title="=&gt; scala.reflect.Manifest[R]">manifest</a> <a title="(scala.reflect.Manifest[_])Boolean" id="55067">&lt;:&lt;</a> <a href="#62773" title="=&gt; scala.reflect.Manifest[T]">manifest</a>)
+				<a href="#62737" title="(sbt.PropertyResolution[T])sbt.PropertyResolution[T]">markInherited</a>(<a href="#62889" title="sbt.BasicEnvironment#UserProperty[R]">prop</a>.<a href="#62728" title="=&gt; sbt.PropertyResolution[R]">resolve</a>.<a title="sbt.PropertyResolution[T]" id="3442">asInstanceOf</a>[<a href="#10907" title="sbt.PropertyResolution[T]">PropertyResolution</a>[T]])
+			<span class="keyword">else</span>
+				<a href="#62841" title="(String,Option[Throwable])sbt.ResolutionException">ResolutionException</a>(<span title="java.lang.String(&quot;Could not inherit property '&quot;)" class="string">&quot;Could not inherit property '&quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#62721" title="=&gt; String">nameString</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot;' from '&quot;)" class="string">&quot;' from '&quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#54268" title="=&gt; String">environmentLabel</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot;':\012&quot;)" class="string">&quot;':\n&quot;</span> <span title="(Any)java.lang.String">+</span>
+					<span title="java.lang.String(&quot;\011 Property had type &quot;)" class="string">&quot;\t Property had type &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#62889" title="sbt.BasicEnvironment#UserProperty[R]">prop</a>.<a href="#62773" title="=&gt; scala.reflect.Manifest[R]">manifest</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot;, expected type &quot;)" class="string">&quot;, expected type &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#62773" title="=&gt; scala.reflect.Manifest[T]">manifest</a>, <span title="object None">None</span>)
+		}
+		<span class="keyword">private</span> <span class="keyword">def</span> <a title="(sbt.PropertyResolution[T])sbt.PropertyResolution[T]" id="62737">markInherited</a>(<a title="sbt.PropertyResolution[T]" id="62919">result</a>: <a href="#10907" title="sbt.PropertyResolution[T]">PropertyResolution</a>[T]) =
+			<a href="#62919" title="sbt.PropertyResolution[T]">result</a> <span title="sbt.PropertyResolution[T]" class="keyword">match</span>
+			{
+				<span title="sbt.DefinedValue[T]" class="keyword">case</span> DefinedValue(<a title="T" id="62930">v</a>, <a title="Boolean" id="62931">isInherited</a>, <a title="Boolean" id="62932">isDefault</a>) =&gt; <a href="#62796" title="(T,Boolean,Boolean)sbt.DefinedValue[T]">DefinedValue</a>(<a href="#62930" title="T">v</a>, <span title="Boolean(true)" class="keyword">true</span>, <a href="#62932" title="Boolean">isDefault</a>)
+				<span title="sbt.PropertyResolution[T]" class="keyword">case</span> <a title="sbt.PropertyResolution[T]" id="62934">x</a> =&gt; <a href="#62934" title="sbt.PropertyResolution[T]">x</a>
+			}
+
+		<span class="keyword">override</span> <span class="keyword">def</span> <a title="()java.lang.String" id="62738">toString</a> = <a href="#62721" title="=&gt; String">nameString</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot;=&quot;)" class="string">&quot;=&quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#62728" title="=&gt; sbt.PropertyResolution[T]">resolve</a>
+
+		<span class="comment">/** Gets the explicitly set value converted to a 'String'.*/</span>
+		<span class="keyword">private</span>[sbt] <span class="keyword">def</span> <a title="=&gt; Option[String]" id="62739">getStringValue</a>: <span title="Option[String]">Option</span>[String] = <a href="#62765" title="()Option[T]">explicitValue</a>().<span title="((T) =&gt; String)Option[String]">map</span>(<a href="#62770" title="sbt.Format[T]">format</a>.<a href="Format.scala.html#52138" title="(T)String">toString</a>)
+		<span class="comment">/** Explicitly sets the value for this property by converting the given string value.*/</span>
+		<span class="keyword">private</span>[sbt] <span class="keyword">def</span> <a title="(String)Unit" id="62740">setStringValue</a>(<a title="String" id="62948">s</a>: <span title="String">String</span>) { <a href="#62727" title="(T)Unit">update</a>(<a href="#62770" title="sbt.Format[T]">format</a>.<a href="Format.scala.html#52139" title="(String)T">fromString</a>(<a href="#62948" title="String">s</a>)) }
+	}
+	<span class="comment">/** Implementation of 'Property' for system properties (i.e. System.getProperty/setProperty) */</span>
+	<span class="keyword">private</span> <span class="keyword">class</span> <a title="class SystemProperty[T] extends BasicEnvironment.this.Property[T] with ScalaObject" id="54290">SystemProperty</a>[<a title="&gt;: Nothing &lt;: Any" id="54291">T</a>](<span class="keyword">val</span> <a title="String" id="62968">name</a>: <span title="String">String</span>, <a title="=&gt; Option[T]" id="62969">lazyDefaultValue</a>: =&gt; Option[T], <span class="keyword">val</span> <a title="sbt.Format[T]" id="62970">format</a>: <a href="Format.scala.html#11438" title="sbt.Format[T]">Format</a>[T]) <span class="keyword">extends</span> <a href="#54238" title="BasicEnvironment.this.Property[T]">Property</a>[T]
+	{
+		<span class="keyword">def</span> <a title="=&gt; sbt.PropertyResolution[T]" id="62958">resolve</a> =
+		{
+			<span class="keyword">val</span> <a title="java.lang.String" id="62973">rawValue</a> = <span title="object java.lang.System">System</span>.<a title="(java.lang.String)java.lang.String" id="18317">getProperty</a>(<a href="#62968" title="=&gt; String">name</a>)
+			<span title="sbt.PropertyResolution[T]" class="keyword">if</span>(<a href="#62973" title="java.lang.String">rawValue</a> <span title="(AnyRef)Boolean">==</span> <span title="Null(null)" class="keyword">null</span>)
+				<a href="#62959" title="=&gt; &lt;refinement&gt; extends Product with sbt.PropertyResolution[T]">notFound</a>
+			<span class="keyword">else</span>
+			{
+				<a href="Control.scala.html#13545" title="object sbt.Control">Control</a>.<a href="Control.scala.html#53228" title="(=&gt; T)Either[Exception,T]">convertException</a>(<a href="#62970" title="=&gt; sbt.Format[T]">format</a>.<a href="Format.scala.html#52139" title="(String)T">fromString</a>(<a href="#62973" title="java.lang.String">rawValue</a>)) <span title="sbt.PropertyResolution[T]" class="keyword">match</span>
+				{
+					<span title="sbt.ResolutionException" class="keyword">case</span> Left(<a title="Exception" id="63078">e</a>) =&gt; <a href="#62841" title="(String,Option[Throwable])sbt.ResolutionException">ResolutionException</a>(<span title="java.lang.String(&quot;Error parsing system property '&quot;)" class="string">&quot;Error parsing system property '&quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#62968" title="=&gt; String">name</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot;': &quot;)" class="string">&quot;': &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#63078" title="Exception">e</a>.<span title="()java.lang.String">toString</span>, <span title="(Exception)Some[Exception]">Some</span>(<a href="#63078" title="Exception">e</a>))
+					<span title="sbt.DefinedValue[T]" class="keyword">case</span> Right(<a title="T" id="63080">x</a>) =&gt; <a href="#62796" title="(T,Boolean,Boolean)sbt.DefinedValue[T]">DefinedValue</a>(<a href="#63080" title="T">x</a>, <span title="Boolean(false)" class="keyword">false</span>, <span title="Boolean(false)" class="keyword">false</span>)
+				}
+			}
+		}
+		<span class="comment">/** Handles resolution when the property has no explicit value.  If there is a default value, that is returned,
+		* otherwise, UndefinedValue is returned.*/</span>
+		<span class="keyword">private</span> <span class="keyword">def</span> <a title="=&gt; &lt;refinement&gt; extends Product with sbt.PropertyResolution[T]" id="62959">notFound</a> =
+		{
+			<a href="#62960" title="=&gt; Option[T]">defaultValue</a> <span title="&lt;refinement&gt; extends Product with sbt.PropertyResolution[T]" class="keyword">match</span>
+			{
+				<span title="sbt.DefinedValue[T]" class="keyword">case</span> Some(<a title="T" id="62978">dv</a>) =&gt;
+				{
+					<a href="#54265" title="=&gt; sbt.Logger">log</a>.<a href="Logger.scala.html#52374" title="(=&gt; String)Unit">debug</a>(<span title="java.lang.String(&quot;System property '&quot;)" class="string">&quot;System property '&quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#62968" title="=&gt; String">name</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot;' does not exist, using provided default.&quot;)" class="string">&quot;' does not exist, using provided default.&quot;</span>)
+					<a href="#62796" title="(T,Boolean,Boolean)sbt.DefinedValue[T]">DefinedValue</a>(<a href="#62978" title="T">dv</a>, <span title="Boolean(false)" class="keyword">false</span>, <span title="Boolean(true)" class="keyword">true</span>)
+				}
+				<span title="sbt.UndefinedValue" class="keyword">case</span> <span title="object None">None</span> =&gt; <a href="#62903" title="(String,String)sbt.UndefinedValue">UndefinedValue</a>(<a href="#62968" title="=&gt; String">name</a>, <a href="#54268" title="=&gt; String">environmentLabel</a>)
+			}
+		}
+		<span class="keyword">protected</span> <span class="keyword">lazy</span> <span class="keyword">val</span> <a title="Option[T]" id="62961">defaultValue</a> = <a href="#62969" title="=&gt; Option[T]">lazyDefaultValue</a>
+		<span class="keyword">def</span> <a title="(T)Unit" id="62962">update</a>(<a title="T" id="63082">t</a>: <a href="#54291" title="T">T</a>)
+		{
+			<span class="keyword">for</span>(<a title="((Exception) =&gt; Unit)Unit" id="63086">e</a> &lt;- <a href="Control.scala.html#13545" title="object sbt.Control">Control</a>.<a href="Control.scala.html#53228" title="(=&gt; java.lang.String)Either[Exception,java.lang.String]">convertException</a>(<span title="object java.lang.System">System</span>.<a title="(java.lang.String,java.lang.String)java.lang.String" id="18319">setProperty</a>(<a href="#62968" title="=&gt; String">name</a>, <a href="#62970" title="=&gt; sbt.Format[T]">format</a>.<a href="Format.scala.html#52138" title="(T)String">toString</a>(<a href="#63082" title="T">t</a>))).<a title="=&gt; Either.LeftProjection[Exception,java.lang.String]" id="53255">left</a>)
+			{
+				<a href="#54265" title="=&gt; sbt.Logger">log</a>.<a href="Logger.scala.html#52372" title="(=&gt; Throwable)Unit">trace</a>(<a href="#63086" title="Exception">e</a>)
+				<a href="#54265" title="=&gt; sbt.Logger">log</a>.<a href="Logger.scala.html#52376" title="(=&gt; String)Unit">warn</a>(<span title="java.lang.String(&quot;Error setting system property '&quot;)" class="string">&quot;Error setting system property '&quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#62968" title="=&gt; String">name</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot;': &quot;)" class="string">&quot;': &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#63086" title="Exception">e</a>.<span title="()java.lang.String">toString</span>)
+			}
+		}
+		<span class="keyword">override</span> <span class="keyword">def</span> <a title="()java.lang.String" id="62963">toString</a> = <a href="#62968" title="=&gt; String">name</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot;=&quot;)" class="string">&quot;=&quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#62958" title="=&gt; sbt.PropertyResolution[T]">resolve</a>
+	}
+
+	<span class="keyword">def</span> <a title="[T](String)(implicit sbt.Format[T])BasicEnvironment.this.Property[T]" id="54292">system</a>[<a title="&gt;: Nothing &lt;: Any" id="54294">T</a>](<a title="String" id="63093">propertyName</a>: <span title="String">String</span>)(<span class="keyword">implicit</span> <a title="sbt.Format[T]" id="63094">format</a>: <a href="Format.scala.html#11438" title="sbt.Format[T]">Format</a>[T]): <a href="#54238" title="BasicEnvironment.this.Property[T]">Property</a>[T] =
+		<span title="BasicEnvironment.this.SystemProperty[T]" class="keyword">new</span> <a href="#54290" title="BasicEnvironment.this.SystemProperty[T]">SystemProperty</a>[T](<a href="#63093" title="String">propertyName</a>, <span title="object None">None</span>, <a href="#63094" title="sbt.Format[T]">format</a>)
+	<span class="keyword">def</span> <a title="[T](String,=&gt; T)(implicit sbt.Format[T])BasicEnvironment.this.Property[T]" id="54295">systemOptional</a>[<a title="&gt;: Nothing &lt;: Any" id="54297">T</a>](<a title="String" id="63095">propertyName</a>: <span title="String">String</span>, <a title="=&gt; T" id="63096">defaultValue</a>: =&gt; T)(<span class="keyword">implicit</span> <a title="sbt.Format[T]" id="63097">format</a>: <a href="Format.scala.html#11438" title="sbt.Format[T]">Format</a>[T]): <a href="#54238" title="BasicEnvironment.this.Property[T]">Property</a>[T] =
+		<span title="BasicEnvironment.this.SystemProperty[T]" class="keyword">new</span> <a href="#54290" title="BasicEnvironment.this.SystemProperty[T]">SystemProperty</a>[T](<a href="#63095" title="String">propertyName</a>, <span title="(T)Some[T]">Some</span>(<a href="#63096" title="=&gt; T">defaultValue</a>), <a href="#63097" title="sbt.Format[T]">format</a>)
+
+	<span class="keyword">def</span> <a title="[T](implicit scala.reflect.Manifest[T],sbt.Format[T])BasicEnvironment.this.Property[T]" id="54298">property</a>[<a title="&gt;: Nothing &lt;: Any" id="54300">T</a>](<span class="keyword">implicit</span> <a title="scala.reflect.Manifest[T]" id="57612">manifest</a>: <span title="scala.reflect.Manifest[T]">Manifest</span>[T], <a title="sbt.Format[T]" id="57613">format</a>: <a href="Format.scala.html#11438" title="sbt.Format[T]">Format</a>[T]): <a href="#54238" title="BasicEnvironment.this.Property[T]">Property</a>[T] =
+		<span title="BasicEnvironment.this.UserProperty[T]" class="keyword">new</span> <a href="#54288" title="BasicEnvironment.this.UserProperty[T]">UserProperty</a>[T](<span title="object None">None</span>, <a href="#57613" title="sbt.Format[T]">format</a>, <span title="Boolean(true)" class="keyword">true</span>, <span title="Boolean(false)" class="keyword">false</span>, <a href="#57612" title="scala.reflect.Manifest[T]">manifest</a>)
+	<span class="keyword">def</span> <a title="[T](implicit scala.reflect.Manifest[T],sbt.Format[T])BasicEnvironment.this.Property[T]" id="54301">propertyLocal</a>[<a title="&gt;: Nothing &lt;: Any" id="54303">T</a>](<span class="keyword">implicit</span> <a title="scala.reflect.Manifest[T]" id="63099">manifest</a>: <span title="scala.reflect.Manifest[T]">Manifest</span>[T], <a title="sbt.Format[T]" id="63100">format</a>: <a href="Format.scala.html#11438" title="sbt.Format[T]">Format</a>[T]): <a href="#54238" title="BasicEnvironment.this.Property[T]">Property</a>[T] =
+		<span title="BasicEnvironment.this.UserProperty[T]" class="keyword">new</span> <a href="#54288" title="BasicEnvironment.this.UserProperty[T]">UserProperty</a>[T](<span title="object None">None</span>, <a href="#63100" title="sbt.Format[T]">format</a>, <span title="Boolean(false)" class="keyword">false</span>, <span title="Boolean(false)" class="keyword">false</span>, <a href="#63099" title="scala.reflect.Manifest[T]">manifest</a>)
+	<span class="keyword">def</span> <a title="[T](=&gt; T)(implicit scala.reflect.Manifest[T],sbt.Format[T])BasicEnvironment.this.Property[T]" id="54304">propertyOptional</a>[<a title="&gt;: Nothing &lt;: Any" id="54306">T</a>](<a title="=&gt; T" id="55061">defaultValue</a>: =&gt; T)(<span class="keyword">implicit</span> <a title="scala.reflect.Manifest[T]" id="55062">manifest</a>: <span title="scala.reflect.Manifest[T]">Manifest</span>[T], <a title="sbt.Format[T]" id="55063">format</a>: <a href="Format.scala.html#11438" title="sbt.Format[T]">Format</a>[T]): <a href="#54238" title="BasicEnvironment.this.Property[T]">Property</a>[T] =
+		<a href="#54307" title="(=&gt; T,Boolean)(implicit scala.reflect.Manifest[T],sbt.Format[T])BasicEnvironment.this.Property[T]">propertyOptional</a>(<a href="#55061" title="=&gt; T">defaultValue</a>, <span title="Boolean(false)" class="keyword">false</span>)(<a href="#55062" title="scala.reflect.Manifest[T]">manifest</a>, <a href="#55063" title="sbt.Format[T]">format</a>)
+	<span class="keyword">def</span> <a title="[T](=&gt; T,Boolean)(implicit scala.reflect.Manifest[T],sbt.Format[T])BasicEnvironment.this.Property[T]" id="54307">propertyOptional</a>[<a title="&gt;: Nothing &lt;: Any" id="54309">T</a>](<a title="=&gt; T" id="55107">defaultValue</a>: =&gt; T, <a title="Boolean" id="55108">inheritFirst</a>: <span title="Boolean">Boolean</span>)(<span class="keyword">implicit</span> <a title="scala.reflect.Manifest[T]" id="55109">manifest</a>: <span title="scala.reflect.Manifest[T]">Manifest</span>[T], <a title="sbt.Format[T]" id="55110">format</a>: <a href="Format.scala.html#11438" title="sbt.Format[T]">Format</a>[T]): <a href="#54238" title="BasicEnvironment.this.Property[T]">Property</a>[T] =
+		<span title="BasicEnvironment.this.UserProperty[T]" class="keyword">new</span> <a href="#54288" title="BasicEnvironment.this.UserProperty[T]">UserProperty</a>[T](<span title="(T)Some[T]">Some</span>(<a href="#55107" title="=&gt; T">defaultValue</a>), <a href="#55110" title="sbt.Format[T]">format</a>, <span title="Boolean(true)" class="keyword">true</span>, <a href="#55108" title="Boolean">inheritFirst</a>, <a href="#55109" title="scala.reflect.Manifest[T]">manifest</a>)
+
+	<span class="keyword">private</span> <span class="keyword">type</span> <a title="BasicEnvironment.this.UserProperty[_]" id="54310">AnyUserProperty</a> = <a href="#54288" title="BasicEnvironment.this.UserProperty[_]">UserProperty</a>[_]
+	<span class="comment">/** Maps property name to property.  The map is constructed by reflecting vals defined on this object,
+	* so it should not be referenced during initialization or else subclass properties will be missed.**/</span>
+	<span class="keyword">private</span> <span class="keyword">lazy</span> <span class="keyword">val</span> <a title="scala.collection.Map[String,BasicEnvironment.this.AnyUserProperty]" id="54312">propertyMap</a>: <span title="scala.collection.Map[String,BasicEnvironment.this.AnyUserProperty]">Map</span>[String, AnyUserProperty] =
+	{
+		<a href="#54265" title="=&gt; sbt.Logger">log</a>.<a href="Logger.scala.html#52374" title="(=&gt; String)Unit">debug</a>(<span title="java.lang.String(&quot;Discovering properties&quot;)" class="string">&quot;Discovering properties&quot;</span>)
+		<span class="keyword">val</span> <a title="scala.collection.mutable.HashMap[String,BasicEnvironment.this.AnyUserProperty]" id="63107">propertyMap</a> = <span title="scala.collection.mutable.HashMap[String,BasicEnvironment.this.AnyUserProperty]" class="keyword">new</span> scala.collection.mutable.<a title="scala.collection.mutable.HashMap[String,BasicEnvironment.this.AnyUserProperty]" id="20417">HashMap</a>[String, AnyUserProperty]
+		<span class="comment">// AnyProperty is required because the return type of the property*[T] methods is Property[T]</span>
+		<span class="comment">// and so the vals we are looking for have type Property[T] and not UserProperty[T]</span>
+		<span class="comment">// We then only keep instances of UserProperty</span>
+		<span class="keyword">val</span> <a title="scala.collection.Map[String,BasicEnvironment.this.Property[_]]" id="63108">vals</a> = <a href="#13374" title="object sbt.Environment">Environment</a>.<a href="#56121" title="(AnyRef,Class[BasicEnvironment.this.Property[_]])scala.collection.Map[String,BasicEnvironment.this.Property[_]]">reflectiveMappings</a>(<a href="#9071" title="sbt.BasicEnvironment" class="keyword">this</a>, <span title="java.lang.Class[BasicEnvironment.this.Property[_]]">classOf</span>[Property[_]])
+		<span class="keyword">for</span>( <a href="#63119" title="(((String, BasicEnvironment.this.Property[_])) =&gt; Unit)Unit">(</a><a title="String" id="63134">name</a>, <a title="BasicEnvironment.this.AnyUserProperty" id="63135">property</a>: <a href="#54288" title="BasicEnvironment.this.AnyUserProperty">AnyUserProperty</a>) &lt;- <a href="#63108" title="scala.collection.Map[String,BasicEnvironment.this.Property[_]]">vals</a>)
+			<a href="#63107" title="scala.collection.mutable.HashMap[String,BasicEnvironment.this.AnyUserProperty]">propertyMap</a>(<a href="#63134" title="String">name</a>) = <a href="#63135" title="BasicEnvironment.this.AnyUserProperty">property</a>
+		<a href="#63107" title="scala.collection.mutable.HashMap[String,BasicEnvironment.this.AnyUserProperty]">propertyMap</a> <span class="comment">//.readOnly (not currently in 2.8)</span>
+	}
+	<span class="keyword">private</span> <span class="keyword">val</span> <a title="scala.collection.Map[String,String]" id="54313">initialValues</a>: <span title="scala.collection.Map[String,String]">Map</span>[String, String] = impl.<a href="impl/MapUtilities.scala.html#14696" title="object sbt.impl.MapUtilities">MapUtilities</a>.<a href="impl/MapUtilities.scala.html#52040" title="(String,sbt.Path,sbt.Logger)scala.collection.Map[String,String]">readStrings</a>(<a href="#54268" title="=&gt; String">environmentLabel</a>, <a href="#54266" title="=&gt; sbt.Path">envBackingPath</a>, <a href="#54265" title="=&gt; sbt.Logger">log</a>)
+
+	<span class="keyword">def</span> <a title="=&gt; Iterable[String]" id="54315">propertyNames</a>: <span title="Iterable[String]">Iterable</span>[String] = <a href="#54311" title="=&gt; scala.collection.Map[String,BasicEnvironment.this.AnyUserProperty]">propertyMap</a>.<a title="=&gt; Iterator[String]" id="38044">keys</a>.<a title="=&gt; List[String]" id="19885">toList</a>
+	<span class="keyword">def</span> <a title="(String)Option[BasicEnvironment.this.UserProperty[_]]" id="54316">getPropertyNamed</a>(<a title="String" id="63151">name</a>: <span title="String">String</span>): <span title="Option[BasicEnvironment.this.UserProperty[_]]">Option</span>[UserProperty[_]] = <a href="#54311" title="=&gt; scala.collection.Map[String,BasicEnvironment.this.AnyUserProperty]">propertyMap</a>.<span title="(String)Option[BasicEnvironment.this.AnyUserProperty]">get</span>(<a href="#63151" title="String">name</a>)
+	<span class="keyword">def</span> <a title="(String)BasicEnvironment.this.UserProperty[_]" id="54317">propertyNamed</a>(<a title="String" id="63160">name</a>: <span title="String">String</span>): <a href="#54288" title="BasicEnvironment.this.UserProperty[_]">UserProperty</a>[_] = <a href="#54311" title="(String)BasicEnvironment.this.AnyUserProperty" id="38041">propertyMap</a>(<a href="#63160" title="String">name</a>)
+	<span class="keyword">def</span> <a title="()Option[String]" id="54318">saveEnvironment</a>(): <span title="Option[String]">Option</span>[String] =
+	{
+		<span title="Option[String]" class="keyword">if</span>(<a href="#54271" title="=&gt; Boolean">isEnvironmentModified</a>)
+		{
+			<span class="keyword">val</span> <a title="java.util.Properties" id="63169">properties</a> = <span title="java.util.Properties" class="keyword">new</span> java.util.<a title="java.util.Properties" id="5807">Properties</a>
+			<span class="keyword">for</span>( <a href="#63179" title="(((String, BasicEnvironment.this.AnyUserProperty)) =&gt; Unit)Unit">(</a><a title="String" id="63185">name</a>, <a title="BasicEnvironment.this.UserProperty[?]" id="63186">variable</a>) &lt;- <a href="#54311" title="=&gt; scala.collection.Map[String,BasicEnvironment.this.AnyUserProperty]">propertyMap</a>; <a title="((String) =&gt; Unit)Unit" id="63189">stringValue</a> &lt;- <a href="#63186" title="BasicEnvironment.this.UserProperty[?]">variable</a>.<a href="#62739" title="=&gt; Option[String]">getStringValue</a>)
+				<a href="#63169" title="java.util.Properties">properties</a>.<a title="(java.lang.String,java.lang.String)java.lang.Object" id="40378">setProperty</a>(<a href="#63185" title="String">name</a>, <a href="#63189" title="String">stringValue</a>)
+			<span class="keyword">val</span> <a title="Option[String]" id="63170">result</a> = <a href="impl/MapUtilities.scala.html#14504" title="object sbt.impl.PropertiesUtilities">PropertiesUtilities</a>.<a href="impl/MapUtilities.scala.html#63191" title="(java.util.Properties,String,sbt.Path,sbt.Logger)Option[String]">write</a>(<a href="#63169" title="java.util.Properties">properties</a>, <span title="java.lang.String(&quot;Project properties&quot;)" class="string">&quot;Project properties&quot;</span>, <a href="#54266" title="=&gt; sbt.Path">envBackingPath</a>, <a href="#54265" title="=&gt; sbt.Logger">log</a>)
+			<a href="#54270" title="(Boolean)Unit">setEnvironmentModified</a>(<span title="Boolean(false)" class="keyword">false</span>)
+			<a href="#63170" title="Option[String]">result</a>
+		}
+		<span class="keyword">else</span>
+			<span title="object None">None</span>
+	}
+	<span class="keyword">private</span>[sbt] <span class="keyword">def</span> <a title="=&gt; Iterable[(String, BasicEnvironment.this.Property[_])]" id="54319">uninitializedProperties</a>: <span title="Iterable[(String, BasicEnvironment.this.Property[_])]">Iterable</span>[(String, Property[_])] = <a href="#54311" title="=&gt; scala.collection.Map[String,BasicEnvironment.this.AnyUserProperty]">propertyMap</a>.<span title="(((String, BasicEnvironment.this.AnyUserProperty)) =&gt; Boolean)Iterable[(String, BasicEnvironment.this.AnyUserProperty)]">filter</span>(<a href="#63212" title="(String, BasicEnvironment.this.AnyUserProperty)">_</a>.<span title="=&gt; BasicEnvironment.this.AnyUserProperty">_2</span>.<a href="#55119" title="=&gt; Option[Any]">get</a>.<a title="=&gt; Boolean" id="30526">isEmpty</a>)
+}
+<span class="keyword">private</span> <span class="keyword">object</span> <a title="object sbt.Environment" id="13374">Environment</a>
+{
+	<span class="keyword">def</span> <a title="[T](AnyRef,Class[T])scala.collection.Map[String,T]" id="56121">reflectiveMappings</a>[<a title="&gt;: Nothing &lt;: Any" id="56123">T</a>](<a title="AnyRef" id="63111">obj</a>: <a title="AnyRef" id="1953">AnyRef</a>, <a title="Class[T]" id="63112">clazz</a>: <a title="Class[T]" id="1611">Class</a>[T]): <span title="scala.collection.Map[String,T]">Map</span>[String, T] =
+	{
+		<span class="keyword">val</span> <a title="scala.collection.mutable.OpenHashMap[String,T]" id="63218">mappings</a> = <a title="()scala.collection.mutable.OpenHashMap[String,T]" id="63225" class="keyword">new</a> scala.collection.mutable.<a title="scala.collection.mutable.OpenHashMap[String,T]" id="20354">OpenHashMap</a>[String, T]
+		<span class="keyword">for</span> (<a href="#63284" title="(((String, T)) =&gt; Unit)Unit">(</a><a title="String" id="63289">name</a>, <a title="T" id="63290">value</a>) &lt;- <a href="ReflectUtilities.scala.html#11454" title="object sbt.ReflectUtilities">ReflectUtilities</a>.<a href="ReflectUtilities.scala.html#56199" title="(AnyRef,Class[T])scala.collection.Map[String,T]">allValsC</a>(<a href="#63111" title="AnyRef">obj</a>, <a href="#63112" title="Class[T]">clazz</a>))
+			<a href="#63218" title="scala.collection.mutable.OpenHashMap[String,T]">mappings</a>(<a href="ReflectUtilities.scala.html#11454" title="object sbt.ReflectUtilities">ReflectUtilities</a>.<a href="ReflectUtilities.scala.html#56196" title="(String,Char)String">transformCamelCase</a>(<a href="#63289" title="String">name</a>, <span title="Char('.')" class="char">'.'</span>)) = <a href="#63290" title="T">value</a>
+		<a href="#63218" title="scala.collection.mutable.OpenHashMap[String,T]">mappings</a>
+	}
+}
+
+<span class="keyword">sealed</span> <span class="keyword">trait</span> <a title="trait PropertyResolution[+T] extends java.lang.Object with NotNull" id="10907">PropertyResolution</a>[+<a title="&gt;: Nothing &lt;: Any" id="13973">T</a>] <span class="keyword">extends</span> <span title="NotNull">NotNull</span>
+{
+	<span class="keyword">def</span> <a title="=&gt; T" id="62622">value</a>: <a href="#13973" title="T">T</a>
+	<span class="keyword">def</span> <a title="[R &gt;: T](=&gt; sbt.PropertyResolution[R])sbt.PropertyResolution[R]" id="62623">orElse</a>[<a title="&gt;: T &lt;: Any" id="62625">R</a> &gt;: T](<a title="=&gt; sbt.PropertyResolution[R]" id="62829">r</a>: =&gt; PropertyResolution[R]): <a href="#10907" title="sbt.PropertyResolution[R]">PropertyResolution</a>[R]
+	<span class="keyword">def</span> <a title="=&gt; Option[T]" id="62626">toOption</a>: <span title="Option[T]">Option</span>[T]
+	<span class="keyword">def</span> <a title="((T) =&gt; Unit)Unit" id="62627">foreach</a>(<a title="(T) =&gt; Unit" id="62638">f</a>: T =&gt; Unit): <span title="Unit">Unit</span>
+	<span class="keyword">def</span> <a title="[R]((T) =&gt; R)sbt.PropertyResolution[R]" id="62628">map</a>[<a title="&gt;: Nothing &lt;: Any" id="62630">R</a>](<a title="(T) =&gt; R" id="62999">f</a>: T =&gt; R): <a href="#10907" title="sbt.PropertyResolution[R]">PropertyResolution</a>[R]
+	<span class="keyword">def</span> <a title="[R]((T) =&gt; sbt.PropertyResolution[R])sbt.PropertyResolution[R]" id="62631">flatMap</a>[<a title="&gt;: Nothing &lt;: Any" id="62633">R</a>](<a title="(T) =&gt; sbt.PropertyResolution[R]" id="62996">f</a>: T =&gt; PropertyResolution[R]): <a href="#10907" title="sbt.PropertyResolution[R]">PropertyResolution</a>[R]
+}
+<span class="keyword">sealed</span> <span class="keyword">trait</span> <a title="trait NoPropertyValue extends java.lang.Object with sbt.PropertyResolution[Nothing] with ScalaObject" id="8957">NoPropertyValue</a> <span class="keyword">extends</span> <a href="#10907" title="sbt.PropertyResolution[Nothing]">PropertyResolution</a>[Nothing]
+{ self: RuntimeException <span class="keyword">with</span> PropertyResolution[Nothing] =&gt;
+
+	<span class="keyword">def</span> <a title="=&gt; Nothing" id="62858">value</a> = <span title="Nothing" class="keyword">throw</span> <a href="#8957" title="&lt;refinement&gt; extends sbt.NoPropertyValue with RuntimeException with sbt.PropertyResolution[Nothing]" class="keyword">this</a>
+	<span class="keyword">def</span> <a title="=&gt; object None" id="62859">toOption</a> = <span title="object None">None</span>
+	<span class="keyword">def</span> <a title="[R]((Nothing) =&gt; R)sbt.PropertyResolution[R]" id="62860">map</a>[<a title="&gt;: Nothing &lt;: Any" id="62862">R</a>](<a title="(Nothing) =&gt; R" id="63000">f</a>: Nothing =&gt; R): <a href="#10907" title="sbt.PropertyResolution[R]">PropertyResolution</a>[R] = <a href="#8957" title="&lt;refinement&gt; extends sbt.NoPropertyValue with RuntimeException with sbt.PropertyResolution[Nothing]" class="keyword">this</a>
+	<span class="keyword">def</span> <a title="[R]((Nothing) =&gt; sbt.PropertyResolution[R])sbt.PropertyResolution[R]" id="62863">flatMap</a>[<a title="&gt;: Nothing &lt;: Any" id="62865">R</a>](<a title="(Nothing) =&gt; sbt.PropertyResolution[R]" id="63297">f</a>: Nothing =&gt; PropertyResolution[R]): <a href="#10907" title="sbt.PropertyResolution[R]">PropertyResolution</a>[R] = <a href="#8957" title="&lt;refinement&gt; extends sbt.NoPropertyValue with RuntimeException with sbt.PropertyResolution[Nothing]" class="keyword">this</a>
+	<span class="keyword">def</span> <a title="((Nothing) =&gt; Unit)Unit" id="62866">foreach</a>(<a title="(Nothing) =&gt; Unit" id="63298">f</a>: Nothing =&gt; Unit) <span title="Unit">{</span>}
+}
+<span class="keyword">final</span> <span class="keyword">case</span> <span class="keyword">class</span> <a title="class ResolutionException extends java.lang.RuntimeException with sbt.NoPropertyValue with ScalaObject with Product" id="62841">ResolutionException</a>(<a title="String" id="62853">message</a>: <span title="String">String</span>, <a title="Option[Throwable]" id="62854">exception</a>: <span title="Option[Throwable]">Option</span>[Throwable])
+	<span class="keyword">extends</span> <a title="java.lang.RuntimeException" id="19726">RuntimeException</a>(<a href="#62853" title="String">message</a>, <a href="#62854" title="Option[Throwable]">exception</a>.<span title="(=&gt; Throwable)Throwable">getOrElse</span>(<span title="Null(null)" class="keyword">null</span>)) <span class="keyword">with</span> <a href="#8957" title="sbt.NoPropertyValue">NoPropertyValue</a>
+{
+	<span class="keyword">def</span> <a title="[R](=&gt; sbt.PropertyResolution[R])sbt.ResolutionException" id="62849">orElse</a>[<a title="&gt;: Nothing &lt;: Any" id="62851">R</a>](<a title="=&gt; sbt.PropertyResolution[R]" id="63318">r</a>: =&gt; PropertyResolution[R]) = <a href="#62841" title="sbt.ResolutionException" class="keyword">this</a>
+}
+<span class="keyword">final</span> <span class="keyword">case</span> <span class="keyword">class</span> <a title="class UndefinedValue extends java.lang.RuntimeException with sbt.NoPropertyValue with ScalaObject with Product" id="62903">UndefinedValue</a>(<a title="String" id="62915">name</a>: <span title="String">String</span>, <a title="String" id="62916">environmentLabel</a>: <span title="String">String</span>)
+	<span class="keyword">extends</span> <a title="java.lang.RuntimeException" id="19725">RuntimeException</a>(<span title="java.lang.String(&quot;Value for property '&quot;)" class="string">&quot;Value for property '&quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#62915" title="String">name</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot;' from &quot;)" class="string">&quot;' from &quot;</span> <span title="(Any)java.lang.String">+</span> <a href="#62916" title="String">environmentLabel</a> <span title="(Any)java.lang.String">+</span> <span title="java.lang.String(&quot; is undefined.&quot;)" class="string">&quot; is undefined.&quot;</span>) <span class="keyword">with</span> <a href="#8957" title="sbt.NoPropertyValue">NoPropertyValue</a>
+{
+	<span class="keyword">def</span> <a title="[R](=&gt; sbt.PropertyResolution[R])sbt.PropertyResolution[R]" id="62911">orElse</a>[<a title="&gt;: Nothing &lt;: Any" id="62913">R</a>](<a title="=&gt; sbt.PropertyResolution[R]" id="63054">r</a>: =&gt; PropertyResolution[R]) =
+		<a href="#63054" title="=&gt; sbt.PropertyResolution[R]">r</a> <span title="sbt.PropertyResolution[R]" class="keyword">match</span>
+		{
+			<span title="sbt.UndefinedValue" class="keyword">case</span> <a title="sbt.UndefinedValue" id="63057">u</a>: <a href="#62903" title="sbt.UndefinedValue">UndefinedValue</a> =&gt; <a href="#62903" title="sbt.UndefinedValue" class="keyword">this</a>
+			<span title="sbt.PropertyResolution[R]" class="keyword">case</span> _ =&gt; <a href="#63054" title="=&gt; sbt.PropertyResolution[R]">r</a>
+		}
+}
+<span class="keyword">final</span> <span class="keyword">case</span> <span class="keyword">class</span> <a title="class DefinedValue[T] extends java.lang.Object with sbt.PropertyResolution[T] with ScalaObject with Product" id="62796">DefinedValue</a>[<a title="&gt;: Nothing &lt;: Any" id="62798">T</a>](<a title="T" id="62823">value</a>: <a href="#62798" title="T">T</a>, <a title="Boolean" id="62824">isInherited</a>: <span title="Boolean">Boolean</span>, <a title="Boolean" id="62825">isDefault</a>: <span title="Boolean">Boolean</span>) <span class="keyword">extends</span> <a href="#10907" title="sbt.PropertyResolution[T]">PropertyResolution</a>[T]
+{
+	<span class="keyword">def</span> <a title="=&gt; Some[T]" id="62809">toOption</a> = <span title="(T)Some[T]">Some</span>(<a href="#62823" title="=&gt; T">value</a>)
+	<span class="keyword">def</span> <a title="[R &gt;: T](=&gt; sbt.PropertyResolution[R])sbt.DefinedValue[T]" id="62810">orElse</a>[<a title="&gt;: T &lt;: Any" id="62812">R</a> &gt;: T](<a title="=&gt; sbt.PropertyResolution[R]" id="63047">r</a>: =&gt; PropertyResolution[R]) = <a href="#62796" title="sbt.DefinedValue[T]" class="keyword">this</a>
+	<span class="keyword">def</span> <a title="[R]((T) =&gt; R)sbt.DefinedValue[R]" id="62813">map</a>[<a title="&gt;: Nothing &lt;: Any" id="62815">R</a>](<a title="(T) =&gt; R" id="62997">f</a>: T =&gt; R) = <a href="#62796" title="(R,Boolean,Boolean)sbt.DefinedValue[R]">DefinedValue</a>[<a href="#62815" title="R">R</a>](<a href="#62997" title="(T)R">f</a>(<a href="#62823" title="=&gt; T">value</a>), <a href="#62824" title="=&gt; Boolean">isInherited</a>, <a href="#62825" title="=&gt; Boolean">isDefault</a>)
+	<span class="keyword">def</span> <a title="[R]((T) =&gt; sbt.PropertyResolution[R])sbt.PropertyResolution[R]" id="62816">flatMap</a>[<a title="&gt;: Nothing &lt;: Any" id="62818">R</a>](<a title="(T) =&gt; sbt.PropertyResolution[R]" id="62994">f</a>: T =&gt; PropertyResolution[R]) = <a href="#62994" title="(T)sbt.PropertyResolution[R]">f</a>(<a href="#62823" title="=&gt; T">value</a>)
+	<span class="keyword">def</span> <a title="((T) =&gt; Unit)Unit" id="62819">foreach</a>(<a title="(T) =&gt; Unit" id="63003">f</a>: T =&gt; Unit) { <a href="#63003" title="(T)Unit">f</a>(<a href="#62823" title="=&gt; T">value</a>) }
+}
+<span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">class</span> <a title="class LazyVar[T] extends java.lang.Object with NotNull with ScalaObject" id="13085">LazyVar</a>[<a title="&gt;: Nothing &lt;: Any" id="13975">T</a>](<a title="=&gt; T" id="62767">initialValue</a>: =&gt; T) <span class="keyword">extends</span> <span title="NotNull">NotNull</span>
+{
+	<span class="keyword">private</span>[<span class="keyword">this</span>] <span class="keyword">var</span> <a title="Option[T]" id="62764">value</a>: <span title="Option[T]">Option</span>[T] = <span title="object None">None</span>
+	<span class="keyword">def</span> <a title="()T" id="62765">apply</a>() =
+		<a href="#13085" title="(T)T">synchronized</a>
+		{
+			<a href="#62764" title="Option[T]">value</a> <span title="T" class="keyword">match</span>
+			{
+				<span title="T" class="keyword">case</span> Some(<a title="T" id="62791">v</a>) =&gt; <a href="#62791" title="T">v</a>
+				<span title="T" class="keyword">case</span> <span title="object None">None</span> =&gt;
+					<span class="keyword">val</span> <a title="T" id="62792">newValue</a> = <a href="#62767" title="=&gt; T">initialValue</a>
+					<a href="#62764" title="Option[T]">value</a> = <span title="(T)Some[T]">Some</span>(<a href="#62792" title="T">newValue</a>)
+					<a href="#62792" title="T">newValue</a>
+			}
+		}
+	<span class="keyword">def</span> <a title="(T)Unit" id="62766">update</a>(<a title="T" id="62780">newValue</a>: <a href="#13975" title="T">T</a>) = <a href="#13085" title="(Unit)Unit">synchronized</a> { <a href="#62764" title="Option[T]">value</a> = <span title="(T)Some[T]">Some</span>(<a href="#62780" title="T">newValue</a>) }
+}
+        </pre>
+    </body>
+</html>
