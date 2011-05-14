@@ -84,3 +84,7 @@ Jenkins plugin: [http://wiki.jenkins-ci.org/display/JENKINS/sbt+plugin].
 = JEdit =
 
 JEdit plugin: [https://github.com/StefanE/SBT4jEdit]
+
+= ScalaEdit =
+
+A text editor for Scala programmers with support for sbt: [http://code.google.com/p/scala-edit/]
