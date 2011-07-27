@@ -1,3 +1,9 @@
+= sbt has moved =
+
+*sbt has now completely moved to GitHub.*
+
+See https://github.com/harrah/xsbt/wiki.
+
 = Webstart =
 
 A webstart project is used to generate outputs for [http://java.sun.com/javase/6/docs/technotes/guides/javaws/developersguide/contents.html Java Webstart].  To create a webstart project, extend `DefaultWebstartProject` instead of extending `DefaultProject`.  The only method required to be defined is:

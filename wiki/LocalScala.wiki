@@ -1,4 +1,11 @@
-sbt 0.7 makes using a locally built version of Scala easier than previous versions.  `sbt` just needs to know where the library and compiler jars are for this version.
+= sbt has moved =
+
+*sbt has now completely moved to GitHub.*
+
+See https://github.com/harrah/xsbt/wiki/Local-Scala.
+
+
+ sbt 0.7 makes using a locally built version of Scala easier than previous versions.  `sbt` just needs to know where the library and compiler jars are for this version.
 
 A `ScalaInstance` object represents a version of Scala, backed by compiler and library jar locations.  To get a `ScalaInstance` for a local Scala, call one of the variants of `defineScala`:
 {{{

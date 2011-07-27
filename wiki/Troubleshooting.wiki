@@ -1,3 +1,9 @@
+= sbt has moved =
+
+*sbt has now completely moved to GitHub.*
+
+See https://github.com/harrah/xsbt/wiki/FAQ.
+
 <dl>
 <dt>Problem</dt>
 <dd>*The compiler cannot find classes*</dd>

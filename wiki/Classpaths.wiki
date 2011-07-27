@@ -1,3 +1,9 @@
+= sbt has moved =
+
+*sbt has now completely moved to !GitHub.*
+
+See https://github.com/harrah/xsbt/wiki/Classpaths.
+
 = Classpaths =
 
 This page discusses how `sbt` builds up classpaths for different actions, like `compile`, `run`, and `test` and how to override or augment these classpaths.  Classpaths do not include the Scala library, since Scala classes are handled by `sbt` (see [ScalaJars]).  All `*Classpath` methods return `PathFinder`s, which are evaluated on demand.

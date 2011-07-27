@@ -1,3 +1,9 @@
+= sbt has moved =
+
+*sbt has now completely moved to GitHub.*
+
+See https://github.com/harrah/xsbt/wiki.
+
 = Lift Example =
 
 This page used to provide an example of building a [http://liftweb.net Lift] web application.

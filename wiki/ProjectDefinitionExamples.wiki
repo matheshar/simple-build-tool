@@ -1,3 +1,10 @@
+= sbt has moved =
+
+*sbt has now completely moved to GitHub.*
+
+See https://github.com/harrah/xsbt/wiki/Quick-Configuration-Examples.
+
+ 
 This page lists some examples of project definitions, mostly drawn from the project definitions of `sbt` and [http://technically.us/code/x/sling-shot/ Sling].
 
 <wiki:toc max_depth="3" />

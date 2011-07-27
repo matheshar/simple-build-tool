@@ -1,3 +1,9 @@
+= sbt has moved =
+
+*sbt has now completely moved to !GitHub.*
+
+See https://github.com/harrah/xsbt/wiki.
+
 = Improvements/Features =
 === General ===
  * Added prompt to retry project loading if compilation of project definition fails.

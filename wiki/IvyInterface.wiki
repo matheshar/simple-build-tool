@@ -1,3 +1,10 @@
+= sbt has moved =
+
+*sbt has now completely moved to GitHub.*
+
+See https://github.com/harrah/xsbt/wiki.
+
+
 This page describes how to use sbt's Ivy interface directly.  This interface is new in 0.7.  The source code can be found in the [http://github.com/harrah/xsbt/tree/master/ivy/ Ivy project of xsbt].  The Ivy interface is published to the `databinder.net` repository (Ivy metadata only).  You can use it in an `sbt` project like:
 
 {{{

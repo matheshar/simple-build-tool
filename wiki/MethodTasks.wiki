@@ -1,3 +1,10 @@
+= sbt has moved =
+
+*sbt has now completely moved to GitHub.*
+
+See https://github.com/harrah/xsbt/wiki/Input-Tasks.
+
+
 = Method Tasks =
 
 As shown in several examples on the [TriggeredExecution Triggered Execution] page, a method task accepts an array of arguments and creates the task to be run from those arguments.  Usage of a method task from the interactive prompt looks like:

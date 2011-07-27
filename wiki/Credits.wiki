@@ -1,4 +1,10 @@
-The following people have contributed ideas, documentation, or code to `sbt`:
+= sbt has moved =
+
+*sbt has now completely moved to !GitHub.*
+
+See https://github.com/harrah/xsbt/wiki/Credits.
+
+ The following people have contributed ideas, documentation, or code to `sbt`:
 
  * Trond Bjerkestrand
  * Steven Blundy

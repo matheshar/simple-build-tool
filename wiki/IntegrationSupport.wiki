@@ -1,3 +1,10 @@
+= sbt has moved =
+
+*sbt has now completely moved to GitHub.*
+
+See https://github.com/harrah/xsbt/wiki/sbt-0.10-plugins-list.
+
+
 = Introduction =
 
 This page describes approaches to using `sbt` with third-party tools.  It is a work in progress.

@@ -1,3 +1,9 @@
+= sbt has moved =
+
+*sbt has now completely moved to GitHub.*
+
+See https://github.com/harrah/xsbt/wiki/Opportunities.
+
 = Getting Involved =
 
 There are many opportunities for getting involved in sbt 0.9.x development.  Some are listed here.  They are only suggestions, though.  If there is something else you'd like to work on, send an email to the list if you want to discuss it or submit a pull request on github if you've already implemented it.  The source code is on github, in the 0.9 branch of the [http://github.com/harrah/xsbt/tree/0.9 xsbt repository].

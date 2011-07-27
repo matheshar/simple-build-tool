@@ -1,3 +1,10 @@
+= sbt has moved =
+
+*sbt has now completely moved to GitHub.*
+
+See https://github.com/harrah/xsbt/wiki/Cross-Build.
+
+
 = Scala and Sbt Versions =
 
 This page describes how the `sbt` loader helps you use different versions of Scala and `sbt` to build your projects.  For details on how it can be used to launch other applications besides `sbt` in a similar manner, see [GeneralizedLauncher].

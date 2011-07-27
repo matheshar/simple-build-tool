@@ -1,3 +1,9 @@
+= sbt has moved =
+
+*sbt has now completely moved to !GitHub.*
+
+See https://github.com/harrah/xsbt/wiki/Compiler-Plugins.
+
 = Compiler Plugin Support =
 
 There is some special support for using compiler plugins.  You can mixin the `AutoCompilerPlugins` trait to your project definition to enable this functionality.

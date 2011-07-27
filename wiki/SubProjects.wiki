@@ -1,3 +1,10 @@
+= sbt has moved =
+
+*sbt has now completely moved to GitHub.*
+
+See https://github.com/harrah/xsbt/wiki/FullConfiguration.
+
+
 = Overview =
 
 This page describes how to manage multiple projects within a project.  The first section details the features of subproject support and the second section describes how to use this support.

@@ -1,4 +1,10 @@
-Project is moving to [https://github.com/harrah/xsbt] for the next release.
+= sbt has moved =
+
+*sbt has now completely moved to !GitHub.*
+
+See https://github.com/harrah/xsbt/wiki.
+
+ Project is moving to [https://github.com/harrah/xsbt] for the next release.
 
 === 0.7.5 to 0.7.7 ===
  * Workaround for Scala issue [http://lampsvn.epfl.ch/trac/scala/ticket/4426 #4426]

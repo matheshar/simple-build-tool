@@ -1,3 +1,10 @@
+= sbt has moved =
+
+*sbt has now completely moved to GitHub.*
+
+See https://github.com/harrah/xsbt/wiki.
+
+
 = Introduction =
 
 The sbt build uses [http://proguard.sourceforge.net/index.html ProGuard] to create the self-contained launcher jar.  The size of the sbt launcher jar went up after migrating it from 2.7.7 to 2.8.0.RC3.  The size increased from about 0.9MB to 1.2MB.  There were several reasons:

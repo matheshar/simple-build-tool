@@ -1,3 +1,10 @@
+= sbt has moved =
+
+*sbt has now completely moved to !GitHub.*
+
+See https://github.com/harrah/xsbt/wiki/Settings.
+
+
 = Introduction =
 
 This page describes build configuration for when the default actions or paths are not sufficient or appropriate for your project.

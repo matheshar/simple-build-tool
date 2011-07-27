@@ -1,3 +1,9 @@
+= sbt has moved =
+
+*sbt has now completely moved to !GitHub.*
+
+See https://github.com/harrah/xsbt/wiki.
+
 = Introduction =
 
 This is the second preview of new features in 0.9.x.  The feature this time is the new task engine.  The main change is that tasks now produce a value.  Another change is that cross-building is at the task level and can be done for more variables than just the Scala version.

@@ -1,3 +1,9 @@
+= sbt has moved =
+
+*sbt has now completely moved to !GitHub.*
+
+See https://github.com/harrah/xsbt/wiki.
+
 = Improvements/Features =
 === Change Detection ===
  * The previous method for detecting changes to sources was to compare last modified times.  This method is still available, but is no longer the default.  Now, SHA hashes of the sources are compared.  This addresses several issues but could be slower for large projects.  Please provide feedback if you notice that running `compile` with no modified sources is slower.   See [ChangeDetectionAndTesting Change Detection and Testing] for details.

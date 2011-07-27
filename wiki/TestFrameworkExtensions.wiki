@@ -1,3 +1,10 @@
+= sbt has moved =
+
+*sbt has now completely moved to GitHub.*
+
+See https://github.com/harrah/xsbt/wiki.
+
+
 = Test Framework Extensions =
 
 == Introduction ==

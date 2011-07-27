@@ -1,3 +1,10 @@
+= sbt has moved =
+
+*sbt has now completely moved to GitHub.*
+
+See https://github.com/harrah/xsbt/wiki/Triggered-Execution.
+
+
 = Triggered Execution =
 
 You can make an action run when certain files change by prefixing the action with `~`.  The files that are monitored for changes are defined by the `watchPaths` method of the current project and the projects it depends on.  By default, a project watches resources and Scala and Java sources.  Monitoring is terminated by default when `enter` is pressed.  This can be changed by overriding the `terminateWatch` method for the current project.

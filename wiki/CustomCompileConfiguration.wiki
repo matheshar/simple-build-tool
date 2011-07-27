@@ -1,3 +1,10 @@
+= sbt has moved =
+
+*sbt has now completely moved to !GitHub.*
+
+See https://github.com/harrah/xsbt/wiki/Common-Tasks.
+
+
 =Adding a custom compile configuration=
 
 Scala projects in SBT automatically have support for compiling "main" sources and "test" sources.  Occasionally, your project may need to compile additional source files that are used during your development cycle or your build process, but which belong in neither the "main" source section nor the "test" source section, because the classes are not used at runtime and are not tests.
