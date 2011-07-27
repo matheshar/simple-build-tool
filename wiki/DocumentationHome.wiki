@@ -4,8 +4,7 @@
 
 See https://github.com/harrah/xsbt/wiki.
 
-#labels Featured
- * Getting Started
+* Getting Started
   * [Setup] - Getting `sbt` running on your machine.
   * [RunningSbt Basic Usage] - Actions and Commands
   * [Troubleshooting]
