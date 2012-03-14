@@ -3,7 +3,7 @@
 
 *sbt has now completely moved to !GitHub.*
 
-See https://github.com/harrah/xsbt/wiki/Setup.
+See https://github.com/harrah/xsbt/wiki/Getting-Started-Setup.
 
 
 = Introduction =
