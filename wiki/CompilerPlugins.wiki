@@ -1,51 +1,8 @@
+
 = sbt has moved =
 
-*sbt has now completely moved to !GitHub.*
+*sbt is now hosted on !GitHub*: https://github.com/harrah/xsbt.
 
-See https://github.com/harrah/xsbt/wiki/Compiler-Plugins.
+This page previously documented sbt 0.7.7, which is *no longer maintained*.
 
-= Compiler Plugin Support =
-
-There is some special support for using compiler plugins.  You can mixin the `AutoCompilerPlugins` trait to your project definition to enable this functionality.
-
-To use a compiler plugin, you either put it in your unmanaged library directory (`lib`) or add it as managed dependency in the `plugin` configuration.  `compilerPlugin` is a convenience method for specifying `plugin` as the configuration for a dependency:
-{{{
-   val sxr = compilerPlugin("org.scala-tools.sxr" %% "sxr" % "0.2.6")
-}}}
-
-Alternatively, you can use inline Ivy XML:
-{{{
-   override def ivyXML =
-      <dependencies>
-         <dependency org="org.scala-tools.sxr" name="sxr" rev="0.2.6" conf="plugin->default(compile)"/>
-      </dependencies>
-}}}
-
-A managed dependency is resolved and retrieved like usual by running `update`.
-
-The `compile` and `test-compile` actions will use any compiler plugins found in the `lib` directory or in the `plugin` configuration.  You are responsible for configuring the plugins as necessary.  For example, Scala X-Ray requires the extra option:
-
-{{{
-  override def compileOptions =
-    CompileOption("-Psxr:base-directory:" + mainScalaSourcePath.absolutePath) ::
-    super.compileOptions.toList
-}}}
-
-You can still specify compiler plugins manually.  For example:
-
-{{{
-  override def compileOptions = CompileOption("-Xplugin:<path-to-sxr>/sxr-0.2.6.jar") :: super.compileOptions.toList
-}}}
-
-== Continuations Plugin Example ==
-
-Support for continuations in Scala 2.8 is implemented as a compiler plugin.  You can use `AutoCompilerPlugins` for this, as shown here.
-{{{
-import sbt._
-
-class ContinuationsExample(info: ProjectInfo) extends DefaultProject(info) with AutoCompilerPlugins
-{
-  val cont = compilerPlugin("org.scala-lang.plugins" % "continuations" % "2.8.0")
-  override def compileOptions = super.compileOptions ++ compileOptions("-P:continuations:enable")
-}
-}}}
+The original content is archived at http://www.scala-sbt.org/0.7.7/docs/CompilerPlugins.html

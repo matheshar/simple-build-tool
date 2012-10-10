@@ -1,37 +1,8 @@
+
 = sbt has moved =
 
-*sbt has now completely moved to !GitHub.*
+*sbt is now hosted on !GitHub*: https://github.com/harrah/xsbt.
 
-See https://github.com/harrah/xsbt/wiki.
+This page previously documented sbt 0.7.7, which is *no longer maintained*.
 
-= Changes from 0.4.6 to 0.5/0.5.1 =
-
-== Compatibility ==
- * Two new features, cross-building from the command line and scratch projects, require an updated loader (version 0.5 or higher).  This updated loader can still run previous versions of `sbt`.
- * `useDefaultConfigurations` supersedes `useMavenConfigurations` and is now enabled by default.  Please report any issues you have because of this change.
-
-== Improvements ==
- * Project definitions can go directly in `project/build` in addition to `project/build/src`
- * Batch-style (command line) execution now supports the cross-building '+' prefix (see [CrossBuild cross-building] for details)
- * New action `jetty` for web application projects that waits for a key press before exiting so that it can be run batch-style as suggested [http://robertlally.com/post/adventures-with-scala-and-vaadin-part-2 here].
- * The files monitored for triggered execution are now taken from the current `Project`'s `watchPaths` method.  The default is now to watch resources in addition to sources. (see TriggeredExecution for details)
- * Can specify the maximum number of errors to print with the `MaxCompileErrors` `CompileOption`/`ScaladocOption`
- * Added JavaNet1Repository for using java.net Maven 1 repository
- * Can publish to HTTP repositories (see [Publishing] for details)
- * Can directly specify location of dependencies using the from(urlString) method (see [LibraryManagement] for details)
- * Can specify artifacts of a dependency using the `artifacts` method.  This is equivalent to the `<artifact>` element in a `<dependency>` element in an Ivy file.  It is used for alternative artifact extensions and types or multiple artifacts per dependency.
-
-== New Features ==
- * `sbt` plugins, including a sample plugin that makes a self-extracting jar for a project (see [SbtPlugins])
- * New project setup option 's' that fills in defaults for all properties (such as name and version) and allows sources and jars to be placed directly in the project directory in addition to the normal locations (see [Setup] for details)
- * Cross-publishing against multiple versions of Scala (see [CrossBuild cross-building] for details])
- 
-== Fixes ==
- * Improved handling of default configuration mapping of dependencies
- * `FileUtilities.unzip` should actually return the set of extracted files now
- * Issue #30 : dependencies in provided configuration were included in packaged webstart and web applications
- * Fixed class loader issue with web applications (JSP did not work for web applications)
- * Fixed manual `reboot` not changing the version of Scala when it is manually `set`
- 
- == Other ==
- * [http://github.com/harrah/browse/ Scala X-Ray] is now published on scala-tools.org as version 0.2.  See [CompilerPlugins] or the `sxr` README for how to enable this in your project.
+The original content is archived at http://www.scala-sbt.org/0.7.7/docs/ChangeSummary_0_5.html

@@ -1,19 +1,8 @@
+
 = sbt has moved =
 
-*sbt has now completely moved to !GitHub.*
+*sbt is now hosted on !GitHub*: https://github.com/harrah/xsbt.
 
-See https://github.com/harrah/xsbt/wiki.
+This page previously documented sbt 0.7.7, which is *no longer maintained*.
 
-= Webstart =
-
-A webstart project is used to generate outputs for [http://java.sun.com/javase/6/docs/technotes/guides/javaws/developersguide/contents.html Java Webstart].  To create a webstart project, extend `DefaultWebstartProject` instead of extending `DefaultProject`.  The only method required to be defined is:
- * `jnlpXML` - Inline XML [http://java.sun.com/javase/6/docs/technotes/guides/javaws/developersguide/syntax.html JNLP file]
-
-Other methods of interest include:
- * `webstartSignConfiguration` - Configures signing.  If it is `None` (the default), signing jars is disabled.  Otherwise, it is contains an instance of `SignConfiguration`.
- * `webstartPack200` - When `true`, enables [http://java.sun.com/j2se/1.5.0/docs/guide/deployment/deployment-guide/pack200.html Pack200] compression of jars.  This is enabled by default.
- * `webstartGzip` - When `true`, enables gzip compression of jars.  This is enabled by default.
-
-See the [http://simple-build-tool.googlecode.com/svn/artifacts/latest/api/sbt/WebstartOptions.html WebstartOptions] API documentation for more options.
-
-A webstart project generates its output when `package` is executed.  The output is by default put in `target/webstart` and produces a zip of that directory.  You can add a web application project to test it out.  An example project definition is shown on the [WebstartExample Webstart Example] page.
+The original content is archived at http://www.scala-sbt.org/0.7.7/docs/Webstart.html

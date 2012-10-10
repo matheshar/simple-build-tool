@@ -1,18 +1,8 @@
+
 = sbt has moved =
 
-*sbt has now completely moved to !GitHub.*
+*sbt is now hosted on !GitHub*: https://github.com/harrah/xsbt.
 
-See https://github.com/harrah/xsbt/wiki.
+This page previously documented sbt 0.7.7, which is *no longer maintained*.
 
-
-#summary Depending on another SBT Project
-
-It is possible to declare a declare a dependency on another SBT project, similar to jar dependencies, by defining a val in your project configuration file. You must specify the path at which the project can be found. (Currently, the path is limited to a subdirectory of the current project directory, which limits the usefulness of this technique.)
-
-{{{
-val util = project("util")
-}}}
-
-A project dependency will be built when the depending project is built, and its classpath will be available; see [SubProjects] for more details. 
-
-Note that there are some other variants of the {{{project()}}} method  which override the configuration of the referenced project when it is loaded (ie they ignore the contents of its project/build directory). See the [http://simple-build-tool.googlecode.com/svn/artifacts/latest/api/sbt/Project.html Project API] for details.
+The original content is archived at http://www.scala-sbt.org/0.7.7/docs/ProjectDependencies.html

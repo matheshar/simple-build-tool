@@ -1,64 +1,8 @@
+
 = sbt has moved =
 
-*sbt has now completely moved to !GitHub.*
+*sbt is now hosted on !GitHub*: https://github.com/harrah/xsbt.
 
-See https://github.com/harrah/xsbt/wiki/Common-Tasks.
+This page previously documented sbt 0.7.7, which is *no longer maintained*.
 
-
-=Adding a custom compile configuration=
-
-Scala projects in SBT automatically have support for compiling "main" sources and "test" sources.  Occasionally, your project may need to compile additional source files that are used during your development cycle or your build process, but which belong in neither the "main" source section nor the "test" source section, because the classes are not used at runtime and are not tests.
-
-As an example, let's say we use scala classes to define a data schema (using an internal DSL), and we want an action in our project that compiles the schema definition classes and then uses those classes to generate artifacts (e.g. resource files, or additional source files).  To do this, first we need to set up a custom compile configuration, and second we need to collect the compiled classes, instantiate objects, and hand off of the objects to the artifact generator (the artifact generator is an exercise left for the reader).  SBT already has a mechanism for doing something similar when compiling, collecting, and running tests, and we are going to repurpose that mechanism to accomplish our our.
-
-The following example code needs to be added to your Project definition class.  This example expects to find the special source files under "src/schema" (no "scala" or "java" subdirectories expected), and collects all classes that extend "com.example.!MyMarkerClass".  One wrinkle here is the classpath.  When compiling the schema classes, the classpath must include "com.example.!MyMarkerClass".  But, our Project definition class also needs "com.example.!MyMarkerClass" in its classpath, otherwise our action definition would not compile.  There is probably a better way to do this, but for this example, we will assume that the jar that contains "com.example.!MyMarkerClass" is duplicated in both the main classpath (either in lib or as a managed jar), and in "project/build/lib".
-
-{{{
-/* use default compile options */
-def schemaCompileOptions: Seq[CompileOption] = compileOptions
-/* label it "schema" */
-def schemaLabel = "schema"    
-/* look for source under "src/schema" */
-def schemaSourcePath = sourcePath / "schema"
-def schemaSourceRoots = (schemaSourcePath ##)
-def schemaSources = sources(schemaSourceRoots)
-/* compiled classes go under "target/schema-classes" */
-def schemaCompilePath = outputPath / "schema-classes"
-/* analysis output goes under "target/schema-analysis" */
-def schemaAnalysisPath = outputPath / "schema-analysis"
-/* we are using the main compile classpath, but it would be better to define a separate
- location to store the jars we need to compile our schema classes */
-def schemaClasspath = compileClasspath
-def schemaCompileConfiguration = new SchemaCompileConfig
-def schemaCompileConditional = new CompileConditional(schemaCompileConfiguration)
-def schemaCompileDescription = "Compiles schema definitions."
-
-class SchemaCompileConfig extends BaseCompileConfig	{
-	def baseCompileOptions = schemaCompileOptions
-	def label = schemaLabel
-	def sourceRoots = schemaSourceRoots
-	def sources = schemaSources
-	def outputDirectory = schemaCompilePath
-	def classpath = schemaClasspath
-	def analysisPath = schemaAnalysisPath
-	def fingerprints = Fingerprints(List("com.example.MyMarkerClass"), List("com.example.MarkerAnnotation"))
-	def javaOptions = javaOptionsAsString(javaCompileOptions)
-}
-
-protected def schemaAction = task { 
-    schemaCompileConditional.run
-    val classLoader = ClasspathUtilities.toLoader(schemaCompileConditional.config.outputDirectory, getClass.getClassLoader)
-    schemaCompileConditional.analysis.allTests foreach { 
-        case TestDefinition(isModule, className, superClassName) =>
-            val schemaDef = 
-                if (isModule) 
-                    ModuleUtilities.getObject(className, classLoader).asInstanceOf[MyMarkerClass]
-                else
-                    classLoader.getClass.newInstance.asInstanceOf[MyMarkerClass]
-            // your code to process the compiled classes goes here
-    }
-    None 
-} describedAs schemaCompileDescription
-
-lazy val schema = schemaAction
-}}}
+The original content is archived at http://www.scala-sbt.org/0.7.7/docs/CustomCompileConfiguration.html

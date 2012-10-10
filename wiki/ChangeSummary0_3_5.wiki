@@ -1,39 +1,8 @@
+
 = sbt has moved =
 
-*sbt has now completely moved to !GitHub.*
+*sbt is now hosted on !GitHub*: https://github.com/harrah/xsbt.
 
-See https://github.com/harrah/xsbt/wiki.
+This page previously documented sbt 0.7.7, which is *no longer maintained*.
 
-= Improvements/Features =
-=== General ===
- * Added prompt to retry project loading if compilation of project definition fails.
- * `package` action now only executes when inputs have changed.
- * Added `help` command that displays an informative message and describes the commands available at the interactive prompt.
- * Added `reload` command to reread the project definition without having to restart sbt.
- * Added `console-quick` action for when you want fast access to the Scala interpreter but don't need your project compiled.
- * Added `clean-cache` action to delete Ivy's artifact and metadata cache.
-
-=== Integration Testing ===
- * Added integration test support with `integration-test` action.
- * Behaves like `test` but takes its test sources from `src/it` (by default).
- * Use it by mixing in `BasicScalaIntegrationTesting` to your project definition.
-
-=== Dependency Management ===
- * Added ability to specify inline Ivy XML configuration in project definition (see towards the bottom of the [LibraryManagement Library Management] page).
- * Can specify Ivy configurations as fourth piece of inline dependencies `(... % "runtime->compile")`.
-
-=== Custom Actions ===
- * Added `fileTask` methods for tasks that execute when the inputs/outputs are out of date (see [CustomActions Creating/Modifying Actions] page).
- * `sbt.FileUtilities` is cleaned up and ready for general use:
-  * Provides zip, unzip, temporary directories, copying, ...
-  * see the [ActionContent Implementing actions] page for an overview of capabilities or the [http://simple-build-tool.googlecode.com/svn/artifacts/0.3.5/api/sbt/FileUtilities$object.html API Documentation] for details.
-
-=== Web Applications ===
- * `package` action creates war file.
- * Added `jetty-run` and `jetty-stop` actions.
- * See [WebApplications web applications] page for more information.
- 
-= Fixes =
- * Fixed bug #11 (project/build.properties unnecessarily updated).
- * Fixed problem with dependencies where source jars would be used instead of binary jars.
- * Fixed scala-tools not being used by default for inline configurations.
+The original content is archived at http://www.scala-sbt.org/0.7.7/docs/ChangeSummary0_3_5.html

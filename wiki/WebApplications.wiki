@@ -1,84 +1,8 @@
+
 = sbt has moved =
 
-*sbt has now completely moved to !GitHub.*
+*sbt is now hosted on !GitHub*: https://github.com/harrah/xsbt.
 
-See https://github.com/harrah/xsbt/wiki.
+This page previously documented sbt 0.7.7, which is *no longer maintained*.
 
-= Web Applications =
-
-This page describes some features of `sbt` that are useful for developing web applications.
-
-== Basic Usage ==
-
-Instead of extending `sbt.DefaultProject` in your project definition, extend `sbt.DefaultWebProject`.  This currently does two things.  First, the `package` action creates a war file instead of a jar file.  Second, if you add [http://jetty.mortbay.com/ Jetty] as a [LibraryManagement dependency] (manually or automatically), you can use `jetty-run` to start your web application from `sbt`.  Use `jetty-stop` to stop it.  If you are running in batch mode, use the `jetty` action, which will wait for a key press before completing.  As of `sbt` 0.7.0, Jetty 7 is supported in addition to Jetty 6.
-
-== Configuration ==
-
-`sbt` uses the directory structure of Maven by default, so your web application files should go in `src/main/webapp` by default.  You can override `webappPath` to change this.  If you need to include extra files in your web application, override `extraWebappFiles` with a `PathFinder` that selects the extra files that you want (see [Paths] for information on `PathFinder`).  To change the port Jetty starts up on, override `jettyPort`.
-
-== Continuous Redeployment ==
-
-You can also continuously recompile and reload the web application when using Jetty:
-{{{
-> jetty-run
-> ~ prepare-webapp
-}}}
-`jetty-run` starts Jetty and the `~ prepare-webapp` recompiles and recreates the web application whenever sources files change (see TriggeredExecution for details on `~`).  The `jetty-run` action monitors the directories given by `scanDirectories` and redeploys on changes.  By default, the entire temporary web application directory is monitored.  You might want to change `scanDirectories` in some cases.  For example, set `scanDirectories` to `Nil` if you do not want to redeploy on any changes.  Or, set `scanDirectories` to only monitor the library and classes directories:
-{{{
-  override def scanDirectories = ( temporaryWarPath / "WEB-INF" * ("classes" | "lib") ).get.toSeq
-}}}
-You might use one of these options if your web application picks up changes to resource files and therefore does not need to be redeployed or if you are using [http://www.zeroturnaround.com/jrebel/ JRebel].
-
-Another possibility is to directly run the web application out of the the source web application path:
-{{{
-  override def jettyWebappPath  = webappPath
-  override def scanDirectories = mainCompilePath :: testCompilePath :: Nil
-}}}
-
-== Jetty 6 Example ==
-
-A minimal project definition for Jetty 6:
-
-{{{
-class WebappBuild(info: ProjectInfo) extends DefaultWebProject(info)
-{
-  val jetty6 = "org.mortbay.jetty" % "jetty" % "6.1.14" % "test"  // jetty is only need for testing
-}
-}}}
-
-For a runnable example, see the [WebApplicationExample] page, which describes running the Hello Lift example with `sbt`.
-
-== Jetty 7 Example ==
-
-A minimal project definition for Jetty 7:
-
-{{{
-class WebappBuild(info: ProjectInfo) extends DefaultWebProject(info)
-{
-  val jetty7 = "org.eclipse.jetty" % "jetty-webapp" % "7.0.2.RC0" % "test"
-}
-}}}
-
-== Manually Managed Example ==
-
-Download Jetty and its dependencies and put them in a directory, say `'jetty-libs/'`.  Add them to `jettyClasspath`.  For example:
-
-{{{
-class WebappBuild(info: ProjectInfo) extends DefaultWebProject(info)
-{
-  override def jettyClasspath = path("jetty-libs") * "*.jar"
-}
-}}}
-
-
-== JRebel ==
-
-To use JRebel, override `scanDirectories` as described above so that `sbt` does not reload Jetty on changes to your classes:
-{{{
-  override def scanDirectories = Nil
-}}}
-
-Pass the following options to `java` in your `sbt` startup script:
-{{{
--noverify -javaagent:/path/to/jrebel/jrebel.jar
-}}}
+The original content is archived at http://www.scala-sbt.org/0.7.7/docs/WebApplications.html

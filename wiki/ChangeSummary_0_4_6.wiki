@@ -1,60 +1,8 @@
+
 = sbt has moved =
 
-*sbt has now completely moved to !GitHub.*
+*sbt is now hosted on !GitHub*: https://github.com/harrah/xsbt.
 
-See https://github.com/harrah/xsbt/wiki.
+This page previously documented sbt 0.7.7, which is *no longer maintained*.
 
-= Changes from 0.4.5 to 0.4.6 =
-
-== Compatibility ==
-
-The default jar name has changed.  Previously, it was based on the name of the project.  For example,
-{{{
-My Project-1.0.jar
-}}}
-The default is now to use the normalized name of your project.  For example,
-{{{
-my-project-1.0.jar
-}}}
-If you modified this by overriding `defaultJarBaseName`, this will still be used.  The preferred way to change the name of artifacts is now to override `artifactID` (for just changing the name part) or `artifactBaseName` (for both the name and version parts).  The definitions of relevant methods are shown below for reference.
-{{{
- def moduleID = normalizedName
- def artifactID = moduleID
- def artifactBaseName = artifactID + "-" + version.toString
- def defaultJarBaseName = artifactBaseName
- def defaultJarName = defaultJarBaseName + ".jar"
-}}}
-
-== Fixes ==
- * Fixed issue with packaging a jar on windows.
- * Support for `specs` 1.5.0 (when building with Scala 2.7.4)
- * Fixed creating a `Path` from a `File` via `Path.fromFile`.
- * Fixed `package-project` to exclude `project/boot` and `project/build/target`.
- * Preserve command line history across `clean`.
- * Fixed issue with external process output being lost when sent to a `BufferedLogger` with `parallelExecution` enabled.
- * Fixed warning message about no `Class-Path` attribute from showing up for `run`.
- * Fixed `OutOfMemoryException: PermGen` errors that occurred during testing or rebooting.
-
-== Improvements ==
- * Added `jettyPort` method to `DefaultWebProject` for overriding the port used by the `jetty-run` action.
- * Exception traces are printed by default
- * Improved access to and handling of `scala-library.jar` and `scala-compiler.jar` used to build the project.
-  * Added two new methods providing the location of these jars
-   * `FileUtilities.scalaLibraryJar`
-   * `FileUtilities.scalaCompilerJar`
-  * Better/easier access to the external dependencies of a project
-    * `mainDependencies` and `testDependencies` provide an analysis of the dependencies of your code as determined during compilation
-    * `scalaJars` is deprecated, use `mainDependencies.scalaJars` instead (provides a `PathFinder`, which is generally more useful)
-  * Fixed classpath issues for projects that use the compiler or interpreter
-   * If your main sources depend on `scala-compiler.jar`, `scala-compiler.jar` is added to `runClasspath` so that compiler classes are available for the `run` command.
-   * If your test sources depend on `scala-compiler.jar`, `scala-compiler.jar` is added to testClasspath so that the compiler classes are available for tests.
-
-== New Features ==
- * Parallel test execution at the suite/specification level.
-The following new features are also present in 0.4.6, but are not fully documented and stabilized.
- * Parallelization at the subtask level.
- * Publishing poms or Ivy files to a ssh/sftp/filesystem repository is supported.
- * Added ability to easily build across multiple versions of Scala.
-  * Override `crossScalaVersions` with the `Set` of Scala versions to build against.
-  * Prefix actions to run with `+`
-  * The version of Scala used to build is appended to `outputPath` (`target`) and `managedDependencyPath` (`lib_managed`).
+The original content is archived at http://www.scala-sbt.org/0.7.7/docs/ChangeSummary_0_4_6.html

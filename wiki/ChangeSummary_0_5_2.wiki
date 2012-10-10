@@ -1,27 +1,8 @@
+
 = sbt has moved =
 
-*sbt has now completely moved to !GitHub.*
+*sbt is now hosted on !GitHub*: https://github.com/harrah/xsbt.
 
-See https://github.com/harrah/xsbt/wiki.
+This page previously documented sbt 0.7.7, which is *no longer maintained*.
 
-= Changes from 0.5.1 to 0.5.2 =
-
-== Improvements ==
- * Better support for Java sources.  Dependency tracking of Java sources is implemented by parsing class files.
- * Added `classifier` method for inline dependency declarations.  This provides support for publishing artifacts with classifiers and retrieving dependencies with classifiers.  A limitation is that the classifiers for dependencies are not written to your project's published pom.
- * Project dependencies are now added to published Ivy files (they were already added for POMs)
- * The `crossScalaVersions` and `managedStyle` methods default to the value of a parent project, if there is one.
- * Added `execTask` that accepts an `sbt.ProcessBuilder` to run when invoked
- * Added implicit conversion in `sbt.Process` that takes `scala.xml.Elem` to `sbt.ProcessBuilder`.  This conversion takes the element's text content, trims it, and splits it around whitespace to obtain the command to run. (See [Process])
- * Added check to verify that dynamic tasks do not reference static tasks
- * Added `Process.cat` that will send contents of `URL`s and `File`s to standard output. (See [Process])
-
-== Fixes ==
- * Issue #29 (Java sources always recompiled)
- * Fix issue where no tests were run when no arguments were provided to `test-failed` or `test-quick`
- * Fixed tab completion for method tasks for multi-project builds
- * Make `Path`s in subprojects print relative to root project directory
- * Properly track dependencies on sources not included in recompilation
- * Added `scala-library.jar` to the `javac` classpath
- * Fixed `run` action swallowing exceptions
- * Fixed problem where dependencies of `sbt` plugins were not on the compile classpath
+The original content is archived at http://www.scala-sbt.org/0.7.7/docs/ChangeSummary_0_5_2.html

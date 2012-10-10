@@ -1,66 +1,8 @@
+
 = sbt has moved =
 
-*sbt has now completely moved to !GitHub.*
+*sbt is now hosted on !GitHub*: https://github.com/harrah/xsbt.
 
-See https://github.com/harrah/xsbt/wiki.
+This page previously documented sbt 0.7.7, which is *no longer maintained*.
 
-
-= Test Framework Extensions =
-
-== Introduction ==
-
-This page describes adding support for additional testing libraries and defining additional test reporters.  You do this by implementing `sbt` interfaces (described below) in a separate project and packaging the project as an [SbtPlugins sbt plugin].
-
-== Custom Test Framework ==
-
-`sbt` contains built-in support for the three main Scala testing libraries (specs, `ScalaTest`, and `ScalaCheck`).  To add support for a differrent framework, implement the [http://github.com/harrah/test-interface uniform test interface].
-
-== Custom Test Reporters ==
-
-Test frameworks report status and results to test reporters.  You can create a new test reporter by implementing either `TestReportListener` or `TestsListener`.  Their definitions are shown below.
-
-{{{
-trait TestReportListener
-{
-  /** called for each class or equivalent grouping */
-  def startGroup(name: String)
-  /** called for each test method or equivalent */
-  def testEvent(event: TestEvent)
-  /** called if there was an error during test */
-  def endGroup(name: String, t: Throwable)
-  /** called if test completed */
-  def endGroup(name: String, result: Result.Value)
-  /** Used by the test framework for logging test results*/
-  def contentLogger: Option[org.scalatools.testing.Logger] = None
-}
-
-trait TestsListener extends TestReportListener
-{
-  /** called once, at beginning. */
-  def doInit
-  /** called once, at end. */
-  def doComplete(finalResult: Result.Value)
-}
-
-abstract class TestEvent
-{
-  def result: Option[Result.Value]
-  def detail: Seq[org.scalatools.testing.Event] = Nil
-}
-}}}
-
-== Using Extensions ==
-
-To use your extensions in a project definition:
-
-Overriding the `testFrameworks` method in your project definition to reference your test framework.
-{{{
-  def extraFramework = new TestFramework("custom.framework.ClassName")
-  override def testFrameworks: Seq[TestFramework] = super.testFrameworks ++ Seq(extraFramework)
-}}}
-
-Specify the test reporters you want to use by overriding the `testListeners` method in your project definition.
-{{{
-  def customTestListener: TestReportListener = ...
-  override def testListeners: Seq[TestReportListener] = super.testListeners ++ Seq(customTestListener)
-}}}
+The original content is archived at http://www.scala-sbt.org/0.7.7/docs/TestFrameworkExtensions.html

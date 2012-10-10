@@ -1,72 +1,8 @@
+
 = sbt has moved =
 
-*sbt has now completely moved to !GitHub.*
+*sbt is now hosted on !GitHub*: https://github.com/harrah/xsbt.
 
-See https://github.com/harrah/xsbt/wiki/Cross-Build.
+This page previously documented sbt 0.7.7, which is *no longer maintained*.
 
-
-= Cross-building =
-
-== Introduction ==
-
-Different versions of Scala are often binary incompatible between versions, despite maintaining source compatibility.  This is true even for versions with the same minor number, such as 2.7.2 and 2.7.4.  This page describes how to use `sbt` to build and publish your project against multiple versions of Scala and how to use libraries that have done the same.
-
-== Publishing Conventions ==
-
-The underlying mechanism used to indicate which version of Scala a library was compiled against is to append `_<scala-version>` to the library's name.  For example, `dispatch` becomes `dispatch_2.7.7` for the variant compiled against Scala 2.7.7.  This allows interoperability with users of Maven, Ant and other build tools.
-
-The rest of this page describes how `sbt` handles this for you as part of cross-building.
-
-== Using Cross-Built Libraries ==
-
-To use a library built against multiple versions of Scala, double the first `%` in an inline dependency to be `%%`.  This tells `sbt` that it should append the current version of Scala being used to build the library to the dependency's name.  For example:
-{{{
-  val dispatch = "net.databinder" %% "dispatch" % "0.7.2"
-}}}
-
-A nearly equivalent, manual alternative is:
-{{{
-  val dispatch = "net.databinder" % ("dispatch_" + crossScalaVersionString) % "0.7.2"
-}}}
-Or, for a fixed version of Scala:
-{{{
-  val dispatch = "net.databinder" % "dispatch_2.7.7" % "0.7.2"
-}}}
-
-== Cross-Building a Project ==
-
-Define the versions of Scala to build against in the `build.scala.versions` property as a space-delimited list.  Versions of Scala 2.7.2 or later are allowed.  Scala 2.8 versions will usually work, including [LocalScala locally built versions].  For example:
-{{{
-> set build.scala.versions 2.9.0 2.7.7 2.8.0 2.8.1
-> reload
-}}}
-
-The first version listed is used when the project is first loaded and when you run an action normally.  To build against all versions listed in `build.scala.versions`, prefix the action to run with `+`.  For example:
-{{{
-> +package
-}}}
-A typical way to use this feature is to do development on a single Scala version (no `+` prefix) and then cross-build (using `+`) occasionally and when releasing.  The ultimate purpose of `+` is to cross-publish your project.  That is, by doing:
-{{{
-> +publish
-}}}
-you make your project available to users with different versions of Scala.  See [Publishing] for more details on publishing your project.
-
-In order to make this process as quick as possible, different output and managed dependency directories are used for different versions of Scala.  For example, when building against Scala 2.7.7,
- * `./lib_managed/` becomes `./lib_managed/scala_2.7.7/
- * `./target/` becomes `./target/scala_2.7.7/`
-Packaged jars, wars, and other artifacts have `_<scala-version>` appended to the normal artifact ID as mentioned in the Publishing Conventions section above.
-
-This means that the outputs of each build against each version of Scala are independent of the others.  Note that you need to run `+update` if you are using managed dependencies so that `sbt` can resolve your dependencies for each version separately.  This way you would get the version of Dispatch compiled against 2.7.5 for your 2.7.5 build, the version compiled against 2.7.4 for your 2.7.4 build, and so on.  In fact, you can control your dependencies for different Scala versions.  For example:
-
-{{{
-  val scalatest =
-    buildScalaVersion match {
-      case "2.7.5" => "org.scala-tools.testing" % "scalatest" % "0.9.5"
-      case "2.7.2" => "org.scalatest" % "scalatest" % "0.9.3"
-      case x => error("Unsupported Scala version " + x)
-    }
-}}}
-
-This works because your project definition is reloaded for each version of Scala you are building against.  `buildScalaVersion` contains the current version of Scala being used to build the project.
-
-As a final note, you can use `++<version>` to temporarily switch the Scala version currently being used to build (see [RunningSbt Basic Usage] for details).
+The original content is archived at http://www.scala-sbt.org/0.7.7/docs/CrossBuild.html

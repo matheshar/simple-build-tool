@@ -1,62 +1,8 @@
+
 = sbt has moved =
 
-*sbt has now completely moved to !GitHub.*
+*sbt is now hosted on !GitHub*: https://github.com/harrah/xsbt.
 
-See https://github.com/harrah/xsbt/wiki.
+This page previously documented sbt 0.7.7, which is *no longer maintained*.
 
-{{{
-import sbt._
-
-// A project that defines a webstart application in the 'app' directory
-// and a web project to serve it in the 'web' directory.
-class WebstartTest(info: ProjectInfo) extends ParentProject(info)
-{
-  val app = project("app", "Webstart Test Application", new ApplicationProject(_))
-  val web = project("web", "Webstart Test Server", new ServerProject(_), app)
-
-  // The web project.  Running 'jetty-run' on this project will serve the
-  // webstart application from http://localhost:8080 using jetty.
-  class ServerProject(info: ProjectInfo) extends DefaultWebProject(info)
-  {
-    // Jetty is only need for the 'test' classpath
-    val jetty6 = "org.mortbay.jetty" % "jetty" % "6.1.14" % "test"
-    // We need the packaged jar from the application project
-    override def prepareWebappAction = super.prepareWebappAction dependsOn app.`package`
-    // Include the webstart files directly in the web app root directory.
-    override def extraWebappFiles = (app.webstartOutputDirectory ##) ** AllPassFilter
-  }
-  class ApplicationProject(info: ProjectInfo) extends DefaultWebstartProject(info)
-  {
-    import SignJar._
-    override def webstartSignConfiguration = Some(new SignConfiguration("mark", storePassword("fakepassword") :: Nil))
-    //override def webstartPack200 = false // uncomment to disable pack200 compression, which is enabled by default
-    //override def webstartGzip = false// uncomment to disable gzip compression, which is enabled by default
-
-    def jnlpXML(libraries: Seq[WebstartJarResource]) =
-      <jnlp spec="1.0+" codebase="http://localhost:8080/" href={artifactBaseName + ".jnlp"}>
-        <information>
-          <title>Webstart Test</title>
-          <vendor>Vendor</vendor>
-          <description>Webstart test</description>
-          <offline-allowed />
-        </information>
-        <resources>
-          <j2se version="1.5+" />
-          { defaultElements(libraries) }
-        </resources>
-        <application-desc main-class="test.Main" />
-      </jnlp>
-  }
-}
-}}}
-
-To request full access to the client machine, use:
-{{{
-  <security>
-    <all-permissions/>
-  </security> 
-}}}
-
-after the `information` tag.
-
-For full details, see the [http://java.sun.com/javase/6/docs/technotes/guides/javaws/developersguide/contents.html webstart guide] and the [http://java.sun.com/j2se/1.4.2/docs/guide/jws/developersguide/syntax.html JNLP File Syntax] page.
+The original content is archived at http://www.scala-sbt.org/0.7.7/docs/WebstartExample.html

@@ -1,48 +1,8 @@
+
 = sbt has moved =
 
-*sbt has now completely moved to !GitHub.*
+*sbt is now hosted on !GitHub*: https://github.com/harrah/xsbt.
 
-See https://github.com/harrah/xsbt/wiki/Library-Management.
+This page previously documented sbt 0.7.7, which is *no longer maintained*.
 
-
-= Scala Jars and Dependency Management =
-
-`sbt` checks and filters managed dependencies on Scala libraries, such as `scala-library.jar` and `scala-compiler.jar`.  This page explains the details of this behavior.
-
-== Explicit Scala Dependencies ==
-
- `sbt` checks that the revisions of any explicit dependencies on Scala libraries match that of the `scala.version` declared for the project.  For example, `sbt` would generate an error if you defined `scala.version` to be 2.7.2 but had the following in your project definition:
-{{{
- val scalaSwing = "org.scala-lang" % "scala-swing" % "2.7.3"
-}}}
-
-To disable this check, set:
-{{{
-  override def checkExplicitScalaDependencies = true
-}}}
-
-== Filtering Scala Dependencies ==
-
-`sbt` excludes all dependencies on `scala-library.jar` and `scala-compiler.jar` so that these will not be downloaded.  `sbt` does this because it already provides the right versions of `scala-library.jar` and `scala-compiler.jar` required for normal use.  In particular,
-   * If your main sources depend on `scala-compiler.jar`, `scala-compiler.jar` is added to `runClasspath` so that compiler classes are available for the `run` command.
-   * If your test sources depend on `scala-compiler.jar`, `scala-compiler.jar` is added to testClasspath so that the compiler classes are available for tests.
-   * You have access to these jars as described in the next section
-
-If you need to explicitly reference the Scala jars used by `sbt`, see the Access to Scala Jars and Dependencies section below.
-
-`sbt` can be configured to skip these checks in certain cases, but this should be considered atypical.  If you want to do this anyway, you should define a non-standard [ManagedConfigurations configuration] and exclude it from the configurations on which `sbt` performs checks and filtering:
-{{{
-  val other = config("scalac-2.7.3")
-  override def checkScalaInConfigurations = super.checkScalaInConfigurations - other
-  val scalac2_7_3 = "org.scala-lang" % "scala-compiler" % "2.7.3" % "scalac-2.7.3"
-}}}
-You might use this to call `java` using the classpath given by `managedClasspath("scalac-2.7.3")`, for example.
-
-To completely disable all filtering of dependencies, set
-{{{
-  override def filterScalaJars = false
-}}}
-
-== Access to Scala Jars and Dependencies ==
- * The `ScalaInstance` corresponding to the version of Scala currently building your project is obtained by the `buildScalaInstance` method.  The `libraryJar` and `compilerJar` methods of a `ScalaInstance` provide the locations of the jars for the Scala version it represents.  There are also the convenience methods `buildCompilerJar` and `buildLibraryJar` defined on `Project`.
- * Two methods on a project definition, `mainDependencies` and `testDependencies`, provide an analysis of the external dependencies (jars) of your code as determined during compilation.  Because it relies on information determined during compilation, the information is only valid when compilation is up to date.  These methods return an instance of `LibraryDependencies`.  Read the [http://simple-build-tool.googlecode.com/svn/artifacts/latest/api/sbt/LibraryDependencies.html API Documentation] for more information.
+The original content is archived at http://www.scala-sbt.org/0.7.7/docs/ScalaJars.html

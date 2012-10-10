@@ -1,25 +1,8 @@
+
 = sbt has moved =
 
-*sbt has now completely moved to !GitHub.*
+*sbt is now hosted on !GitHub*: https://github.com/harrah/xsbt.
 
-See https://github.com/harrah/xsbt/wiki.
+This page previously documented sbt 0.7.7, which is *no longer maintained*.
 
-= Lift Example =
-
-This page used to provide an example of building a [http://liftweb.net Lift] web application.
-
-Now, just see [http://github.com/lift/lift_sbt_prototype].
-
-{{{
-$ git clone git://github.com/lift/lift_sbt_prototype
-$ cd lift_sbt_prototype
-$ sbt
-> update
-...
-> jetty-run
-...
-}}}
-
-and browse to http://localhost:8080.
-
-See also [http://www.assembla.com/wiki/show/liftweb/Using_SBT Lift's sbt documentation].
+The original content is archived at http://www.scala-sbt.org/0.7.7/docs/WebApplicationExample.html

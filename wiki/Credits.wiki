@@ -1,25 +1,8 @@
+
 = sbt has moved =
 
-*sbt has now completely moved to !GitHub.*
+*sbt is now hosted on !GitHub*: https://github.com/harrah/xsbt.
 
-See https://github.com/harrah/xsbt/wiki/Credits.
+This page previously documented sbt 0.7.7, which is *no longer maintained*.
 
- The following people have contributed ideas, documentation, or code to `sbt`:
-
- * Trond Bjerkestrand
- * Steven Blundy
- * Josh Cough
- * Nolan Darilek
- * Nathan Hamblen
- * Mark Harrah
- * Joonas Javanainen
- * David R. !MacIver
- * Artyom Olshevskiy
- * Mikko Peltonen
- * Harshad RJ
- * Tony Sloane
- * Doug Tangren
- * Seth Tisue
- * Francisco Treacy
- * Vesa Vilhonen
- * Jason Zaugg
+The original content is archived at http://www.scala-sbt.org/0.7.7/docs/Credits.html

@@ -1,28 +1,8 @@
+
 = sbt has moved =
 
-*sbt has now completely moved to !GitHub.*
+*sbt is now hosted on !GitHub*: https://github.com/harrah/xsbt.
 
-See https://github.com/harrah/xsbt/.
+This page previously documented sbt 0.7.7, which is *no longer maintained*.
 
-
-= Building `sbt` =
-
-== Background ==
-
-`sbt` now uses git for version control.  You can find the source on github.  As of 0.7.2, `sbt` is at [http://github.com/harrah/xsbt].  The 'master' branch is for 0.7.x stable releases, while the 0.9 branch is for the 0.9.x development series.
-
-Test support was separated out to work across a [http://github.com/harrah/test-interface uniform test interface].  Because of this, `sbt` no longer needs to be compiled against test frameworks.  New test frameworks that implement the uniform test interface can be used by `sbt` without needing to recompile `sbt`, as was the case previously.  In order to provide compatibility with `sbt` 0.5.6, there is [http://github.com/harrah/test-compat an implementation] of the test interface for Scala test frameworks released before the interface existed.
-
-== Instructions ==
-
-The latest `sbt` release (0.7.7) is used to build.  From scratch, building `sbt` locally looks like:
-{{{
-$ git clone git://github.com/harrah/xsbt.git
-$ cd xsbt
-$ sbt update proguard "project Simple Build Tool" publish-local
-}}}
-The launcher jar created by the `proguard` action is located at `xsbt/target/sbt-launch-0.7.x.jar`.
-
-== Usage ==
-
-Set the `sbt.version` in the project you want to use this in to be `0.7.8-SNAPSHOT`.  If you rebuild sbt, you'll need to remove `project/boot` for that project because `sbt` does not recheck a version once it is retrieved to a project.
+The original content is archived at http://www.scala-sbt.org/0.7.7/docs/Build.html

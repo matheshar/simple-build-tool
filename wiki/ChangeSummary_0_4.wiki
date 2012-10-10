@@ -1,43 +1,8 @@
+
 = sbt has moved =
 
-*sbt has now completely moved to !GitHub.*
+*sbt is now hosted on !GitHub*: https://github.com/harrah/xsbt.
 
-See https://github.com/harrah/xsbt/wiki.
+This page previously documented sbt 0.7.7, which is *no longer maintained*.
 
-= Changes from 0.3.7 to 0.4 =
-
-This release includes a number of new features and improvements.  They are summarized below.  Comments, questions, and suggestions are welcome!
-
-== Major Features ==
- * New loader architecture that enables Scala and `sbt` versions to be specified per project.  See [Loader Sbt Loader] for details.
- * Webstart project support.  See [Webstart] for details.
- * Automatic reloading of web application run with `jetty-run`.  See [WebApplications].
- * Triggered execution of any action by prefixing the line with `~`.  The action will run when any Scala source files are modified.  Thanks to Mikko for the work on continuous compilation that made this feature possible!  See [TriggeredExecution Triggered Execution].
- * Method tasks, which take arguments and produce the task to run.  See [MethodTasks Method Tasks].
- * Added `test-quick`, `test-failed`, and `test-only` methods.  See [TriggeredExecution Triggered Execution] for details.
- * Reworked task execution model across multiple projects.  See the Multi-Project Tasks Details section below.
-
-== Improvements ==
- * Added `jetty-restart` action, which first executes `jetty-stop` and then executes `jetty-run`
- * Added project organization as a property that defaults to inheriting from the parent project.  Project creation organization now prompts for organization, which can be left blank
- * `help`, `actions`, and `methods` commands are now available when executing `sbt` batch style
- * Modified logging subsystem for improved labeling of logging by action and project and for better support for buffered logging from actors.
- * `run` now accepts arguments to pass to the `main` method of the class being run.
- * Added `publish-local` action for publishing to the local Ivy repository.
-
-== Fixes ==
- * Fixed bug #17 - resources not added to classpath.
- * Fixed issue with `build.properties` being unnecessarily updated in sub-projects during startup.
- * Fixed problem with nested modules being detected as tests (as occurred when testing specs itself).
-
-== Multi-Project Task Execution Details ==
-
-There have been some changes in how tasks are executed, mainly with respect to multiple projects.
- * Tasks can now explicitly depend on tasks in other projects.
- * A task (call it T) implicitly depends on tasks in projects that T's project depends on that have the same name as T.
- * Methods and interactive tasks (such as `run` and `console`) must be executed directly on the desired project.
-
-Some consequences of these changes are:
- * Tasks will run in parallel within a given project if `parallelExecution` is set to `true`.  Previously, only one task per project could run at a time.
- * Tasks are run breadth-first.  For example, the default project type defines a `package` task that depends on a `compile` task.  If you execute `package` on multiple projects, `compile` will be run across all projects first and then `package` will be run across all projects.  Previously, the specified action (`package` in this case) would be executed on each project in the order required by project-level dependencies.  This resulted in depth-first execution.
- * Tasks no longer have to be explicitly called to have implicit dependencies across multiple projects.  For example, the web application project type defines the `jetty-run` action.  One of its dependencies is `compile`.  Previously, `compile` would not be invoked in other projects that did not have a `jetty-run` task.  This would be the case if you had one web application subproject that depended on another subproject that was not a web application.
+The original content is archived at http://www.scala-sbt.org/0.7.7/docs/ChangeSummary_0_4.html

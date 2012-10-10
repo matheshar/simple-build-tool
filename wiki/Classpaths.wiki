@@ -1,82 +1,8 @@
+
 = sbt has moved =
 
-*sbt has now completely moved to !GitHub.*
+*sbt is now hosted on !GitHub*: https://github.com/harrah/xsbt.
 
-See https://github.com/harrah/xsbt/wiki/Classpaths.
+This page previously documented sbt 0.7.7, which is *no longer maintained*.
 
-= Classpaths =
-
-This page discusses how `sbt` builds up classpaths for different actions, like `compile`, `run`, and `test` and how to override or augment these classpaths.  Classpaths do not include the Scala library, since Scala classes are handled by `sbt` (see [ScalaJars]).  All `*Classpath` methods return `PathFinder`s, which are evaluated on demand.
-
-== Top Level Methods ==
-
-At the highest level, each of the major actions has a corresponding method defining the classpaths used by that method.
-
-These are:
- * docClasspath
- * compileClasspath
- * testClasspath
- * runClasspath
- * consoleClasspath
-
-For web applications, there are a few additional classpaths:
- * `webappClasspath` determines the classes and jars to include in the war created by `package`
- * `jettyClasspath` provides Jetty and its dependencies to the `jetty-run` and `jetty` tasks
- * `jettyRunClasspath` determines the classpath for the web application run by `jetty-run` and `jetty`
-
-These methods provide a classpath that includes the appropriate classpath from all dependent projects and both managed and unmanaged dependencies.  They use lower level methods to construct these classpaths.  These are described in the next section.
-
-== Lower-Level Methods ==
-
-The top level methods use several lower-level methods to construct classpaths.  The method directly used by the top level methods is:
-{{{
- fullClasspath(config: Configuration): PathFinder
-}}}
-
-This provides the classpath for the given [ManagedConfigurations configuration].  By default, this method is itself implemented by combining the `projectClasspath`s from the project and all dependent projects.
-
-`projectClasspath` has the same signature as `fullClasspath`, but represents only the classpath for a single project.  `projectClasspath` by default combines the dependencies provided by `managedClasspath` and `unmanagedClasspath`:
-{{{
-    def projectClasspath(config: Configuration): PathFinder =
-      unmanagedClasspath +++ managedClasspath(config)
-}}}
-
-`unmanagedClasspath`, `managedClasspath` and releated methods are shown below:
-{{{
-   def unmanagedClasspath: PathFinder =
-      descendents(dependencyPath, classpathFilter)
-
-   def managedClasspath(config: Configuration): PathFinder =
-      descendents(configurationPath(config), classpathFilter)
-
-   def classpathFilter: FileFilter = "*.jar"
-
-   def configurationPath(config: Configuration): Path =
-      managedDependencyPath / config.toString
-}}}
-
-where dependencyPath is by default `lib` and `managedDependencyPath` is `lib_managed/scala_<version>`.
-
-== Examples ==
-
-To add a dependency to all classpaths, add it to `unmanagedClasspath`.  For example:
-{{{
-   override def unmanagedClasspath = super.unmanagedClasspath +++ ("lib2" / "a.jar")
-}}}
-
-To add a dependency to a specific classpath, select the appropriate top-level method.  For example, to put something on the test classpath:
-{{{
-   override def testClasspath = super.testClasspath +++ ("lib_test" / "aTest.jar")
-}}}
-
-To build a custom managed classpath, say for using something like `fmpp` for your build:
-{{{
-	val fmppConf = config("fmpp")
-	val fmppDep = "net.sourceforge.fmpp" % "fmpp" % "0.9.13" % "fmpp"
-	def fmppClasspath = managedClasspath(fmppConf)
-
-	def fmppTask(args: List[String]) =
-		runTask(Some("fmpp.tools.CommandLine"), fmppClasspath, args)
-
-	lazy val fmpp = fmppTask(...)
-}}}
+The original content is archived at http://www.scala-sbt.org/0.7.7/docs/Classpaths.html

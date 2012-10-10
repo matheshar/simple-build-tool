@@ -1,57 +1,8 @@
+
 = sbt has moved =
 
-*sbt has now completely moved to !GitHub.*
+*sbt is now hosted on !GitHub*: https://github.com/harrah/xsbt.
 
-See https://github.com/harrah/xsbt/wiki/Forking.
+This page previously documented sbt 0.7.7, which is *no longer maintained*.
 
-
-= Forking =
-
-== Introduction ==
-
-By default, the `run` action runs in the same JVM as `sbt`.  Forking is required under [RunningProjectCode certain circumstances], however.  Or, you might want to fork Java processes when implementing new tasks.
-
-== Forking run ==
-
-=== Basics ===
-
-The following examples demonstrate forking the `run` action and changing the working directory or arguments.
-
-{{{
-  override def fork = forkRun
-  
-  override def fork =
-    forkRun(new File("different-working-directory"))
-
-  override def fork =
-    forkRun("-Xmx8G" :: Nil)
-
-  override def fork =
-    forkRun(
-      Some(new File("different-working-directory")),
-      "-Xmx8G" :: Nil
-    )
-}}}
-
-=== Advanced ===
-
-The method to override in your project definition is `fork`, which is of type `Option[ForkScala]`.  By default, it is `None`, which indicates forking is disabled.  To enable forking, override `fork` to return an instance of `ForkScalaRun` (wrapped in `Some`).  `ForkScalaRun` defines these methods:
-{{{
-def runJVMOptions: Seq[String] = Nil
-def workingDirectory: Option[File] = None
-def javaHome: Option[File] = None
-def scalaJars: Iterable[File] = None
-}}}
-
-By default, the forked process uses the same Java and Scala being used for the build and the working directory and JVM options of the current process.  Override the above methods to use a different version.  For example, to override the working directory used when running, do:
-
-{{{
-def forkConfiguration = new ForkScalaRun { override def workingDirectory = Some(info.projectPath.asFile) } 
-override def fork = Some(forkConfiguration)
-}}}
-
-== Direct Usage ==
-
-To fork a new Java process, use the [http://simple-build-tool.googlecode.com/svn/artifacts/latest/api/sbt/Fork$object.html Fork API].  The methods of interest are `Fork.java`, `Fork.javac`, `Fork.scala`, and `Fork.scalac`.  See the [http://simple-build-tool.googlecode.com/svn/artifacts/latest/api/sbt/Fork$object.ForkJava.html ForkJava] and [http://simple-build-tool.googlecode.com/svn/artifacts/latest/api/sbt/Fork$object.ForkScala.html ForkScala] classes for the arguments and types.
-
-The last argument in all cases is either the `Logger` to which output should go or the [http://simple-build-tool.googlecode.com/svn/artifacts/latest/api/sbt/OutputStrategy.html OutputStrategy] to use (such as standard output or another `OutputStream`).
+The original content is archived at http://www.scala-sbt.org/0.7.7/docs/Forking.html

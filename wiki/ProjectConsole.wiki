@@ -1,69 +1,8 @@
+
 = sbt has moved =
 
-*sbt has now completely moved to !GitHub.*
+*sbt is now hosted on !GitHub*: https://github.com/harrah/xsbt.
 
-See https://github.com/harrah/xsbt/wiki/Console-Project.
+This page previously documented sbt 0.7.7, which is *no longer maintained*.
 
-
-= Project Console =
-
-== Description ==
-
-The `console-project` action starts the Scala interpreter with access to your project and to `sbt`.  Specifically, the interpreter is started up with these commands already executed:
-{{{
-> val current: <YourProjectType> = <your project definition>
-> import sbt._
-> import Process._
-> import current._
-> 
-}}}
-
-This can be useful for creating and modifying your build in the same way that the Scala interpreter is normally used to explore writing code.  Note that this gives you raw access to your build.  Think about what you pass to `FileUtilities.clean`, for example.
-
-== Examples ==
-
-Clean classes directory:
-{{{
-> FileUtilities.clean(mainCompilePath.asFile :: Nil, log)
-}}}
-
-Show current compile options:
-{{{
-> compileOptions.foreach(println)
-}}}
-
-Show additionally configured repositories.  Then, show all repositories, including defaults.
-{{{
-> repositories.foreach(println)
-> ivyRepositories.foreach(println)
-}}}
-
-Show the compile, test, and optional classpaths:
-{{{
-> compileClasspath
-> testClasspath
-> optionalClasspath
-}}}
-
-Run the `console` task to drop to another interactive prompt with your project (not the build) on the classpath:
-{{{
-> console.run
-}}}
-
-Run external processes:
-{{{
-> "tar -zcvf project-src.tar.gz src" !
-> "find project -name *.jar" !
-> "cat project/build.properties" #| "grep sbt.version" #> new File("sbt-version") !
-> "grep -r null src" #|| "echo null-free" !
-> new URL("http://databinder.net/dispatch/About") #> new File("About.html") !
-}}}
-
-Show the dependencies on external jars computed during compilation:
-{{{
-> compile.run
-> mainDependencies.external
-> mainDependencies.libraries
-> mainDependencies.scalaJars
-}}}
-`external` consists of dependencies outside of the project, like the Java standard library.  `libraries` are managed or unmanaged dependencies other than Scala libraries.  `scalaJars` includes `scala-library.jar` and `scala-compiler.jar` if your project uses them.
+The original content is archived at http://www.scala-sbt.org/0.7.7/docs/ProjectConsole.html

@@ -1,78 +1,8 @@
+
 = sbt has moved =
 
-*sbt has now completely moved to !GitHub.*
+*sbt is now hosted on !GitHub*: https://github.com/harrah/xsbt.
 
-See https://github.com/harrah/xsbt/wiki.
+This page previously documented sbt 0.7.7, which is *no longer maintained*.
 
-= Changes from 0.4 to 0.4.3 =
-
-The changes in this release are mainly minor improvements and fixes in support of the new launcher.  There is one important change to managing Scala jars that should be noted before updating.  See the Scala Jars and Dependency Management section below and please ask if you have any questions about it.
-
-== New Features ==
- * Dependencies on Scala are checked and filtered.  Please read the Scala Jars and Dependency Management section below!
- * `ParentProject`s now have dependency management tasks (like `update`) defined.
-
-== Improvements ==
- * Print version of `sbt` and Scala on project startup:
- {{{
-[info] Building project dispatch 0.1-SNAPSHOT using Dispatch
-[info]    with sbt 0.4.3 and Scala 2.7.3
- }}}
- *  Launcher prompts if versions could not be retrieved:
- {{{
-Could not retrieve sbt 0.4.4. Select different version? (y/N) : y
-sbt version [0.4.3]:
- }}}
- * Print note when scala.version or sbt.version are changed that reboot is required:
- {{{
-> set sbt.version 0.4.3
- Build will use sbt 0.4.3 after running 'reboot' command or restarting sbt.
-
-> set scala.version 2.7.3
- Build will use Scala 2.7.3 after running 'reboot' command or restarting sbt.
- }}}
- * Fixed analysis plugin improperly including traits/abstract classes in subclass search.  Previously, `sbt` would generate an error for the following project definition because it detected multiple publicly visible `Project` subclasses:
- {{{
-  trait ProjectHelper extends Project
-  class MyProject(info: DefaultInfo) extends DefaultProject(info) with ProjectHelper
- }}}
- * The launcher test loads a class from each of `sbt`, Ivy, the Scala compiler, and the Scala library to determine if jars were properly downloaded.  Previously, it just tested if the right directory in `project/boot` existed.
-
-== Fixes ==
- * Fixed bug #19 (build.properties always updated when using launcher)
-
-== sbt's Build ==
-
-Building `sbt` from source in general has changed to support multiple Scala versions and the launcher.  Please see Build for more information.  Specific changes are:
-
- * The launcher project is now a proper subproject
- * The launcher now looks in the local Ivy repository for main `sbt` builder jars so that you can use jars compiled from source in your projects
-
-== Scala Jars and Dependency Management ==
-
-`sbt` now checks and filters managed dependencies on Scala libraries, such as `scala-library.jar` and `scala-compiler.jar`.
-
-=== Explicit Scala Dependencies ===
-
- `sbt` checks that the revisions of any explicit dependencies on Scala libraries match that of the `scala.version` declared for the project.  For example, `sbt` would generate an error if you defined `scala.version` to be 2.7.2 but had the following in your project definition:
-{{{
- val scalaSwing = "org.scala-lang" % "scala-swing" % "2.7.3"
-}}}
-
-=== Filtering Scala Dependencies ===
-
-`sbt` excludes all dependencies on `scala-library.jar` and `scala-compiler.jar` so that these will not be downloaded.  `sbt` does this because it already provides the right versions of `scala-library.jar` and `scala-compiler.jar` required for normal use.  If you do not ever need to explicitly reference these jars, this change should not affect you and you can stop reading this section now.
-
-If you rely on either of these jars being in `lib_managed`, for example, you should use one of the following solutions:
- * The `scalaJars` method returns a two `File`s, one for the location of `scala-compiler.jar` and one for `scala-library.jar`.
- * `mainCompileConditional.analysis.allExternals` provides `File`s for all jars that your main classes depend on.  This includes `rt.jar`, which you will probably want to filter.
- 
-=== Making Exceptions ===
-
-`sbt` can be configured to skip these checks in certain cases, but this should be considered atypical.  `sbt`'s build does it in order to build `sbt` across several versions of Scala, but that is a bootstrapping issue.  If you want to do this anyway, you should define a non-standard configuration and exclude it from the configurations on which `sbt` performs checks and filtering:
-{{{
-  val other = config("scalac-2.7.3")
-  override def checkScalaInConfigurations = super.checkScalaInConfigurations - other
-  val scalac2_7_3 = "org.scala-lang" % "scala-compiler" % "2.7.3" % "scalac-2.7.3->default"
-}}}
-You might then call `java` using the classpath given by `managedClasspath("scalac-2.7.3")`, for example.
+The original content is archived at http://www.scala-sbt.org/0.7.7/docs/ChangeSummary_0_4_3.html

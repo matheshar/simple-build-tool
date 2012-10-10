@@ -1,48 +1,8 @@
+
 = sbt has moved =
 
-*sbt has now completely moved to !GitHub.*
+*sbt is now hosted on !GitHub*: https://github.com/harrah/xsbt.
 
-See https://github.com/harrah/xsbt/wiki/Local-Scala.
+This page previously documented sbt 0.7.7, which is *no longer maintained*.
 
-
- sbt 0.7 makes using a locally built version of Scala easier than previous versions.  `sbt` just needs to know where the library and compiler jars are for this version.
-
-A `ScalaInstance` object represents a version of Scala, backed by compiler and library jar locations.  To get a `ScalaInstance` for a local Scala, call one of the variants of `defineScala`:
-{{{
-/** Get a `ScalaInstance` for the Scala version with base directory `home`.  The library and compiler jars are
-* assumed to be at `new File(home, "lib/scala-library.jar")` and `new File(home, "lib/scala-compiler.jar")`.
-* The label for this instance is determined by the version String in the `compiler.properties` file in `scala-compiler.jar`.*/
-def defineScala(home: File): ScalaInstance
-
-/** Get a `ScalaInstance` for the Scala version with base directory `home`.  The library and compiler jars are
-* assumed to be at `new File(home, "lib/scala-library.jar")` and `new File(home, "lib/scala-compiler.jar")`.
-* `version` is used as the label for this instance.*/
-def defineScala(version: String, home: File): ScalaInstance
-}}}
-The label referred to in the comments is how you refer to this version in your `build.scala.versions` property and in the `++<version>` version switching command.
-
-Override the `localScala` method to declare these local instances to `sbt`:
-{{{
-override def localScala =
-  defineScala("2.8.0-local", new File(scalaRoot + "/build/pack/")) ::
-  Nil
-}}}
-
-Include it in `build.scala.versions`:
-{{{
-$ cat project/build.properties
-...
-build.scala.versions=2.8.0.RC2 2.8.0-local 2.7.7
-...
-}}}
-
-or use it temporarily with `++<version>`:
-{{{
-$ sbt "++2.8.0-local compile" "++2.7.7 compile"
-}}}
-
-sbt reuses the class loader for the local Scala version.  If you recompile your local Scala version and you are using sbt interactively, run
-{{{
-> reload
-}}}
-to use the new compilation results.
+The original content is archived at http://www.scala-sbt.org/0.7.7/docs/LocalScala.html

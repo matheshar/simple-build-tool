@@ -1,60 +1,8 @@
+
 = sbt has moved =
 
-*sbt has now completely moved to !GitHub.*
+*sbt is now hosted on !GitHub*: https://github.com/harrah/xsbt.
 
-See https://github.com/harrah/xsbt/wiki/Input-Tasks.
+This page previously documented sbt 0.7.7, which is *no longer maintained*.
 
-
-= Method Tasks =
-
-As shown in several examples on the [TriggeredExecution Triggered Execution] page, a method task accepts an array of arguments and creates the task to be run from those arguments.  Usage of a method task from the interactive prompt looks like:
-{{{
-> run 10000 5 0.3
-}}}
-or
-{{{
-> test-only example.TestSpecification
-}}}
-
-Defining your own method task is similar to defining a normal action, as shown in the following example.
-{{{
-lazy val example =
-   task { args =>
-     if(args.length == 2)
-       actionConstructor(args(0).toInt, args(1))
-     else
-       task { Some("Usage: example <integer> <string>") }
-   }
-def actionConstructor(a: Int, b: String) =
-    task {
-      println("Arguments were: " + a + " and " + b)
-      None
-    }
-}}}
-The type of `args` is `Array[String]`.
-
-You can then call `example` like:
-{{{
-> example 5 text
-Arguments were: 5 and text
-}}}
-
-Additionally, you can use quotes to include whitespace in arguments.  Quotes must be escaped (`\"`) and so must backslashes (`\\`):
-{{{
-> example "5" "Text with \"spaces\" and a backslash \\ included."
-Arguments were: 5 and Text with "spaces" and a backslash \ included.
-}}}
-
-You can provide strings for basic tab completion for method tasks using the `completeWith` method.
-
-{{{
-  def testNames: Seq[String] = ...
-
-  lazy val myTestOnly =
-    task { args => ... } completeWith( testNames )
-}}}
-
-
-The argument to `completeWith` is call-by-name and is re-evaluated after a command is run.
-
-In a multi-project setting, method tasks can only be run from the project they are defined on.
+The original content is archived at http://www.scala-sbt.org/0.7.7/docs/MethodTasks.html

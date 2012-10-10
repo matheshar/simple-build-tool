@@ -1,9 +1,3 @@
-= sbt has moved =
-
-*sbt has now completely moved to !GitHub.*
-
-See https://github.com/harrah/xsbt/wiki.
-
 * Getting Started
   * [Setup] - Getting `sbt` running on your machine.
   * [RunningSbt Basic Usage] - Actions and Commands
