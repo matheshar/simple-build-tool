@@ -1,7 +1,7 @@
 
 = sbt has moved =
 
-*sbt is now hosted on !GitHub*: https://github.com/harrah/xsbt.
+*sbt is now hosted on !GitHub*: https://github.com/sbt/sbt.
 
 This page previously documented sbt 0.7.7, which is *no longer maintained*.
 
